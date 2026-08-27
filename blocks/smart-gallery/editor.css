@@ -1,0 +1,171 @@
+/**
+ * Editor styles for the Smart Gallery block.
+ *
+ * @package matcha-ai-smart-gallery
+ */
+
+/* ==========================================================================
+   Placeholder
+   ========================================================================== */
+
+.matcha-gallery-placeholder {
+	border: 2px dashed #a5d6a7 !important;
+	background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%) !important;
+	border-radius: 12px !important;
+	padding: 40px 32px !important;
+}
+
+.matcha-gallery-placeholder .components-placeholder__label {
+	color: #2e7d32;
+	font-weight: 700;
+}
+
+.matcha-gallery-placeholder .components-placeholder__instructions {
+	color: #666;
+	font-size: 13px;
+}
+
+.matcha-gallery-placeholder__actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	width: 100%;
+	max-width: 360px;
+	margin: 0 auto;
+}
+
+.matcha-gallery-placeholder__btn {
+	background: linear-gradient(135deg, #4caf50, #388e3c) !important;
+	border: none !important;
+	font-weight: 600 !important;
+	padding: 10px 28px !important;
+	border-radius: 8px !important;
+	font-size: 14px !important;
+	transition: all 0.2s ease !important;
+}
+
+.matcha-gallery-placeholder__btn:hover {
+	background: linear-gradient(135deg, #388e3c, #2e7d32) !important;
+	transform: translateY(-1px);
+	box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3) !important;
+}
+
+.matcha-gallery-placeholder__divider {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	color: #999;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.matcha-gallery-placeholder__divider::before,
+.matcha-gallery-placeholder__divider::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: #c8e6c9;
+}
+
+/* ==========================================================================
+   Preview
+   ========================================================================== */
+
+.matcha-gallery-preview {
+	padding: 4px;
+}
+
+.matcha-gallery-preview--loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 48px 16px;
+	color: #888;
+	gap: 12px;
+}
+
+.matcha-gallery-preview__toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	padding: 8px 12px;
+	background: #f1f8e9;
+	border-radius: 8px;
+	border: 1px solid #c8e6c9;
+}
+
+.matcha-gallery-preview__count {
+	font-size: 13px;
+	font-weight: 600;
+	color: #2e7d32;
+}
+
+/* Grid preview */
+.matcha-gallery-preview__grid {
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+/* Item */
+.matcha-gallery-preview__item {
+	position: relative;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #f5f5f5;
+}
+
+.matcha-gallery-preview__grid--grid .matcha-gallery-preview__item {
+	aspect-ratio: 1;
+}
+
+.matcha-gallery-preview__img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.matcha-gallery-preview__info {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 8px 10px;
+	background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+	color: #fff;
+}
+
+.matcha-gallery-preview__title {
+	display: block;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.3;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.matcha-gallery-preview__caption {
+	display: block;
+	font-size: 11px;
+	opacity: 0.85;
+	line-height: 1.3;
+	margin-top: 2px;
+}
+
+.matcha-gallery-preview__caption p {
+	margin: 0;
+}
+
+/* Editor wrapper */
+.matcha-gallery-editor {
+	border: 1px solid #e0e0e0;
+	border-radius: 12px;
+	padding: 4px;
+	background: #fafafa;
+}

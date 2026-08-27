@@ -1,0 +1,17 @@
+{
+	"name": "matcha-gallery",
+	"version": "1.0.0",
+	"description": "AI-powered image metadata and filterable smart galleries for WordPress.",
+	"author": "Matcha AI",
+	"license": "GPL-2.0-or-later",
+	"private": true,
+	"scripts": {
+		"build": "node build.js",
+		"pack": "node pack.js",
+		"build:studio": "npx esbuild studio/src/index.js --bundle --outfile=assets/js/studio.js --format=iife",
+		"watch:studio": "npx esbuild studio/src/index.js --bundle --outfile=assets/js/studio.js --format=iife --watch"
+	},
+	"devDependencies": {
+		"esbuild": "^0.25.12"
+	}
+}

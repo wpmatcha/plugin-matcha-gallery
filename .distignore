@@ -1,0 +1,16 @@
+.git
+.gitignore
+.distignore
+node_modules
+package.json
+package-lock.json
+build.js
+pack.js
+studio/src
+tests
+.editorconfig
+.eslintrc*
+.prettierrc*
+*.zip
+.DS_Store
+Thumbs.db

@@ -1,0 +1,651 @@
+/**
+ * Advanced Admin Styles for Matcha AI Smart Gallery.
+ *
+ * Modern Matcha green theme, stats counters, tabbed navigation,
+ * switch sliders, shortcode generator, and responsive card layouts.
+ *
+ * @package matcha-ai-smart-gallery
+ */
+
+/* ==========================================================================
+   CSS Custom Properties & Reset
+   ========================================================================== */
+
+:root {
+	--matcha-admin-primary: #2e7d32;
+	--matcha-admin-primary-hover: #1b5e20;
+	--matcha-admin-accent: #4caf50;
+	--matcha-admin-light: #e8f5e9;
+	--matcha-admin-surface: #ffffff;
+	--matcha-admin-border: #e0e0e0;
+	--matcha-admin-text: #212121;
+	--matcha-admin-text-muted: #666666;
+	--matcha-admin-radius: 10px;
+	--matcha-admin-radius-sm: 6px;
+	--matcha-admin-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+	--matcha-admin-shadow-hover: 0 6px 20px rgba(46, 125, 50, 0.12);
+	--matcha-admin-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.matcha-dashboard {
+	max-width: 1000px;
+	margin: 20px 20px 40px 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	color: var(--matcha-admin-text);
+}
+
+/* ==========================================================================
+   Header Banner
+   ========================================================================== */
+
+.matcha-dash-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 60%, #43a047 100%);
+	color: #fff;
+	padding: 24px 32px;
+	border-radius: var(--matcha-admin-radius);
+	box-shadow: 0 4px 18px rgba(27, 94, 32, 0.2);
+	margin-bottom: 24px;
+}
+
+.matcha-dash-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.matcha-logo-icon {
+	font-size: 38px;
+	line-height: 1;
+	background: rgba(255, 255, 255, 0.15);
+	padding: 10px;
+	border-radius: 12px;
+	backdrop-filter: blur(4px);
+}
+
+.matcha-dash-title {
+	font-size: 24px;
+	font-weight: 800;
+	color: #fff;
+	margin: 0 0 4px;
+	line-height: 1.2;
+}
+
+.matcha-dash-subtitle {
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.85);
+	margin: 0;
+}
+
+.matcha-dash-header__meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.matcha-version-pill {
+	font-size: 12px;
+	font-weight: 700;
+	background: rgba(255, 255, 255, 0.2);
+	color: #fff;
+	padding: 4px 10px;
+	border-radius: 20px;
+}
+
+.matcha-status-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	font-weight: 700;
+	padding: 4px 12px;
+	border-radius: 20px;
+	background: rgba(0, 0, 0, 0.2);
+	color: #fff;
+}
+
+.matcha-status-pill.is-connected {
+	background: #ffffff;
+	color: #1b5e20;
+}
+
+.matcha-status-pill.is-disconnected {
+	background: #ffebee;
+	color: #c62828;
+}
+
+.matcha-status-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: currentColor;
+	display: inline-block;
+}
+
+.matcha-status-pill.is-connected .matcha-status-dot {
+	background: #2e7d32;
+	box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
+
+/* ==========================================================================
+   KPI Stats Grid
+   ========================================================================== */
+
+.matcha-stats-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+.matcha-stat-card {
+	background: var(--matcha-admin-surface);
+	border: 1px solid var(--matcha-admin-border);
+	border-radius: var(--matcha-admin-radius);
+	padding: 18px 20px;
+	box-shadow: var(--matcha-admin-shadow);
+	transition: transform var(--matcha-admin-transition), box-shadow var(--matcha-admin-transition);
+}
+
+.matcha-stat-card:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--matcha-admin-shadow-hover);
+}
+
+.matcha-stat-card__number {
+	font-size: 28px;
+	font-weight: 800;
+	color: var(--matcha-admin-primary);
+	line-height: 1.1;
+	margin-bottom: 6px;
+}
+
+.matcha-stat-card__label {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--matcha-admin-text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.matcha-stat-card--highlight {
+	background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e9 100%);
+	border-color: #c8e6c9;
+}
+
+/* ==========================================================================
+   Tab Navigation
+   ========================================================================== */
+
+.matcha-tabs-nav {
+	display: flex;
+	gap: 6px;
+	border-bottom: 2px solid var(--matcha-admin-border);
+	margin-bottom: 24px;
+}
+
+.matcha-tab-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 20px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--matcha-admin-text-muted);
+	background: transparent;
+	border: none;
+	border-bottom: 3px solid transparent;
+	margin-bottom: -2px;
+	cursor: pointer;
+	transition: all var(--matcha-admin-transition);
+}
+
+.matcha-tab-btn .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	color: inherit;
+}
+
+.matcha-tab-btn:hover {
+	color: var(--matcha-admin-primary);
+	background: #f9f9f9;
+	border-radius: var(--matcha-admin-radius-sm) var(--matcha-admin-radius-sm) 0 0;
+}
+
+.matcha-tab-btn.is-active {
+	color: var(--matcha-admin-primary);
+	border-bottom-color: var(--matcha-admin-primary);
+	background: #fff;
+	border-radius: var(--matcha-admin-radius-sm) var(--matcha-admin-radius-sm) 0 0;
+}
+
+/* Tab Content Visibility */
+.matcha-tab-content {
+	display: none;
+}
+
+.matcha-tab-content.is-active {
+	display: block;
+	animation: matchaFadeIn 0.3s ease;
+}
+
+@keyframes matchaFadeIn {
+	from { opacity: 0; transform: translateY(4px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Cards & Form Controls
+   ========================================================================== */
+
+.matcha-card {
+	background: var(--matcha-admin-surface);
+	border: 1px solid var(--matcha-admin-border);
+	border-radius: var(--matcha-admin-radius);
+	padding: 28px 32px;
+	box-shadow: var(--matcha-admin-shadow);
+	margin-bottom: 20px;
+}
+
+.matcha-card__header {
+	margin-bottom: 24px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.matcha-card__header h3 {
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--matcha-admin-primary);
+	margin: 0 0 6px;
+}
+
+.matcha-card__header p {
+	color: var(--matcha-admin-text-muted);
+	font-size: 13px;
+	margin: 0;
+}
+
+.matcha-field-row {
+	margin-bottom: 22px;
+}
+
+.matcha-field-row:last-child {
+	margin-bottom: 0;
+}
+
+.matcha-field-row > label {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 6px;
+	color: var(--matcha-admin-text);
+}
+
+.matcha-badge--required {
+	display: inline-block;
+	background: #ffebee;
+	color: #c62828;
+	font-size: 10px;
+	font-weight: 800;
+	padding: 2px 6px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	margin-left: 6px;
+}
+
+.matcha-input-group {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.matcha-input-group input[type="password"],
+.matcha-input-group input[type="text"] {
+	flex: 1;
+	height: 38px;
+	padding: 0 12px;
+	border-radius: var(--matcha-admin-radius-sm);
+	border: 1.5px solid var(--matcha-admin-border);
+	font-size: 14px;
+	transition: border-color var(--matcha-admin-transition);
+}
+
+.matcha-input-group input:focus,
+.matcha-field-row input[type="text"]:focus,
+.matcha-field-row input[type="url"]:focus,
+.matcha-field-row select:focus {
+	border-color: var(--matcha-admin-primary);
+	box-shadow: 0 0 0 1px var(--matcha-admin-primary);
+	outline: none;
+}
+
+.matcha-quick-presets {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+	font-size: 12px;
+	color: var(--matcha-admin-text-muted);
+}
+
+.matcha-preset-btn {
+	background: #f1f8e9;
+	border: 1px solid #c8e6c9;
+	color: #2e7d32;
+	font-size: 11px;
+	font-weight: 600;
+	padding: 3px 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background var(--matcha-admin-transition);
+}
+
+.matcha-preset-btn:hover {
+	background: #c8e6c9;
+}
+
+/* ==========================================================================
+   Switch Sliders (iOS Style)
+   ========================================================================== */
+
+.matcha-switch-label {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	cursor: pointer;
+}
+
+.matcha-switch-label input[type="checkbox"] {
+	display: none;
+}
+
+.matcha-switch-slider {
+	position: relative;
+	width: 44px;
+	height: 24px;
+	background: #ccc;
+	border-radius: 30px;
+	transition: background 0.25s ease;
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.matcha-switch-slider::before {
+	content: "";
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #fff;
+	top: 3px;
+	left: 3px;
+	transition: transform 0.25s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.matcha-switch-label input:checked + .matcha-switch-slider {
+	background: var(--matcha-admin-primary);
+}
+
+.matcha-switch-label input:checked + .matcha-switch-slider::before {
+	transform: translateX(20px);
+}
+
+.matcha-switch-text strong {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 2px;
+}
+
+.matcha-checkbox-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	background: #fafafa;
+	padding: 16px;
+	border-radius: var(--matcha-admin-radius-sm);
+	border: 1px solid #eee;
+}
+
+.matcha-checkbox-grid label {
+	font-size: 13px;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* ==========================================================================
+   Connection Test Feedback Box
+   ========================================================================== */
+
+.matcha-test-result {
+	margin-top: 10px;
+	padding: 10px 14px;
+	border-radius: var(--matcha-admin-radius-sm);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.matcha-test-result.is-success {
+	background: #e8f5e9;
+	color: #1b5e20;
+	border: 1px solid #c8e6c9;
+}
+
+.matcha-test-result.is-error {
+	background: #ffebee;
+	color: #c62828;
+	border: 1px solid #ffcdd2;
+}
+
+.matcha-spinner {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border: 2px solid #c8e6c9;
+	border-top-color: #2e7d32;
+	border-radius: 50%;
+	animation: matchaSpin 0.6s linear infinite;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+
+@keyframes matchaSpin {
+	to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Shortcode Generator Box
+   ========================================================================== */
+
+.matcha-builder-controls {
+	background: #fafafa;
+	border: 1px solid #eee;
+	border-radius: var(--matcha-admin-radius-sm);
+	padding: 20px;
+}
+
+.matcha-builder-row {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 16px;
+}
+
+.matcha-generated-shortcode-box {
+	margin-top: 20px;
+	padding: 16px;
+	background: #fff;
+	border: 1.5px dashed #4caf50;
+	border-radius: var(--matcha-admin-radius-sm);
+}
+
+.matcha-sc-label {
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--matcha-admin-primary);
+	text-transform: uppercase;
+	margin-bottom: 8px;
+}
+
+.matcha-sc-code-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.matcha-sc-code-wrap code {
+	font-size: 15px;
+	font-weight: 700;
+	color: #1b5e20;
+	background: #f1f8e9;
+	padding: 8px 14px;
+	border-radius: 6px;
+	display: block;
+	flex: 1;
+	word-break: break-all;
+}
+
+/* ==========================================================================
+   AI Keywords Cloud
+   ========================================================================== */
+
+.matcha-tag-cloud {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.matcha-tag-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: #f1f8e9;
+	color: #2e7d32;
+	border: 1px solid #c8e6c9;
+	padding: 6px 14px;
+	border-radius: 20px;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.matcha-tag-count {
+	background: #2e7d32;
+	color: #fff;
+	font-size: 11px;
+	padding: 2px 6px;
+	border-radius: 10px;
+}
+
+/* ==========================================================================
+   Pro Feature Showcase Card
+   ========================================================================== */
+
+.matcha-pro-card {
+	background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+	color: #fff;
+	border-radius: var(--matcha-admin-radius);
+	padding: 36px 40px;
+	box-shadow: 0 8px 24px rgba(27, 94, 32, 0.25);
+}
+
+.matcha-pro-card__badge {
+	display: inline-block;
+	background: #fbc02d;
+	color: #000;
+	font-size: 11px;
+	font-weight: 800;
+	letter-spacing: 1.5px;
+	padding: 4px 12px;
+	border-radius: 20px;
+	margin-bottom: 14px;
+}
+
+.matcha-pro-card h2 {
+	font-size: 24px;
+	font-weight: 800;
+	color: #fff;
+	margin: 0 0 8px;
+}
+
+.matcha-pro-desc {
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.9);
+	margin: 0 0 24px;
+}
+
+.matcha-pro-features-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	margin-bottom: 28px;
+}
+
+.matcha-pro-feat {
+	background: rgba(255, 255, 255, 0.1);
+	padding: 10px 14px;
+	border-radius: 8px;
+	font-size: 13px;
+	font-weight: 500;
+	backdrop-filter: blur(4px);
+}
+
+.matcha-pro-upgrade-btn {
+	background: #fbc02d !important;
+	border-color: #fbc02d !important;
+	color: #1b5e20 !important;
+	font-weight: 800 !important;
+	padding: 8px 28px !important;
+	border-radius: 8px !important;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ==========================================================================
+   Submit Bar
+   ========================================================================== */
+
+.matcha-submit-bar {
+	margin-top: 24px;
+}
+
+.matcha-submit-bar .button-hero {
+	background: linear-gradient(135deg, #2e7d32, #388e3c) !important;
+	border-color: #1b5e20 !important;
+	color: #fff !important;
+	font-weight: 700 !important;
+	padding: 10px 36px !important;
+	border-radius: 8px !important;
+	box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25) !important;
+	transition: all 0.2s ease !important;
+}
+
+.matcha-submit-bar .button-hero:hover {
+	background: linear-gradient(135deg, #1b5e20, #2e7d32) !important;
+	transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 900px) {
+	.matcha-stats-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.matcha-builder-row {
+		grid-template-columns: 1fr;
+	}
+	.matcha-pro-features-grid {
+		grid-template-columns: 1fr;
+	}
+	.matcha-dash-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+}

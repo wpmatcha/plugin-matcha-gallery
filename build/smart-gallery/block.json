@@ -1,0 +1,100 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "matcha-ai/smart-gallery",
+  "version": "1.0.0",
+  "title": "Matcha AI Smart Gallery",
+  "category": "media",
+  "icon": "format-gallery",
+  "description": "AI-powered filterable image gallery with grid and masonry layouts.",
+  "keywords": [
+    "gallery",
+    "images",
+    "filter",
+    "ai",
+    "matcha",
+    "masonry"
+  ],
+  "textdomain": "matcha-gallery",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "sourceType": {
+      "type": "string",
+      "default": "selected"
+    },
+    "imageIds": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "number"
+      }
+    },
+    "aiTags": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "layout": {
+      "type": "string",
+      "default": "grid",
+      "enum": [
+        "grid",
+        "masonry"
+      ]
+    },
+    "columns": {
+      "type": "number",
+      "default": 3
+    },
+    "columnsTablet": {
+      "type": "number",
+      "default": 2
+    },
+    "columnsMobile": {
+      "type": "number",
+      "default": 1
+    },
+    "gutterSize": {
+      "type": "number",
+      "default": 16
+    },
+    "filtersEnabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "showAllFilter": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "showCaption": {
+      "type": "boolean",
+      "default": false
+    },
+    "lightboxEnabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "galleryId": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css"
+}
