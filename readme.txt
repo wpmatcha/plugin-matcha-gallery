@@ -17,7 +17,7 @@ AI-powered image metadata generation, interactive mosaic photo walls, masonry la
 
 Unlike bloated legacy gallery plugins, Matcha Gallery produces pure vanilla HTML5/CSS3 output with zero jQuery dependencies and ultra-fast page load times (<15KB frontend runtime).
 
-[Live Demo & Documentation](https://wpmatcha.com) | [GitHub Repository](https://github.com/wpmatcha/matcha-gallery)
+[Live Demo & Documentation](https://wpmatcha.com) | [GitHub Repository](https://github.com/wpmatcha/plugin-matcha-gallery)
 
 = 🍵 Key Highlights =
 
