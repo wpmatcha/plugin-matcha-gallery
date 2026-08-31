@@ -65,7 +65,7 @@ final class AI_REST {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( static::class, 'handle_attachments_meta' ),
-				'permission_callback' => array( static::class, 'can_analyze' ),
+				'permission_callback' => array( static::class, 'can_read_attachments_meta' ),
 				'args'                => array(
 					'ids' => array(
 						'type'              => 'string',
@@ -82,21 +82,25 @@ final class AI_REST {
 			array(
 				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => array( static::class, 'handle_update_attachments_meta' ),
-				'permission_callback' => static function () {
-					return current_user_can( 'upload_files' );
-				},
+				'permission_callback' => array( static::class, 'can_update_attachments_meta' ),
 			)
 		);
 	}
 
 	/**
-	 * Capability + rate limit check.
+	 * Capability + rate limit check for AI analysis.
 	 *
+	 * @param WP_REST_Request $request Request.
 	 * @return bool|WP_Error
 	 */
-	public static function can_analyze() {
+	public static function can_analyze( WP_REST_Request $request ) {
 		if ( ! current_user_can( 'upload_files' ) ) {
 			return new WP_Error( 'forbidden', __( 'You do not have permission to analyze images.', 'matcha-gallery' ), array( 'status' => 403 ) );
+		}
+
+		$att_id = (int) $request->get_param( 'attachment_id' );
+		if ( $att_id && ! current_user_can( 'edit_post', $att_id ) ) {
+			return new WP_Error( 'forbidden', __( 'You do not have permission to edit this attachment.', 'matcha-gallery' ), array( 'status' => 403 ) );
 		}
 
 		// Rate limit: 60 per minute per user (supports smooth batch processing).
@@ -111,6 +115,37 @@ final class AI_REST {
 			set_transient( $transient, 1, 60 );
 		} else {
 			set_transient( $transient, $count + 1, 60 );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Permission check for reading attachment metadata.
+	 *
+	 * @return bool
+	 */
+	public static function can_read_attachments_meta(): bool {
+		return current_user_can( 'upload_files' );
+	}
+
+	/**
+	 * Permission check for bulk updating attachment metadata.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public static function can_update_attachments_meta( WP_REST_Request $request ): bool {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return false;
+		}
+
+		$updates = (array) $request->get_param( 'updates' );
+		foreach ( array_keys( $updates ) as $id ) {
+			$att_id = (int) $id;
+			if ( $att_id > 0 && ! current_user_can( 'edit_post', $att_id ) ) {
+				return false;
+			}
 		}
 
 		return true;
@@ -300,7 +335,7 @@ final class AI_REST {
 
 		foreach ( $updates as $id => $meta ) {
 			$att_id = (int) $id;
-			if ( $att_id <= 0 || ! wp_attachment_is_image( $att_id ) ) {
+			if ( $att_id <= 0 || ! wp_attachment_is_image( $att_id ) || ! current_user_can( 'edit_post', $att_id ) ) {
 				continue;
 			}
 			$data = array(

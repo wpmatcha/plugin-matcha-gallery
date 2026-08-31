@@ -127,13 +127,13 @@ class Settings_Page {
 			return array();
 		}
 
-		$endpoint = esc_url_raw( $input['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions' );
+		$endpoint = esc_url_raw( $input['api_endpoint'] ?? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
 		// SSRF guard on custom endpoint
 		if ( class_exists( '\\Matcha_AI_Smart_Gallery\\AI\\AI_REST' ) ) {
 			$check = \Matcha_AI_Smart_Gallery\AI\AI_REST::validate_endpoint_url( $endpoint );
 			if ( is_wp_error( $check ) ) {
 				add_settings_error( 'matcha_gallery_settings', 'invalid_endpoint', $check->get_error_message() );
-				$endpoint = 'https://api.openai.com/v1/chat/completions';
+				$endpoint = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
 			}
 		}
 
@@ -147,7 +147,7 @@ class Settings_Page {
 
 		return array(
 			'api_key'            => $raw_key,
-			'api_model'          => sanitize_text_field( $input['api_model'] ?? 'gpt-4o-mini' ),
+			'api_model'          => sanitize_text_field( $input['api_model'] ?? 'gemini-1.5-flash' ),
 			'api_endpoint'       => $endpoint,
 			'generate_alt'       => ! empty( $input['generate_alt'] ),
 			'generate_title'     => ! empty( $input['generate_title'] ),
@@ -279,13 +279,13 @@ class Settings_Page {
 
 						<div class="matcha-field-row">
 							<label for="matcha_api_model"><strong><?php esc_html_e( 'Vision Model', 'matcha-gallery' ); ?></strong></label>
-							<input type="text" id="matcha_api_model" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_model]" value="<?php echo esc_attr( $settings['api_model'] ?? 'gpt-4o-mini' ); ?>" class="regular-text" />
-							<p class="description"><?php esc_html_e( 'e.g. gpt-4o-mini, gpt-4o, gemini-1.5-flash, gemini-2.0-flash', 'matcha-gallery' ); ?></p>
+							<input type="text" id="matcha_api_model" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_model]" value="<?php echo esc_attr( $settings['api_model'] ?? 'gemini-1.5-flash' ); ?>" class="regular-text" />
+							<p class="description"><?php esc_html_e( 'e.g. gemini-1.5-flash, gemini-2.0-flash, gpt-4o-mini', 'matcha-gallery' ); ?></p>
 						</div>
 
 						<div class="matcha-field-row">
 							<label for="matcha_api_endpoint"><strong><?php esc_html_e( 'API Endpoint URL', 'matcha-gallery' ); ?></strong></label>
-							<input type="url" id="matcha_api_endpoint" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_endpoint]" value="<?php echo esc_attr( $settings['api_endpoint'] ?? 'https://api.openai.com/v1/chat/completions' ); ?>" class="large-text" />
+							<input type="url" id="matcha_api_endpoint" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_endpoint]" value="<?php echo esc_attr( $settings['api_endpoint'] ?? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' ); ?>" class="large-text" />
 							<p class="description"><?php esc_html_e( 'For Google Gemini: https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'matcha-gallery' ); ?></p>
 						</div>
 					</div>

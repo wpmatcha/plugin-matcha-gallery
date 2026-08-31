@@ -44,12 +44,12 @@ final class Gallery_REST {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( static::class, 'list_galleries' ),
-					'permission_callback' => array( static::class, 'can_edit' ),
+					'permission_callback' => array( static::class, 'can_read_galleries' ),
 				),
 				array(
 					'methods'             => WP_REST_Server::CREATABLE,
 					'callback'            => array( static::class, 'create_gallery' ),
-					'permission_callback' => array( static::class, 'can_edit' ),
+					'permission_callback' => array( static::class, 'can_create_gallery' ),
 					'args'                => self::schema_args(),
 				),
 			)
@@ -62,30 +62,81 @@ final class Gallery_REST {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( static::class, 'get_gallery' ),
-					'permission_callback' => array( static::class, 'can_edit' ),
+					'permission_callback' => array( static::class, 'can_read_gallery' ),
 				),
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( static::class, 'update_gallery' ),
-					'permission_callback' => array( static::class, 'can_edit' ),
+					'permission_callback' => array( static::class, 'can_edit_gallery' ),
 					'args'                => self::schema_args(),
 				),
 				array(
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => array( static::class, 'delete_gallery' ),
-					'permission_callback' => array( static::class, 'can_edit' ),
+					'permission_callback' => array( static::class, 'can_delete_gallery' ),
 				),
 			)
 		);
 	}
 
 	/**
-	 * Capability check.
+	 * Check capability to list galleries.
 	 *
 	 * @return bool
 	 */
-	public static function can_edit(): bool {
+	public static function can_read_galleries(): bool {
 		return current_user_can( 'edit_posts' );
+	}
+
+	/**
+	 * Check capability to create a new gallery.
+	 *
+	 * @return bool
+	 */
+	public static function can_create_gallery(): bool {
+		return current_user_can( 'edit_posts' );
+	}
+
+	/**
+	 * Check capability to read a specific gallery post.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public static function can_read_gallery( WP_REST_Request $request ): bool {
+		$id = (int) $request->get_param( 'id' );
+		if ( ! $id ) {
+			return false;
+		}
+		return current_user_can( 'read_post', $id ) || current_user_can( 'edit_post', $id );
+	}
+
+	/**
+	 * Check capability to edit a specific gallery post.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public static function can_edit_gallery( WP_REST_Request $request ): bool {
+		$id = (int) $request->get_param( 'id' );
+		if ( ! $id ) {
+			return false;
+		}
+		return current_user_can( 'edit_post', $id );
+	}
+
+	/**
+	 * Check capability to delete a specific gallery post.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return bool
+	 */
+	public static function can_delete_gallery( WP_REST_Request $request ): bool {
+		$id = (int) $request->get_param( 'id' );
+		if ( ! $id ) {
+			return false;
+		}
+		return current_user_can( 'delete_post', $id );
 	}
 
 	/**

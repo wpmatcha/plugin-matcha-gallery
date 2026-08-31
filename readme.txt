@@ -15,7 +15,7 @@ AI-powered image metadata generation, interactive mosaic photo walls, masonry la
 
 **Matcha Gallery** is the next-generation WordPress gallery plugin built for photographers, visual artists, designers, and eCommerce portfolios. It combines a state-of-the-art **Matcha Studio visual editor** with Google Gemini AI vision to automatically tag photos, generate SEO alt-text, calculate color palettes, and create stunning responsive photo walls.
 
-Unlike bloated legacy gallery plugins, Matcha Gallery produces pure vanilla HTML5/CSS3 output with zero jQuery dependencies and ultra-fast page load times (<15KB frontend runtime).
+Matcha Gallery produces clean, modern HTML5/CSS3 output with zero jQuery dependencies and fast page load times (<15KB frontend runtime).
 
 [Live Demo & Documentation](https://wpmatcha.com) | [GitHub Repository](https://github.com/wpmatcha/plugin-matcha-gallery)
 
@@ -41,14 +41,25 @@ Unlike bloated legacy gallery plugins, Matcha Gallery produces pure vanilla HTML
 
 == Third-Party Services ==
 
-This plugin integrates with the following external third-party API services to provide AI image analysis and metadata generation:
+This plugin can optionally integrate with the following external third-party AI provider services to generate image alt-text, titles, captions, keyword tags, color swatches, and focal cropping coordinates. All AI features are entirely optional and require you to provide your own API key in the plugin settings.
 
-* **Google Gemini AI Vision API (Google LLC)**
-  * **Purpose:** Analyzes uploaded images to generate descriptive alt-text, titles, captions, keyword tags, dominant color palettes, and focal point coordinates.
-  * **When it connects:** Only when you explicitly click "⚡ AI Enhance" in the Matcha Studio editor, use the "Generate AI Metadata" button in the WordPress Media Library, or enable the "Auto-generate on upload" setting.
-  * **Data Transmitted:** Image file URL or base64 image data sent over secure HTTPS directly to the Google Gemini API endpoint.
-  * **Privacy Policy:** [Google Privacy Policy](https://policies.google.com/privacy)
-  * **Terms of Service:** [Google Generative AI Terms of Service](https://ai.google.dev/terms)
+* **Google Gemini AI API (Google LLC)**
+  * **What it is used for:** Analyzes uploaded image attachments to generate descriptive alt-text, titles, captions, keyword tags, dominant color palettes, and focal point coordinates.
+  * **What data is sent and when:** Image URLs or base64 image data are sent over secure HTTPS only when you explicitly click "⚡ AI Enhance", click "Generate AI Metadata" in the WordPress Media Library, or enable the "Auto-generate on upload" option in settings.
+  * **Privacy Policy:** [https://policies.google.com/privacy](https://policies.google.com/privacy)
+  * **Terms of Service:** [https://ai.google.dev/terms](https://ai.google.dev/terms)
+
+* **OpenAI API (OpenAI, Inc.)**
+  * **What it is used for:** Vision-based image metadata generation, keyword tagging, and alt text analysis for users configuring an OpenAI API key.
+  * **What data is sent and when:** Image data and text prompts are sent over secure HTTPS only when triggered by user request in the editor or media library.
+  * **Privacy Policy:** [https://openai.com/policies/privacy-policy/](https://openai.com/policies/privacy-policy/)
+  * **Terms of Service:** [https://openai.com/policies/terms-of-use/](https://openai.com/policies/terms-of-use/)
+
+* **OpenRouter API (OpenRouter)**
+  * **What it is used for:** Multi-model AI routing allowing users to connect alternative vision models using an OpenRouter API key.
+  * **What data is sent and when:** Image data and prompt requests are sent over secure HTTPS only when triggered by user request.
+  * **Privacy Policy:** [https://openrouter.ai/privacy](https://openrouter.ai/privacy)
+  * **Terms of Service:** [https://openrouter.ai/terms](https://openrouter.ai/terms)
 
 == Installation ==
 

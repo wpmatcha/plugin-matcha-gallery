@@ -120,8 +120,8 @@ register_activation_hook(
 				'matcha_gallery_settings',
 				array(
 					'api_key'            => '',
-					'api_model'          => 'gpt-4o-mini',
-					'api_endpoint'       => 'https://api.openai.com/v1/chat/completions',
+					'api_model'          => 'gemini-1.5-flash',
+					'api_endpoint'       => 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
 					'generate_alt'       => true,
 					'generate_title'     => true,
 					'generate_caption'   => true,
