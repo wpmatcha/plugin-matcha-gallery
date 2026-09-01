@@ -168,7 +168,7 @@ class Media_Actions {
 		foreach ( $post_ids as $post_id ) {
 			$post_id = (int) $post_id;
 
-			if ( ! wp_attachment_is_image( $post_id ) ) {
+			if ( ! wp_attachment_is_image( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
 				continue;
 			}
 
@@ -362,6 +362,13 @@ class Media_Actions {
 			wp_send_json_error(
 				array( 'message' => __( 'Invalid attachment ID.', 'matcha-gallery' ) ),
 				400
+			);
+		}
+
+		if ( ! current_user_can( 'edit_post', $attachment_id ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'You do not have permission to edit this attachment.', 'matcha-gallery' ) ),
+				403
 			);
 		}
 

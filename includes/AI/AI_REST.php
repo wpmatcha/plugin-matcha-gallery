@@ -123,10 +123,25 @@ final class AI_REST {
 	/**
 	 * Permission check for reading attachment metadata.
 	 *
+	 * @param WP_REST_Request $request Request.
 	 * @return bool
 	 */
-	public static function can_read_attachments_meta(): bool {
-		return current_user_can( 'upload_files' );
+	public static function can_read_attachments_meta( WP_REST_Request $request ): bool {
+		if ( ! current_user_can( 'upload_files' ) ) {
+			return false;
+		}
+
+		$raw_ids = (string) $request->get_param( 'ids' );
+		if ( ! empty( $raw_ids ) ) {
+			$ids = array_map( 'absint', explode( ',', $raw_ids ) );
+			foreach ( $ids as $att_id ) {
+				if ( $att_id > 0 && ! current_user_can( 'read_post', $att_id ) && ! current_user_can( 'edit_post', $att_id ) ) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
