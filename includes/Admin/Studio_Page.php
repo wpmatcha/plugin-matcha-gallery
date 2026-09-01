@@ -197,7 +197,7 @@ final class Studio_Page {
 		wp_enqueue_script( 'matcha-studio', $studio_js, array( 'media-editor' ), MATCHA_GALLERY_VERSION . '.4', true );
 		wp_enqueue_style( 'matcha-studio-v4', MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css', array(), MATCHA_GALLERY_VERSION . '.4' );
 		// Local vendored libraries (WordPress.org compliant — no remote CDNs)
-		wp_enqueue_script( 'sortablejs', MATCHA_GALLERY_URL . 'assets/js/vendor/sortable.min.js', array(), '1.15.2', true );
+		wp_enqueue_script( 'sortablejs', MATCHA_GALLERY_URL . 'assets/js/vendor/sortable.min.js', array(), '1.15.6', true );
 		wp_enqueue_script( 'html2canvas', MATCHA_GALLERY_URL . 'assets/js/vendor/html2canvas.min.js', array(), '1.4.1', true );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Gallery ID reading for script localization.

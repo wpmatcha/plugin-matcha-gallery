@@ -131,10 +131,6 @@ final class Gallery_CPT {
 	}
 
 	/**
-	 * Sanitize config array with allowlist.
-	 *
-	 * @param array<string,mixed> $cfg Raw config.
-	/**
 	 * Check if Matcha Gallery Pro add-on is active.
 	 *
 	 * @return bool

@@ -82,7 +82,7 @@ if (root) {
           <a href="#" class="matcha-brand-badge">
             <span class="brand-leaf">${Icons.leaf}</span>
             <span>Matcha Studio</span>
-            ${isPro ? '<span class="matcha-pro-tag" style="background:rgba(34,197,94,0.15);color:#4ade80;border-color:rgba(34,197,94,0.3);">PRO</span>' : '<span class="matcha-pro-tag" id="top-pro-badge" style="cursor:pointer;" title="Click to view Pro features">FREE</span>'}
+            <span class="matcha-pro-tag" style="background:rgba(34,197,94,0.15);color:#4ade80;border-color:rgba(34,197,94,0.3);">STUDIO</span>
           </a>
           <input id="studio-title" class="matcha-studio__title" value="${escapeHtml(initialTitle || 'Untitled Gallery')}" placeholder="Gallery Title..." />
           <span id="save-status" style="font-size:11px;color:#4ade80;font-weight:700;"></span>
@@ -113,7 +113,7 @@ if (root) {
                 <div>
                   <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
                     Wall Snapshot (PNG)
-                    ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+                    
                   </div>
                   <div style="font-size:9px;color:var(--st-text-muted);">2x High-Res visual rendering of wall layout</div>
                 </div>
@@ -123,7 +123,7 @@ if (root) {
                 <div>
                   <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
                     Client Proofing Sheet (Print / PDF)
-                    ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+                    
                   </div>
                   <div style="font-size:9px;color:var(--st-text-muted);">Itemized presentation with dimensions & prices</div>
                 </div>
@@ -150,7 +150,7 @@ if (root) {
           <div class="matcha-tabs">
             <button data-tab="images" class="is-active">${Icons.image} Photos</button>
             <button data-tab="blueprints">${Icons.layoutGrid} Layouts</button>
-            <button data-tab="superpowers">${Icons.sparkles} Pro ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}</button>
+            <button data-tab="superpowers">${Icons.sparkles} Superpowers</button>
           </div>
           <div id="studio-left-tabpanel" class="matcha-tabpanel"></div>
         </aside>
@@ -189,53 +189,7 @@ if (root) {
         </aside>
       </div>
     </div>
-
-    <!-- Pro Upgrade Modal -->
-    <div id="matcha-pro-modal-backdrop" class="matcha-pro-modal-backdrop">
-      <div class="matcha-pro-modal">
-        <button type="button" class="close-btn" id="btn-close-pro-modal">×</button>
-        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-          ${Icons.gem}
-        </div>
-        <h3 style="margin:0 0 6px 0;font-size:18px;font-weight:800;" id="pro-modal-title">Unlock Matcha Pro</h3>
-        <p style="font-size:12px;color:#94a3b8;margin:0 0 16px;">Supercharge your gallery with client proofing, custom mosaic geometry, luxury framing, infinite scroll, and shoppable links.</p>
-
-        <div class="matcha-pro-features-list">
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> PhotoBlocks Mosaic (1x1, 2x1, 1x2, 2x2 custom spans)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Bento Showcase & Pinwheel Spiral layout blueprints</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Infinite Smooth Scroll & Numbered Page Navigation</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> In-Frame Pan & Zoom Cropping (2D focal reticle)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Luxury Picture Frames (Natural Oak, Black Metal, Brushed Gold)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Multi-Section Gallery Chapters (Ceremony, Reception, Portraits)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Client Proofing (Favorites Heart Tray + Export list)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> Shoppable Buy Hotspots (Buy Now button + Price tag)</div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span> 1-Click 2x PNG Wall Snapshot & PDF Proofing Sheet</div>
-        </div>
-
-        <a href="${escapeHtml(upgradeUrl)}" target="_blank" class="matcha-publish-btn" style="display:block;text-align:center;padding:12px 20px;font-size:13px;text-decoration:none;border-radius:8px;">
-          Upgrade to Matcha Pro Now →
-        </a>
-      </div>
-    </div>
   `;
-
-  // --- Pro Modal Triggers ---
-  const proModal = document.getElementById('matcha-pro-modal-backdrop');
-  const proModalTitle = document.getElementById('pro-modal-title');
-  document.getElementById('btn-close-pro-modal')?.addEventListener('click', () => {
-    proModal.classList.remove('is-visible');
-  });
-  proModal.addEventListener('click', e => {
-    if (e.target === proModal) proModal.classList.remove('is-visible');
-  });
-  document.getElementById('top-pro-badge')?.addEventListener('click', () => {
-    showProModal('Unlock All Matcha Pro Features');
-  });
-
-  function showProModal(featureName = 'Unlock Matcha Pro') {
-    proModalTitle.textContent = featureName;
-    proModal.classList.add('is-visible');
-  }
 
   // --- Topbar Bindings ---
   const titleEl = document.getElementById('studio-title');
@@ -277,11 +231,9 @@ if (root) {
   window.addEventListener('click', () => exportDropdown.classList.remove('is-open'));
 
   document.getElementById('export-action-png').addEventListener('click', () => {
-    if (!isPro) return showProModal('Wall Snapshot (PNG) is a Pro Feature');
     exportPNG();
   });
   document.getElementById('export-action-pdf').addEventListener('click', () => {
-    if (!isPro) return showProModal('Client Proofing PDF Export is a Pro Feature');
     exportPDFSheet();
   });
   document.getElementById('export-action-md').addEventListener('click', copyProposalMarkdown);
@@ -516,7 +468,7 @@ if (root) {
             </button>
           `).join('')}
           <button type="button" id="btn-add-section" class="matcha-studio-section-pill" style="color:#4ade80;border-color:rgba(34,197,94,0.3);" title="Create new gallery chapter">
-            + Chapter ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+            + Chapter 
           </button>
         </div>
 
@@ -538,7 +490,7 @@ if (root) {
             <span>${Icons.bolt}</span> AI Enhance
           </button>
           <button type="button" id="matcha-smart-fill" class="matcha-exit-btn" style="font-weight:700;color:#38bdf8;display:flex;align-items:center;justify-content:center;gap:5px;" title="Auto-match aspect ratios and tile geometry">
-            <span>${Icons.sparkles}</span> Smart Fill ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}
+            <span>${Icons.sparkles}</span> Smart Fill
           </button>
         </div>
         <div class="matcha-progress" style="height:4px;background:#202632;border-radius:4px;overflow:hidden;margin:6px 0;display:none;">
@@ -625,7 +577,7 @@ if (root) {
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.layoutGrid} Layout Blueprints</span>
           <button type="button" id="btn-smart-shuffle" style="background:none;border:none;color:#4ade80;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;">
-            <span>${Icons.sparkles}</span> Auto-Arrange ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}
+            <span>${Icons.sparkles}</span> Auto-Arrange
           </button>
         </div>
         <p style="font-size:11px;color:var(--st-text-muted);margin:0 0 12px;">Select an algorithmic layout style or let AI auto-arrange.</p>
@@ -649,21 +601,21 @@ if (root) {
           <div class="matcha-blueprint-card ${curLayout === 'mosaic' ? 'is-active' : ''}" data-layout="mosaic">
             <span class="matcha-blueprint-icon">${Icons.mosaic}</span>
             <div class="matcha-blueprint-title">
-              PhotoBlocks Mosaic ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}
+              PhotoBlocks Mosaic
             </div>
             <div class="matcha-blueprint-desc">Custom tile spans</div>
           </div>
           <div class="matcha-blueprint-card ${curLayout === 'bento' ? 'is-active' : ''}" data-layout="bento">
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
             <div class="matcha-blueprint-title">
-              Bento Showcase ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}
+              Bento Showcase
             </div>
             <div class="matcha-blueprint-desc">Modern hero spread</div>
           </div>
           <div class="matcha-blueprint-card ${curLayout === 'pinwheel' ? 'is-active' : ''}" data-layout="pinwheel">
             <span class="matcha-blueprint-icon">${Icons.pinwheel}</span>
             <div class="matcha-blueprint-title">
-              Pinwheel Spiral ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock}</span>` : ''}
+              Pinwheel Spiral
             </div>
             <div class="matcha-blueprint-desc">Center hero + spiral</div>
           </div>
@@ -677,10 +629,10 @@ if (root) {
       <div class="matcha-card">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.folder} Multi-Section Chapters</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-sections-toggle" ${cfg.sectionsEnabled !== false && isPro ? 'checked' : ''} ${!isPro ? 'disabled' : ''}>
+          <input type="checkbox" id="st-sections-toggle" ${cfg.sectionsEnabled !== false ? "checked" : ""}>
           Enable Chapter Tab Navigation
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -689,10 +641,10 @@ if (root) {
 
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.palette} AI Color Swatches</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-color-filter" ${cfg.colorFilterEnabled !== false && isPro ? 'checked' : ''} ${!isPro ? 'disabled' : ''}>
+          <input type="checkbox" id="st-color-filter" ${cfg.colorFilterEnabled !== false ? "checked" : ""}>
           Enable Live Color Swatches Filter
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -701,10 +653,10 @@ if (root) {
 
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.shoppingBag} Shoppable Portfolios</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-shoppable" ${cfg.shoppableEnabled !== false && isPro ? 'checked' : ''} ${!isPro ? 'disabled' : ''}>
+          <input type="checkbox" id="st-shoppable" ${cfg.shoppableEnabled !== false ? "checked" : ""}>
           Enable Shoppable Buy Buttons
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -713,25 +665,17 @@ if (root) {
 
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.heart} Client Proofing</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-proofing" ${cfg.proofingEnabled && isPro ? 'checked' : ''} ${!isPro ? 'disabled' : ''}>
+          <input type="checkbox" id="st-proofing" ${cfg.proofingEnabled ? "checked" : ""}>
           Enable Favorites Tray & Export
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 0 22px;">
           Clients can heart photos and export a clean list of selected image IDs with 1 click.
         </p>
 
-        ${!isPro ? `
-          <div style="margin-top:16px;padding:12px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:8px;text-align:center;">
-            <div style="font-size:11px;font-weight:800;color:#fbbf24;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:5px;">
-              ${Icons.lock} PRO FEATURES LOCKED
-            </div>
-            <p style="font-size:10px;color:#cbd5e1;margin:0 0 10px;">Upgrade to Matcha Pro to unlock Shoppable Links, Client Proofing, and Chapters.</p>
-            <button type="button" id="btn-unlock-pro-superpowers" class="matcha-publish-btn" style="padding:6px 14px;font-size:11px;">Unlock Pro →</button>
-          </div>
-        ` : ''}
+        
       </div>
     `;
   }
@@ -771,10 +715,10 @@ if (root) {
         <select id="st-frame-style" class="matcha-dark-select" style="margin-bottom:12px;">
           <option value="none" ${curFrame === 'none' ? 'selected' : ''}>Frameless Clean (Modern)</option>
           <option value="white-mat" ${curFrame === 'white-mat' ? 'selected' : ''}>Gallery White Matting</option>
-          <option value="black-metal" ${curFrame === 'black-metal' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Slim Matte Black Metal ${!isPro ? '(PRO)' : ''}</option>
-          <option value="natural-oak" ${curFrame === 'natural-oak' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Natural Oak Wood ${!isPro ? '(PRO)' : ''}</option>
-          <option value="gold-brass" ${curFrame === 'gold-brass' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Brushed Gold Brass ${!isPro ? '(PRO)' : ''}</option>
-          <option value="glass-float" ${curFrame === 'glass-float' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Glassmorphism 3D Float ${!isPro ? '(PRO)' : ''}</option>
+          <option value="black-metal" ${curFrame === 'black-metal' ? 'selected' : ''} >Slim Matte Black Metal </option>
+          <option value="natural-oak" ${curFrame === 'natural-oak' ? 'selected' : ''} >Natural Oak Wood </option>
+          <option value="gold-brass" ${curFrame === 'gold-brass' ? 'selected' : ''} >Brushed Gold Brass </option>
+          <option value="glass-float" ${curFrame === 'glass-float' ? 'selected' : ''} >Glassmorphism 3D Float </option>
         </select>
 
         <div class="range-row">
@@ -853,9 +797,9 @@ if (root) {
         </div>
         <select id="st-pagination" class="matcha-dark-select" style="margin-bottom:12px;">
           <option value="none" ${curPag === 'none' ? 'selected' : ''}>All Photos (No Pagination)</option>
-          <option value="load-more" ${curPag === 'load-more' ? 'selected' : ''}>Load More Button (Free)</option>
-          <option value="infinite" ${curPag === 'infinite' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Infinite Smooth Scroll ${!isPro ? '(PRO)' : ''}</option>
-          <option value="pages" ${curPag === 'pages' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Numbered Pages Navigation ${!isPro ? '(PRO)' : ''}</option>
+          <option value="load-more" ${curPag === 'load-more' ? 'selected' : ''}>Load More Button</option>
+          <option value="infinite" ${curPag === 'infinite' ? 'selected' : ''} >Infinite Smooth Scroll </option>
+          <option value="pages" ${curPag === 'pages' ? 'selected' : ''} >Numbered Pages Navigation </option>
         </select>
 
         ${curPag !== 'none' ? `
@@ -871,11 +815,11 @@ if (root) {
             <div>
               <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Visual Style</label>
               <select id="st-loadmore-style" class="matcha-dark-select">
-                <option value="pill" ${(cfg.loadMoreStyle || 'pill') === 'pill' ? 'selected' : ''}>Solid Accent Pill (Free)</option>
-                <option value="outline" ${(cfg.loadMoreStyle || 'pill') === 'outline' ? 'selected' : ''}>Accent Outline / Border (Free)</option>
-                <option value="minimal" ${(cfg.loadMoreStyle || 'pill') === 'minimal' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Minimalist Text Link ${!isPro ? '(PRO)' : ''}</option>
-                <option value="glass" ${(cfg.loadMoreStyle || 'pill') === 'glass' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Frosted Glass Pill ${!isPro ? '(PRO)' : ''}</option>
-                <option value="dark" ${(cfg.loadMoreStyle || 'pill') === 'dark' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Solid Obsidian Dark ${!isPro ? '(PRO)' : ''}</option>
+                <option value="pill" ${(cfg.loadMoreStyle || 'pill') === 'pill' ? 'selected' : ''}>Solid Accent Pill</option>
+                <option value="outline" ${(cfg.loadMoreStyle || 'pill') === 'outline' ? 'selected' : ''}>Accent Outline / Border</option>
+                <option value="minimal" ${(cfg.loadMoreStyle || 'pill') === 'minimal' ? 'selected' : ''} >Minimalist Text Link </option>
+                <option value="glass" ${(cfg.loadMoreStyle || 'pill') === 'glass' ? 'selected' : ''} >Frosted Glass Pill </option>
+                <option value="dark" ${(cfg.loadMoreStyle || 'pill') === 'dark' ? 'selected' : ''} >Solid Obsidian Dark </option>
               </select>
             </div>
             <div>
@@ -909,11 +853,11 @@ if (root) {
             <div>
               <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Visual Style</label>
               <select id="st-filter-style" class="matcha-dark-select">
-                <option value="pills" ${(cfg.filterStyle || 'pills') === 'pills' ? 'selected' : ''}>Modern Rounded Pills (Free)</option>
-                <option value="underline" ${(cfg.filterStyle || 'pills') === 'underline' ? 'selected' : ''}>Minimalist Underline Tabs (Free)</option>
-                <option value="dark" ${(cfg.filterStyle || 'pills') === 'dark' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Solid Obsidian Dark ${!isPro ? '(PRO)' : ''}</option>
-                <option value="minimal" ${(cfg.filterStyle || 'pills') === 'minimal' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Clean Ghost Text ${!isPro ? '(PRO)' : ''}</option>
-                <option value="glass" ${(cfg.filterStyle || 'pills') === 'glass' ? 'selected' : ''} ${!isPro ? 'data-pro="true"' : ''}>${!isPro ? '🔒 ' : ''}Frosted Glassmorphic ${!isPro ? '(PRO)' : ''}</option>
+                <option value="pills" ${(cfg.filterStyle || 'pills') === 'pills' ? 'selected' : ''}>Modern Rounded Pills</option>
+                <option value="underline" ${(cfg.filterStyle || 'pills') === 'underline' ? 'selected' : ''}>Minimalist Underline Tabs</option>
+                <option value="dark" ${(cfg.filterStyle || 'pills') === 'dark' ? 'selected' : ''} >Solid Obsidian Dark </option>
+                <option value="minimal" ${(cfg.filterStyle || 'pills') === 'minimal' ? 'selected' : ''} >Clean Ghost Text </option>
+                <option value="glass" ${(cfg.filterStyle || 'pills') === 'glass' ? 'selected' : ''} >Frosted Glassmorphic </option>
               </select>
             </div>
 
@@ -979,17 +923,13 @@ if (root) {
         <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);">Custom Brand Hex Color</label>
-            ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+            
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
-            <input type="color" id="st-accent-picker" value="${cfg.accentColor || '#22c55e'}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:${isPro ? 'pointer' : 'not-allowed'};padding:0;" ${!isPro ? 'disabled' : ''} />
-            <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || '#22c55e')}" placeholder="#22c55e" style="font-family:monospace;font-size:12px;cursor:${isPro ? 'text' : 'not-allowed'};" ${!isPro ? 'disabled' : ''} />
+            <input type="color" id="st-accent-picker" value="${cfg.accentColor || '#22c55e'}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:pointer;padding:0;" />
+            <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || '#22c55e')}" placeholder="#22c55e" style="font-family:monospace;font-size:12px;cursor:text;" />
           </div>
-          ${!isPro ? `
-            <div style="margin-top:6px;font-size:10px;color:#64748b;line-height:1.3;">
-              Free includes 5 designer presets. Upgrade to Pro for custom client hex codes.
-            </div>
-          ` : ''}
+          
         </div>
       </div>
     `;
@@ -1025,7 +965,7 @@ if (root) {
       <div class="matcha-card">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.crosshair} In-Frame Pan & Zoom</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : '<button type="button" id="btn-reset-ai-focal" style="background:none;border:none;color:#4ade80;cursor:pointer;font-size:10px;font-weight:700;">↺ Reset</button>'}
+          <button type="button" id="btn-reset-ai-focal" style="background:none;border:none;color:#4ade80;cursor:pointer;font-size:10px;font-weight:700;">↺ Reset</button>
         </div>
         <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 8px;">Click or drag to pan the photo crop in real time.</p>
 
@@ -1041,13 +981,13 @@ if (root) {
 
         <div class="range-row">
           <label>Zoom Scale</label>
-          <input id="prop-crop-zoom" type="range" min="1" max="2.5" step="0.05" value="${zoom}" ${!isPro ? 'disabled' : ''}>
+          <input id="prop-crop-zoom" type="range" min="1" max="2.5" step="0.05" value="${zoom}">
           <span class="val">${zoom.toFixed(2)}x</span>
         </div>
 
         <div class="range-row">
           <label>Horizontal (X)</label>
-          <input id="prop-focal-x" type="range" min="0" max="100" value="${fp.x}" ${!isPro ? 'disabled' : ''}>
+          <input id="prop-focal-x" type="range" min="0" max="100" value="${fp.x}">
           <span class="val">${fp.x}%</span>
         </div>
 
@@ -1062,7 +1002,7 @@ if (root) {
       <div class="matcha-card">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.mosaic} Mosaic Tile Geometry</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <button type="button" class="matcha-exit-btn prop-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-span="1x1">1x1 Standard</button>
@@ -1132,20 +1072,20 @@ if (root) {
       <div class="matcha-card">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.shoppingBag} Shoppable Action Link</span>
-          ${!isPro ? `<span class="matcha-pro-tag">${Icons.lock} PRO</span>` : ''}
+          
         </div>
         <div style="margin-bottom:8px;">
           <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Product / Page URL</label>
-          <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || '')}" placeholder="https://store.com/product" ${!isPro ? 'disabled' : ''} />
+          <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || '')}" placeholder="https://store.com/product" />
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <div>
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Price Tag</label>
-            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || '')}" placeholder="$45" ${!isPro ? 'disabled' : ''} />
+            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || '')}" placeholder="$45" />
           </div>
           <div>
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Text</label>
-            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || 'Shop Now')}" placeholder="Buy Now" ${!isPro ? 'disabled' : ''} />
+            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || 'Shop Now')}" placeholder="Buy Now" />
           </div>
         </div>
       </div>
@@ -1155,11 +1095,7 @@ if (root) {
   function bindWallProperties() {
     document.getElementById('st-frame-style')?.addEventListener('change', e => {
       const val = e.target.value;
-      const opt = e.target.selectedOptions[0];
-      if (opt?.dataset.pro && !isPro) {
-        e.target.value = 'none';
-        return showProModal('Picture Framing is a Pro Feature');
-      }
+      
       patchConfig({ frameStyle: val });
       renderCanvas();
       autosaveSoon();
@@ -1182,11 +1118,7 @@ if (root) {
     });
     document.getElementById('st-pagination')?.addEventListener('change', e => {
       const val = e.target.value;
-      const opt = e.target.selectedOptions[0];
-      if (opt?.dataset.pro && !isPro) {
-        e.target.value = 'none';
-        return showProModal(`${opt.textContent} is a Pro Feature`);
-      }
+      
       patchConfig({ paginationType: val });
       renderRightPanel();
       renderCanvas();
@@ -1199,12 +1131,6 @@ if (root) {
       autosaveSoon();
     });
     document.getElementById('st-loadmore-style')?.addEventListener('change', e => {
-      const selOpt = e.target.selectedOptions[0];
-      if (selOpt && selOpt.dataset.pro === 'true' && !isPro) {
-        e.target.value = getState().config.loadMoreStyle || 'pill';
-        showProModal('Unlock Premium Load More Button Styles (Minimalist, Frosted Glass, Obsidian Dark) with Matcha Gallery Pro!');
-        return;
-      }
       patchConfig({ loadMoreStyle: e.target.value });
       renderCanvas();
       autosaveSoon();
@@ -1260,12 +1186,6 @@ if (root) {
       autosaveSoon();
     });
     document.getElementById('st-filter-style')?.addEventListener('change', e => {
-      const selOpt = e.target.selectedOptions[0];
-      if (selOpt && selOpt.dataset.pro === 'true' && !isPro) {
-        e.target.value = getState().config.filterStyle || 'pills';
-        showProModal('Unlock Premium Filter Visual Styles (Obsidian Dark, Frosted Glass, Clean Ghost) with Matcha Gallery Pro!');
-        return;
-      }
       patchConfig({ filterStyle: e.target.value });
       renderCanvas();
       autosaveSoon();
@@ -1312,10 +1232,7 @@ if (root) {
     const accentHex = document.getElementById('st-accent-hex');
 
     accentPicker?.addEventListener('input', e => {
-      if (!isPro) {
-        showProModal('Custom Brand Hex Color is a Pro Feature. Choose from 5 curated designer palettes or upgrade to Pro!');
-        return;
-      }
+      
       if (accentHex) accentHex.value = e.target.value;
       patchConfig({ accentColor: e.target.value });
       renderCanvas();
@@ -1323,10 +1240,7 @@ if (root) {
     });
 
     accentHex?.addEventListener('change', e => {
-      if (!isPro) {
-        showProModal('Custom Brand Hex Color is a Pro Feature. Choose from 5 curated designer palettes or upgrade to Pro!');
-        return;
-      }
+      
       let val = e.target.value.trim();
       if (!val.startsWith('#')) val = '#' + val;
       if (/^#[0-9a-fA-F]{3,8}$/.test(val)) {
@@ -1382,9 +1296,7 @@ if (root) {
     }
 
     if (cropperBox) {
-      if (!isPro) {
-        cropperBox.addEventListener('click', () => showProModal('In-Frame 2D Pan & Zoom is a Pro Feature'));
-      } else {
+      {
         let isDragging = false;
         const handlePointer = (e) => {
           const rect = cropperBox.getBoundingClientRect();
@@ -1417,7 +1329,6 @@ if (root) {
     }
 
     zoomInp?.addEventListener('input', e => {
-      if (!isPro) return showProModal('Focal Zoom is a Pro Feature');
       const z = parseFloat(e.target.value);
       const curX = parseInt(xInp?.value || 50);
       const curY = parseInt(yInp?.value || 50);
@@ -1425,7 +1336,6 @@ if (root) {
     });
 
     xInp?.addEventListener('input', e => {
-      if (!isPro) return showProModal('Focal Pan is a Pro Feature');
       const x = parseInt(e.target.value);
       const curY = parseInt(yInp?.value || 50);
       const curZ = parseFloat(zoomInp?.value || 1.0);
@@ -1724,13 +1634,10 @@ if (root) {
 
     document.querySelectorAll('.prop-span-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (!isPro && btn.dataset.span !== '1x1') {
-          return showProModal('PhotoBlocks Mosaic Spans are a Pro Feature');
-        }
         const span = btn.dataset.span;
         const currentSpans = { ...(getState().config.imageSpans || {}) };
         currentSpans[id] = span;
-        patchConfig({ imageSpans: currentSpans, layout: isPro ? 'mosaic' : 'grid' });
+        patchConfig({ imageSpans: currentSpans, layout: 'mosaic' });
         renderRightPanel();
         renderCanvas();
         autosaveSoon();
@@ -1738,7 +1645,6 @@ if (root) {
     });
 
     const updateLink = () => {
-      if (!isPro) return showProModal('Shoppable Action Links are a Pro Feature');
       const url = document.getElementById('prop-link-url')?.value || '';
       const price = document.getElementById('prop-link-price')?.value || '';
       const label = document.getElementById('prop-link-label')?.value || 'Shop Now';
@@ -1786,7 +1692,6 @@ if (root) {
 
     document.getElementById('matcha-run-ai')?.addEventListener('click', runAI);
     document.getElementById('matcha-smart-fill')?.addEventListener('click', () => {
-      if (!isPro) return showProModal('AI Smart Fill is a Pro Feature');
       smartAutoArrange();
     });
 
@@ -1852,7 +1757,6 @@ if (root) {
 
     // Add Section button
     document.getElementById('btn-add-section')?.addEventListener('click', () => {
-      if (!isPro) return showProModal('Multi-Section Chapters are a Pro Feature');
       const name = prompt('Enter Chapter Name:');
       if (!name || !name.trim()) return;
       const secId = 'sec_' + Date.now().toString(36);
@@ -1870,9 +1774,6 @@ if (root) {
     document.querySelectorAll('.matcha-blueprint-card').forEach(card => {
       card.addEventListener('click', () => {
         const layout = card.dataset.layout;
-        if (!isPro && (layout === 'mosaic' || layout === 'pinwheel' || layout === 'bento')) {
-          return showProModal(`${card.querySelector('.matcha-blueprint-title')?.textContent || 'Layout'} is a Pro Feature`);
-        }
 
         document.querySelectorAll('.matcha-blueprint-card').forEach(c => c.classList.remove('is-active'));
         card.classList.add('is-active');
@@ -1894,35 +1795,27 @@ if (root) {
     });
 
     document.getElementById('btn-smart-shuffle')?.addEventListener('click', () => {
-      if (!isPro) return showProModal('Auto-Arrange is a Pro Feature');
       smartAutoArrange();
     });
   }
 
   function bindSuperpowers() {
-    document.getElementById('btn-unlock-pro-superpowers')?.addEventListener('click', () => {
-      showProModal('Unlock All Matcha Pro Superpowers');
-    });
     document.getElementById('st-sections-toggle')?.addEventListener('change', e => {
-      if (!isPro) return showProModal('Multi-Section Chapters are a Pro Feature');
       patchConfig({ sectionsEnabled: e.target.checked });
       renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-color-filter')?.addEventListener('change', e => {
-      if (!isPro) return showProModal('Live Color Swatches Filter is a Pro Feature');
       patchConfig({ colorFilterEnabled: e.target.checked });
       renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-shoppable')?.addEventListener('change', e => {
-      if (!isPro) return showProModal('Shoppable Buy Hotspots are a Pro Feature');
       patchConfig({ shoppableEnabled: e.target.checked });
       renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-proofing')?.addEventListener('change', e => {
-      if (!isPro) return showProModal('Client Proofing is a Pro Feature');
       patchConfig({ proofingEnabled: e.target.checked });
       renderCanvas();
       autosaveSoon();
@@ -2418,7 +2311,7 @@ if (root) {
     const frameStyle = cfg.frameStyle || 'none';
     const shadowElevation = cfg.shadowElevation || 'soft';
     const canvasBackdrop = cfg.canvasBackdrop || 'white';
-    const hasSections = sections.length > 0 && cfg.sectionsEnabled !== false && isPro;
+    const hasSections = sections.length > 0 && cfg.sectionsEnabled !== false;
 
     if (!allIds.length) {
       canvas.innerHTML = '<div class="matcha-empty" style="text-align:center;padding:80px 20px;color:var(--st-text-muted);"><h3 style="color:#f8fafc;">Your gallery canvas is empty</h3><p>Add photos from the sidebar to preview layouts, frames & live filters.</p></div>';
@@ -2494,7 +2387,7 @@ if (root) {
           </div>
         ` : ''}
 
-        ${(cfg.searchEnabled !== false || cfg.filtersEnabled || (isPro && cfg.colorFilterEnabled !== false && sortedColors.length > 0)) ? `
+        ${(cfg.searchEnabled !== false || cfg.filtersEnabled || (cfg.colorFilterEnabled !== false && sortedColors.length > 0)) ? `
           <div class="matcha-gallery__toolbar">
             ${cfg.searchEnabled !== false ? `
               <div class="matcha-gallery__search-wrap">
@@ -2505,7 +2398,7 @@ if (root) {
               </div>
             ` : ''}
 
-            ${(isPro && cfg.colorFilterEnabled !== false && sortedColors.length > 0) ? `
+            ${(cfg.colorFilterEnabled !== false && sortedColors.length > 0) ? `
               <div class="matcha-gallery__color-swatches">
                 <span class="matcha-color-label" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
                 ${sortedColors.map(c => `
@@ -2543,10 +2436,10 @@ if (root) {
             const imgCaption = meta?.caption || '';
             const isAi = meta?.ai_generated && keywords.length > 0;
             const currentSpan = imageSpans[m.id] || '1x1';
-            const spanClass = (isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) ? `matcha-gallery__item--span-${currentSpan}` : '';
+            const spanClass = (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') ? `matcha-gallery__item--span-${currentSpan}` : '';
             const link = imageLinks[m.id] || {};
             const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1.0 };
-            const zoom = isPro ? (fp.zoom || 1.0) : 1.0;
+            const zoom = fp.zoom || 1.0;
             const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
             const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || '';
 
@@ -2557,10 +2450,10 @@ if (root) {
                   <div class="matcha-gallery__overlay">
                     <span class="matcha-gallery__zoom-icon">${Icons.search}</span>
                     ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ''}
-                    ${(isPro && cfg.proofingEnabled) ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ''}
+                    ${cfg.proofingEnabled ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ''}
                   </div>
 
-                  ${(isPro && cfg.shoppableEnabled !== false && link.url) ? `
+                  ${(cfg.shoppableEnabled !== false && link.url) ? `
                     <div class="matcha-gallery__shop-bar">
                       <span class="matcha-gallery__shop-btn" style="display:inline-flex;align-items:center;gap:5px;">
                         <span>${Icons.shoppingBag}</span> ${escapeHtml(link.label || 'Shop Now')}
@@ -2569,7 +2462,7 @@ if (root) {
                     </div>
                   ` : ''}
 
-                  ${(isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) ? `
+                  ${(cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') ? `
                     <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
                       <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
                       <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
@@ -2611,7 +2504,7 @@ if (root) {
       });
     });
 
-    if (isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) {
+    if (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') {
       canvas.querySelectorAll('.matcha-span-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
@@ -2644,7 +2537,7 @@ if (root) {
         const caption = (item.dataset.caption || '').toLowerCase();
         const alt = (item.querySelector('img')?.alt || '').toLowerCase();
 
-        const matchesSection = !isPro || activeSectionId === '*' || secs.includes(activeSectionId);
+        const matchesSection = activeSectionId === '*' || secs.includes(activeSectionId);
         const matchesTag = currentFilter === '*' || tags.includes(currentFilter);
         const matchesSearch = !currentSearch || tags.some(t => t.includes(currentSearch)) || title.includes(currentSearch) || caption.includes(currentSearch) || alt.includes(currentSearch);
         const matchesColor = !currentColor || colors.includes(currentColor.toLowerCase());
