@@ -170,7 +170,7 @@ final class AI_REST {
 		}
 
 		// SSRF guard on endpoint URL before any remote call.
-		$endpoint = Plugin::get_setting( 'api_endpoint', 'https://api.openai.com/v1/chat/completions' );
+		$endpoint = Plugin::get_setting( 'api_endpoint', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
 		$ssrf     = self::validate_endpoint_url( $endpoint );
 		if ( is_wp_error( $ssrf ) ) {
 			return $ssrf;

@@ -458,8 +458,8 @@ class Settings_Page {
 		check_ajax_referer( 'matcha_ai_generate', 'nonce' );
 
 		$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : Plugin::get_setting( 'api_key', '' );
-		$model    = isset( $_POST['api_model'] ) ? sanitize_text_field( wp_unslash( $_POST['api_model'] ) ) : Plugin::get_setting( 'api_model', 'gpt-4o-mini' );
-		$endpoint = isset( $_POST['api_endpoint'] ) ? esc_url_raw( wp_unslash( $_POST['api_endpoint'] ) ) : Plugin::get_setting( 'api_endpoint', 'https://api.openai.com/v1/chat/completions' );
+		$model    = isset( $_POST['api_model'] ) ? sanitize_text_field( wp_unslash( $_POST['api_model'] ) ) : Plugin::get_setting( 'api_model', 'gemini-1.5-flash' );
+		$endpoint = isset( $_POST['api_endpoint'] ) ? esc_url_raw( wp_unslash( $_POST['api_endpoint'] ) ) : Plugin::get_setting( 'api_endpoint', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
 		// SSRF check
 		if ( class_exists( '\\Matcha_AI_Smart_Gallery\\AI\\AI_REST' ) ) {
 			$check = \Matcha_AI_Smart_Gallery\AI\AI_REST::validate_endpoint_url( $endpoint );
