@@ -47,8 +47,6 @@ const Icons = {
 
 const root = document.getElementById('matcha-studio-root');
 if (root) {
-  const isPro = !!(window.MatchaStudio?.isPro);
-  const upgradeUrl = window.MatchaStudio?.upgradeUrl || 'https://wpmatcha.com/pricing';
   const initialId = parseInt(root.dataset.galleryId || '0');
   const initialConfig = (() => {
     try {

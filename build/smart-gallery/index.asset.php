@@ -9,5 +9,5 @@ return array(
 		'wp-i18n',
 		'wp-api-fetch',
 	),
-	'version'      => '1788300361278',
+	'version'      => '1788301184163',
 );

@@ -1696,8 +1696,6 @@
       document.getElementById("save-status").textContent = "\u2026";
       autosaveTimer = setTimeout(autosave, 800);
     };
-    const isPro = !!window.MatchaStudio?.isPro;
-    const upgradeUrl = window.MatchaStudio?.upgradeUrl || "https://wpmatcha.com/pricing";
     const initialId = parseInt(root.dataset.galleryId || "0");
     const initialConfig = (() => {
       try {
