@@ -106,7 +106,7 @@ class Gallery_Shortcode {
 			'sourceType'      => $source_type,
 			'imageIds'        => $image_ids,
 			'aiTags'          => $ai_tags,
-			'layout'          => in_array( $raw_atts['layout'] ?? 'grid', array( 'grid', 'masonry' ), true ) ? $raw_atts['layout'] : 'grid',
+			'layout'          => in_array( $raw_atts['layout'] ?? 'grid', array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento' ), true ) ? $raw_atts['layout'] : 'grid',
 			'columns'         => max( 1, min( 6, (int) ( $raw_atts['columns'] ?? 3 ) ) ),
 			'columnsTablet'   => max( 1, min( 4, (int) ( $raw_atts['columns_tablet'] ?? 2 ) ) ),
 			'columnsMobile'   => max( 1, min( 2, (int) ( $raw_atts['columns_mobile'] ?? 1 ) ) ),

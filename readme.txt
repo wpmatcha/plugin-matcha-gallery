@@ -21,7 +21,7 @@ Matcha Gallery produces clean, modern HTML5/CSS3 output with zero jQuery depende
 
 = 🍵 Key Highlights =
 
-* **Matcha Studio Pro Editor:** A distraction-free, 3-panel visual workspace inspired by GalleryPlanner and Figma. Customize layouts, picture framing, drop shadows, and matting with real-time WYSIWYG preview.
+* **Matcha Studio Visual Editor:** A distraction-free, 3-panel visual workspace inspired by Figma. Customize layouts, picture framing, drop shadows, and matting with real-time WYSIWYG preview.
 * **AI Vision & Metadata Generator:** Powered by Google Gemini AI. Automatically generates ADA-compliant alt text, human-readable titles, descriptive captions, and SEO keyword taxonomy.
 * **6 Algorithmic Layout Blueprints:**
   * *Classic Grid* — Uniform aspect ratio with responsive column presets.
@@ -88,7 +88,7 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 
 == Screenshots ==
 
-1. **Matcha Studio Editor** — 3-Panel Pro visual workspace with dark studio theme and realistic wall preview.
+1. **Matcha Studio Editor** — 3-Panel visual workspace with dark studio theme and realistic wall preview.
 2. **Layout Blueprints** — 6 visual presets including Classic Grid, Pinterest Masonry, and PhotoBlocks Mosaic.
 3. **Picture Framing & Matting** — Realistic Oak Wood, Black Metal, Gold Brass, and White Matting frames.
 4. **In-Frame Pan & Zoom Cropper** — 2D interactive focal target reticle and zoom controls.
@@ -100,7 +100,7 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 
 = 1.0.0 =
 * Initial public release on WordPress.org.
-* Matcha Studio 3-panel Pro dark workspace editor.
+* Matcha Studio 3-panel dark workspace editor.
 * 6 Algorithmic layout blueprints: Grid, Masonry, Mosaic, Pinwheel, Bento, and Justified.
 * 1-Click Smart Fill aspect-ratio matcher.
 * Picture Framing & Matting system (5 realistic frame styles).

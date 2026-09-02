@@ -685,7 +685,7 @@ class Settings_Page {
 			<p class="matcha-pro-desc"><?php esc_html_e( 'Unlock advanced layouts, background batch queues, multi-category filters, and WooCommerce support.', 'matcha-gallery' ); ?></p>
 			
 			<div class="matcha-pro-features-grid">
-				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Justified (Flickr) & Slider Layouts', 'matcha-gallery' ); ?></div>
+				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Carousel Slider & 3D Tilt Showcase', 'matcha-gallery' ); ?></div>
 				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Background Queue (Action Scheduler) for 1000+ Images', 'matcha-gallery' ); ?></div>
 				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Multi-select Faceted Filters & Deep-Linking', 'matcha-gallery' ); ?></div>
 				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Claude 3.5 Sonnet & Google Gemini Pro Support', 'matcha-gallery' ); ?></div>

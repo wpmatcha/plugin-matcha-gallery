@@ -78,8 +78,12 @@ class Pro_Features {
 	 * @return array<string, string>
 	 */
 	public static function register_free_layouts( array $layouts ): array {
-		$layouts['grid']    = __( 'Grid', 'matcha-gallery' );
-		$layouts['masonry'] = __( 'Masonry', 'matcha-gallery' );
+		$layouts['grid']      = __( 'Grid', 'matcha-gallery' );
+		$layouts['masonry']   = __( 'Masonry', 'matcha-gallery' );
+		$layouts['justified'] = __( 'Justified', 'matcha-gallery' );
+		$layouts['mosaic']    = __( 'Mosaic', 'matcha-gallery' );
+		$layouts['pinwheel']  = __( 'Pinwheel', 'matcha-gallery' );
+		$layouts['bento']     = __( 'Bento', 'matcha-gallery' );
 
 		return $layouts;
 	}

@@ -62,7 +62,7 @@ final class Gallery_CPT {
 				'show_in_rest'        => true,
 				'rest_base'           => 'matcha-galleries',
 				'supports'            => array( 'title' ),
-				'capability_type'     => 'page', // maps to edit_pages / edit_others_pages - allows editors
+				'capability_type'     => 'post',
 				'map_meta_cap'        => true,
 				'rewrite'             => false,
 				'query_var'           => false,

@@ -89,16 +89,31 @@ final class Gallery_REST {
 	}
 
 	/**
-	 * Check capability to create a new gallery.
+	 * Check capability to create a new gallery, including verifying
+	 * access to any attachment IDs included in the request configuration.
 	 *
-	 * @return bool
+	 * @param WP_REST_Request $request Request.
+	 * @return bool|WP_Error
 	 */
-	public static function can_create_gallery(): bool {
-		return current_user_can( 'edit_posts' );
+	public static function can_create_gallery( WP_REST_Request $request ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		$config = $request->get_param( 'config' );
+		if ( is_array( $config ) ) {
+			$check = self::validate_attachment_ids( $config );
+			if ( is_wp_error( $check ) ) {
+				return $check;
+			}
+		}
+
+		return true;
 	}
 
 	/**
 	 * Check capability to read a specific gallery post.
+	 * Requires edit_post so only authorized gallery managers can view configuration.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return bool
@@ -108,21 +123,31 @@ final class Gallery_REST {
 		if ( ! $id ) {
 			return false;
 		}
-		return current_user_can( 'read_post', $id ) || current_user_can( 'edit_post', $id );
+		return current_user_can( 'edit_post', $id );
 	}
 
 	/**
-	 * Check capability to edit a specific gallery post.
+	 * Check capability to edit a specific gallery post, including verifying
+	 * access to any attachment IDs included in the update configuration.
 	 *
 	 * @param WP_REST_Request $request Request.
-	 * @return bool
+	 * @return bool|WP_Error
 	 */
-	public static function can_edit_gallery( WP_REST_Request $request ): bool {
+	public static function can_edit_gallery( WP_REST_Request $request ) {
 		$id = (int) $request->get_param( 'id' );
-		if ( ! $id ) {
+		if ( ! $id || ! current_user_can( 'edit_post', $id ) ) {
 			return false;
 		}
-		return current_user_can( 'edit_post', $id );
+
+		$config = $request->get_param( 'config' );
+		if ( is_array( $config ) ) {
+			$check = self::validate_attachment_ids( $config );
+			if ( is_wp_error( $check ) ) {
+				return $check;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -170,7 +195,7 @@ final class Gallery_REST {
 			if ( ! wp_attachment_is_image( $att_id ) ) {
 				continue; // Skip non-existent or non-image IDs; sanitize_config_array will filter them.
 			}
-			if ( ! current_user_can( 'edit_post', $att_id ) ) {
+			if ( ! current_user_can( 'read_post', $att_id ) && ! current_user_can( 'edit_post', $att_id ) ) {
 				return new WP_Error(
 					'forbidden_attachment',
 					sprintf(
