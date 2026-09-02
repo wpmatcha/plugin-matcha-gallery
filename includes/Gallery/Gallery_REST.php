@@ -140,6 +140,53 @@ final class Gallery_REST {
 	}
 
 	/**
+	 * Validate that the current user has edit access to all attachment IDs
+	 * referenced in a gallery config. This prevents users from referencing
+	 * arbitrary attachments they don't own.
+	 *
+	 * @param array<string,mixed> $config Gallery config array.
+	 * @return true|WP_Error True if valid, WP_Error if not.
+	 */
+	private static function validate_attachment_ids( array $config ) {
+		$ids_to_check = array();
+
+		// Collect all attachment IDs from config.
+		if ( ! empty( $config['imageIds'] ) && is_array( $config['imageIds'] ) ) {
+			$ids_to_check = array_map( 'absint', $config['imageIds'] );
+		}
+
+		// Also check section imageIds.
+		if ( ! empty( $config['sections'] ) && is_array( $config['sections'] ) ) {
+			foreach ( $config['sections'] as $sec ) {
+				if ( ! empty( $sec['imageIds'] ) && is_array( $sec['imageIds'] ) ) {
+					$ids_to_check = array_merge( $ids_to_check, array_map( 'absint', $sec['imageIds'] ) );
+				}
+			}
+		}
+
+		$ids_to_check = array_unique( array_filter( $ids_to_check ) );
+
+		foreach ( $ids_to_check as $att_id ) {
+			if ( ! wp_attachment_is_image( $att_id ) ) {
+				continue; // Skip non-existent or non-image IDs; sanitize_config_array will filter them.
+			}
+			if ( ! current_user_can( 'edit_post', $att_id ) ) {
+				return new WP_Error(
+					'forbidden_attachment',
+					sprintf(
+						/* translators: %d: Attachment ID. */
+						__( 'You do not have permission to use attachment #%d.', 'matcha-gallery' ),
+						$att_id
+					),
+					array( 'status' => 403 )
+				);
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Schema args for write.
 	 *
 	 * @return array<string,mixed>
@@ -180,6 +227,11 @@ final class Gallery_REST {
 			'no_found_rows'  => false,
 		);
 
+		// Non-admin users can only see their own galleries.
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			$args['author'] = get_current_user_id();
+		}
+
 		$query = new \WP_Query( $args );
 
 		$data = array_map( array( static::class, 'prepare_item' ), $query->posts );
@@ -218,6 +270,12 @@ final class Gallery_REST {
 		$config = $request->get_param( 'config' );
 		if ( ! is_array( $config ) ) {
 			$config = Gallery_CPT::default_config();
+		}
+
+		// Verify the user has edit access to all referenced attachments.
+		$att_check = self::validate_attachment_ids( $config );
+		if ( is_wp_error( $att_check ) ) {
+			return $att_check;
 		}
 
 		$post_id = wp_insert_post(
@@ -268,6 +326,12 @@ final class Gallery_REST {
 
 		$config = $request->get_param( 'config' );
 		if ( is_array( $config ) ) {
+			// Verify the user has edit access to all referenced attachments.
+			$att_check = self::validate_attachment_ids( $config );
+			if ( is_wp_error( $att_check ) ) {
+				return $att_check;
+			}
+
 			// Merge with existing to allow partial PATCH
 			$existing = Gallery_CPT::get_config( $id );
 			$merged   = array_merge( $existing, $config );
