@@ -197,8 +197,8 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						{ label: __( 'Pinterest Masonry', 'matcha-gallery' ), value: 'masonry' },
 						{ label: __( 'Flickr Justified Rows', 'matcha-gallery' ), value: 'justified' },
 						{ label: __( 'PhotoBlocks Mosaic', 'matcha-gallery' ), value: 'mosaic' },
-						{ label: __( 'Bento Showcase', 'matcha-gallery' ), value: 'bento' },
-						{ label: __( 'Pinwheel Spiral', 'matcha-gallery' ), value: 'pinwheel' },
+						{ label: __( 'Bento Showcase (PRO)', 'matcha-gallery' ), value: 'bento' },
+						{ label: __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
 					onChange={ ( value ) => setAttributes( { layout: value } ) }
 				/>

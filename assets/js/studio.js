@@ -2963,10 +2963,13 @@
       const sortedColors = Array.from(uniqueColors).slice(0, 8);
       const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || "#607d66"};`;
       const activeCardTheme = !isPro && ["glass", "glow"].includes(cfg.cardTheme) ? "clean" : cfg.cardTheme || "clean";
+      const activeFrameStyle = !isPro && ["black-metal", "natural-oak", "gold-brass", "glass-float"].includes(cfg.frameStyle) ? "none" : cfg.frameStyle || "none";
+      const activeLayout = !isPro && ["pinwheel", "bento"].includes(cfg.layout) ? "grid" : cfg.layout || "grid";
+      const activePagination = !isPro && ["infinite", "pages"].includes(cfg.paginationType) ? "load-more" : cfg.paginationType || "none";
       const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
       canvas.style.background = canvasBackdrop === "cream" ? "#fbf9f4" : canvasBackdrop === "sage" ? "#eef4ed" : canvasBackdrop === "charcoal" ? "#22252a" : canvasBackdrop === "transparent" ? "transparent" : "#ffffff";
       canvas.innerHTML = `
-      <div class="matcha-gallery matcha-gallery--${cfg.layout || "grid"} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${frameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect}" style="${style}">
+      <div class="matcha-gallery matcha-gallery--${activeLayout} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === "*" ? "matcha-section-tab--active" : ""}" data-section="*">
@@ -3101,8 +3104,8 @@
           ${cfg.layout === "justified" ? '<div style="flex-grow:99999;min-width:100px;height:0;margin:0;padding:0;"></div>' : ""}
         </div>
 
-        ${cfg.paginationType && cfg.paginationType !== "none" ? `
-          ${cfg.paginationType === "load-more" || cfg.paginationType === "infinite" ? `
+        ${activePagination && activePagination !== "none" ? `
+          ${activePagination === "load-more" || isPro && activePagination === "infinite" ? `
             <div class="matcha-gallery__load-more-wrap" style="display:flex;justify-content:center;margin-top:24px;">
               <button type="button" id="studio-canvas-load-more" class="matcha-gallery__load-more-btn matcha-gallery__load-more-btn--${cfg.loadMoreStyle || "pill"}">
                 <span>${escapeHtml(cfg.loadMoreLabel || "Load More Photos")}</span>

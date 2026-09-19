@@ -533,8 +533,8 @@
             { label: (0, import_i18n3.__)("Pinterest Masonry", "matcha-gallery"), value: "masonry" },
             { label: (0, import_i18n3.__)("Flickr Justified Rows", "matcha-gallery"), value: "justified" },
             { label: (0, import_i18n3.__)("PhotoBlocks Mosaic", "matcha-gallery"), value: "mosaic" },
-            { label: (0, import_i18n3.__)("Bento Showcase", "matcha-gallery"), value: "bento" },
-            { label: (0, import_i18n3.__)("Pinwheel Spiral", "matcha-gallery"), value: "pinwheel" }
+            { label: (0, import_i18n3.__)("Bento Showcase (PRO)", "matcha-gallery"), value: "bento" },
+            { label: (0, import_i18n3.__)("Pinwheel Spiral (PRO)", "matcha-gallery"), value: "pinwheel" }
           ],
           onChange: (value) => setAttributes({ layout: value })
         }

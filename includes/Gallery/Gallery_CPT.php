@@ -148,6 +148,8 @@ final class Gallery_CPT {
 	public static function sanitize_config_array( array $cfg ): array {
 		$out = array();
 
+		$is_pro = self::is_pro_active();
+
 		$out['sourceType'] = in_array( $cfg['sourceType'] ?? 'selected', array( 'selected', 'dynamic' ), true ) ? $cfg['sourceType'] : 'selected';
 
 		$ids = array_filter( array_map( 'intval', (array) ( $cfg['imageIds'] ?? array() ) ) );
@@ -157,7 +159,8 @@ final class Gallery_CPT {
 		$tags = array_filter( array_map( 'sanitize_title', (array) ( $cfg['aiTags'] ?? array() ) ) );
 		$out['aiTags'] = array_slice( $tags, 0, 30 );
 
-		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', array( 'grid', 'masonry', 'justified', 'mosaic' ) );
+		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento' ) : array( 'grid', 'masonry', 'justified', 'mosaic' );
+		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', $default_layouts );
 		$out['layout']   = in_array( $cfg['layout'] ?? 'grid', (array) $allowed_layouts, true ) ? $cfg['layout'] : 'grid';
 
 		$out['columns']       = max( 1, min( 6, (int) ( $cfg['columns'] ?? 3 ) ) );
@@ -184,20 +187,24 @@ final class Gallery_CPT {
 		$out['lightboxEnabled']    = ! isset( $cfg['lightboxEnabled'] ) || ! empty( $cfg['lightboxEnabled'] );
 		$out['borderRadius']       = max( 0, min( 32, (int) ( $cfg['borderRadius'] ?? 10 ) ) );
 		$out['mattingSize']        = max( 0, min( 32, (int) ( $cfg['mattingSize'] ?? 0 ) ) );
-		$allowed_card_themes       = apply_filters( 'matcha_gallery_allowed_card_themes', array( 'clean', 'dark' ) );
+
+		$default_card_themes       = $is_pro ? array( 'clean', 'dark', 'glass', 'glow' ) : array( 'clean', 'dark' );
+		$allowed_card_themes       = apply_filters( 'matcha_gallery_allowed_card_themes', $default_card_themes );
 		$out['cardTheme']          = in_array( $cfg['cardTheme'] ?? 'clean', (array) $allowed_card_themes, true ) ? $cfg['cardTheme'] : 'clean';
 		$out['canvasBackdrop']     = in_array( $cfg['canvasBackdrop'] ?? 'transparent', array( 'transparent', 'white', 'cream', 'sage', 'charcoal', 'dark-slate' ), true ) ? $cfg['canvasBackdrop'] : 'transparent';
 		$allowed_hover_effects = apply_filters( 'matcha_gallery_allowed_hover_effects', array( 'none', 'zoom', 'lift', 'glow', 'grayscale' ) );
 		$out['hoverEffect']    = in_array( $cfg['hoverEffect'] ?? 'zoom', (array) $allowed_hover_effects, true ) ? $cfg['hoverEffect'] : 'zoom';
 
-		$allowed_frames     = apply_filters( 'matcha_gallery_allowed_frames', array( 'none', 'white-mat' ) );
+		$default_frames     = $is_pro ? array( 'none', 'white-mat', 'black-metal', 'natural-oak', 'gold-brass', 'glass-float' ) : array( 'none', 'white-mat' );
+		$allowed_frames     = apply_filters( 'matcha_gallery_allowed_frames', $default_frames );
 		$out['frameStyle']  = in_array( $cfg['frameStyle'] ?? 'none', (array) $allowed_frames, true ) ? $cfg['frameStyle'] : 'none';
 		$out['shadowElevation'] = in_array( $cfg['shadowElevation'] ?? 'soft', array( 'none', 'soft', 'medium', 'gallery-spotlight', 'deep-lift' ), true ) ? $cfg['shadowElevation'] : 'soft';
 
-		$allowed_pagination   = apply_filters( 'matcha_gallery_allowed_pagination', array( 'none', 'load-more' ) );
+		$default_pagination   = $is_pro ? array( 'none', 'load-more', 'infinite', 'pages' ) : array( 'none', 'load-more' );
+		$allowed_pagination   = apply_filters( 'matcha_gallery_allowed_pagination', $default_pagination );
 		$out['paginationType'] = in_array( $cfg['paginationType'] ?? 'none', (array) $allowed_pagination, true ) ? $cfg['paginationType'] : 'none';
 		$out['itemsPerPage']   = max( 4, min( 60, (int) ( $cfg['itemsPerPage'] ?? 12 ) ) );
-		$allowed_load_styles  = apply_filters( 'matcha_gallery_allowed_loadmore_styles', array( 'pill', 'outline', 'minimal' ) );
+		$allowed_load_styles  = apply_filters( 'matcha_gallery_allowed_loadmore_styles', array( 'pill', 'outline', 'minimal', 'glass', 'dark' ) );
 		$out['loadMoreStyle'] = in_array( $cfg['loadMoreStyle'] ?? 'pill', (array) $allowed_load_styles, true ) ? $cfg['loadMoreStyle'] : 'pill';
 		$out['loadMoreLabel'] = sanitize_text_field( $cfg['loadMoreLabel'] ?? 'Load More Photos' );
 
@@ -206,7 +213,6 @@ final class Gallery_CPT {
 		$out['instantFramesEnabled'] = ! isset( $cfg['instantFramesEnabled'] ) || ! empty( $cfg['instantFramesEnabled'] );
 
 		// Pro-only features: only sanitized and stored when Pro is active
-		$is_pro = self::is_pro_active();
 
 		// Sorting & Randomization: Free gets manual, name-asc, name-desc; Pro gets newest, oldest, random & randomizeOrder
 		$allowed_sort = $is_pro ? array( 'manual', 'name-asc', 'name-desc', 'newest', 'oldest', 'random' ) : array( 'manual', 'name-asc', 'name-desc' );

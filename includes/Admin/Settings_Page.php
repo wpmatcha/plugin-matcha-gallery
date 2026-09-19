@@ -145,6 +145,11 @@ class Settings_Page {
 			$raw_key = $existing;
 		}
 
+		$is_pro = class_exists( '\\Matcha_AI_Smart_Gallery\\Gallery\\Gallery_CPT' ) ? \Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT::is_pro_active() : Pro_Features::is_active();
+		$allowed_personas = array( 'standard', 'ecommerce', 'wedding', 'architecture', 'editorial' );
+		$requested_persona = sanitize_text_field( $input['ai_persona'] ?? 'standard' );
+		$ai_persona = ( $is_pro && in_array( $requested_persona, $allowed_personas, true ) ) ? $requested_persona : 'standard';
+
 		return array(
 			'api_key'            => $raw_key,
 			'api_model'          => sanitize_text_field( $input['api_model'] ?? 'gemini-1.5-flash' ),
@@ -154,7 +159,7 @@ class Settings_Page {
 			'generate_caption'   => ! empty( $input['generate_caption'] ),
 			'generate_tags'      => ! empty( $input['generate_tags'] ),
 			'locale'             => sanitize_text_field( $input['locale'] ?? 'en' ),
-			'ai_persona'         => sanitize_text_field( $input['ai_persona'] ?? 'standard' ),
+			'ai_persona'         => $ai_persona,
 			'auto_generate'      => ! empty( $input['auto_generate'] ),
 			'overwrite_existing' => ! empty( $input['overwrite_existing'] ),
 		);
