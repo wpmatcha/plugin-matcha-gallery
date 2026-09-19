@@ -1610,6 +1610,10 @@
       document.querySelectorAll(".matcha-tray-view-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           trayViewMode = btn.dataset.trayView;
+          try {
+            localStorage.setItem("matcha_studio_tray_density", trayViewMode);
+          } catch (e) {
+          }
           renderLeftTab("images");
         });
       });
@@ -2191,7 +2195,16 @@
     let activeSectionId = "*";
     let canvasZoom = 100;
     let traySearchQuery = "";
-    let trayViewMode = "grid-2";
+    let trayViewMode = (() => {
+      try {
+        const saved = localStorage.getItem("matcha_studio_tray_density");
+        if (saved && ["list", "grid-2", "grid-3"].includes(saved)) {
+          return saved;
+        }
+      } catch (e) {
+      }
+      return "grid-2";
+    })();
     let traySortBy = initialConfig.sortBy || "manual";
     let trayFilterBy = "all";
     let trayPage = 1;
