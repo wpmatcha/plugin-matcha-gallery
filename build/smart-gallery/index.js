@@ -360,7 +360,7 @@
         {
           key: image.id,
           className: "matcha-gallery-preview__item",
-          style: layout === "masonry" ? { breakInside: "avoid", marginBottom: `${gutterSize}px` } : {}
+          style: layout === "masonry" ? { display: "inline-block", width: "100%", breakInside: "avoid", marginBottom: `${gutterSize}px` } : {}
         },
         /* @__PURE__ */ window.wp.element.createElement(
           "img",

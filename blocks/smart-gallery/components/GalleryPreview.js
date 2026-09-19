@@ -124,7 +124,7 @@ export default function GalleryPreview( { images, attributes, setAttributes } ) 
 						className="matcha-gallery-preview__item"
 						style={
 							layout === 'masonry'
-								? { breakInside: 'avoid', marginBottom: `${ gutterSize }px` }
+								? { display: 'inline-block', width: '100%', breakInside: 'avoid', marginBottom: `${ gutterSize }px` }
 								: {}
 						}
 					>

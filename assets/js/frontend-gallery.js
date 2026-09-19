@@ -853,36 +853,38 @@
 			const counterEl = this.lightbox.querySelector( '.matcha-lightbox__counter' );
 			const downloadLink = this.lightbox.querySelector( '.matcha-lb-download' );
 
-			// Luxury instant cross-dissolve transition (zero scale distortion, zero black flicker)
+			// Luxury zero-shift cross-dissolve transition (zero scale distortion, zero black flicker)
 			if ( imgWrap ) {
 				const oldImgs = Array.from( imgWrap.querySelectorAll( '.matcha-lightbox__img' ) );
 
 				if ( direction !== 0 && oldImgs.length > 0 ) {
-					// Smoothly dissolve out existing image
-					oldImgs.forEach( ( oldImg ) => {
-						oldImg.classList.add( 'matcha-lightbox__img--exiting' );
-						oldImg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-						oldImg.style.opacity = '0';
-						oldImg.style.transform = `translateX(${ -direction * 12 }px)`;
-						setTimeout( () => {
-							if ( oldImg.parentNode ) oldImg.remove();
-						}, 220 );
-					} );
-
-					// Create incoming image
+					// Create incoming image in the exact centered stage coordinates
 					const newImg = document.createElement( 'img' );
 					newImg.className = 'matcha-lightbox__img matcha-lightbox__img--incoming';
 					newImg.alt = alt;
 					newImg.style.transition = 'none';
 					newImg.style.opacity = '0';
-					newImg.style.transform = `translateX(${ direction * 12 }px)`;
+					newImg.style.transform = `translateX(${ direction * 16 }px)`;
 					newImg.src = fullSrc;
 					imgWrap.appendChild( newImg );
 
-					const onSlideIn = () => {
+					const performTransition = () => {
 						requestAnimationFrame( () => {
 							requestAnimationFrame( () => {
-								newImg.style.transition = 'opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+								// Smoothly dissolve out existing image(s)
+								oldImgs.forEach( ( oldImg ) => {
+									oldImg.classList.add( 'matcha-lightbox__img--exiting' );
+									oldImg.style.pointerEvents = 'none';
+									oldImg.style.transition = 'opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1), transform 0.22s cubic-bezier(0.25, 1, 0.5, 1)';
+									oldImg.style.opacity = '0';
+									oldImg.style.transform = `translateX(${ -direction * 16 }px)`;
+									setTimeout( () => {
+										if ( oldImg.parentNode ) oldImg.remove();
+									}, 240 );
+								} );
+
+								// Reveal incoming image
+								newImg.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
 								newImg.style.opacity = '1';
 								newImg.style.transform = 'none';
 								newImg.classList.remove( 'matcha-lightbox__img--incoming' );
@@ -891,9 +893,14 @@
 					};
 
 					if ( newImg.complete && newImg.naturalWidth > 0 ) {
-						onSlideIn();
+						performTransition();
 					} else {
-						newImg.onload = onSlideIn;
+						newImg.onload = performTransition;
+						newImg.onerror = () => {
+							newImg.style.opacity = '1';
+							newImg.style.transform = 'none';
+							oldImgs.forEach( ( oldImg ) => oldImg.remove() );
+						};
 					}
 				} else {
 					// Initial opening or direct jump: clean smooth fade-in
@@ -929,10 +936,29 @@
 
 			// Smooth, instant caption cross-fade
 			if ( captionBar ) {
-				if ( direction !== 0 ) {
-					captionBar.style.transition = 'opacity 0.15s ease';
+				const hasContent = Boolean( title || caption );
+				if ( ! hasContent ) {
 					captionBar.style.opacity = '0';
-					setTimeout( () => {
+					captionBar.style.display = 'none';
+				} else {
+					if ( direction !== 0 ) {
+						captionBar.style.transition = 'opacity 0.15s ease';
+						captionBar.style.opacity = '0';
+						setTimeout( () => {
+							if ( titleEl ) {
+								titleEl.textContent = title;
+								titleEl.style.display = title ? 'block' : 'none';
+							}
+							if ( captionEl ) {
+								captionEl.textContent = caption;
+								captionEl.style.display = caption ? 'block' : 'none';
+							}
+							captionBar.style.display = 'block';
+							requestAnimationFrame( () => {
+								captionBar.style.opacity = '1';
+							} );
+						}, 150 );
+					} else {
 						if ( titleEl ) {
 							titleEl.textContent = title;
 							titleEl.style.display = title ? 'block' : 'none';
@@ -941,22 +967,9 @@
 							captionEl.textContent = caption;
 							captionEl.style.display = caption ? 'block' : 'none';
 						}
-						captionBar.style.display = ( title || caption ) ? 'block' : 'none';
-						requestAnimationFrame( () => {
-							captionBar.style.opacity = '1';
-						} );
-					}, 150 );
-				} else {
-					if ( titleEl ) {
-						titleEl.textContent = title;
-						titleEl.style.display = title ? 'block' : 'none';
+						captionBar.style.display = 'block';
+						captionBar.style.opacity = '1';
 					}
-					if ( captionEl ) {
-						captionEl.textContent = caption;
-						captionEl.style.display = caption ? 'block' : 'none';
-					}
-					captionBar.style.display = ( title || caption ) ? 'block' : 'none';
-					captionBar.style.opacity = '1';
 				}
 			}
 
