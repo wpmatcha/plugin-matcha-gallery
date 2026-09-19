@@ -1167,11 +1167,17 @@ body.matcha-is-dragging * {
 /* --------------------------------------------------------------------------
    Multi-Section Chapters Switcher
    -------------------------------------------------------------------------- */
+.matcha-studio-chapter-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+
 .matcha-studio-sections {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 6px;
-	overflow-x: auto;
-	padding-bottom: 8px;
 	margin-bottom: 12px;
 }
 
@@ -1179,17 +1185,17 @@ body.matcha-is-dragging * {
 	background: var(--st-bg-surface);
 	border: 1px solid var(--st-border-subtle);
 	color: var(--st-text-secondary);
-	padding: 5px 10px;
-	border-radius: 100px;
+	padding: 5px 9px;
+	border-radius: 8px;
 	font-size: 11px;
 	font-weight: 600;
 	cursor: pointer;
-	white-space: nowrap;
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: 5px;
 	transition: all 0.15s ease;
 	letter-spacing: -0.01em;
+	max-width: 100%;
 }
 
 .matcha-studio-section-pill:hover {
@@ -1207,7 +1213,7 @@ body.matcha-is-dragging * {
 .matcha-studio-section-pill .cnt {
 	background: rgba(255, 255, 255, 0.1);
 	padding: 1px 5px;
-	border-radius: 10px;
+	border-radius: 6px;
 	font-size: 9px;
 }
 

@@ -324,8 +324,17 @@
       const totalCount = (cfg.imageIds || []).length;
       const currentSection = sections.find((s) => s.id === activeSectionId);
       return `
-      <div>
-        <!-- Chapter / Section Switcher Bar -->
+        <!-- Chapter / Section Switcher Header -->
+        <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.5px;text-transform:uppercase;">
+            <span style="color:#5ec27f;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ""}
+          </span>
+          <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
+            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+          </button>
+        </div>
+
+        <!-- Wrapped Chapter Pills (Auto-wrapping, zero horizontal overflow) -->
         <div class="matcha-studio-sections">
           <button type="button" class="matcha-studio-section-pill ${activeSectionId === "*" ? "is-active" : ""}" data-sec="*">
             All Photos <span class="cnt">${totalCount}</span>
@@ -335,14 +344,13 @@
               <span style="opacity:0.7;">${Icons.folder}</span> ${escapeHtml(s.title)} <span class="cnt">${(s.imageIds || []).length}</span>
             </button>
           `).join("")}
-          <button type="button" id="btn-add-section" class="matcha-studio-section-pill" style="color:#ffffff;border-color:rgba(77,164,104,0.35);font-weight:700;display:inline-flex;align-items:center;gap:4px;" title="Create new gallery chapter">
-            <span style="color:#5ec27f;">+</span> Chapter <span class="matcha-pro-badge">PRO</span>
-          </button>
         </div>
 
         ${currentSection ? `
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 2px;margin-bottom:8px;">
-            <span style="font-size:11px;font-weight:700;color:#ffffff;">Chapter: "${escapeHtml(currentSection.title)}"</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;margin-bottom:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;">
+            <span style="font-size:11px;font-weight:700;color:#ffffff;display:flex;align-items:center;gap:5px;">
+              <span style="color:#5ec27f;">${Icons.folder}</span> "${escapeHtml(currentSection.title)}"
+            </span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="btn-rename-sec" class="matcha-exit-btn" style="padding:2px 6px;font-size:9px;">Rename</button>
               <button type="button" id="btn-delete-sec" class="matcha-exit-btn" style="padding:2px 6px;font-size:9px;color:#f87171;">Delete</button>
