@@ -172,7 +172,7 @@ class OpenAI_Client implements Client_Interface {
 			? sprintf( 'Write all text in the "%s" locale/language.', $locale )
 			: 'Write all text in English.';
 
-		return implode(
+		$prompt = implode(
 			"\n",
 			array(
 				'You are an image metadata generator for a WordPress website.',
@@ -184,6 +184,8 @@ class OpenAI_Client implements Client_Interface {
 				'Be accurate and specific to what is actually visible in the image.',
 			)
 		);
+
+		return (string) apply_filters( 'matcha_gallery_ai_system_prompt', $prompt, $locale, $fields );
 	}
 
 	/**

@@ -115,6 +115,16 @@ Dynamic Gallery Wall
     * `matcha_gallery_sanitize_config` -> preserves spans, shoppable links, chapters, focal zoom
   * [Updater.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/includes/Updater.php) provides GitHub / remote license-based automatic plugin updates.
 
+### 4. Pro AI Architecture & Background Processing (Completed)
+* **AI Smart Fill Geometry Matcher:**
+  * Implemented in [studio/src/index.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/studio/src/index.js). Automatically reads photo aspect ratios and focal points, allocates `2x2` hero anchors and balanced `2x1` / `1x2` spans, sets layout to `mosaic`, and notifies with interactive visual toast.
+* **Server-Side Unattended Background Queue:**
+  * Implemented in [Background_Queue.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/includes/Background_Queue.php) and [Queue_REST.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/includes/Queue_REST.php).
+  * Uses non-blocking asynchronous HTTP loops with WP-Cron fallback. Processes batches unattended with 2-second rate-limit protection so users can close their browser safely.
+* **AI Brand Persona & Tone Presets:**
+  * Added `ai_persona` setting in [Settings_Page.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Admin/Settings_Page.php) for E-Commerce, Wedding/Portraits, Architecture/Interiors, and Editorial/Fashion.
+  * Injected via `matcha_gallery_ai_system_prompt` filter hook in [matcha-gallery-pro.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/matcha-gallery-pro.php) to calibrate vision classification.
+
 ---
 
 ## 6. Git Repositories & Build Instructions
@@ -143,6 +153,8 @@ Dynamic Gallery Wall
 - [x] Fix Gemini 2.5 Flash token truncation & 429 burst rate limits.
 - [x] Smart skip for already-analyzed images in Studio.
 - [x] Connect Pro license validation and remote updates.
-- [ ] **Action Scheduler Background Queue:** Server-side batch processing for 500+ photos without requiring the browser tab to remain open.
+- [x] **AI Smart Fill Geometry Matcher:** Auto-calculates optimal Bento/Mosaic tile layouts.
+- [x] **Server-Side Unattended Background Queue:** Background batch processing for 500+ photos without keeping the tab open.
+- [x] **AI Brand Persona / Tone Presets:** E-Commerce, Wedding, Architecture, Editorial niche vision prompts.
 - [ ] **WordPress.org Directory Review:** Complete directory review requirements (assets, banner, icon, tags, translations).
 - [ ] **WooCommerce Hotspots:** Native product search picker in Studio for tagging photos with products.

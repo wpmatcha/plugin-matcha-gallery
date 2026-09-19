@@ -154,6 +154,7 @@ class Settings_Page {
 			'generate_caption'   => ! empty( $input['generate_caption'] ),
 			'generate_tags'      => ! empty( $input['generate_tags'] ),
 			'locale'             => sanitize_text_field( $input['locale'] ?? 'en' ),
+			'ai_persona'         => sanitize_text_field( $input['ai_persona'] ?? 'standard' ),
 			'auto_generate'      => ! empty( $input['auto_generate'] ),
 			'overwrite_existing' => ! empty( $input['overwrite_existing'] ),
 		);
@@ -386,6 +387,29 @@ class Settings_Page {
 								}
 								?>
 							</select>
+						</div>
+
+						<div class="matcha-field-row">
+							<label for="matcha_ai_persona">
+								<strong><?php esc_html_e( 'AI Vision Persona & Brand Tone', 'matcha-gallery' ); ?></strong>
+								<?php if ( ! $is_pro ) : ?>
+									<span class="matcha-badge matcha-badge--pro"><?php esc_html_e( 'PRO', 'matcha-gallery' ); ?></span>
+								<?php endif; ?>
+							</label>
+							<select id="matcha_ai_persona" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[ai_persona]" <?php echo ! $is_pro ? 'disabled' : ''; ?>>
+								<option value="standard" <?php selected( $settings['ai_persona'] ?? 'standard', 'standard' ); ?>><?php esc_html_e( 'Standard Studio (Balanced artistic analysis)', 'matcha-gallery' ); ?></option>
+								<option value="ecommerce" <?php selected( $settings['ai_persona'] ?? 'standard', 'ecommerce' ); ?>><?php esc_html_e( 'E-Commerce & Products (SKU, materials, finish, product angles)', 'matcha-gallery' ); ?></option>
+								<option value="wedding" <?php selected( $settings['ai_persona'] ?? 'standard', 'wedding' ); ?>><?php esc_html_e( 'Wedding & Portrait Photography (Emotional intimacy, attire, event mood)', 'matcha-gallery' ); ?></option>
+								<option value="architecture" <?php selected( $settings['ai_persona'] ?? 'standard', 'architecture' ); ?>><?php esc_html_e( 'Architectural & Interior Design (Spatial structure, lighting, decor)', 'matcha-gallery' ); ?></option>
+								<option value="editorial" <?php selected( $settings['ai_persona'] ?? 'standard', 'editorial' ); ?>><?php esc_html_e( 'High-Fashion & Editorial (Avant-garde styling, magazine mood)', 'matcha-gallery' ); ?></option>
+							</select>
+							<p class="description">
+								<?php if ( ! $is_pro ) : ?>
+									<span style="color:#eab308;font-weight:600;">✦ <?php esc_html_e( 'Pro feature: Custom vision personas calibrate AI prompt instructions for specialized photography niches.', 'matcha-gallery' ); ?></span>
+								<?php else : ?>
+									<?php esc_html_e( 'Adapts the AI system prompt to emphasize niche-specific vocabulary and classification.', 'matcha-gallery' ); ?>
+								<?php endif; ?>
+							</p>
 						</div>
 					</div>
 				</div>

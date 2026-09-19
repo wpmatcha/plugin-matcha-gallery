@@ -2201,6 +2201,25 @@ if (root) {
     });
   }
 
+  // --- Studio Toast Notification System ---
+  function showStudioToast(msg, isSuccess = true) {
+    let t = document.getElementById('matcha-studio-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'matcha-studio-toast';
+      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#181e29;border:1px solid rgba(255,255,255,0.15);color:#fff;padding:8px 20px;border-radius:24px;font-size:12px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,0.6);z-index:999999;pointer-events:none;transition:opacity 0.3s ease, transform 0.3s ease;opacity:0;display:flex;align-items:center;gap:8px;backdrop-filter:blur(8px);';
+      document.body.appendChild(t);
+    }
+    t.innerHTML = `<span style="color:#5ec27f;font-size:14px;">✦</span> <span>${escapeHtml(msg)}</span>`;
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(12px)';
+    }, 3200);
+  }
+
   // --- Smart Fill & Auto-Arrange Algorithm (Pro) ---
   function smartAutoArrange() {
     if (!isPro) {
@@ -2211,18 +2230,34 @@ if (root) {
     if (!ids.length) return alert('Please add images first.');
 
     const spans = {};
+    const total = ids.length;
+
+    // Determine how many 2x2 Hero anchors to allocate based on gallery volume
+    let heroesNeeded = total >= 10 ? 2 : (total >= 4 ? 1 : 0);
+    let heroesAssigned = 0;
+    const heroIndices = new Set();
+
+    if (heroesNeeded >= 1) heroIndices.add(0);
+    if (heroesNeeded >= 2) heroIndices.add(Math.floor(total / 2));
+
+    let landscapeCount = 0;
+    let portraitCount = 0;
+
     ids.forEach((id, idx) => {
       const m = mediaCache.get(id);
       const w = m?.media_details?.width || 1000;
       const h = m?.media_details?.height || 1000;
       const ratio = w / h;
 
-      if (idx === 0) {
+      if (heroIndices.has(idx) && heroesAssigned < heroesNeeded) {
         spans[id] = '2x2';
-      } else if (ratio >= 1.35) {
+        heroesAssigned++;
+      } else if (ratio >= 1.32 && landscapeCount <= portraitCount + 2) {
         spans[id] = '2x1';
-      } else if (ratio <= 0.8) {
+        landscapeCount++;
+      } else if (ratio <= 0.82 && portraitCount <= landscapeCount + 2) {
         spans[id] = '1x2';
+        portraitCount++;
       } else {
         spans[id] = '1x1';
       }
@@ -2233,6 +2268,7 @@ if (root) {
     renderCanvas();
     renderRightPanel();
     autosaveSoon();
+    showStudioToast(`AI Smart Fill: Arranged ${total} photos into balanced Mosaic geometry!`);
   }
 
   // --- Serial AI Queue (FREE) ---
