@@ -373,7 +373,7 @@ class Smart_Gallery_Block {
 		$image_links  = (array) ( $attrs['imageLinks'] ?? array() );
 		$focal_points = (array) ( $attrs['focalPoints'] ?? array() );
 		$sections     = (array) ( $attrs['sections'] ?? array() );
-		$has_sections = ! empty( $attrs['sectionsEnabled'] ) && count( $sections ) > 1;
+		$has_sections = ! empty( $attrs['sectionsEnabled'] ) && count( $sections ) > 0;
 
 		$img_sections = array();
 		if ( $has_sections ) {
