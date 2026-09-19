@@ -268,7 +268,7 @@
 			if ( this.loadMoreBtn ) {
 				this.loadMoreBtn.addEventListener( 'click', () => {
 					this.currentPage++;
-					this.applyPagination();
+					this.applyPagination( true );
 				} );
 			}
 
@@ -276,7 +276,7 @@
 				const observer = new IntersectionObserver( ( entries ) => {
 					if ( entries[ 0 ].isIntersecting && this.hasMoreItems ) {
 						this.currentPage++;
-						this.applyPagination();
+						this.applyPagination( true );
 					}
 				}, { rootMargin: '200px' } );
 				observer.observe( this.loadMoreBtn );
@@ -389,7 +389,17 @@
 		}
 
 		applyFilters() {
-			let delay = 0;
+			// 1. FIRST: Capture starting layout rects of all visible items
+			const firstRects = new Map();
+			if ( ! prefersReducedMotion ) {
+				this.items.forEach( ( item ) => {
+					if ( ! item.classList.contains( 'matcha-gallery__item--hidden' ) &&
+					     ! item.classList.contains( 'is-paginated-hidden' ) ) {
+						firstRects.set( item, item.getBoundingClientRect() );
+					}
+				} );
+			}
+
 			const q = this.searchQuery || '';
 			const f = this.activeFilter || '*';
 			const c = ( this.activeColor || '' ).toLowerCase();
@@ -436,30 +446,64 @@
 
 				if ( isVisible ) {
 					item.classList.remove( 'matcha-gallery__item--hidden' );
-					if ( ! prefersReducedMotion ) {
-						item.style.transitionDelay = `${ delay * 25 }ms`;
-						delay++;
-					}
 				} else {
 					item.classList.add( 'matcha-gallery__item--hidden' );
-					item.style.transitionDelay = '0ms';
 				}
 			} );
 
-			// Clear transition delays after animation.
-			if ( ! prefersReducedMotion ) {
-				setTimeout( () => {
-					this.items.forEach( ( item ) => {
-						item.style.transitionDelay = '0ms';
-					} );
-				}, delay * 25 + 350 );
-			}
-
 			// Apply pagination to visible subset
-			this.applyPagination();
+			this.applyPagination( false );
+
+			// 2. LAST & INVERT & PLAY: Smooth FLIP transition for surviving and repositioned items
+			if ( ! prefersReducedMotion && firstRects.size > 0 ) {
+				const lastRects = new Map();
+				this.items.forEach( ( item ) => {
+					if ( ! item.classList.contains( 'matcha-gallery__item--hidden' ) &&
+					     ! item.classList.contains( 'is-paginated-hidden' ) ) {
+						lastRects.set( item, item.getBoundingClientRect() );
+					}
+				} );
+
+				// INVERT: Calculate deltas and apply inverse translations
+				lastRects.forEach( ( lastRect, item ) => {
+					const firstRect = firstRects.get( item );
+					if ( firstRect ) {
+						const dx = firstRect.left - lastRect.left;
+						const dy = firstRect.top - lastRect.top;
+						if ( Math.abs( dx ) > 0.5 || Math.abs( dy ) > 0.5 ) {
+							item.style.transition = 'none';
+							item.style.transform = `translate3d(${ dx }px, ${ dy }px, 0)`;
+						}
+					} else {
+						// Newly revealed item entering
+						item.style.transition = 'none';
+						item.style.transform = 'translate3d(0, 16px, 0) scale(0.95)';
+						item.style.opacity = '0';
+					}
+				} );
+
+				// PLAY: Animate smoothly to natural position
+				requestAnimationFrame( () => {
+					requestAnimationFrame( () => {
+						lastRects.forEach( ( _, item ) => {
+							item.style.transition = 'transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), opacity 0.35s ease';
+							item.style.transform = '';
+							item.style.opacity = '1';
+						} );
+					} );
+				} );
+
+				clearTimeout( this.flipResetTimer );
+				this.flipResetTimer = setTimeout( () => {
+					this.items.forEach( ( item ) => {
+						item.style.transition = '';
+						item.style.transform = '';
+					} );
+				}, 450 );
+			}
 		}
 
-		applyPagination() {
+		applyPagination( isLoadMore = false ) {
 			if ( ! this.paginationType || this.paginationType === 'none' ) {
 				this.items.forEach( item => item.classList.remove( 'is-paginated-hidden' ) );
 				if ( this.loadMoreBtn ) this.loadMoreBtn.parentElement.style.display = 'none';
@@ -489,13 +533,37 @@
 				const limit = this.currentPage * this.perPage;
 				this.hasMoreItems = limit < total;
 
+				let staggerIdx = 0;
+
 				visibleItems.forEach( ( item, idx ) => {
 					if ( idx < limit ) {
+						const wasHidden = item.classList.contains( 'is-paginated-hidden' );
 						item.classList.remove( 'is-paginated-hidden' );
+
+						// Staggered cascade entrance for newly revealed items
+						if ( isLoadMore && wasHidden && ! prefersReducedMotion ) {
+							item.classList.add( 'matcha-gallery__item--entering' );
+							item.style.transitionDelay = `${ staggerIdx * 45 }ms`;
+							staggerIdx++;
+
+							requestAnimationFrame( () => {
+								requestAnimationFrame( () => {
+									item.classList.remove( 'matcha-gallery__item--entering' );
+								} );
+							} );
+						}
 					} else {
 						item.classList.add( 'is-paginated-hidden' );
 					}
 				} );
+
+				if ( isLoadMore && staggerIdx > 0 ) {
+					setTimeout( () => {
+						visibleItems.forEach( ( item ) => {
+							item.style.transitionDelay = '';
+						} );
+					}, staggerIdx * 45 + 400 );
+				}
 
 				if ( this.loadMoreBtn ) {
 					this.loadMoreBtn.parentElement.style.display = this.hasMoreItems ? 'flex' : 'none';
@@ -643,54 +711,71 @@
 				.querySelector( '.matcha-lightbox__prev' )
 				.addEventListener( 'click', ( e ) => {
 					e.stopPropagation();
-					this.prevImage();
+					const inst = MatchaGallery.activeInstance || this;
+					inst.prevImage();
 				} );
 			this.lightbox
 				.querySelector( '.matcha-lightbox__next' )
 				.addEventListener( 'click', ( e ) => {
 					e.stopPropagation();
-					this.nextImage();
+					const inst = MatchaGallery.activeInstance || this;
+					inst.nextImage();
 				} );
 
 			// Zoom toggle
 			const zoomBtn = this.lightbox.querySelector( '.matcha-lb-zoom' );
 			const imgWrap = this.lightbox.querySelector( '.matcha-lightbox__image-wrap' );
-			zoomBtn.addEventListener( 'click', () => this.toggleZoom() );
+			zoomBtn.addEventListener( 'click', () => {
+				const inst = MatchaGallery.activeInstance || this;
+				inst.toggleZoom();
+			} );
 			imgWrap.addEventListener( 'click', ( e ) => {
 				if ( e.target.tagName === 'IMG' ) {
-					this.toggleZoom();
+					const inst = MatchaGallery.activeInstance || this;
+					inst.toggleZoom();
 				}
 			} );
 
 			// Fullscreen toggle
 			const fsBtn = this.lightbox.querySelector( '.matcha-lb-fullscreen' );
-			fsBtn.addEventListener( 'click', () => this.toggleFullscreen() );
+			fsBtn.addEventListener( 'click', () => {
+				const inst = MatchaGallery.activeInstance || this;
+				inst.toggleFullscreen();
+			} );
 
 			// Keyboard shortcuts
 			document.addEventListener( 'keydown', ( e ) => {
 				if ( this.lightbox.hasAttribute( 'hidden' ) ) return;
-				if ( e.key === 'Escape' ) this.closeLightbox();
-				if ( e.key === 'ArrowLeft' ) this.prevImage();
-				if ( e.key === 'ArrowRight' ) this.nextImage();
-				if ( e.key.toLowerCase() === 'z' ) this.toggleZoom();
-				if ( e.key.toLowerCase() === 'f' ) this.toggleFullscreen();
+				const inst = MatchaGallery.activeInstance || this;
+				if ( e.key === 'Escape' ) inst.closeLightbox();
+				if ( e.key === 'ArrowLeft' ) inst.prevImage();
+				if ( e.key === 'ArrowRight' ) inst.nextImage();
+				if ( e.key.toLowerCase() === 'z' ) inst.toggleZoom();
+				if ( e.key.toLowerCase() === 'f' ) inst.toggleFullscreen();
 			} );
 
-			// Mobile touch swipe gestures
+			// Mobile touch swipe gestures (with vertical guard & zoom guard)
 			let touchStartX = 0;
-			let touchEndX = 0;
+			let touchStartY = 0;
 			this.lightbox.addEventListener( 'touchstart', ( e ) => {
+				const inst = MatchaGallery.activeInstance || this;
+				if ( inst.isZoomed ) return;
 				touchStartX = e.changedTouches[ 0 ].screenX;
+				touchStartY = e.changedTouches[ 0 ].screenY;
 			}, { passive: true } );
 
 			this.lightbox.addEventListener( 'touchend', ( e ) => {
-				touchEndX = e.changedTouches[ 0 ].screenX;
-				const diff = touchStartX - touchEndX;
-				if ( Math.abs( diff ) > 45 ) {
-					if ( diff > 0 ) {
-						this.nextImage();
+				const inst = MatchaGallery.activeInstance || this;
+				if ( inst.isZoomed ) return;
+				const touchEndX = e.changedTouches[ 0 ].screenX;
+				const touchEndY = e.changedTouches[ 0 ].screenY;
+				const diffX = touchStartX - touchEndX;
+				const diffY = touchStartY - touchEndY;
+				if ( Math.abs( diffX ) > 45 && Math.abs( diffX ) > Math.abs( diffY ) * 1.5 ) {
+					if ( diffX > 0 ) {
+						inst.nextImage();
 					} else {
-						this.prevImage();
+						inst.prevImage();
 					}
 				}
 			}, { passive: true } );
@@ -714,53 +799,176 @@
 			}
 		}
 
-		openLightbox( index ) {
+		lockScroll() {
+			const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+			this.bodyOriginalPaddingRight = document.body.style.paddingRight || '';
+			this.bodyOriginalOverflow = document.body.style.overflow || '';
+			if ( scrollbarWidth > 0 ) {
+				document.body.style.paddingRight = `${ scrollbarWidth }px`;
+				document.documentElement.style.setProperty( '--matcha-scrollbar-width', `${ scrollbarWidth }px` );
+			}
+			document.body.style.overflow = 'hidden';
+			document.documentElement.classList.add( 'matcha-lightbox-open' );
+		}
+
+		unlockScroll() {
+			document.body.style.overflow = this.bodyOriginalOverflow || '';
+			document.body.style.paddingRight = this.bodyOriginalPaddingRight || '';
+			document.documentElement.style.removeProperty( '--matcha-scrollbar-width' );
+			document.documentElement.classList.remove( 'matcha-lightbox-open' );
+		}
+
+		preloadAdjacent( currentIndex ) {
+			const toPreload = [ currentIndex - 1, currentIndex + 1 ];
+			toPreload.forEach( ( idx ) => {
+				if ( idx >= 0 && idx < this.items.length ) {
+					const it = this.items[ idx ];
+					const src = it.dataset.fullSrc || it.querySelector( 'img' )?.src;
+					if ( src ) {
+						const img = new Image();
+						img.src = src;
+					}
+				}
+			} );
+		}
+
+		openLightbox( index, direction = 0 ) {
+			MatchaGallery.activeInstance = this;
 			this.currentIndex = index;
 			const item = this.items[ index ];
 			if ( ! item ) return;
 
 			this.isZoomed = false;
-			this.lightbox.querySelector( '.matcha-lightbox__image-wrap' )?.classList.remove( 'is-zoomed' );
+			const imgWrap = this.lightbox.querySelector( '.matcha-lightbox__image-wrap' );
+			imgWrap?.classList.remove( 'is-zoomed' );
 
 			const fullSrc = item.dataset.fullSrc || item.querySelector( 'img' )?.src;
 			const alt = item.querySelector( 'img' )?.alt || '';
 			const title = item.dataset.title || '';
 			const caption = item.dataset.caption || '';
 
-			const img = this.lightbox.querySelector( '.matcha-lightbox__img' );
 			const titleEl = this.lightbox.querySelector( '.matcha-lightbox__title' );
 			const captionEl = this.lightbox.querySelector( '.matcha-lightbox__caption' );
 			const captionBar = this.lightbox.querySelector( '.matcha-lightbox__caption-bar' );
 			const counterEl = this.lightbox.querySelector( '.matcha-lightbox__counter' );
 			const downloadLink = this.lightbox.querySelector( '.matcha-lb-download' );
 
-			if ( img ) {
-				img.style.opacity = '0';
-				img.style.transform = 'scale(0.97)';
-				img.src = fullSrc;
-				img.alt = alt;
-				img.onload = () => {
-					img.style.transition = 'opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
-					img.style.opacity = '1';
-					img.style.transform = 'scale(1)';
-				};
+			// Directional image sliding with hardware acceleration & zero black flicker
+			if ( imgWrap ) {
+				const oldImgs = Array.from( imgWrap.querySelectorAll( '.matcha-lightbox__img' ) );
+
+				if ( direction !== 0 && oldImgs.length > 0 ) {
+					// Animate out existing images in direction
+					oldImgs.forEach( ( oldImg ) => {
+						oldImg.classList.add( 'matcha-lightbox__img--exiting' );
+						oldImg.style.transition = 'opacity 0.25s ease, transform 0.28s cubic-bezier(0.2, 0, 0.2, 1)';
+						oldImg.style.opacity = '0';
+						oldImg.style.transform = `translateX(${ -direction * 50 }px) scale(0.96)`;
+						setTimeout( () => {
+							if ( oldImg.parentNode ) oldImg.remove();
+						}, 300 );
+					} );
+
+					// Create and slide in new incoming image
+					const newImg = document.createElement( 'img' );
+					newImg.className = 'matcha-lightbox__img matcha-lightbox__img--incoming';
+					newImg.alt = alt;
+					newImg.style.transition = 'none';
+					newImg.style.opacity = '0';
+					newImg.style.transform = `translateX(${ direction * 50 }px) scale(0.96)`;
+					newImg.src = fullSrc;
+					imgWrap.appendChild( newImg );
+
+					const onSlideIn = () => {
+						requestAnimationFrame( () => {
+							requestAnimationFrame( () => {
+								newImg.style.transition = 'opacity 0.28s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
+								newImg.style.opacity = '1';
+								newImg.style.transform = 'translateX(0) scale(1)';
+								newImg.classList.remove( 'matcha-lightbox__img--incoming' );
+							} );
+						} );
+					};
+
+					if ( newImg.complete && newImg.naturalWidth > 0 ) {
+						onSlideIn();
+					} else {
+						newImg.onload = onSlideIn;
+					}
+				} else {
+					// Initial opening or direct jump: clean scale & fade entrance
+					imgWrap.innerHTML = '';
+					const img = document.createElement( 'img' );
+					img.className = 'matcha-lightbox__img';
+					img.alt = alt;
+					img.style.transition = 'none';
+					img.style.opacity = '0';
+					img.style.transform = 'scale(0.95)';
+					img.src = fullSrc;
+					imgWrap.appendChild( img );
+
+					const onInitialReady = () => {
+						requestAnimationFrame( () => {
+							requestAnimationFrame( () => {
+								img.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+								img.style.opacity = '1';
+								img.style.transform = 'scale(1)';
+							} );
+						} );
+					};
+
+					if ( img.complete && img.naturalWidth > 0 ) {
+						onInitialReady();
+					} else {
+						img.onload = onInitialReady;
+					}
+				}
+			}
+
+			// Preload adjacent photos for instant response
+			this.preloadAdjacent( index );
+
+			// Smooth caption update with subtle directional cue
+			if ( captionBar ) {
+				if ( direction !== 0 ) {
+					captionBar.style.transition = 'opacity 0.18s ease, transform 0.2s ease';
+					captionBar.style.opacity = '0';
+					captionBar.style.transform = `translateX(${ -direction * 15 }px)`;
+					setTimeout( () => {
+						if ( titleEl ) {
+							titleEl.textContent = title;
+							titleEl.style.display = title ? 'block' : 'none';
+						}
+						if ( captionEl ) {
+							captionEl.textContent = caption;
+							captionEl.style.display = caption ? 'block' : 'none';
+						}
+						captionBar.style.display = ( title || caption ) ? 'block' : 'none';
+						captionBar.style.transform = `translateX(${ direction * 15 }px)`;
+						requestAnimationFrame( () => {
+							captionBar.style.opacity = '1';
+							captionBar.style.transform = 'translateX(0)';
+						} );
+					}, 180 );
+				} else {
+					if ( titleEl ) {
+						titleEl.textContent = title;
+						titleEl.style.display = title ? 'block' : 'none';
+					}
+					if ( captionEl ) {
+						captionEl.textContent = caption;
+						captionEl.style.display = caption ? 'block' : 'none';
+					}
+					captionBar.style.display = ( title || caption ) ? 'block' : 'none';
+					captionBar.style.opacity = '1';
+					captionBar.style.transform = 'translateX(0)';
+				}
 			}
 
 			if ( downloadLink ) {
 				downloadLink.href = fullSrc;
 			}
 
-			if ( titleEl ) {
-				titleEl.textContent = title;
-				titleEl.style.display = title ? 'block' : 'none';
-			}
-			if ( captionEl ) {
-				captionEl.textContent = caption;
-				captionEl.style.display = caption ? 'block' : 'none';
-			}
-			if ( captionBar ) {
-				captionBar.style.display = ( title || caption ) ? 'block' : 'none';
-			}
 			if ( counterEl ) {
 				counterEl.textContent = `${ index + 1 } / ${ this.items.length }`;
 			}
@@ -771,7 +979,7 @@
 			this.lightbox.removeAttribute( 'hidden' );
 			this.lightbox.classList.add( 'matcha-lightbox--open' );
 			this.lightbox.classList.add( 'matcha-lightbox--active' );
-			document.body.style.overflow = 'hidden';
+			this.lockScroll();
 
 			this.lightbox.querySelector( '.matcha-lb-close' )?.focus();
 		}
@@ -798,7 +1006,10 @@
 
 			strip.querySelectorAll( '.matcha-lb-thumb' ).forEach( ( btn ) => {
 				btn.addEventListener( 'click', () => {
-					this.openLightbox( parseInt( btn.dataset.index, 10 ) );
+					const targetIdx = parseInt( btn.dataset.index, 10 );
+					if ( targetIdx === this.currentIndex ) return;
+					const dir = targetIdx > this.currentIndex ? 1 : -1;
+					this.openLightbox( targetIdx, dir );
 				} );
 			} );
 
@@ -816,7 +1027,7 @@
 			this.lightbox.setAttribute( 'hidden', '' );
 			this.lightbox.classList.remove( 'matcha-lightbox--open' );
 			this.lightbox.classList.remove( 'matcha-lightbox--active' );
-			document.body.style.overflow = '';
+			this.unlockScroll();
 		}
 
 		prevImage() {
@@ -824,7 +1035,7 @@
 			while ( idx >= 0 && this.items[ idx ].classList.contains( 'matcha-gallery__item--hidden' ) ) {
 				idx--;
 			}
-			if ( idx >= 0 ) this.openLightbox( idx );
+			if ( idx >= 0 ) this.openLightbox( idx, -1 );
 		}
 
 		nextImage() {
@@ -832,7 +1043,7 @@
 			while ( idx < this.items.length && this.items[ idx ].classList.contains( 'matcha-gallery__item--hidden' ) ) {
 				idx++;
 			}
-			if ( idx < this.items.length ) this.openLightbox( idx );
+			if ( idx < this.items.length ) this.openLightbox( idx, 1 );
 		}
 	}
 

@@ -1056,15 +1056,21 @@
 }
 
 /* ==========================================================================
-   Filter Animation States
+   Filter Animation States & Staggered Load More
    ========================================================================== */
 
 .matcha-gallery__item--hidden {
-	opacity: 0;
-	transform: scale(0.85);
-	pointer-events: none;
-	position: absolute;
-	visibility: hidden;
+	opacity: 0 !important;
+	transform: scale(0.88) !important;
+	pointer-events: none !important;
+	position: absolute !important;
+	visibility: hidden !important;
+	width: 0 !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: hidden !important;
+	transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 /* Grid: use display-based hiding for proper grid reflow */
@@ -1086,10 +1092,11 @@
 	overflow: hidden;
 }
 
-/* Entrance animation */
+/* Entrance animation for staggered Load More & initial reveals */
 .matcha-gallery__item--entering {
-	opacity: 0;
-	transform: translateY(20px) scale(0.95);
+	opacity: 0 !important;
+	transform: translateY(24px) scale(0.96) !important;
+	transition: none !important;
 }
 
 /* ==========================================================================
@@ -1265,6 +1272,7 @@
 }
 
 .matcha-lightbox__image-wrap {
+	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1296,7 +1304,20 @@
 	display: block;
 	border-radius: 8px;
 	box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7);
-	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: transform, opacity;
+}
+
+.matcha-lightbox__img--exiting {
+	position: absolute !important;
+	inset: 0 !important;
+	margin: auto !important;
+	pointer-events: none !important;
+	z-index: 1 !important;
+}
+
+.matcha-lightbox__img--incoming {
+	position: relative !important;
+	z-index: 2 !important;
 }
 
 /* Minimalist Caption (No Artificial Pill Box) */
@@ -1306,6 +1327,8 @@
 	text-align: center;
 	max-width: 680px;
 	padding: 0 20px;
+	transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	will-change: opacity, transform;
 }
 
 .matcha-lightbox__title {
