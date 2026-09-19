@@ -1230,14 +1230,16 @@ final class Studio_Page {
 		// Studio bundle (vanilla IIFE, no imports)
 		$studio_js  = MATCHA_GALLERY_URL . 'assets/js/studio.js';
 		$studio_css = MATCHA_GALLERY_URL . 'assets/css/studio.css';
+		$css_ver    = file_exists( MATCHA_GALLERY_PATH . 'assets/css/studio.css' ) ? filemtime( MATCHA_GALLERY_PATH . 'assets/css/studio.css' ) : MATCHA_GALLERY_VERSION;
+		$js_ver     = file_exists( MATCHA_GALLERY_PATH . 'assets/js/studio.js' ) ? filemtime( MATCHA_GALLERY_PATH . 'assets/js/studio.js' ) : MATCHA_GALLERY_VERSION;
 
-		wp_enqueue_style( 'matcha-studio', $studio_css, array(), MATCHA_GALLERY_VERSION );
+		wp_enqueue_style( 'matcha-studio', $studio_css, array(), $css_ver );
 		wp_enqueue_style( 'matcha-frontend-for-canvas', MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css', array(), MATCHA_GALLERY_VERSION );
 		// Add full-screen hide for WP chrome for pure studio immersion
 		wp_add_inline_style( 'matcha-studio', '#wpadminbar,#adminmenumain,#adminmenuback,#wpfooter{display:none !important} #wpcontent{margin-left:0 !important;padding:0 !important;} #wpbody-content{padding:0 !important;} html.wp-toolbar{padding-top:0 !important;}' );
 
-		// Bust cache after clipboard+PUT fix
-		wp_enqueue_script( 'matcha-studio', $studio_js, array( 'media-editor' ), MATCHA_GALLERY_VERSION . '.4', true );
+		// Bust cache after studio fixes
+		wp_enqueue_script( 'matcha-studio', $studio_js, array( 'media-editor' ), $js_ver, true );
 		wp_enqueue_style( 'matcha-studio-v4', MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css', array(), MATCHA_GALLERY_VERSION . '.4' );
 		// Local vendored libraries (WordPress.org compliant — no remote CDNs)
 		wp_enqueue_script( 'sortablejs', MATCHA_GALLERY_URL . 'assets/js/vendor/sortable.min.js', array(), '1.15.7', true );

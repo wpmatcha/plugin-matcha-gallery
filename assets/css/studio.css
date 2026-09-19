@@ -925,6 +925,7 @@ body.matcha-is-dragging * {
    -------------------------------------------------------------------------- */
 .matcha-canvas-wrap {
 	flex: 1;
+	min-width: 0;
 	background: var(--st-bg-base);
 	position: relative;
 	display: flex;
@@ -933,32 +934,47 @@ body.matcha-is-dragging * {
 	justify-content: flex-start;
 	overflow-y: auto;
 	overflow-x: auto;
-	padding: 40px 20px 90px;
+	padding: 40px 24px 100px;
 }
 
 #studio-canvas-container {
-	margin: auto;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	margin: 0 auto;
 	transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 	transform-origin: center top;
 }
 
 .matcha-canvas {
 	width: min(1180px, calc(100% - 48px));
+	max-width: 100%;
+	min-width: 0;
 	min-height: 520px;
 	background: #ffffff;
 	border-radius: var(--st-radius-md);
 	box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
 	padding: 24px;
 	box-sizing: border-box;
+	margin: 0 auto;
 	transition: width 0.3s ease, background 0.3s ease;
 }
 
 .matcha-canvas.is-tablet {
-	width: 768px;
+	width: min(768px, calc(100% - 48px));
 }
 
 .matcha-canvas.is-mobile {
-	width: 375px;
+	width: min(375px, calc(100% - 48px));
+}
+
+#matcha-studio-root .matcha-canvas .matcha-gallery {
+	margin: 0 !important;
+	width: 100% !important;
 }
 
 /* Ensure canvas images are always visible and un-obscured */
