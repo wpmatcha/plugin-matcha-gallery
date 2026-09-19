@@ -998,11 +998,11 @@ if (root) {
         ${cfg.filtersEnabled ? `
           <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;">
             <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
-              <input type="checkbox" id="st-filter-multi" ${cfg.filterMultiSelect ? 'checked' : ''}>
-              Enable Multi-Select Filtering
+              <input type="checkbox" id="st-filter-multi" ${isPro && cfg.filterMultiSelect ? 'checked' : ''}>
+              <span>Enable Multi-Select Filtering</span> <span class="matcha-pro-badge">PRO</span>
             </label>
             
-            ${cfg.filterMultiSelect ? `
+            ${(isPro && cfg.filterMultiSelect) ? `
               <div>
                 <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Multi-Select Intersection Logic</label>
                 <select id="st-filter-logic" class="matcha-dark-select">
@@ -1424,6 +1424,14 @@ if (root) {
       autosaveSoon();
     });
     document.getElementById('st-filter-multi')?.addEventListener('change', e => {
+      if (!isPro) {
+        e.target.checked = false;
+        showProModal(
+          'Multi-Select Faceted Filtering',
+          'Upgrade to Matcha Gallery Pro to enable advanced multi-tag filtering with custom AND/OR intersection logic.'
+        );
+        return;
+      }
       patchConfig({ filterMultiSelect: e.target.checked });
       renderRightPanel();
       renderCanvas();
@@ -3024,6 +3032,7 @@ if (root) {
     const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || '#607d66'};`;
 
     const activeCardTheme = (!isPro && ['glass', 'glow'].includes(cfg.cardTheme)) ? 'clean' : (cfg.cardTheme || 'clean');
+    const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
 
     canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
 
@@ -3076,7 +3085,7 @@ if (root) {
             ` : ''}
 
             ${(cfg.filtersEnabled && allTags.length > 0) ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${cfg.filterMultiSelect ? 'true' : 'false'}" role="toolbar">
+              <div class="matcha-gallery__filters matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar">
                 ${cfg.showAllFilter !== false ? `
                   <button type="button" class="matcha-filter matcha-filter--active" data-filter="*">
                     ${escapeHtml(cfg.allFilterLabel || 'All')}
@@ -3221,13 +3230,13 @@ if (root) {
         const matchesSection = activeSectionId === '*' || secs.includes(activeSectionId);
         
         let matchesTag = true;
-        if (cfg.filterMultiSelect && activeFilterSet.size > 0) {
+        if (isMultiSelect && activeFilterSet.size > 0) {
           if ((cfg.filterLogic || 'or') === 'and') {
             matchesTag = Array.from(activeFilterSet).every(t => tags.includes(t));
           } else {
             matchesTag = Array.from(activeFilterSet).some(t => tags.includes(t));
           }
-        } else if (!cfg.filterMultiSelect) {
+        } else if (!isMultiSelect) {
           matchesTag = currentFilter === '*' || tags.includes(currentFilter);
         }
 
@@ -3321,7 +3330,7 @@ if (root) {
     });
 
     function updateFilterButtonsState() {
-      if (cfg.filterMultiSelect) {
+      if (isMultiSelect) {
         canvas.querySelectorAll('.matcha-filter').forEach(btn => {
           if (btn.dataset.filter === '*') {
             const isActive = activeFilterSet.size === 0;
@@ -3345,7 +3354,7 @@ if (root) {
     canvas.querySelectorAll('.matcha-filter').forEach(btn => {
       btn.addEventListener('click', () => {
         const f = btn.dataset.filter;
-        if (cfg.filterMultiSelect) {
+        if (isMultiSelect) {
           if (f === '*') {
             activeFilterSet.clear();
           } else {

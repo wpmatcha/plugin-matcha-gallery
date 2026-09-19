@@ -259,6 +259,7 @@ class Smart_Gallery_Block {
 			$attrs['sections']           = array();
 			$attrs['randomizeOrder']     = false;
 			$attrs['frontendSortEnabled']= false;
+			$attrs['filterMultiSelect']  = false;
 			if ( ! in_array( $attrs['sortBy'], array( 'manual', 'name-asc', 'name-desc' ), true ) ) {
 				$attrs['sortBy'] = 'manual';
 			}

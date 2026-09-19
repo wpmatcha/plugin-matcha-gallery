@@ -167,7 +167,6 @@ final class Gallery_CPT {
 		$out['rowHeight']     = max( 120, min( 600, (int) ( $cfg['rowHeight'] ?? 240 ) ) );
 
 		$out['filtersEnabled']     = ! empty( $cfg['filtersEnabled'] );
-		$out['filterMultiSelect']  = ! empty( $cfg['filterMultiSelect'] );
 		$out['filterLogic']        = in_array( $cfg['filterLogic'] ?? 'or', array( 'or', 'and' ), true ) ? $cfg['filterLogic'] : 'or';
 		$out['orderedFilterTags']  = array_values( array_filter( array_map( 'sanitize_title', (array) ( $cfg['orderedFilterTags'] ?? array() ) ) ) );
 		$allowed_filter_styles     = apply_filters( 'matcha_gallery_allowed_filter_styles', array( 'pills', 'underline' ) );
@@ -223,6 +222,7 @@ final class Gallery_CPT {
 		$out['proofingEnabled']    = $is_pro && ! empty( $cfg['proofingEnabled'] );
 		$out['shoppableEnabled']   = $is_pro && ! empty( $cfg['shoppableEnabled'] );
 		$out['sectionsEnabled']    = $is_pro && ! empty( $cfg['sectionsEnabled'] );
+		$out['filterMultiSelect']  = $is_pro && ! empty( $cfg['filterMultiSelect'] );
 
 		// Sanitize multi-section chapters (Pro)
 		$out['sections'] = array();
