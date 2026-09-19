@@ -943,7 +943,7 @@ body.matcha-is-dragging * {
 }
 
 .matcha-canvas {
-	width: 860px;
+	width: min(1180px, calc(100% - 48px));
 	min-height: 520px;
 	background: #ffffff;
 	border-radius: var(--st-radius-md);
@@ -954,11 +954,11 @@ body.matcha-is-dragging * {
 }
 
 .matcha-canvas.is-tablet {
-	width: 620px;
+	width: 768px;
 }
 
 .matcha-canvas.is-mobile {
-	width: 360px;
+	width: 375px;
 }
 
 /* Ensure canvas images are always visible and un-obscured */

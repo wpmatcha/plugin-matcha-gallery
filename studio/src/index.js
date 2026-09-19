@@ -324,7 +324,20 @@ if (root) {
 
   document.getElementById('hud-zoom-in').addEventListener('click', () => updateZoom(canvasZoom + 10));
   document.getElementById('hud-zoom-out').addEventListener('click', () => updateZoom(canvasZoom - 10));
-  document.getElementById('hud-zoom-fit').addEventListener('click', () => updateZoom(100));
+  document.getElementById('hud-zoom-fit').addEventListener('click', () => {
+    const wrap = document.querySelector('.matcha-canvas-wrap');
+    const canvas = document.getElementById('studio-canvas');
+    if (wrap && canvas) {
+      const availW = wrap.clientWidth - 80;
+      const canvasW = canvas.offsetWidth;
+      if (availW > 0 && canvasW > 0 && availW < canvasW) {
+        const fitScale = Math.max(50, Math.min(100, Math.round((availW / canvasW) * 100)));
+        updateZoom(fitScale);
+        return;
+      }
+    }
+    updateZoom(100);
+  });
 
   document.querySelectorAll('.matcha-hud-dot').forEach(dot => {
     dot.addEventListener('click', () => {
