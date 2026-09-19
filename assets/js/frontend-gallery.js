@@ -853,38 +853,38 @@
 			const counterEl = this.lightbox.querySelector( '.matcha-lightbox__counter' );
 			const downloadLink = this.lightbox.querySelector( '.matcha-lb-download' );
 
-			// Directional image sliding with hardware acceleration & zero black flicker
+			// Luxury instant cross-dissolve transition (zero scale distortion, zero black flicker)
 			if ( imgWrap ) {
 				const oldImgs = Array.from( imgWrap.querySelectorAll( '.matcha-lightbox__img' ) );
 
 				if ( direction !== 0 && oldImgs.length > 0 ) {
-					// Animate out existing images in direction
+					// Smoothly dissolve out existing image
 					oldImgs.forEach( ( oldImg ) => {
 						oldImg.classList.add( 'matcha-lightbox__img--exiting' );
-						oldImg.style.transition = 'opacity 0.25s ease, transform 0.28s cubic-bezier(0.2, 0, 0.2, 1)';
+						oldImg.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
 						oldImg.style.opacity = '0';
-						oldImg.style.transform = `translateX(${ -direction * 50 }px) scale(0.96)`;
+						oldImg.style.transform = `translateX(${ -direction * 12 }px)`;
 						setTimeout( () => {
 							if ( oldImg.parentNode ) oldImg.remove();
-						}, 300 );
+						}, 220 );
 					} );
 
-					// Create and slide in new incoming image
+					// Create incoming image
 					const newImg = document.createElement( 'img' );
 					newImg.className = 'matcha-lightbox__img matcha-lightbox__img--incoming';
 					newImg.alt = alt;
 					newImg.style.transition = 'none';
 					newImg.style.opacity = '0';
-					newImg.style.transform = `translateX(${ direction * 50 }px) scale(0.96)`;
+					newImg.style.transform = `translateX(${ direction * 12 }px)`;
 					newImg.src = fullSrc;
 					imgWrap.appendChild( newImg );
 
 					const onSlideIn = () => {
 						requestAnimationFrame( () => {
 							requestAnimationFrame( () => {
-								newImg.style.transition = 'opacity 0.28s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
+								newImg.style.transition = 'opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
 								newImg.style.opacity = '1';
-								newImg.style.transform = 'translateX(0) scale(1)';
+								newImg.style.transform = 'none';
 								newImg.classList.remove( 'matcha-lightbox__img--incoming' );
 							} );
 						} );
@@ -896,23 +896,22 @@
 						newImg.onload = onSlideIn;
 					}
 				} else {
-					// Initial opening or direct jump: clean scale & fade entrance
+					// Initial opening or direct jump: clean smooth fade-in
 					imgWrap.innerHTML = '';
 					const img = document.createElement( 'img' );
 					img.className = 'matcha-lightbox__img';
 					img.alt = alt;
 					img.style.transition = 'none';
 					img.style.opacity = '0';
-					img.style.transform = 'scale(0.95)';
+					img.style.transform = 'none';
 					img.src = fullSrc;
 					imgWrap.appendChild( img );
 
 					const onInitialReady = () => {
 						requestAnimationFrame( () => {
 							requestAnimationFrame( () => {
-								img.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+								img.style.transition = 'opacity 0.22s ease';
 								img.style.opacity = '1';
-								img.style.transform = 'scale(1)';
 							} );
 						} );
 					};
@@ -928,12 +927,11 @@
 			// Preload adjacent photos for instant response
 			this.preloadAdjacent( index );
 
-			// Smooth caption update with subtle directional cue
+			// Smooth, instant caption cross-fade
 			if ( captionBar ) {
 				if ( direction !== 0 ) {
-					captionBar.style.transition = 'opacity 0.18s ease, transform 0.2s ease';
+					captionBar.style.transition = 'opacity 0.15s ease';
 					captionBar.style.opacity = '0';
-					captionBar.style.transform = `translateX(${ -direction * 15 }px)`;
 					setTimeout( () => {
 						if ( titleEl ) {
 							titleEl.textContent = title;
@@ -944,12 +942,10 @@
 							captionEl.style.display = caption ? 'block' : 'none';
 						}
 						captionBar.style.display = ( title || caption ) ? 'block' : 'none';
-						captionBar.style.transform = `translateX(${ direction * 15 }px)`;
 						requestAnimationFrame( () => {
 							captionBar.style.opacity = '1';
-							captionBar.style.transform = 'translateX(0)';
 						} );
-					}, 180 );
+					}, 150 );
 				} else {
 					if ( titleEl ) {
 						titleEl.textContent = title;
@@ -961,7 +957,6 @@
 					}
 					captionBar.style.display = ( title || caption ) ? 'block' : 'none';
 					captionBar.style.opacity = '1';
-					captionBar.style.transform = 'translateX(0)';
 				}
 			}
 
