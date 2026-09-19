@@ -8,6 +8,7 @@
 	"scripts": {
 		"build": "node build.js",
 		"pack": "node pack.js",
+		"make-pot": "node bin/make-pot.js",
 		"build:studio": "npx esbuild studio/src/index.js --bundle --outfile=assets/js/studio.js --format=iife",
 		"watch:studio": "npx esbuild studio/src/index.js --bundle --outfile=assets/js/studio.js --format=iife --watch"
 	},

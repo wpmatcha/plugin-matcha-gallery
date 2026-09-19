@@ -43,14 +43,14 @@ export function ImagesTab({ config, patchConfig, mediaNonce }) {
       }
     });
     await Promise.all(workers);
-    btn.disabled=false; btn.textContent='⚡ Run AI Auto-Enhance';
+    btn.disabled=false; btn.textContent='Run AI Auto-Enhance';
   };
 
   return `
     <div>
       <button type="button" class="button button-primary" id="matcha-add-images" style="width:100%">+ Add Images (wp.media)</button>
       <div style="margin:10px 0;display:flex;gap:8px;">
-        <button type="button" class="button" id="matcha-run-ai" style="flex:1">⚡ Run AI Auto-Enhance</button>
+        <button type="button" class="button" id="matcha-run-ai" style="flex:1">Run AI Auto-Enhance</button>
       </div>
       <div class="matcha-progress"><div id="matcha-ai-bar" class="matcha-progress__bar"></div></div>
       <div id="matcha-ai-status" style="font-size:11px;color:#646970;text-align:center;"></div>
@@ -86,7 +86,7 @@ export function bindImagesTab(patchConfig, config){
       }
     });
     await Promise.all(workers);
-    btn.disabled=false; btn.textContent='⚡ Run AI Auto-Enhance';
+    btn.disabled=false; btn.textContent='Run AI Auto-Enhance';
   });
 }
 function getComputedConfig(){ return window.__matchaGetConfig?.(); }

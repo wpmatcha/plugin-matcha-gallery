@@ -58,7 +58,7 @@ export default function GalleryPlaceholder( { attributes, setAttributes } ) {
 				{ studioGalleries.length > 0 && (
 					<div style={ { width: '100%', padding: '10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px' } }>
 						<SelectControl
-							label={ __( '🍵 Select Studio Gallery', 'matcha-gallery' ) }
+							label={ __( 'Select Studio Gallery', 'matcha-gallery' ) }
 							value={ galleryId || 0 }
 							options={ galleryOptions }
 							onChange={ ( val ) => {
@@ -84,7 +84,7 @@ export default function GalleryPlaceholder( { attributes, setAttributes } ) {
 									onClick={ open }
 									className="matcha-gallery-placeholder__btn"
 								>
-									{ __( '🖼 Select Images', 'matcha-gallery' ) }
+									{ __( 'Select Images', 'matcha-gallery' ) }
 								</Button>
 							) }
 						/>
@@ -97,7 +97,7 @@ export default function GalleryPlaceholder( { attributes, setAttributes } ) {
 						className="components-button is-secondary"
 						style={ { textDecoration: 'none' } }
 					>
-						{ __( '🎨 Open Matcha Studio ↗', 'matcha-gallery' ) }
+						{ __( 'Open Matcha Studio ↗', 'matcha-gallery' ) }
 					</a>
 				</div>
 

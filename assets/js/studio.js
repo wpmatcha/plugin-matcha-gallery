@@ -54,12 +54,62 @@
     eye: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
     list: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>`,
     grid: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>`,
-    gem: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/></svg>`,
-    check: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+    grid3: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="4" x="3" y="3" rx="1"/><rect width="4" height="4" x="10" y="3" rx="1"/><rect width="4" height="4" x="17" y="3" rx="1"/><rect width="4" height="4" x="3" y="10" rx="1"/><rect width="4" height="4" x="10" y="10" rx="1"/><rect width="4" height="4" x="17" y="10" rx="1"/><rect width="4" height="4" x="3" y="17" rx="1"/><rect width="4" height="4" x="10" y="17" rx="1"/><rect width="4" height="4" x="17" y="17" rx="1"/></svg>`,
+    gem: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8da993" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/></svg>`,
+    check: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    drag: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>`,
+    edit: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`,
+    trash: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`
   };
   var root = document.getElementById("matcha-studio-root");
   if (root) {
-    let updateZoom = function(z) {
+    let showProModal = function(featureTitle = "Matcha Studio Pro Feature", featureDesc = "Upgrade to Matcha Gallery Pro to unlock this advanced feature and take your WordPress galleries to the next level.") {
+      let backdrop = document.querySelector(".matcha-pro-modal-backdrop");
+      if (!backdrop) {
+        backdrop = document.createElement("div");
+        backdrop.className = "matcha-pro-modal-backdrop";
+        document.body.appendChild(backdrop);
+      }
+      backdrop.innerHTML = `
+      <div class="matcha-pro-modal" role="dialog" aria-modal="true">
+        <button type="button" class="close-btn" aria-label="Close" id="matcha-pro-close-btn">&times;</button>
+        <div class="matcha-pro-modal-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div style="margin-bottom: 6px;"><span class="matcha-pro-badge" style="font-size: 10px; padding: 2px 8px;">MATCHA PRO</span></div>
+        <h3 class="matcha-pro-modal-title">${escapeHtml(featureTitle)}</h3>
+        <p class="matcha-pro-modal-desc">${escapeHtml(featureDesc)}</p>
+        
+        <div class="matcha-pro-features-list">
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>PhotoBlocks Mosaic, Pinwheel & Bento Layouts</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Pixel-Perfect 2D Focal Pan & Zoom Cropping</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>5 Realistic Luxury Picture Frames & Matting</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Client Proofing Sessions & Favorite Trays</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Shoppable Hotspots & Buy Now Buttons</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Multi-Section Animated Gallery Chapters</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>1-Click High-Res Wall Snapshots & PDF Proposals</span></div>
+        </div>
+
+        <a href="${upgradeUrl}" target="_blank" rel="noopener noreferrer" class="matcha-pro-modal-cta" id="matcha-pro-cta-btn">
+          <span>Upgrade to Matcha Pro \u2192</span>
+        </a>
+
+        <div class="matcha-pro-modal-footer">
+          <span>30-Day Money-Back Guarantee</span> \u2022 <span>Instant License Activation</span>
+        </div>
+      </div>
+    `;
+      backdrop.classList.add("is-visible");
+      const closeBtn = backdrop.querySelector("#matcha-pro-close-btn");
+      if (closeBtn) {
+        closeBtn.onclick = () => backdrop.classList.remove("is-visible");
+      }
+      backdrop.onclick = (e) => {
+        if (e.target === backdrop) {
+          backdrop.classList.remove("is-visible");
+        }
+      };
+    }, updateZoom = function(z) {
       canvasZoom = Math.max(50, Math.min(150, z));
       zoomLabel.textContent = `${canvasZoom}%`;
       zoomContainer.style.transform = `scale(${canvasZoom / 100})`;
@@ -174,7 +224,6 @@
         leftPanel.innerHTML = imagesHTML(cfg);
         bindImages();
         renderImageList();
-        initSortable();
       } else if (name === "blueprints") {
         leftPanel.innerHTML = blueprintsHTML(cfg);
         bindBlueprints();
@@ -198,14 +247,14 @@
               <span style="opacity:0.7;">${Icons.folder}</span> ${escapeHtml(s.title)} <span class="cnt">${(s.imageIds || []).length}</span>
             </button>
           `).join("")}
-          <button type="button" id="btn-add-section" class="matcha-studio-section-pill" style="color:#4ade80;border-color:rgba(34,197,94,0.3);" title="Create new gallery chapter">
-            + Chapter 
+          <button type="button" id="btn-add-section" class="matcha-studio-section-pill" style="color:#ffffff;border-color:rgba(77,164,104,0.35);font-weight:700;display:inline-flex;align-items:center;gap:4px;" title="Create new gallery chapter">
+            <span style="color:#5ec27f;">+</span> Chapter <span class="matcha-pro-badge">PRO</span>
           </button>
         </div>
 
         ${currentSection ? `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 2px;margin-bottom:8px;">
-            <span style="font-size:11px;font-weight:700;color:#4ade80;">Chapter: "${escapeHtml(currentSection.title)}"</span>
+            <span style="font-size:11px;font-weight:700;color:#ffffff;">Chapter: "${escapeHtml(currentSection.title)}"</span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="btn-rename-sec" class="matcha-exit-btn" style="padding:2px 6px;font-size:9px;">Rename</button>
               <button type="button" id="btn-delete-sec" class="matcha-exit-btn" style="padding:2px 6px;font-size:9px;color:#f87171;">Delete</button>
@@ -217,19 +266,19 @@
           <span>+</span> Add Photos from Media
         </button>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
-          <button type="button" id="matcha-run-ai" class="matcha-exit-btn" style="font-weight:700;color:#4ade80;display:flex;align-items:center;justify-content:center;gap:5px;" title="Run Gemini AI Vision Auto-Tagging">
-            <span>${Icons.bolt}</span> AI Enhance
+          <button type="button" id="matcha-run-ai" class="matcha-exit-btn" style="font-weight:700;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;" title="Run Gemini AI Vision Auto-Tagging">
+            <span style="color:#5ec27f;">${Icons.bolt}</span> AI Enhance
           </button>
-          <button type="button" id="matcha-smart-fill" class="matcha-exit-btn" style="font-weight:700;color:#38bdf8;display:flex;align-items:center;justify-content:center;gap:5px;" title="Auto-match aspect ratios and tile geometry">
-            <span>${Icons.sparkles}</span> Smart Fill
+          <button type="button" id="matcha-smart-fill" class="matcha-exit-btn" style="font-weight:700;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;" title="Auto-match aspect ratios and tile geometry">
+            <span style="color:#38bdf8;">${Icons.sparkles}</span> Smart Fill <span class="matcha-pro-badge">PRO</span>
           </button>
         </div>
         <div class="matcha-progress" style="height:4px;background:#202632;border-radius:4px;overflow:hidden;margin:6px 0;display:none;">
-          <div id="matcha-ai-bar" class="matcha-progress__bar" style="height:100%;background:linear-gradient(90deg, #4ade80, #22c55e);width:0%;transition:width 0.3s ease;"></div>
+          <div id="matcha-ai-bar" class="matcha-progress__bar" style="height:100%;background:linear-gradient(90deg, #5ec27f, #4da468);width:0%;transition:width 0.3s ease;"></div>
         </div>
         <div id="matcha-ai-status" style="font-size:10px;color:var(--st-text-secondary);text-align:center;min-height:14px;margin-bottom:8px;"></div>
 
-        <!-- Photos Tray Management Toolbar (Search, View Mode, Sort, Filter) -->
+        <!-- Photos Tray Management Toolbar (Search, 3-Way Density Switcher, Sort, Filter) -->
         <div class="matcha-tray-toolbar" style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
           <div style="position:relative;flex:1;display:flex;align-items:center;">
             <span style="position:absolute;left:8px;color:#64748b;font-size:11px;display:flex;pointer-events:none;">${Icons.search}</span>
@@ -237,57 +286,71 @@
             ${traySearchQuery ? `<button type="button" id="btn-clear-tray-search" style="position:absolute;right:6px;background:none;border:none;color:#94a3b8;cursor:pointer;font-size:12px;padding:0;line-height:1;" title="Clear Search">\xD7</button>` : ""}
           </div>
 
-          <!-- View Mode Toggle (Grid / List) -->
-          <button type="button" id="btn-tray-view-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${trayViewMode === "list" ? "#4ade80" : "#94a3b8"};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Toggle Grid / List View">
-            ${trayViewMode === "list" ? Icons.list : Icons.eye}
-          </button>
+          <!-- Segmented View Switcher (List / 2-Col / 3-Col) -->
+          <div class="matcha-tray-view-segmented" title="Switch photo density">
+            <button type="button" class="matcha-tray-view-btn ${trayViewMode === "list" ? "is-active" : ""}" data-tray-view="list" title="1-Column List View (Details)">
+              ${Icons.list}
+            </button>
+            <button type="button" class="matcha-tray-view-btn ${trayViewMode === "grid-2" ? "is-active" : ""}" data-tray-view="grid-2" title="2-Column Grid (Standard)">
+              ${Icons.grid}
+            </button>
+            <button type="button" class="matcha-tray-view-btn ${trayViewMode === "grid-3" ? "is-active" : ""}" data-tray-view="grid-3" title="3-Column Grid (High Density)">
+              ${Icons.grid3}
+            </button>
+          </div>
 
           <!-- Sort Dropdown -->
           <div style="position:relative;">
-            <button type="button" id="btn-tray-sort-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${traySortBy !== "manual" ? "#4ade80" : "#94a3b8"};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Sort Photos">
+            <button type="button" id="btn-tray-sort-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${(getState().config.sortBy || "manual") !== "manual" ? "#5ec27f" : "#b5c7ba"};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Sort Gallery Photos">
               ${Icons.sort}
             </button>
-            <div id="tray-sort-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:160px;background:#0f172a;border:1px solid rgba(255,255,255,0.18);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.7);z-index:9999;padding:4px;">
-              <div class="tray-menu-item ${traySortBy === "manual" ? "is-selected" : ""}" data-sort="manual">
-                <span>Drag & Drop</span>
-                ${traySortBy === "manual" ? '<span style="color:#4ade80;">\u2713</span>' : ""}
+            <div id="tray-sort-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:185px;background:var(--st-bg-card);border:1px solid var(--st-border-strong);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.8);z-index:9999;padding:4px;">
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "manual" ? "is-selected" : ""}" data-sort="manual">
+                <span>Manual (Drag & Drop)</span>
+                ${(getState().config.sortBy || "manual") === "manual" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : ""}
               </div>
-              <div class="tray-menu-item ${traySortBy === "newest" ? "is-selected" : ""}" data-sort="newest">
-                <span>Newest Added</span>
-                ${traySortBy === "newest" ? '<span style="color:#4ade80;">\u2713</span>' : ""}
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "name-asc" ? "is-selected" : ""}" data-sort="name-asc">
+                <span>Title (A \u2192 Z)</span>
+                ${(getState().config.sortBy || "manual") === "name-asc" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : ""}
               </div>
-              <div class="tray-menu-item ${traySortBy === "oldest" ? "is-selected" : ""}" data-sort="oldest">
-                <span>Oldest Added</span>
-                ${traySortBy === "oldest" ? '<span style="color:#4ade80;">\u2713</span>' : ""}
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "name-desc" ? "is-selected" : ""}" data-sort="name-desc">
+                <span>Title (Z \u2192 A)</span>
+                ${(getState().config.sortBy || "manual") === "name-desc" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : ""}
               </div>
-              <div class="tray-menu-item ${traySortBy === "name-asc" ? "is-selected" : ""}" data-sort="name-asc">
-                <span>Name (A-Z)</span>
-                ${traySortBy === "name-asc" ? '<span style="color:#4ade80;">\u2713</span>' : ""}
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "newest" ? "is-selected" : ""}" data-sort="newest">
+                <span>Date Added (Newest)</span>
+                ${isPro ? (getState().config.sortBy || "manual") === "newest" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : "" : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
               </div>
-              <div class="tray-menu-item ${traySortBy === "name-desc" ? "is-selected" : ""}" data-sort="name-desc">
-                <span>Name (Z-A)</span>
-                ${traySortBy === "name-desc" ? '<span style="color:#4ade80;">\u2713</span>' : ""}
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "oldest" ? "is-selected" : ""}" data-sort="oldest">
+                <span>Date Added (Oldest)</span>
+                ${isPro ? (getState().config.sortBy || "manual") === "oldest" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : "" : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
+              </div>
+              <div class="tray-menu-item ${(getState().config.sortBy || "manual") === "random" ? "is-selected" : ""}" data-sort="random">
+                <span>Random Shuffle</span>
+                ${isPro ? (getState().config.sortBy || "manual") === "random" ? '<span style="color:#5ec27f;font-weight:700;">\u2713</span>' : "" : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
               </div>
             </div>
           </div>
 
           <!-- Filter Status Dropdown -->
           <div style="position:relative;">
-            <button type="button" id="btn-tray-filter-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${trayFilterBy !== "all" ? "#4ade80" : "#94a3b8"};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Filter Photos by Status">
+            <button type="button" id="btn-tray-filter-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${trayFilterBy !== "all" ? "#5ec27f" : "#b5c7ba"};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Filter Photos by Status">
               ${Icons.filter}
             </button>
-            <div id="tray-filter-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:170px;background:#0f172a;border:1px solid rgba(255,255,255,0.18);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.7);z-index:9999;padding:4px;">
+            <div id="tray-filter-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:170px;background:var(--st-bg-card);border:1px solid var(--st-border-strong);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.8);z-index:9999;padding:4px;">
               <div class="tray-menu-item ${trayFilterBy === "all" ? "is-selected" : ""}" data-filter="all">
                 <span>All Photos</span>
                 <span style="font-size:10px;opacity:0.7;">(${totalCount})</span>
               </div>
               <div class="tray-menu-item ${trayFilterBy === "ai" ? "is-selected" : ""}" data-filter="ai">
                 <span>AI Analyzed</span>
-                <span style="font-size:10px;color:#4ade80;">\u2713</span>
+                <span style="font-size:10px;color:#5ec27f;font-weight:700;">\u2713</span>
               </div>
               <div class="tray-menu-item ${trayFilterBy === "no-alt" ? "is-selected" : ""}" data-filter="no-alt">
                 <span>Needs Alt Text</span>
-                <span style="font-size:10px;color:#fbbf24;">\u26A0\uFE0F</span>
+                <span style="font-size:10px;color:#fbbf24;display:inline-flex;align-items:center;">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
               </div>
               <div class="tray-menu-item ${trayFilterBy === "untagged" ? "is-selected" : ""}" data-filter="untagged">
                 <span>Untagged Photos</span>
@@ -296,7 +359,8 @@
           </div>
         </div>
 
-        <div id="matcha-image-list" class="matcha-image-grid ${trayViewMode === "list" ? "matcha-image-grid--list" : ""}"></div>
+        <div id="matcha-image-list" class="matcha-image-grid ${trayViewMode === "list" ? "matcha-image-grid--list" : trayViewMode === "grid-3" ? "matcha-image-grid--col-3" : ""}"></div>
+        <div id="matcha-tray-pagination" class="matcha-tray-pagination-bar" style="display:none;"></div>
       </div>
     `;
     }, blueprintsHTML = function(cfg) {
@@ -305,8 +369,8 @@
       <div class="matcha-card">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.layoutGrid} Layout Blueprints</span>
-          <button type="button" id="btn-smart-shuffle" style="background:none;border:none;color:#4ade80;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;">
-            <span>${Icons.sparkles}</span> Auto-Arrange
+          <button type="button" id="btn-smart-shuffle" style="background:none;border:none;color:#ffffff;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;">
+            <span style="color:#5ec27f;">${Icons.sparkles}</span> Auto-Arrange
           </button>
         </div>
         <p style="font-size:11px;color:var(--st-text-muted);margin:0 0 12px;">Select an algorithmic layout style or let AI auto-arrange.</p>
@@ -335,6 +399,7 @@
             <div class="matcha-blueprint-desc">Custom tile spans</div>
           </div>
           <div class="matcha-blueprint-card ${curLayout === "bento" ? "is-active" : ""}" data-layout="bento">
+            <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
             <div class="matcha-blueprint-title">
               Bento Showcase
@@ -342,6 +407,7 @@
             <div class="matcha-blueprint-desc">Modern hero spread</div>
           </div>
           <div class="matcha-blueprint-card ${curLayout === "pinwheel" ? "is-active" : ""}" data-layout="pinwheel">
+            <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.pinwheel}</span>
             <div class="matcha-blueprint-title">
               Pinwheel Spiral
@@ -355,11 +421,10 @@
       return `
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters</span>
-          
+          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters <span class="matcha-pro-badge">PRO</span></span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-sections-toggle" ${cfg.sectionsEnabled !== false ? "checked" : ""}>
+          <input type="checkbox" id="st-sections-toggle" ${isPro && cfg.sectionsEnabled !== false ? "checked" : ""}>
           Enable Chapter Tab Navigation
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -367,11 +432,10 @@
         </p>
 
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.palette} AI Color Swatches</span>
-          
+          <span class="heading-wrap">${Icons.palette} AI Color Swatches <span class="matcha-pro-badge">PRO</span></span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-color-filter" ${cfg.colorFilterEnabled !== false ? "checked" : ""}>
+          <input type="checkbox" id="st-color-filter" ${isPro && cfg.colorFilterEnabled ? "checked" : ""}>
           Enable Live Color Swatches Filter
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -379,11 +443,10 @@
         </p>
 
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.shoppingBag} Shoppable Portfolios</span>
-          
+          <span class="heading-wrap">${Icons.shoppingBag} Shoppable Portfolios <span class="matcha-pro-badge">PRO</span></span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-shoppable" ${cfg.shoppableEnabled !== false ? "checked" : ""}>
+          <input type="checkbox" id="st-shoppable" ${isPro && cfg.shoppableEnabled !== false ? "checked" : ""}>
           Enable Shoppable Buy Buttons
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
@@ -391,11 +454,10 @@
         </p>
 
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.heart} Client Proofing</span>
-          
+          <span class="heading-wrap">${Icons.heart} Client Proofing <span class="matcha-pro-badge">PRO</span></span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-proofing" ${cfg.proofingEnabled ? "checked" : ""}>
+          <input type="checkbox" id="st-proofing" ${isPro && cfg.proofingEnabled ? "checked" : ""}>
           Enable Favorites Tray & Export
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 0 22px;">
@@ -435,10 +497,10 @@
         <select id="st-frame-style" class="matcha-dark-select" style="margin-bottom:12px;">
           <option value="none" ${curFrame === "none" ? "selected" : ""}>Frameless Clean (Modern)</option>
           <option value="white-mat" ${curFrame === "white-mat" ? "selected" : ""}>Gallery White Matting</option>
-          <option value="black-metal" ${curFrame === "black-metal" ? "selected" : ""} >Slim Matte Black Metal </option>
-          <option value="natural-oak" ${curFrame === "natural-oak" ? "selected" : ""} >Natural Oak Wood </option>
-          <option value="gold-brass" ${curFrame === "gold-brass" ? "selected" : ""} >Brushed Gold Brass </option>
-          <option value="glass-float" ${curFrame === "glass-float" ? "selected" : ""} >Glassmorphism 3D Float </option>
+          <option value="black-metal" ${curFrame === "black-metal" ? "selected" : ""}>Slim Matte Black Metal (PRO)</option>
+          <option value="natural-oak" ${curFrame === "natural-oak" ? "selected" : ""}>Natural Oak Wood (PRO)</option>
+          <option value="gold-brass" ${curFrame === "gold-brass" ? "selected" : ""}>Brushed Gold Brass (PRO)</option>
+          <option value="glass-float" ${curFrame === "glass-float" ? "selected" : ""}>Glassmorphism 3D Float (PRO)</option>
         </select>
 
         <div class="range-row">
@@ -464,9 +526,18 @@
         <div class="matcha-card-title" style="margin-top:14px;">Card Aesthetic Theme</div>
         <select id="st-theme" class="matcha-dark-select">
           <option value="clean" ${curTheme === "clean" ? "selected" : ""}>Clean Minimalist</option>
-          <option value="glass" ${curTheme === "glass" ? "selected" : ""}>Glassmorphic Frost</option>
-          <option value="glow" ${curTheme === "glow" ? "selected" : ""}>Matcha Glow Lift</option>
           <option value="dark" ${curTheme === "dark" ? "selected" : ""}>Dark Mode Aesthetic</option>
+          <option value="glass" ${curTheme === "glass" ? "selected" : ""}>Glassmorphic Frost (PRO)</option>
+          <option value="glow" ${curTheme === "glow" ? "selected" : ""}>Matcha Glow Lift (PRO)</option>
+        </select>
+
+        <div class="matcha-card-title" style="margin-top:14px;">Photo Hover Animation</div>
+        <select id="st-hover-effect" class="matcha-dark-select">
+          <option value="zoom" ${(cfg.hoverEffect || "zoom") === "zoom" ? "selected" : ""}>Smooth Zoom (Default)</option>
+          <option value="lift" ${(cfg.hoverEffect || "zoom") === "lift" ? "selected" : ""}>3D Elevation Lift</option>
+          <option value="glow" ${(cfg.hoverEffect || "zoom") === "glow" ? "selected" : ""}>Matcha Neon Glow</option>
+          <option value="grayscale" ${(cfg.hoverEffect || "zoom") === "grayscale" ? "selected" : ""}>Monochrome to Vibrant Color</option>
+          <option value="none" ${(cfg.hoverEffect || "zoom") === "none" ? "selected" : ""}>Subtle Flat (No Effect)</option>
         </select>
       </div>
 
@@ -513,13 +584,44 @@
       <!-- Progressive Loading & Pagination -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.fileText} Pagination & Loading</span>
+          <span class="heading-wrap">${Icons.fileText} Loading & Pagination</span>
         </div>
+        
+        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+          <input type="checkbox" id="st-instant-frames" ${cfg.instantFramesEnabled !== false ? "checked" : ""}>
+          Enable Instant Zero-CLS Frames
+        </label>
+        
+        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+          <input type="checkbox" id="st-preloader" ${cfg.preloaderEnabled !== false ? "checked" : ""}>
+          Enable Gallery Pre-Loader
+        </label>
+
+        <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="st-randomize-load" ${isPro && cfg.randomizeOrder ? "checked" : ""}>
+            Randomize on Page Load
+          </span>
+          <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+        </label>
+
+        ${cfg.preloaderEnabled !== false ? `
+          <div style="padding-top:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Preloader Visual Style</label>
+            <select id="st-preloader-style" class="matcha-dark-select">
+              <option value="spinner" ${(cfg.preloaderStyle || "spinner") === "spinner" ? "selected" : ""}>Matcha Spinner (Classic)</option>
+              <option value="pulse" ${(cfg.preloaderStyle || "spinner") === "pulse" ? "selected" : ""}>Soft Pulse Overlay (PRO)</option>
+              <option value="skeleton" ${(cfg.preloaderStyle || "spinner") === "skeleton" ? "selected" : ""}>Shimmering Skeleton Boxes (PRO)</option>
+            </select>
+          </div>
+        ` : ""}
+
+        <div class="matcha-card-title" style="margin-top:14px;">Pagination Type</div>
         <select id="st-pagination" class="matcha-dark-select" style="margin-bottom:12px;">
           <option value="none" ${curPag === "none" ? "selected" : ""}>All Photos (No Pagination)</option>
           <option value="load-more" ${curPag === "load-more" ? "selected" : ""}>Load More Button</option>
-          <option value="infinite" ${curPag === "infinite" ? "selected" : ""} >Infinite Smooth Scroll </option>
-          <option value="pages" ${curPag === "pages" ? "selected" : ""} >Numbered Pages Navigation </option>
+          <option value="infinite" ${curPag === "infinite" ? "selected" : ""}>Infinite Smooth Scroll (PRO)</option>
+          <option value="pages" ${curPag === "pages" ? "selected" : ""}>Numbered Pages Navigation (PRO)</option>
         </select>
 
         ${curPag !== "none" ? `
@@ -563,6 +665,13 @@
           <input type="checkbox" id="st-filters" ${cfg.filtersEnabled ? "checked" : ""}>
           Enable Category Pill Filters
         </label>
+        <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+          <span style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="st-frontend-sort" ${isPro && cfg.frontendSortEnabled ? "checked" : ""}>
+            Enable Visitor Sort Dropdown
+          </span>
+          <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+        </label>
         <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
           <input type="checkbox" id="st-lightbox" ${cfg.lightboxEnabled ? "checked" : ""}>
           Enable Fullscreen Lightbox
@@ -570,6 +679,21 @@
 
         ${cfg.filtersEnabled ? `
           <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
+              <input type="checkbox" id="st-filter-multi" ${cfg.filterMultiSelect ? "checked" : ""}>
+              Enable Multi-Select Filtering
+            </label>
+            
+            ${cfg.filterMultiSelect ? `
+              <div>
+                <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Multi-Select Intersection Logic</label>
+                <select id="st-filter-logic" class="matcha-dark-select">
+                  <option value="or" ${(cfg.filterLogic || "or") === "or" ? "selected" : ""}>Match ANY Tag (Expand Results - OR)</option>
+                  <option value="and" ${(cfg.filterLogic || "or") === "and" ? "selected" : ""}>Match ALL Tags (Strict Intersection - AND)</option>
+                </select>
+              </div>
+            ` : ""}
+
             <div>
               <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Visual Style</label>
               <select id="st-filter-style" class="matcha-dark-select">
@@ -611,8 +735,8 @@
         ` : ""}
 
         <div style="margin-top:14px;">
-          <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-weight:600;font-size:12px;border-radius:8px;cursor:pointer;">
-            <span>${Icons.filter}</span> Manage All Gallery Filters
+          <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#ffffff;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer;">
+            <span style="color:#5ec27f;">${Icons.filter}</span> Manage All Gallery Filters
           </button>
         </div>
       </div>
@@ -626,13 +750,14 @@
           <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Curated Brand Palettes</label>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
             ${[
-        { hex: "#22c55e", name: "Matcha Green" },
+        { hex: "#607d66", name: "Matcha Green" },
+        { hex: "#3e5242", name: "Dark Moss" },
         { hex: "#0284c7", name: "Ocean Blue" },
         { hex: "#8b5cf6", name: "Royal Violet" },
         { hex: "#d97706", name: "Amber Gold" },
-        { hex: "#0f172a", name: "Slate Black" }
+        { hex: "#1e2420", name: "Matcha Slate" }
       ].map((p) => {
-        const isSelected = (cfg.accentColor || "#22c55e").toLowerCase() === p.hex.toLowerCase();
+        const isSelected = (cfg.accentColor || "#607d66").toLowerCase() === p.hex.toLowerCase();
         return `
                 <button type="button" class="btn-accent-preset" data-hex="${p.hex}" style="width:28px;height:28px;border-radius:50%;background:${p.hex};border:2px solid ${isSelected ? "#ffffff" : "rgba(255,255,255,0.2)"};box-shadow:${isSelected ? `0 0 0 2px ${p.hex}, 0 2px 8px rgba(0,0,0,0.4)` : "none"};cursor:pointer;transition:all 0.15s ease;" title="${p.name}"></button>
               `;
@@ -646,8 +771,8 @@
             
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
-            <input type="color" id="st-accent-picker" value="${cfg.accentColor || "#22c55e"}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:pointer;padding:0;" />
-            <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || "#22c55e")}" placeholder="#22c55e" style="font-family:monospace;font-size:12px;cursor:text;" />
+            <input type="color" id="st-accent-picker" value="${cfg.accentColor || "#607d66"}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:pointer;padding:0;" />
+            <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || "#607d66")}" placeholder="#607d66" style="font-family:monospace;font-size:12px;cursor:text;" />
           </div>
           
         </div>
@@ -661,7 +786,7 @@
       const currentSpan = (cfg.imageSpans || {})[id] || "1x1";
       const media = mediaCache.get(id);
       const imgSrc = media?.media_details?.sizes?.medium_large?.source_url || media?.media_details?.sizes?.medium?.source_url || media?.source_url || "";
-      const zoom = fp.zoom || 1;
+      const zoom = isPro ? fp.zoom || 1 : 1;
       const keywords = m.keywords || [];
       const allIds = cfg.imageIds || [];
       const allGalleryTags = /* @__PURE__ */ new Set();
@@ -677,10 +802,10 @@
       const availableTags = Array.from(allGalleryTags).sort();
       return `
       <!-- In-Frame Pan & Zoom Cropper -->
-      <div class="matcha-card">
+      <div class="matcha-card" style="position:relative;">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.crosshair} In-Frame Pan & Zoom</span>
-          <button type="button" id="btn-reset-ai-focal" style="background:none;border:none;color:#4ade80;cursor:pointer;font-size:10px;font-weight:700;">\u21BA Reset</button>
+          <span class="heading-wrap">${Icons.crosshair} In-Frame Pan & Focal Crop</span>
+          <button type="button" id="btn-reset-ai-focal" style="background:none;border:none;color:#ffffff;cursor:pointer;font-size:10px;font-weight:700;">\u21BA Reset</button>
         </div>
         <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 8px;">Click or drag to pan the photo crop in real time.</p>
 
@@ -694,10 +819,12 @@
           <div id="cropper-reticle" class="matcha-cropper-reticle" style="left:${fp.x}%;top:${fp.y}%;"></div>
         </div>
 
-        <div class="range-row">
-          <label>Zoom Scale</label>
-          <input id="prop-crop-zoom" type="range" min="1" max="2.5" step="0.05" value="${zoom}">
-          <span class="val">${zoom.toFixed(2)}x</span>
+        <div class="range-row" id="wrap-crop-zoom" style="position:relative;cursor:${!isPro ? "pointer" : "default"};" title="${!isPro ? "Click to unlock Zoom Scaling with Matcha Pro" : ""}">
+          <label style="display:flex;align-items:center;gap:6px;${!isPro ? "pointer-events:none;" : ""}">
+            Zoom Scale ${!isPro ? `<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>` : ""}
+          </label>
+          <input id="prop-crop-zoom" type="range" min="1" max="2.5" step="0.05" value="${zoom}" ${!isPro ? "disabled" : ""} style="${!isPro ? "opacity:0.6;pointer-events:none;" : ""}">
+          <span class="val" style="${!isPro ? "pointer-events:none;" : ""}">${zoom.toFixed(2)}x</span>
         </div>
 
         <div class="range-row">
@@ -716,8 +843,7 @@
       <!-- Tile Geometry Spans -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.mosaic} Mosaic Tile Geometry</span>
-          
+          <span class="heading-wrap">${Icons.mosaic} Mosaic Tile Geometry ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ""}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <button type="button" class="matcha-exit-btn prop-span-btn ${currentSpan === "1x1" ? "is-active" : ""}" data-span="1x1">1x1 Standard</button>
@@ -730,7 +856,7 @@
       <!-- Interactive Photo SEO & Tag Manager (FREE & FULLY EDITABLE) -->
       <div class="matcha-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div style="font-weight:700;font-size:11px;color:#4ade80;text-transform:uppercase;letter-spacing:0.5px;">Photo SEO & Filter Tags</div>
+          <div style="font-weight:700;font-size:11px;color:#ffffff;text-transform:uppercase;letter-spacing:0.5px;">Photo SEO & Filter Tags</div>
           <div style="display:flex;gap:4px;">
             ${colors.map((c) => `<span style="width:14px;height:14px;border-radius:50%;background:${c};border:1px solid rgba(255,255,255,0.4);" title="${c}"></span>`).join("")}
           </div>
@@ -772,42 +898,53 @@
               <input type="text" id="prop-combobox-input" class="matcha-dark-input" placeholder="Type tag or click list \u25BE" style="font-size:11px;padding:6px 52px 6px 26px;width:100%;" autocomplete="off" />
               <div style="position:absolute;right:6px;display:flex;align-items:center;gap:4px;">
                 <button type="button" id="btn-toggle-tag-dropdown" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#cbd5e1;border-radius:4px;cursor:pointer;font-size:10px;padding:2px 6px;line-height:1;" title="Toggle Gallery Tags List">\u25BE</button>
-                <button type="button" id="btn-combobox-add" style="background:none;border:none;color:#4ade80;cursor:pointer;font-weight:700;font-size:13px;padding:1px 3px;line-height:1;" title="Add Tag">+</button>
+                <button type="button" id="btn-combobox-add" style="background:none;border:none;color:#ffffff;cursor:pointer;font-weight:700;font-size:13px;padding:1px 3px;line-height:1;" title="Add Tag">+</button>
               </div>
             </div>
 
             <!-- Floating Suggestions Dropdown with Custom Scrollbar -->
-            <div id="tag-suggestions-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#0f172a;border:1px solid rgba(255,255,255,0.18);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.7);z-index:9999;max-height:200px;overflow-y:auto;padding:6px;">
+            <div id="tag-suggestions-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--st-bg-card);border:1px solid var(--st-border-strong);border-radius:8px;box-shadow:0 14px 35px rgba(0,0,0,0.85);z-index:9999;max-height:200px;overflow-y:auto;padding:6px;">
             </div>
           </div>
         </div>
       </div>
 
       <!-- Shoppable Product Link -->
-      <div class="matcha-card">
+      <div class="matcha-card" style="position:relative;">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.shoppingBag} Shoppable Action Link</span>
-          
+          <span class="heading-wrap">${Icons.shoppingBag} Shoppable Action Link ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ""}</span>
         </div>
         <div style="margin-bottom:8px;">
           <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Product / Page URL</label>
-          <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || "")}" placeholder="https://store.com/product" />
+          <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || "")}" placeholder="https://store.com/product" ${!isPro ? "disabled" : ""} />
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <div>
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Price Tag</label>
-            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || "")}" placeholder="$45" />
+            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || "")}" placeholder="$45" ${!isPro ? "disabled" : ""} />
           </div>
           <div>
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Text</label>
-            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || "Shop Now")}" placeholder="Buy Now" />
+            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || "Shop Now")}" placeholder="Buy Now" ${!isPro ? "disabled" : ""} />
           </div>
         </div>
+        ${!isPro ? `
+          <div class="matcha-pro-lock-overlay" id="lock-shoppable-link" style="padding:10px;">
+            <div class="lock-icon" style="width:26px;height:26px;font-size:12px;">${Icons.lock}</div>
+            <div class="lock-title" style="font-size:11px;">Shoppable Product Links</div>
+            <span class="lock-cta" style="font-size:9px;padding:2px 8px;">Unlock with Pro \u2192</span>
+          </div>
+        ` : ""}
       </div>
     `;
     }, bindWallProperties = function() {
       document.getElementById("st-frame-style")?.addEventListener("change", (e) => {
         const val = e.target.value;
+        if (!isPro && ["black-metal", "natural-oak", "gold-brass", "glass-float"].includes(val)) {
+          e.target.value = getState().config.frameStyle || "none";
+          showProModal("Luxury Picture Framing", "Museum-grade picture frames including Natural Oak Wood, Matte Black Metal, Brushed Gold Brass, and 3D Glass Float are available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ frameStyle: val });
         renderCanvas();
         autosaveSoon();
@@ -824,12 +961,28 @@
         autosaveSoon();
       });
       document.getElementById("st-theme")?.addEventListener("change", (e) => {
-        patchConfig({ cardTheme: e.target.value });
+        const val = e.target.value;
+        if (!isPro && ["glass", "glow"].includes(val)) {
+          e.target.value = getState().config.cardTheme || "clean";
+          showProModal("Boutique Card Aesthetic Themes", "Bespoke card aesthetics including Glassmorphic Frost and Matcha Glow Lift are available in Matcha Gallery Pro.");
+          return;
+        }
+        patchConfig({ cardTheme: val });
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-hover-effect")?.addEventListener("change", (e) => {
+        patchConfig({ hoverEffect: e.target.value });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-pagination")?.addEventListener("change", (e) => {
         const val = e.target.value;
+        if (!isPro && ["infinite", "pages"].includes(val)) {
+          e.target.value = getState().config.paginationType || "none";
+          showProModal("Advanced Pagination", "Infinite viewport scroll and multi-page numbered pagination navigation are available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ paginationType: val });
         renderRightPanel();
         renderCanvas();
@@ -885,14 +1038,72 @@
         renderCanvas();
         autosaveSoon();
       });
+      document.getElementById("st-instant-frames")?.addEventListener("change", (e) => {
+        patchConfig({ instantFramesEnabled: e.target.checked });
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-preloader")?.addEventListener("change", (e) => {
+        patchConfig({ preloaderEnabled: e.target.checked });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-preloader-style")?.addEventListener("change", (e) => {
+        const val = e.target.value;
+        if (!isPro && ["pulse", "skeleton"].includes(val)) {
+          e.target.value = getState().config.preloaderStyle || "spinner";
+          showProModal("Luxury Preloader Styles", "Cinematic preloading effects including Ambient Soft Pulse and Shimmering Skeleton Boxes are available in Matcha Gallery Pro.");
+          return;
+        }
+        patchConfig({ preloaderStyle: val });
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-randomize-load")?.addEventListener("change", (e) => {
+        if (!isPro) {
+          e.target.checked = false;
+          showProModal(
+            "Randomize Photos on Page Load",
+            "Upgrade to Matcha Gallery Pro to deliver dynamic galleries that automatically shuffle photo order on every visitor page load."
+          );
+          return;
+        }
+        patchConfig({ randomizeOrder: e.target.checked });
+        autosaveSoon();
+      });
       document.getElementById("st-search")?.addEventListener("change", (e) => {
         patchConfig({ searchEnabled: e.target.checked });
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-frontend-sort")?.addEventListener("change", (e) => {
+        if (!isPro) {
+          e.target.checked = false;
+          showProModal(
+            "Visitor Sort Dropdown",
+            "Upgrade to Matcha Gallery Pro to let visitors interactively sort your gallery by newest, oldest, or alphabetically directly on your website."
+          );
+          return;
+        }
+        patchConfig({ frontendSortEnabled: e.target.checked });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-filters")?.addEventListener("change", (e) => {
         patchConfig({ filtersEnabled: e.target.checked });
         renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-filter-multi")?.addEventListener("change", (e) => {
+        patchConfig({ filterMultiSelect: e.target.checked });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-filter-logic")?.addEventListener("change", (e) => {
+        patchConfig({ filterLogic: e.target.value });
         renderCanvas();
         autosaveSoon();
       });
@@ -993,6 +1204,11 @@
         renderCanvas();
         autosaveSoon();
       }
+      document.getElementById("wrap-crop-zoom")?.addEventListener("click", () => {
+        if (!isPro) {
+          showProModal("In-Frame Zoom Scaling (1.0x \u2013 2.5x)", "Magnify subjects and create tight editorial close-ups directly inside the gallery frame. Available in Matcha Gallery Pro.");
+        }
+      });
       if (cropperBox) {
         {
           let isDragging = false;
@@ -1002,7 +1218,7 @@
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             const x = Math.max(0, Math.min(100, Math.round((clientX - rect.left) / rect.width * 100)));
             const y = Math.max(0, Math.min(100, Math.round((clientY - rect.top) / rect.height * 100)));
-            const curZoom = parseFloat(zoomInp?.value || 1);
+            const curZoom = isPro ? parseFloat(zoomInp?.value || 1) : 1;
             updateCrop(x, y, curZoom);
           };
           cropperBox.addEventListener("mousedown", (e) => {
@@ -1028,6 +1244,7 @@
         }
       }
       zoomInp?.addEventListener("input", (e) => {
+        if (!isPro) return;
         const z = parseFloat(e.target.value);
         const curX = parseInt(xInp?.value || 50);
         const curY = parseInt(yInp?.value || 50);
@@ -1036,19 +1253,19 @@
       xInp?.addEventListener("input", (e) => {
         const x = parseInt(e.target.value);
         const curY = parseInt(yInp?.value || 50);
-        const curZ = parseFloat(zoomInp?.value || 1);
+        const curZ = isPro ? parseFloat(zoomInp?.value || 1) : 1;
         updateCrop(x, curY, curZ);
       });
       yInp?.addEventListener("input", (e) => {
         const y = parseInt(e.target.value);
         const curX = parseInt(xInp?.value || 50);
-        const curZ = parseFloat(zoomInp?.value || 1);
+        const curZ = isPro ? parseFloat(zoomInp?.value || 1) : 1;
         updateCrop(curX, y, curZ);
       });
       document.getElementById("btn-reset-ai-focal")?.addEventListener("click", () => {
         const m = metaCache.get(id);
         const aiFp = m?.focal_point || { x: 50, y: 50 };
-        updateCrop(aiFp.x, aiFp.y, 1);
+        updateCrop(aiFp.x, aiFp.y, isPro ? aiFp.zoom || 1 : 1);
       });
       function addTags(rawInput) {
         if (!rawInput) return;
@@ -1140,9 +1357,9 @@
           const newParts = parts.filter((p) => !currentTags.includes(p.toLowerCase().replace(/[^a-z0-9_-]/g, "-")));
           if (newParts.length > 0) {
             html += `
-            <div class="combobox-item combobox-item--create" data-tags="${escapeHtml(newParts.join(","))}" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;cursor:pointer;background:rgba(34,197,94,0.14);border:1px solid rgba(34,197,94,0.3);color:#4ade80;font-size:11px;font-weight:600;margin-bottom:6px;">
+            <div class="combobox-item combobox-item--create" data-tags="${escapeHtml(newParts.join(","))}" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;cursor:pointer;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;font-size:11px;font-weight:600;margin-bottom:6px;">
               <span>\u2795 Add ${newParts.length > 1 ? `${newParts.length} tags` : `tag`}: "<strong>${escapeHtml(newParts.join(", "))}</strong>"</span>
-              <span style="font-size:9px;color:#94a3b8;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">Enter \u21B5</span>
+              <span style="font-size:9px;color:#ffffff;background:rgba(77,164,104,0.35);padding:2px 6px;border-radius:4px;border:1px solid rgba(77,164,104,0.4);">Enter \u21B5</span>
             </div>
           `;
           }
@@ -1150,16 +1367,16 @@
         if (matchingTags.length > 0) {
           html += `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;">
-            <span style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Gallery Tags (${matchingTags.length})</span>
-            <span style="font-size:9px;color:#94a3b8;">Click to toggle multi-select</span>
+            <span style="font-size:9px;font-weight:700;color:#9aa79d;text-transform:uppercase;letter-spacing:0.5px;">Gallery Tags (${matchingTags.length})</span>
+            <span style="font-size:9px;color:#9aa79d;">Click to toggle multi-select</span>
           </div>
         `;
           html += matchingTags.map((tag) => {
             const isSelected = currentTags.includes(tag);
             return `
-            <div class="combobox-item ${isSelected ? "is-selected" : ""}" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;cursor:pointer;color:${isSelected ? "#4ade80" : "#e2e8f0"};background:${isSelected ? "rgba(34,197,94,0.08)" : "transparent"};font-size:11px;transition:all 0.15s ease;margin-bottom:1px;">
+            <div class="combobox-item ${isSelected ? "is-selected" : ""}" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;cursor:pointer;color:${isSelected ? "#ffffff" : "#e2e8f0"};background:${isSelected ? "rgba(77,164,104,0.18)" : "transparent"};font-size:11px;transition:all 0.15s ease;margin-bottom:1px;">
               <span style="display:flex;align-items:center;gap:8px;">
-                <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;border:1px solid ${isSelected ? "#22c55e" : "rgba(255,255,255,0.2)"};background:${isSelected ? "#22c55e" : "rgba(255,255,255,0.04)"};color:#fff;font-size:10px;font-weight:900;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;border:1px solid ${isSelected ? "#4da468" : "rgba(255,255,255,0.2)"};background:${isSelected ? "#4da468" : "rgba(255,255,255,0.04)"};color:#fff;font-size:10px;font-weight:900;">
                   ${isSelected ? "\u2713" : "+"}
                 </span>
                 <span style="font-weight:${isSelected ? "700" : "500"};">${escapeHtml(tag)}</span>
@@ -1291,6 +1508,10 @@
       });
       document.querySelectorAll(".prop-span-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
+          if (!isPro) {
+            showProModal("PhotoBlocks Mosaic Geometry", "Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.");
+            return;
+          }
           const span = btn.dataset.span;
           const currentSpans = { ...getState().config.imageSpans || {} };
           currentSpans[id] = span;
@@ -1300,7 +1521,11 @@
           autosaveSoon();
         });
       });
+      document.getElementById("lock-shoppable-link")?.addEventListener("click", () => {
+        showProModal("Shoppable Product Links", "Turn any photo into a shoppable product hotspot with custom price tags and direct buy buttons. Available in Matcha Gallery Pro.");
+      });
       const updateLink = () => {
+        if (!isPro) return;
         const url = document.getElementById("prop-link-url")?.value || "";
         const price = document.getElementById("prop-link-price")?.value || "";
         const label = document.getElementById("prop-link-label")?.value || "Shop Now";
@@ -1330,8 +1555,9 @@
           const sel = frame.state().get("selection").toJSON();
           const ids = sel.map((s) => s.id);
           const cur = getState().config.imageIds || [];
-          const merged = [.../* @__PURE__ */ new Set([...cur, ...ids])].slice(0, 150);
+          const merged = [.../* @__PURE__ */ new Set([...cur, ...ids])];
           patchConfig({ imageIds: merged });
+          trayPage = 1;
           renderLeftTab("images");
           renderCanvas();
           autosaveSoon();
@@ -1342,19 +1568,50 @@
       document.getElementById("matcha-smart-fill")?.addEventListener("click", () => {
         smartAutoArrange();
       });
+      document.querySelectorAll(".matcha-studio-section-pill[data-sec]").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          activeSectionId = pill.dataset.sec;
+          trayPage = 1;
+          renderLeftTab("images");
+        });
+      });
+      document.getElementById("btn-rename-sec")?.addEventListener("click", () => {
+        const sections = [...getState().config.sections || []];
+        const sec = sections.find((s) => s.id === activeSectionId);
+        if (!sec) return;
+        const newName = prompt("Rename Chapter:", sec.title);
+        if (newName && newName.trim()) {
+          sec.title = newName.trim();
+          patchConfig({ sections });
+          renderLeftTab("images");
+          autosaveSoon();
+        }
+      });
+      document.getElementById("btn-delete-sec")?.addEventListener("click", () => {
+        if (!confirm("Delete this chapter? (Photos will remain in All Photos)")) return;
+        const sections = (getState().config.sections || []).filter((s) => s.id !== activeSectionId);
+        activeSectionId = "*";
+        patchConfig({ sections });
+        renderLeftTab("images");
+        autosaveSoon();
+      });
       const searchInp = document.getElementById("tray-search-input");
       searchInp?.addEventListener("input", (e) => {
         traySearchQuery = e.target.value.toLowerCase().trim();
+        trayPage = 1;
         renderImageList();
       });
       document.getElementById("btn-clear-tray-search")?.addEventListener("click", () => {
         traySearchQuery = "";
+        trayPage = 1;
         if (searchInp) searchInp.value = "";
         renderImageList();
       });
-      document.getElementById("btn-tray-view-toggle")?.addEventListener("click", () => {
-        trayViewMode = trayViewMode === "grid" ? "list" : "grid";
-        renderLeftTab("images");
+      document.querySelectorAll(".matcha-tray-view-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          trayViewMode = btn.dataset.trayView;
+          renderLeftTab("images");
+        });
       });
       const sortBtn = document.getElementById("btn-tray-sort-toggle");
       const sortDropdown = document.getElementById("tray-sort-dropdown");
@@ -1368,9 +1625,59 @@
       sortDropdown?.querySelectorAll(".tray-menu-item").forEach((item) => {
         item.addEventListener("click", (e) => {
           e.stopPropagation();
-          traySortBy = item.dataset.sort;
+          const selectedSort = item.dataset.sort;
           if (sortDropdown) sortDropdown.style.display = "none";
+          if (!isPro && ["newest", "oldest", "random"].includes(selectedSort)) {
+            showProModal(
+              "Advanced Gallery Sorting & Shuffling",
+              "Upgrade to Matcha Gallery Pro to sort your gallery chronologically by date added (newest/oldest) or shuffle your entire photo order with 1 click."
+            );
+            return;
+          }
+          const cfg = getState().config;
+          const curIds = [...cfg.imageIds || []];
+          if (selectedSort === "manual") {
+            patchConfig({ sortBy: "manual" });
+          } else if (selectedSort === "name-asc") {
+            curIds.sort((a, b) => {
+              const nameA = (metaCache.get(a)?.title || mediaCache.get(a)?.title?.rendered || "#" + a).toLowerCase();
+              const nameB = (metaCache.get(b)?.title || mediaCache.get(b)?.title?.rendered || "#" + b).toLowerCase();
+              return nameA.localeCompare(nameB);
+            });
+            patchConfig({ imageIds: curIds, sortBy: "name-asc" });
+          } else if (selectedSort === "name-desc") {
+            curIds.sort((a, b) => {
+              const nameA = (metaCache.get(a)?.title || mediaCache.get(a)?.title?.rendered || "#" + a).toLowerCase();
+              const nameB = (metaCache.get(b)?.title || mediaCache.get(b)?.title?.rendered || "#" + b).toLowerCase();
+              return nameB.localeCompare(nameA);
+            });
+            patchConfig({ imageIds: curIds, sortBy: "name-desc" });
+          } else if (selectedSort === "newest") {
+            curIds.sort((a, b) => {
+              const dateA = new Date(mediaCache.get(a)?.date || 0).getTime() || a;
+              const dateB = new Date(mediaCache.get(b)?.date || 0).getTime() || b;
+              return dateB - dateA;
+            });
+            patchConfig({ imageIds: curIds, sortBy: "newest" });
+          } else if (selectedSort === "oldest") {
+            curIds.sort((a, b) => {
+              const dateA = new Date(mediaCache.get(a)?.date || 0).getTime() || a;
+              const dateB = new Date(mediaCache.get(b)?.date || 0).getTime() || b;
+              return dateA - dateB;
+            });
+            patchConfig({ imageIds: curIds, sortBy: "oldest" });
+          } else if (selectedSort === "random") {
+            for (let i = curIds.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [curIds[i], curIds[j]] = [curIds[j], curIds[i]];
+            }
+            patchConfig({ imageIds: curIds, sortBy: "random" });
+          }
+          traySortBy = selectedSort;
+          trayPage = 1;
           renderLeftTab("images");
+          renderCanvas();
+          autosaveSoon();
         });
       });
       filterBtn?.addEventListener("click", (e) => {
@@ -1382,6 +1689,7 @@
         item.addEventListener("click", (e) => {
           e.stopPropagation();
           trayFilterBy = item.dataset.filter;
+          trayPage = 1;
           if (filterDropdown) filterDropdown.style.display = "none";
           renderLeftTab("images");
         });
@@ -1390,13 +1698,26 @@
         if (sortDropdown) sortDropdown.style.display = "none";
         if (filterDropdown) filterDropdown.style.display = "none";
       });
+      const leftPanelEl = document.getElementById("studio-left-tabpanel");
+      leftPanelEl?.addEventListener("scroll", () => {
+        if (leftPanelEl.scrollTop + leftPanelEl.clientHeight >= leftPanelEl.scrollHeight - 160) {
+          if (typeof window.__matchaTrayLoadMore === "function") {
+            window.__matchaTrayLoadMore();
+          }
+        }
+      });
       document.getElementById("btn-add-section")?.addEventListener("click", () => {
+        if (!isPro) {
+          showProModal("Multi-Section Gallery Chapters", "Divide your story into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.");
+          return;
+        }
         const name = prompt("Enter Chapter Name:");
         if (!name || !name.trim()) return;
         const secId = "sec_" + Date.now().toString(36);
         const sections = [...getState().config.sections || []];
         sections.push({ id: secId, title: name.trim(), imageIds: [] });
         activeSectionId = secId;
+        trayPage = 1;
         patchConfig({ sections, sectionsEnabled: true });
         renderLeftTab("images");
         renderCanvas();
@@ -1406,6 +1727,14 @@
       document.querySelectorAll(".matcha-blueprint-card").forEach((card) => {
         card.addEventListener("click", () => {
           const layout = card.dataset.layout;
+          if (!isPro && (layout === "pinwheel" || layout === "bento")) {
+            const names = {
+              pinwheel: "Pinwheel Spiral",
+              bento: "Bento Showcase"
+            };
+            showProModal(`Unlock ${names[layout] || "Pro Layout"}`, "Dynamic aspect-ratio tile spanning, focal-directed hero spreads, and bespoke gallery layouts are available in Matcha Gallery Pro.");
+            return;
+          }
           document.querySelectorAll(".matcha-blueprint-card").forEach((c) => c.classList.remove("is-active"));
           card.classList.add("is-active");
           if (layout === "pinwheel") {
@@ -1429,26 +1758,50 @@
       });
     }, bindSuperpowers = function() {
       document.getElementById("st-sections-toggle")?.addEventListener("change", (e) => {
+        if (!isPro && e.target.checked) {
+          e.target.checked = false;
+          showProModal("Multi-Section Chapters", "Divide your story into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ sectionsEnabled: e.target.checked });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-color-filter")?.addEventListener("change", (e) => {
+        if (!isPro && e.target.checked) {
+          e.target.checked = false;
+          showProModal("AI Color Swatches Palette Filter", "Visitors can filter your photos by clicking dominant color palette swatches automatically extracted by AI. Available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ colorFilterEnabled: e.target.checked });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-shoppable")?.addEventListener("change", (e) => {
+        if (!isPro && e.target.checked) {
+          e.target.checked = false;
+          showProModal("Shoppable Portfolios", "Display glassmorphic Buy Now buttons and product price hotspots on image hover. Available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ shoppableEnabled: e.target.checked });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-proofing")?.addEventListener("change", (e) => {
+        if (!isPro && e.target.checked) {
+          e.target.checked = false;
+          showProModal("Client Proofing Sessions", "Allow clients to favorite photos and export a clean selection list with 1 click. Available in Matcha Gallery Pro.");
+          return;
+        }
         patchConfig({ proofingEnabled: e.target.checked });
         renderCanvas();
         autosaveSoon();
       });
     }, smartAutoArrange = function() {
+      if (!isPro) {
+        showProModal("AI Smart Fill Geometry Matcher", "AI Smart Fill analyzes photo dimensions and aspect ratios across your collection and automatically creates an optimal mosaic arrangement. Available in Matcha Gallery Pro.");
+        return;
+      }
       const ids = getState().config.imageIds || [];
       if (!ids.length) return alert("Please add images first.");
       const spans = {};
@@ -1507,11 +1860,57 @@
     }, initSortable = function() {
       const list = document.getElementById("matcha-image-list");
       if (!list || !window.Sortable) return;
-      new Sortable(list, {
-        animation: 150,
-        onEnd: () => {
-          const ids = [...list.querySelectorAll(".matcha-img-card")].map((el) => parseInt(el.dataset.id));
-          patchConfig({ imageIds: ids });
+      if (studioSortableInstance) {
+        try {
+          studioSortableInstance.destroy();
+        } catch (e) {
+        }
+        studioSortableInstance = null;
+      }
+      const isFiltering = !!(traySearchQuery || trayFilterBy && trayFilterBy !== "all");
+      if (isFiltering) {
+        return;
+      }
+      studioSortableInstance = new Sortable(list, {
+        animation: 200,
+        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+        swapThreshold: 0.65,
+        invertSwap: true,
+        invertedSwapThreshold: 0.65,
+        forceFallback: true,
+        fallbackClass: "matcha-sortable-fallback",
+        fallbackOnBody: true,
+        fallbackTolerance: 4,
+        ghostClass: "matcha-sortable-ghost",
+        chosenClass: "matcha-sortable-chosen",
+        dragClass: "matcha-sortable-drag",
+        filter: ".remove",
+        preventOnFilter: true,
+        onStart: () => {
+          didJustDrag = true;
+          document.body.classList.add("matcha-is-dragging");
+        },
+        onEnd: (evt) => {
+          document.body.classList.remove("matcha-is-dragging");
+          setTimeout(() => {
+            didJustDrag = false;
+          }, 80);
+          if (evt.oldIndex === evt.newIndex) return;
+          const cards = [...list.querySelectorAll(".matcha-img-card")];
+          const newIdsInDOM = cards.map((el) => parseInt(el.dataset.id)).filter(Boolean);
+          if (!newIdsInDOM.length) return;
+          const cfg = getState().config;
+          const sections = cfg.sections || [];
+          const currentSection = sections.find((s) => s.id === activeSectionId);
+          if (currentSection) {
+            currentSection.imageIds = newIdsInDOM;
+            patchConfig({ sections: [...sections], sortBy: "manual" });
+          } else {
+            patchConfig({ imageIds: newIdsInDOM, sortBy: "manual" });
+          }
+          traySortBy = "manual";
+          const sortBtn = document.getElementById("btn-tray-sort-toggle");
+          if (sortBtn) sortBtn.style.color = "#b5c7ba";
           renderCanvas();
           autosaveSoon();
         }
@@ -1538,61 +1937,73 @@
           tagMap[clean].push(id);
         });
       });
-      const sortedTags = Object.keys(tagMap).sort((a, b) => tagMap[b].length - tagMap[a].length);
+      const existingOrder = cfg.orderedFilterTags || [];
+      const sortedTags = Object.keys(tagMap).sort((a, b) => {
+        const idxA = existingOrder.indexOf(a);
+        const idxB = existingOrder.indexOf(b);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return tagMap[b].length - tagMap[a].length;
+      });
       modal.innerHTML = `
       <div class="matcha-modal-backdrop" id="filter-modal-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:999999;"></div>
-      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:640px;width:92vw;max-height:86vh;background:#0f172a;border:1px solid rgba(255,255,255,0.15);border-radius:14px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.8);overflow:hidden;">
+      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:500px;width:92vw;max-height:86vh;background:#151a16;border:1px solid var(--st-border-subtle);border-radius:12px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.8);overflow:hidden;font-family:var(--st-font);">
         
-        <!-- Modal Header -->
-        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.02);">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:36px;height:36px;border-radius:10px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;display:flex;align-items:center;justify-content:center;">
+        <!-- Compact Modal Header -->
+        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;display:flex;align-items:center;justify-content:center;">
               ${Icons.filter}
             </div>
             <div>
-              <h3 style="margin:0;font-size:16px;color:#f8fafc;font-weight:700;">Gallery Filter Manager</h3>
-              <p style="margin:2px 0 0;font-size:12px;color:#94a3b8;">Manage, rename, or delete tags globally across all ${allIds.length} gallery photos.</p>
+              <h3 style="margin:0;font-size:14px;color:#f2f5f3;font-weight:700;letter-spacing:-0.01em;">Gallery Filter Manager</h3>
+              <p style="margin:1px 0 0;font-size:11px;color:#9aa79d;">Drag to reorder pills, toggle visibility, or edit tags.</p>
             </div>
           </div>
-          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:22px;line-height:1;padding:4px;" title="Close">\u2715</button>
+          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:#9aa79d;cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;" title="Close">\u2715</button>
         </div>
 
         <!-- Modal Body -->
-        <div class="matcha-modal-body" style="padding:20px 24px;overflow-y:auto;flex:1;">
+        <div class="matcha-modal-body" style="padding:12px 18px;overflow-y:auto;flex:1;">
           ${sortedTags.length === 0 ? `
-            <div style="text-align:center;padding:50px 20px;color:#94a3b8;">
-              <div style="font-size:32px;margin-bottom:12px;opacity:0.6;">\u{1F3F7}\uFE0F</div>
-              <p style="font-size:15px;color:#f8fafc;font-weight:600;margin:0 0 6px;">No tags found in this gallery</p>
-              <p style="font-size:12px;margin:0;max-width:360px;margin-inline:auto;">Click "AI Enhance" in the left sidebar to generate smart tags or add custom tags to individual photos.</p>
+            <div style="text-align:center;padding:40px 16px;color:#9aa79d;">
+              <div style="font-size:28px;margin-bottom:8px;opacity:0.6;display:flex;justify-content:center;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              </div>
+              <p style="font-size:14px;color:#f2f5f3;font-weight:600;margin:0 0 4px;">No tags found in this gallery</p>
+              <p style="font-size:11px;margin:0;max-width:320px;margin-inline:auto;">Click "AI Enhance" in the sidebar to auto-generate smart tags.</p>
             </div>
           ` : `
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-              <div>
-                <span style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;">Active Gallery Tags (${sortedTags.length})</span>
-                <p style="font-size:11px;color:#64748b;margin:2px 0 0;">Check items to select which tags appear as pills on the frontend toolbar.</p>
+            <!-- Dense Utility Subheader -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
+              <input type="search" id="filter-mgr-search" placeholder="Find tag..." style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:5px;padding:3px 8px;font-size:11px;width:130px;outline:none;" />
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" id="btn-select-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#5ec27f;border:1px solid rgba(94,194,127,0.3);border-radius:4px;background:rgba(94,194,127,0.08);cursor:pointer;" title="Select all tags">Select All</button>
+                <button type="button" id="btn-deselect-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#9aa79d;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:none;cursor:pointer;" title="Deselect all tags">Deselect</button>
+                <button type="button" id="btn-clear-all-gallery-tags" style="padding:2px 7px;font-size:10px;font-weight:600;color:#ef4444;border:1px solid rgba(239,68,68,0.25);border-radius:4px;background:rgba(239,68,68,0.08);cursor:pointer;" title="Delete all tags from photos">Clear All</button>
               </div>
-              <button type="button" id="btn-clear-all-gallery-tags" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-size:11px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
-                \u{1F5D1}\uFE0F Clear All Tags
-              </button>
             </div>
 
-            <div style="display:flex;flex-direction:column;gap:8px;" id="filter-manager-tags-list">
+            <!-- Ultra-Compact Draggable Tag Rows -->
+            <div style="display:flex;flex-direction:column;gap:3px;max-height:55vh;overflow-y:auto;padding-right:2px;" id="filter-manager-tags-list">
               ${sortedTags.map((tag) => {
         const count = tagMap[tag].length;
         const isChecked = visibleFilterTags.length === 0 || visibleFilterTags.includes(tag);
         return `
-                  <div class="filter-mgr-row" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;gap:12px;">
-                    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
-                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? "checked" : ""} style="cursor:pointer;accent-color:#22c55e;" title="Show as category pill on frontend" />
-                      <span class="tag-badge" style="background:rgba(34,197,94,0.15);color:#4ade80;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;flex-shrink:0;">${count}</span>
-                      <span class="tag-name" style="font-size:13px;font-weight:600;color:#f8fafc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tag)}</span>
+                  <div class="filter-manager-row filter-mgr-row" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:3px 8px;gap:8px;min-height:27px;">
+                    <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+                      <span class="filter-drag-handle" title="Drag to reorder tag" style="cursor:grab;color:var(--st-text-muted);display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;">${Icons.drag}</span>
+                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? "checked" : ""} style="cursor:pointer;accent-color:#4da468;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
+                      <span class="tag-badge" style="background:rgba(77,164,104,0.14);border:1px solid rgba(77,164,104,0.25);color:#5ec27f;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
+                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tag)}</span>
                     </div>
-                    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-                      <button type="button" class="btn-rename-tag matcha-exit-btn" data-tag="${escapeHtml(tag)}" style="padding:4px 10px;font-size:11px;color:#94a3b8;border:1px solid rgba(255,255,255,0.15);border-radius:6px;background:none;cursor:pointer;" title="Rename tag globally">
-                        \u270F\uFE0F Rename
+                    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">
+                      <button type="button" class="btn-rename-tag matcha-row-icon-btn" data-tag="${escapeHtml(tag)}" title="Rename tag globally">
+                        ${Icons.edit}
                       </button>
-                      <button type="button" class="btn-delete-tag-global matcha-exit-btn" data-tag="${escapeHtml(tag)}" style="padding:4px 8px;font-size:11px;color:#ef4444;border:1px solid rgba(239,68,68,0.25);border-radius:6px;background:none;cursor:pointer;" title="Delete from all photos in this gallery">
-                        \u{1F5D1}\uFE0F
+                      <button type="button" class="btn-delete-tag-global matcha-row-icon-btn matcha-row-icon-btn--danger" data-tag="${escapeHtml(tag)}" title="Delete from all photos in this gallery">
+                        ${Icons.trash}
                       </button>
                     </div>
                   </div>
@@ -1603,23 +2014,60 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.3);">
-          <span style="font-size:11px;color:#64748b;">Changes apply immediately to your canvas and saved gallery.</span>
-          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:8px 20px;font-size:13px;background:#22c55e;color:#fff;border-radius:8px;border:none;cursor:pointer;font-weight:600;">
+        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.3);">
+          <span style="font-size:11px;color:#647367;">Drag to order pills. Uncheck to hide.</span>
+          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:6px 16px;font-size:12px;background:linear-gradient(135deg, #4da468, #377d4f);color:#fff;border-radius:6px;border:1px solid #2e6942;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(55,125,79,0.35);">
             Apply & Save
           </button>
         </div>
       </div>
     `;
       modal.style.display = "block";
+      const searchInput = modal.querySelector("#filter-mgr-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          const q = e.target.value.toLowerCase().trim();
+          modal.querySelectorAll(".filter-mgr-row").forEach((row) => {
+            const t = (row.dataset.tag || "").toLowerCase();
+            row.style.display = !q || t.includes(q) ? "flex" : "none";
+          });
+        });
+      }
+      modal.querySelector("#btn-select-all-tags")?.addEventListener("click", () => {
+        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
+          cb.checked = true;
+        });
+      });
+      modal.querySelector("#btn-deselect-all-tags")?.addEventListener("click", () => {
+        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
+          cb.checked = false;
+        });
+      });
+      const tagListEl = modal.querySelector("#filter-manager-tags-list");
+      if (tagListEl && window.Sortable) {
+        new window.Sortable(tagListEl, {
+          handle: ".filter-drag-handle",
+          animation: 150,
+          ghostClass: "matcha-sortable-ghost",
+          onEnd: () => {
+            const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
+            const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
+            patchConfig({ orderedFilterTags });
+            autosaveSoon();
+            renderCanvas();
+          }
+        });
+      }
       const saveAndClose = () => {
+        const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
+        const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
         const checkedBoxes = modal.querySelectorAll(".tag-vis-check:checked");
         if (checkedBoxes.length > 0 && checkedBoxes.length < sortedTags.length) {
           visibleFilterTags = [...checkedBoxes].map((cb) => cb.dataset.tag);
         } else {
           visibleFilterTags = [];
         }
-        patchConfig({ visibleFilterTags });
+        patchConfig({ visibleFilterTags, orderedFilterTags });
         modal.style.display = "none";
         renderCanvas();
         renderRightPanel();
@@ -1673,7 +2121,7 @@
             dirtyMetaIds.add(id);
           }
         });
-        patchConfig({ visibleFilterTags: [] });
+        patchConfig({ visibleFilterTags: [], orderedFilterTags: [] });
         autosaveSoon();
         openFilterManagerModal();
       });
@@ -1706,6 +2154,8 @@
     })();
     const initialTitle = root.dataset.title || window.MatchaStudio?.title || "";
     setState({ galleryId: initialId, title: initialTitle, config: initialConfig });
+    const isPro = Boolean(window.MatchaStudio && window.MatchaStudio.isPro);
+    const upgradeUrl = window.MatchaStudio && window.MatchaStudio.upgradeUrl || "https://wpmatcha.com/wordpress-plugins/matcha-gallery/";
     const metaCache = /* @__PURE__ */ new Map();
     const mediaCache = /* @__PURE__ */ new Map();
     const dirtyMetaIds = /* @__PURE__ */ new Set();
@@ -1713,9 +2163,12 @@
     let activeSectionId = "*";
     let canvasZoom = 100;
     let traySearchQuery = "";
-    let trayViewMode = "grid";
-    let traySortBy = "manual";
+    let trayViewMode = "grid-2";
+    let traySortBy = initialConfig.sortBy || "manual";
     let trayFilterBy = "all";
+    let trayPage = 1;
+    const trayBatchSize = 60;
+    let isLoadingMore = false;
     root.innerHTML = `
     <div class="matcha-studio">
       <!-- Top Navigation Bar -->
@@ -1725,10 +2178,10 @@
           <a href="#" class="matcha-brand-badge">
             <span class="brand-leaf">${Icons.leaf}</span>
             <span>Matcha Studio</span>
-            <span class="matcha-pro-tag" style="background:rgba(34,197,94,0.15);color:#4ade80;border-color:rgba(34,197,94,0.3);">STUDIO</span>
+            <span class="matcha-pro-tag" style="background:rgba(77,164,104,0.18);color:#5ec27f;border-color:rgba(77,164,104,0.35);font-weight:700;">STUDIO</span>
           </a>
           <input id="studio-title" class="matcha-studio__title" value="${escapeHtml(initialTitle || "Untitled Gallery")}" placeholder="Gallery Title..." />
-          <span id="save-status" style="font-size:11px;color:#4ade80;font-weight:700;"></span>
+          <span id="save-status" style="font-size:11px;color:#ffffff;font-weight:700;"></span>
         </div>
         <div class="matcha-studio__actions">
           <!-- SEO & ADA Accessibility Scorecard Widget -->
@@ -1752,7 +2205,7 @@
             </button>
             <div id="export-dropdown" class="matcha-export-dropdown">
               <button type="button" id="export-action-png" class="matcha-export-item">
-                <span style="color:#4ade80;">${Icons.camera}</span>
+                <span style="color:#8da993;">${Icons.camera}</span>
                 <div>
                   <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
                     Wall Snapshot (PNG)
@@ -1766,7 +2219,7 @@
                 <div>
                   <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
                     Client Proofing Sheet (Print / PDF)
-                    
+                    <span class="matcha-pro-badge">PRO</span>
                   </div>
                   <div style="font-size:9px;color:var(--st-text-muted);">Itemized presentation with dimensions & prices</div>
                 </div>
@@ -1871,6 +2324,10 @@
       exportPNG();
     });
     document.getElementById("export-action-pdf").addEventListener("click", () => {
+      if (!isPro) {
+        showProModal("Client Proposal PDF Export", "Generate high-resolution printable client proposals and dimension spec sheets. Available in Matcha Gallery Pro.");
+        return;
+      }
       exportPDFSheet();
     });
     document.getElementById("export-action-md").addEventListener("click", copyProposalMarkdown);
@@ -1942,17 +2399,27 @@
       const progressWrap = document.querySelector(".matcha-progress");
       const bar = document.getElementById("matcha-ai-bar");
       const statusText = document.getElementById("matcha-ai-status");
+      const queue = ids.filter((attId) => {
+        const m = metaCache.get(attId);
+        return !(m && m.ai_generated && m.keywords && m.keywords.length > 0);
+      });
+      if (!queue.length) {
+        if (statusText) statusText.textContent = "All images are already enriched!";
+        if (bar) bar.style.width = "100%";
+        return;
+      }
       btn.disabled = true;
       btn.innerHTML = `<span>${Icons.bolt}</span> Analyzing with Gemini\u2026`;
       if (progressWrap) progressWrap.style.display = "block";
       let done = 0;
       let errors = 0;
-      const total = ids.length;
-      const queue = [...ids];
-      const concurrency = 2;
-      const workers = Array.from({ length: concurrency }, async () => {
-        while (queue.length) {
-          const attId = queue.shift();
+      const totalToEnrich = queue.length;
+      let processedCount = 0;
+      while (queue.length) {
+        const attId = queue.shift();
+        let retries = 0;
+        let success = false;
+        while (retries < 3 && !success) {
           try {
             const res = await fetch(`${window.MatchaStudio.root}matcha-gallery/v1/ai/analyze`, {
               method: "POST",
@@ -1962,6 +2429,13 @@
               },
               body: JSON.stringify({ attachment_id: attId, overwrite: false })
             });
+            if (res.status === 429) {
+              retries++;
+              const waitSec = retries * 3;
+              if (statusText) statusText.textContent = `Rate limited by Gemini. Retrying in ${waitSec}s (${retries}/3)\u2026`;
+              await new Promise((r) => setTimeout(r, waitSec * 1e3));
+              continue;
+            }
             if (!res.ok) throw new Error(await res.text());
             const json = await res.json();
             if (json.metadata) {
@@ -1976,24 +2450,42 @@
               });
               updateSingleCardMeta(attId);
             }
+            success = true;
           } catch (e) {
-            errors++;
+            retries++;
+            if (retries >= 3) {
+              errors++;
+            } else {
+              await new Promise((r) => setTimeout(r, 2e3));
+            }
           }
-          done++;
-          if (bar) bar.style.width = `${Math.round(done / total * 100)}%`;
-          if (statusText) statusText.textContent = `${done}/${total} processed (${errors} errors)`;
-          updateScorecard();
-          await new Promise((r) => setTimeout(r, 400));
         }
-      });
-      await Promise.all(workers);
+        processedCount++;
+        if (bar) bar.style.width = `${Math.round(processedCount / totalToEnrich * 100)}%`;
+        if (statusText) statusText.textContent = `${processedCount}/${totalToEnrich} processed (${errors} errors)`;
+        updateScorecard();
+        await new Promise((r) => setTimeout(r, 800));
+      }
       btn.disabled = false;
       btn.innerHTML = `<span>${Icons.bolt}</span> AI Enhance`;
-      if (statusText) statusText.textContent = `Done! Enriched ${done - errors} images.`;
+      if (statusText) statusText.textContent = `Done! Enriched ${processedCount - errors} images.`;
       updateScorecard();
       renderCanvas();
       renderImageList();
     }
+    window.__matchaTrayLoadMore = () => {
+      const list = document.getElementById("matcha-image-list");
+      if (!list || isLoadingMore) return;
+      const cfg = getState().config;
+      const allIds = cfg.imageIds || [];
+      const sections = cfg.sections || [];
+      const currentSection = sections.find((s) => s.id === activeSectionId);
+      let displayIds = currentSection ? currentSection.imageIds || [] : allIds;
+      if (trayPage * trayBatchSize < displayIds.length) {
+        trayPage++;
+        renderImageList();
+      }
+    };
     async function renderImageList() {
       const list = document.getElementById("matcha-image-list");
       if (!list) return;
@@ -2003,7 +2495,9 @@
       const currentSection = sections.find((s) => s.id === activeSectionId);
       let displayIds = currentSection ? currentSection.imageIds || [] : allIds;
       if (!displayIds.length) {
-        list.innerHTML = `<p style="font-size:11px;color:var(--st-text-muted);text-align:center;grid-column:span 2;margin-top:16px;">${currentSection ? "No photos in this chapter yet." : 'No photos added.<br>Click "+ Add Photos" to start.'}</p>`;
+        list.innerHTML = `<p style="font-size:11px;color:var(--st-text-muted);text-align:center;grid-column:1 / -1;margin-top:16px;">${currentSection ? "No photos in this chapter yet." : 'No photos added.<br>Click "+ Add Photos" to start.'}</p>`;
+        const pag = document.getElementById("matcha-tray-pagination");
+        if (pag) pag.style.display = "none";
         return;
       }
       if (trayFilterBy === "ai") {
@@ -2033,80 +2527,118 @@
           return title.includes(traySearchQuery) || alt.includes(traySearchQuery) || kw.includes(traySearchQuery) || fname.includes(traySearchQuery) || ("#" + id).includes(traySearchQuery);
         });
       }
-      if (traySortBy === "newest") {
-        displayIds = [...displayIds].reverse();
-      } else if (traySortBy === "name-asc") {
-        displayIds = [...displayIds].sort((a, b) => {
-          const nameA = (metaCache.get(a)?.title || mediaCache.get(a)?.title?.rendered || "#" + a).toLowerCase();
-          const nameB = (metaCache.get(b)?.title || mediaCache.get(b)?.title?.rendered || "#" + b).toLowerCase();
-          return nameA.localeCompare(nameB);
-        });
-      } else if (traySortBy === "name-desc") {
-        displayIds = [...displayIds].sort((a, b) => {
-          const nameA = (metaCache.get(a)?.title || mediaCache.get(a)?.title?.rendered || "#" + a).toLowerCase();
-          const nameB = (metaCache.get(b)?.title || mediaCache.get(b)?.title?.rendered || "#" + b).toLowerCase();
-          return nameB.localeCompare(nameA);
-        });
-      }
-      if (!displayIds.length) {
-        list.innerHTML = `<p style="font-size:11px;color:var(--st-text-muted);text-align:center;grid-column:span 2;margin-top:16px;">No photos match your search or filter.</p>`;
+      const totalMatches = displayIds.length;
+      if (!totalMatches) {
+        list.innerHTML = `<p style="font-size:11px;color:var(--st-text-muted);text-align:center;grid-column:1 / -1;margin-top:16px;">No photos match your search or filter.</p>`;
+        const pag = document.getElementById("matcha-tray-pagination");
+        if (pag) pag.style.display = "none";
         return;
       }
-      list.innerHTML = displayIds.map((id) => {
+      const visibleCount = Math.min(totalMatches, trayPage * trayBatchSize);
+      const visibleIds = displayIds.slice(0, visibleCount);
+      const is3Col = trayViewMode === "grid-3";
+      list.innerHTML = visibleIds.map((id) => {
         const cached = metaCache.get(id);
+        const media = mediaCache.get(id);
+        const thumbUrl = media?.media_details?.sizes?.thumbnail?.source_url || media?.source_url || "";
         const isAi = cached?.ai_generated && cached.keywords?.length > 0;
         const isSelected = selectedPhotoId === id;
         return `
-        <div class="matcha-img-card ${isSelected ? "is-selected" : ""}" data-id="${id}">
-          <img src="" data-id="${id}" loading="lazy" />
+        <div class="matcha-img-card ${isSelected ? "is-selected" : ""}" data-id="${id}" title="${escapeHtml(cached?.title || media?.title?.rendered || "#" + id)}">
+          <img src="${escapeHtml(thumbUrl)}" data-id="${id}" loading="lazy" />
           <div class="matcha-img-card__meta">
-            <div class="matcha-img-card__title">${escapeHtml(cached?.title || "#" + id)}</div>
-            <span class="matcha-badge ${isAi ? "matcha-badge--ai" : "matcha-badge--missing"}" title="${escapeHtml((cached?.keywords || []).join(", "))}">
-              ${isAi ? "\u2713 " + escapeHtml(cached.keywords[0] || "AI Tagged") : "Needs AI"}
-            </span>
+            <div class="matcha-img-card__title">${escapeHtml(cached?.title || media?.title?.rendered || "#" + id)}</div>
+            ${!is3Col ? `
+              <span class="matcha-badge ${isAi ? "matcha-badge--ai" : "matcha-badge--missing"}" title="${escapeHtml((cached?.keywords || []).join(", "))}">
+                ${isAi ? "\u2713 " + escapeHtml(cached.keywords[0] || "AI Tagged") : "Needs AI"}
+              </span>
+            ` : isAi ? `<span class="matcha-badge matcha-badge--ai" style="font-size:8px;padding:1px 4px;">\u2713 AI</span>` : ""}
           </div>
           <button type="button" class="remove" data-remove="${id}" title="Remove photo">\xD7</button>
         </div>
       `;
       }).join("");
-      try {
-        const [mediaRes, metaRes] = await Promise.all([
-          fetch(`${window.MatchaStudio.root}wp/v2/media?include=${displayIds.join(",")}&per_page=100`, {
-            headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
-          }),
-          fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${displayIds.join(",")}`, {
-            headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
-          })
-        ]);
-        const medias = await mediaRes.json();
-        const metas = await metaRes.json();
-        if (metas && typeof metas === "object") {
-          Object.entries(metas).forEach(([idStr, m]) => {
-            const numId = parseInt(idStr);
-            if (!dirtyMetaIds.has(numId)) {
-              metaCache.set(numId, m);
-            }
+      const pagBar = document.getElementById("matcha-tray-pagination");
+      if (pagBar) {
+        if (totalMatches > visibleCount) {
+          pagBar.style.display = "flex";
+          const nextBatch = Math.min(trayBatchSize, totalMatches - visibleCount);
+          pagBar.innerHTML = `
+          <div class="matcha-tray-count-label">Showing <strong>${visibleCount}</strong> of <strong>${totalMatches}</strong> photos</div>
+          <button type="button" id="btn-tray-load-more" class="matcha-tray-load-more-btn">
+            <span>Load Next ${nextBatch} Photos \u25BE</span>
+          </button>
+          ${totalMatches > visibleCount + trayBatchSize ? `
+            <button type="button" id="btn-tray-load-all" style="background:none;border:none;color:var(--st-text-secondary);font-size:10px;cursor:pointer;text-decoration:underline;margin-top:4px;">
+              Show All (${totalMatches} photos)
+            </button>
+          ` : ""}
+        `;
+          document.getElementById("btn-tray-load-more")?.addEventListener("click", () => {
+            trayPage++;
+            renderImageList();
           });
+          document.getElementById("btn-tray-load-all")?.addEventListener("click", () => {
+            trayPage = Math.ceil(totalMatches / trayBatchSize);
+            renderImageList();
+          });
+        } else if (totalMatches > trayBatchSize) {
+          pagBar.style.display = "flex";
+          pagBar.innerHTML = `<div class="matcha-tray-count-label">All ${totalMatches} photos loaded \u2713</div>`;
+        } else {
+          pagBar.style.display = "none";
         }
-        if (Array.isArray(medias)) {
-          medias.forEach((m) => mediaCache.set(m.id, m));
-        }
-        list.querySelectorAll("img[data-id]").forEach((img) => {
-          const id = parseInt(img.dataset.id);
-          const m = mediaCache.get(id);
-          if (m?.media_details?.sizes?.thumbnail?.source_url) {
-            img.src = m.media_details.sizes.thumbnail.source_url;
-          } else if (m?.source_url) {
-            img.src = m.source_url;
+      }
+      const missingIds = visibleIds.filter((id) => !mediaCache.has(id));
+      if (missingIds.length > 0) {
+        const chunkSize = 50;
+        for (let i = 0; i < missingIds.length; i += chunkSize) {
+          const chunk = missingIds.slice(i, i + chunkSize);
+          try {
+            const [mediaRes, metaRes] = await Promise.all([
+              fetch(`${window.MatchaStudio.root}wp/v2/media?include=${chunk.join(",")}&per_page=${chunkSize}`, {
+                headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
+              }),
+              fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${chunk.join(",")}`, {
+                headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
+              })
+            ]);
+            const medias = await mediaRes.json();
+            const metas = await metaRes.json();
+            if (metas && typeof metas === "object") {
+              Object.entries(metas).forEach(([idStr, m]) => {
+                const numId = parseInt(idStr);
+                if (!dirtyMetaIds.has(numId)) {
+                  metaCache.set(numId, m);
+                }
+              });
+            }
+            if (Array.isArray(medias)) {
+              medias.forEach((m) => mediaCache.set(m.id, m));
+            }
+            chunk.forEach((id) => {
+              const card = list.querySelector(`.matcha-img-card[data-id="${id}"]`);
+              if (card) {
+                const img = card.querySelector("img");
+                const m = mediaCache.get(id);
+                if (img && m) {
+                  if (m.media_details?.sizes?.thumbnail?.source_url) {
+                    img.src = m.media_details.sizes.thumbnail.source_url;
+                  } else if (m.source_url) {
+                    img.src = m.source_url;
+                  }
+                }
+                updateSingleCardMeta(id);
+              }
+            });
+          } catch (e) {
           }
-          updateSingleCardMeta(id);
-        });
+        }
         updateScorecard();
-      } catch (e) {
       }
       list.querySelectorAll(".matcha-img-card").forEach((card) => {
         card.addEventListener("click", (e) => {
-          if (e.target.classList.contains("remove")) return;
+          if (didJustDrag || e.target.closest(".remove")) return;
           selectPhoto(parseInt(card.dataset.id));
         });
       });
@@ -2122,7 +2654,10 @@
           autosaveSoon();
         });
       });
+      initSortable();
     }
+    let studioSortableInstance = null;
+    let didJustDrag = false;
     async function renderCanvas() {
       const canvas = document.getElementById("studio-canvas");
       if (!canvas) return;
@@ -2134,6 +2669,7 @@
       const focalPoints = cfg.focalPoints || {};
       const frameStyle = cfg.frameStyle || "none";
       const shadowElevation = cfg.shadowElevation || "soft";
+      const hoverEffect = cfg.hoverEffect || "zoom";
       const canvasBackdrop = cfg.canvasBackdrop || "white";
       const hasSections = sections.length > 0 && cfg.sectionsEnabled !== false;
       if (!allIds.length) {
@@ -2182,13 +2718,24 @@
       } else {
         const sortedByFreq = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
         const maxTags = cfg.maxFilterTags ?? 8;
-        allTags = sortedByFreq.slice(0, maxTags).sort();
+        allTags = sortedByFreq.slice(0, maxTags);
+      }
+      if (cfg.orderedFilterTags && cfg.orderedFilterTags.length > 0) {
+        const ordered = [];
+        cfg.orderedFilterTags.forEach((t) => {
+          if (allTags.includes(t)) ordered.push(t);
+        });
+        allTags.forEach((t) => {
+          if (!ordered.includes(t)) ordered.push(t);
+        });
+        allTags = ordered;
       }
       const sortedColors = Array.from(uniqueColors).slice(0, 8);
-      const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || "#22c55e"};`;
+      const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || "#607d66"};`;
+      const activeCardTheme = !isPro && ["glass", "glow"].includes(cfg.cardTheme) ? "clean" : cfg.cardTheme || "clean";
       canvas.style.background = canvasBackdrop === "cream" ? "#fbf9f4" : canvasBackdrop === "sage" ? "#eef4ed" : canvasBackdrop === "charcoal" ? "#22252a" : canvasBackdrop === "transparent" ? "transparent" : "#ffffff";
       canvas.innerHTML = `
-      <div class="matcha-gallery matcha-gallery--${cfg.layout || "grid"} matcha-gallery--theme-${cfg.cardTheme || "clean"} matcha-gallery--frame-${frameStyle} matcha-gallery--shadow-${shadowElevation}" style="${style}">
+      <div class="matcha-gallery matcha-gallery--${cfg.layout || "grid"} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${frameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === "*" ? "matcha-section-tab--active" : ""}" data-section="*">
@@ -2202,7 +2749,7 @@
           </div>
         ` : ""}
 
-        ${cfg.searchEnabled !== false || cfg.filtersEnabled || cfg.colorFilterEnabled !== false && sortedColors.length > 0 ? `
+        ${cfg.searchEnabled !== false || cfg.filtersEnabled || isPro && cfg.colorFilterEnabled && sortedColors.length > 0 || isPro && cfg.frontendSortEnabled ? `
           <div class="matcha-gallery__toolbar">
             ${cfg.searchEnabled !== false ? `
               <div class="matcha-gallery__search-wrap">
@@ -2213,7 +2760,20 @@
               </div>
             ` : ""}
 
-            ${cfg.colorFilterEnabled !== false && sortedColors.length > 0 ? `
+            ${isPro && cfg.frontendSortEnabled ? `
+              <div class="matcha-gallery__sort-wrap">
+                <select class="matcha-gallery__sort-select" style="pointer-events:none;">
+                  <option>Default Order</option>
+                  <option>Title (A \u2192 Z)</option>
+                  <option>Title (Z \u2192 A)</option>
+                  <option>Date Added (Newest)</option>
+                  <option>Date Added (Oldest)</option>
+                  <option>Random Shuffle</option>
+                </select>
+              </div>
+            ` : ""}
+
+            ${isPro && cfg.colorFilterEnabled && sortedColors.length > 0 ? `
               <div class="matcha-gallery__color-swatches">
                 <span class="matcha-color-label" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
                 ${sortedColors.map((c) => `
@@ -2223,7 +2783,7 @@
             ` : ""}
 
             ${cfg.filtersEnabled && allTags.length > 0 ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--style-${cfg.filterStyle || "pills"} matcha-gallery__filters--align-${cfg.filterAlign || "left"} ${cfg.showFilterCount === false ? "matcha-gallery__filters--hide-count" : ""}" role="toolbar">
+              <div class="matcha-gallery__filters matcha-gallery__filters--style-${cfg.filterStyle || "pills"} matcha-gallery__filters--align-${cfg.filterAlign || "left"} ${cfg.showFilterCount === false ? "matcha-gallery__filters--hide-count" : ""}" data-filter-logic="${cfg.filterLogic || "or"}" data-filter-multiselect="${cfg.filterMultiSelect ? "true" : "false"}" role="toolbar">
                 ${cfg.showAllFilter !== false ? `
                   <button type="button" class="matcha-filter matcha-filter--active" data-filter="*">
                     ${escapeHtml(cfg.allFilterLabel || "All")}
@@ -2241,7 +2801,7 @@
           </div>
         ` : ""}
         <div class="matcha-gallery__grid">
-          ${medias.map((m) => {
+          ${medias.map((m, idx) => {
         const meta = metaCache.get(m.id);
         const keywords = (meta?.keywords || []).map((k) => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-"));
         const tagStr = keywords.join(" ");
@@ -2250,24 +2810,32 @@
         const imgTitle = meta?.title || stripHtml(m.title?.rendered || "");
         const imgCaption = meta?.caption || "";
         const isAi = meta?.ai_generated && keywords.length > 0;
-        const currentSpan = imageSpans[m.id] || "1x1";
+        const mosaicRhythm = ["2x2", "1x1", "1x1", "2x1", "1x1", "1x2", "1x1", "2x1"];
+        const currentSpan = isPro && imageSpans[m.id] ? imageSpans[m.id] : cfg.layout === "mosaic" ? mosaicRhythm[idx % mosaicRhythm.length] : imageSpans[m.id] || "1x1";
         const spanClass = cfg.layout === "mosaic" || cfg.layout === "pinwheel" ? `matcha-gallery__item--span-${currentSpan}` : "";
         const link = imageLinks[m.id] || {};
         const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1 };
-        const zoom = fp.zoom || 1;
+        const zoom = isPro ? fp.zoom || 1 : 1;
         const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
         const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || "";
+        let itemStyle = "cursor:pointer;";
+        if (cfg.layout === "justified") {
+          const w = m.media_details?.width || 800;
+          const h = m.media_details?.height || 600;
+          const ratio = (w / h).toFixed(3);
+          itemStyle += `flex:${ratio} 1 calc(${cfg.rowHeight || 240}px * ${ratio});max-width:calc(${cfg.rowHeight || 240}px * ${ratio} * 2);`;
+        }
         return `
-              <div class="matcha-gallery__item ${isAi ? "matcha-gallery__item--ai" : ""} ${spanClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" style="cursor:pointer;">
+              <div class="matcha-gallery__item ${isAi ? "matcha-gallery__item--ai" : ""} ${spanClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" style="${itemStyle}">
                 <div class="matcha-gallery__item-inner">
                   <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || "")}" style="${imgStyle}" />
                   <div class="matcha-gallery__overlay">
                     <span class="matcha-gallery__zoom-icon">${Icons.search}</span>
                     ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ""}
-                    ${cfg.proofingEnabled ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ""}
+                    ${isPro && cfg.proofingEnabled ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ""}
                   </div>
 
-                  ${cfg.shoppableEnabled !== false && link.url ? `
+                  ${isPro && cfg.shoppableEnabled && link.url ? `
                     <div class="matcha-gallery__shop-bar">
                       <span class="matcha-gallery__shop-btn" style="display:inline-flex;align-items:center;gap:5px;">
                         <span>${Icons.shoppingBag}</span> ${escapeHtml(link.label || "Shop Now")}
@@ -2276,7 +2844,7 @@
                     </div>
                   ` : ""}
 
-                  ${cfg.layout === "mosaic" || cfg.layout === "pinwheel" ? `
+                  ${isPro && (cfg.layout === "mosaic" || cfg.layout === "pinwheel") ? `
                     <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
                       <button type="button" class="matcha-span-btn ${currentSpan === "1x1" ? "is-active" : ""}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
                       <button type="button" class="matcha-span-btn ${currentSpan === "2x1" ? "is-active" : ""}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 \u2194</button>
@@ -2295,6 +2863,7 @@
               </div>
             `;
       }).join("")}
+          ${cfg.layout === "justified" ? '<div style="flex-grow:99999;min-width:100px;height:0;margin:0;padding:0;"></div>' : ""}
         </div>
 
         ${cfg.paginationType && cfg.paginationType !== "none" ? `
@@ -2332,6 +2901,7 @@
         });
       }
       let currentFilter = "*";
+      const activeFilterSet = /* @__PURE__ */ new Set();
       let currentSearch = "";
       let currentColor = "";
       let canvasPage = 1;
@@ -2346,7 +2916,16 @@
           const caption = (item.dataset.caption || "").toLowerCase();
           const alt = (item.querySelector("img")?.alt || "").toLowerCase();
           const matchesSection = activeSectionId === "*" || secs.includes(activeSectionId);
-          const matchesTag = currentFilter === "*" || tags.includes(currentFilter);
+          let matchesTag = true;
+          if (cfg.filterMultiSelect && activeFilterSet.size > 0) {
+            if ((cfg.filterLogic || "or") === "and") {
+              matchesTag = Array.from(activeFilterSet).every((t) => tags.includes(t));
+            } else {
+              matchesTag = Array.from(activeFilterSet).some((t) => tags.includes(t));
+            }
+          } else if (!cfg.filterMultiSelect) {
+            matchesTag = currentFilter === "*" || tags.includes(currentFilter);
+          }
           const matchesSearch = !currentSearch || tags.some((t) => t.includes(currentSearch)) || title.includes(currentSearch) || caption.includes(currentSearch) || alt.includes(currentSearch);
           const matchesColor = !currentColor || colors.includes(currentColor.toLowerCase());
           if (matchesSection && matchesTag && matchesSearch && matchesColor) {
@@ -2427,11 +3006,45 @@
           applyCanvasFilter();
         });
       });
+      function updateFilterButtonsState() {
+        if (cfg.filterMultiSelect) {
+          canvas.querySelectorAll(".matcha-filter").forEach((btn) => {
+            if (btn.dataset.filter === "*") {
+              const isActive = activeFilterSet.size === 0;
+              btn.classList.toggle("matcha-filter--active", isActive);
+              btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+            } else {
+              const isActive = activeFilterSet.has(btn.dataset.filter);
+              btn.classList.toggle("matcha-filter--active", isActive);
+              btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+            }
+          });
+        } else {
+          canvas.querySelectorAll(".matcha-filter").forEach((btn) => {
+            const isActive = btn.dataset.filter === currentFilter;
+            btn.classList.toggle("matcha-filter--active", isActive);
+            btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+          });
+        }
+      }
       canvas.querySelectorAll(".matcha-filter").forEach((btn) => {
         btn.addEventListener("click", () => {
-          canvas.querySelectorAll(".matcha-filter").forEach((b) => b.classList.remove("matcha-filter--active"));
-          btn.classList.add("matcha-filter--active");
-          currentFilter = btn.dataset.filter;
+          const f = btn.dataset.filter;
+          if (cfg.filterMultiSelect) {
+            if (f === "*") {
+              activeFilterSet.clear();
+            } else {
+              if (activeFilterSet.has(f)) {
+                activeFilterSet.delete(f);
+              } else {
+                activeFilterSet.add(f);
+              }
+            }
+            updateFilterButtonsState();
+          } else {
+            currentFilter = f;
+            updateFilterButtonsState();
+          }
           canvasPage = 1;
           applyCanvasFilter();
         });
@@ -2460,8 +3073,13 @@
         });
       }
     }
+    let lastSubscribedImageIds = null;
     subscribe((s) => {
-      renderImageList();
+      const curIds = (s.config?.imageIds || []).join(",");
+      if (lastSubscribedImageIds !== null && curIds !== lastSubscribedImageIds && !didJustDrag) {
+        renderImageList();
+      }
+      lastSubscribedImageIds = curIds;
       renderCanvas();
       updateScorecard();
       const sc = document.getElementById("studio-shortcode");

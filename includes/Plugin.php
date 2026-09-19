@@ -58,6 +58,9 @@ final class Plugin {
 		Smart_Gallery_Block::register();
 		\Matcha_AI_Smart_Gallery\Shortcode\Gallery_Shortcode::register();
 
+		// --- Page Builder Integrations (Elementor, etc.) ---
+		\Matcha_AI_Smart_Gallery\Integrations\Elementor\Elementor_Integration::init();
+
 		// --- Admin-only components ---
 		if ( is_admin() ) {
 			// Studio hub must register before Settings_Page to own top-level menu

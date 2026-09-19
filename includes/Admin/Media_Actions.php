@@ -259,7 +259,7 @@ class Media_Actions {
 	 * @return array<string, string>
 	 */
 	public static function add_media_columns( array $columns ): array {
-		$columns['matcha_ai_keywords'] = __( '🍵 AI Keywords', 'matcha-gallery' );
+		$columns['matcha_ai_keywords'] = __( 'AI Keywords', 'matcha-gallery' );
 		return $columns;
 	}
 
@@ -291,7 +291,7 @@ class Media_Actions {
 		} else {
 			$nonce = wp_create_nonce( self::NONCE_ACTION );
 			printf(
-				'<button type="button" class="button button-small matcha-ai-generate-btn" data-attachment-id="%d" data-nonce="%s" style="color:#2e7d32; border-color:#81c784; background:#f1f8e9;">🍵 %s</button><div class="matcha-ai-status" style="display:none; font-size:11px; margin-top:4px;"></div>',
+				'<button type="button" class="button button-small matcha-ai-generate-btn" data-attachment-id="%d" data-nonce="%s" style="color:#2e7d32; border-color:#81c784; background:#f1f8e9;"><span class="dashicons dashicons-admin-generic" style="font-size:14px;line-height:1.4;vertical-align:middle;margin-right:2px;"></span>%s</button><div class="matcha-ai-status" style="display:none; font-size:11px; margin-top:4px;"></div>',
 				(int) $post_id,
 				esc_attr( $nonce ),
 				esc_html__( 'Analyze AI', 'matcha-gallery' )
@@ -319,7 +319,7 @@ class Media_Actions {
 
 		$html = sprintf(
 			'<div class="matcha-ai-generate-wrap">'
-			. '<button type="button" class="button matcha-ai-generate-btn" data-attachment-id="%d" data-nonce="%s">🍵 %s</button>'
+			. '<button type="button" class="button matcha-ai-generate-btn" data-attachment-id="%d" data-nonce="%s"><span class="dashicons dashicons-admin-generic" style="font-size:14px;line-height:1.4;vertical-align:middle;margin-right:2px;"></span>%s</button>'
 			. '<div class="matcha-ai-status" style="display:none;"></div>'
 			. '</div>',
 			esc_attr( $post->ID ),

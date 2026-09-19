@@ -157,7 +157,7 @@ final class Gallery_CPT {
 		$tags = array_filter( array_map( 'sanitize_title', (array) ( $cfg['aiTags'] ?? array() ) ) );
 		$out['aiTags'] = array_slice( $tags, 0, 30 );
 
-		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento' ) );
+		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', array( 'grid', 'masonry', 'justified', 'mosaic' ) );
 		$out['layout']   = in_array( $cfg['layout'] ?? 'grid', (array) $allowed_layouts, true ) ? $cfg['layout'] : 'grid';
 
 		$out['columns']       = max( 1, min( 6, (int) ( $cfg['columns'] ?? 3 ) ) );
@@ -167,12 +167,15 @@ final class Gallery_CPT {
 		$out['rowHeight']     = max( 120, min( 600, (int) ( $cfg['rowHeight'] ?? 240 ) ) );
 
 		$out['filtersEnabled']     = ! empty( $cfg['filtersEnabled'] );
+		$out['filterMultiSelect']  = ! empty( $cfg['filterMultiSelect'] );
+		$out['filterLogic']        = in_array( $cfg['filterLogic'] ?? 'or', array( 'or', 'and' ), true ) ? $cfg['filterLogic'] : 'or';
+		$out['orderedFilterTags']  = array_values( array_filter( array_map( 'sanitize_title', (array) ( $cfg['orderedFilterTags'] ?? array() ) ) ) );
 		$allowed_filter_styles     = apply_filters( 'matcha_gallery_allowed_filter_styles', array( 'pills', 'underline' ) );
 		$out['filterStyle']        = in_array( $cfg['filterStyle'] ?? 'pills', (array) $allowed_filter_styles, true ) ? $cfg['filterStyle'] : 'pills';
 		$out['filterAlign']        = in_array( $cfg['filterAlign'] ?? 'left', array( 'left', 'center', 'right', 'between' ), true ) ? $cfg['filterAlign'] : 'left';
 		$out['showFilterCount']    = ! isset( $cfg['showFilterCount'] ) || ! empty( $cfg['showFilterCount'] );
 		$out['allFilterLabel']     = sanitize_text_field( $cfg['allFilterLabel'] ?? 'All' );
-		$out['accentColor']        = sanitize_hex_color( $cfg['accentColor'] ?? '#22c55e' ) ?: '#22c55e';
+		$out['accentColor']        = sanitize_hex_color( $cfg['accentColor'] ?? '#607d66' ) ?: '#607d66';
 		$out['searchEnabled']      = ! isset( $cfg['searchEnabled'] ) || ! empty( $cfg['searchEnabled'] );
 		$out['maxFilterTags']      = max( 0, min( 30, (int) ( $cfg['maxFilterTags'] ?? 8 ) ) );
 		$out['visibleFilterTags']  = array_values( array_filter( array_map( 'sanitize_title', (array) ( $cfg['visibleFilterTags'] ?? array() ) ) ) );
@@ -182,30 +185,48 @@ final class Gallery_CPT {
 		$out['lightboxEnabled']    = ! isset( $cfg['lightboxEnabled'] ) || ! empty( $cfg['lightboxEnabled'] );
 		$out['borderRadius']       = max( 0, min( 32, (int) ( $cfg['borderRadius'] ?? 10 ) ) );
 		$out['mattingSize']        = max( 0, min( 32, (int) ( $cfg['mattingSize'] ?? 0 ) ) );
-		$out['cardTheme']          = in_array( $cfg['cardTheme'] ?? 'clean', array( 'clean', 'glass', 'glow', 'dark' ), true ) ? $cfg['cardTheme'] : 'clean';
+		$allowed_card_themes       = apply_filters( 'matcha_gallery_allowed_card_themes', array( 'clean', 'dark' ) );
+		$out['cardTheme']          = in_array( $cfg['cardTheme'] ?? 'clean', (array) $allowed_card_themes, true ) ? $cfg['cardTheme'] : 'clean';
 		$out['canvasBackdrop']     = in_array( $cfg['canvasBackdrop'] ?? 'transparent', array( 'transparent', 'white', 'cream', 'sage', 'charcoal', 'dark-slate' ), true ) ? $cfg['canvasBackdrop'] : 'transparent';
-		$out['hoverEffect']        = sanitize_key( $cfg['hoverEffect'] ?? 'zoom' );
+		$allowed_hover_effects = apply_filters( 'matcha_gallery_allowed_hover_effects', array( 'none', 'zoom', 'lift', 'glow', 'grayscale' ) );
+		$out['hoverEffect']    = in_array( $cfg['hoverEffect'] ?? 'zoom', (array) $allowed_hover_effects, true ) ? $cfg['hoverEffect'] : 'zoom';
 
-		$allowed_frames     = apply_filters( 'matcha_gallery_allowed_frames', array( 'none', 'white-mat', 'black-metal', 'natural-oak', 'gold-brass', 'glass-float' ) );
+		$allowed_frames     = apply_filters( 'matcha_gallery_allowed_frames', array( 'none', 'white-mat' ) );
 		$out['frameStyle']  = in_array( $cfg['frameStyle'] ?? 'none', (array) $allowed_frames, true ) ? $cfg['frameStyle'] : 'none';
 		$out['shadowElevation'] = in_array( $cfg['shadowElevation'] ?? 'soft', array( 'none', 'soft', 'medium', 'gallery-spotlight', 'deep-lift' ), true ) ? $cfg['shadowElevation'] : 'soft';
 
-		$allowed_pagination   = apply_filters( 'matcha_gallery_allowed_pagination', array( 'none', 'load-more', 'infinite', 'pages' ) );
+		$allowed_pagination   = apply_filters( 'matcha_gallery_allowed_pagination', array( 'none', 'load-more' ) );
 		$out['paginationType'] = in_array( $cfg['paginationType'] ?? 'none', (array) $allowed_pagination, true ) ? $cfg['paginationType'] : 'none';
 		$out['itemsPerPage']   = max( 4, min( 60, (int) ( $cfg['itemsPerPage'] ?? 12 ) ) );
 		$allowed_load_styles  = apply_filters( 'matcha_gallery_allowed_loadmore_styles', array( 'pill', 'outline', 'minimal' ) );
 		$out['loadMoreStyle'] = in_array( $cfg['loadMoreStyle'] ?? 'pill', (array) $allowed_load_styles, true ) ? $cfg['loadMoreStyle'] : 'pill';
 		$out['loadMoreLabel'] = sanitize_text_field( $cfg['loadMoreLabel'] ?? 'Load More Photos' );
 
-		// Features fully functional in core
-		$out['colorFilterEnabled'] = ! empty( $cfg['colorFilterEnabled'] );
-		$out['proofingEnabled']    = ! empty( $cfg['proofingEnabled'] );
-		$out['shoppableEnabled']   = ! empty( $cfg['shoppableEnabled'] );
-		$out['sectionsEnabled']    = ! empty( $cfg['sectionsEnabled'] );
+		// Preloader & Frames
+		$out['preloaderEnabled']     = ! isset( $cfg['preloaderEnabled'] ) || ! empty( $cfg['preloaderEnabled'] );
+		$out['instantFramesEnabled'] = ! isset( $cfg['instantFramesEnabled'] ) || ! empty( $cfg['instantFramesEnabled'] );
 
-		// Sanitize multi-section chapters
+		// Pro-only features: only sanitized and stored when Pro is active
+		$is_pro = self::is_pro_active();
+
+		// Sorting & Randomization: Free gets manual, name-asc, name-desc; Pro gets newest, oldest, random & randomizeOrder
+		$allowed_sort = $is_pro ? array( 'manual', 'name-asc', 'name-desc', 'newest', 'oldest', 'random' ) : array( 'manual', 'name-asc', 'name-desc' );
+		$out['sortBy'] = in_array( $cfg['sortBy'] ?? 'manual', $allowed_sort, true ) ? $cfg['sortBy'] : 'manual';
+		$out['randomizeOrder']      = $is_pro && ! empty( $cfg['randomizeOrder'] );
+		$out['frontendSortEnabled'] = $is_pro && ! empty( $cfg['frontendSortEnabled'] );
+
+		// Gate Pro preloader styles
+		$allowed_preloaders = $is_pro ? array( 'spinner', 'pulse', 'bar', 'logo', 'skeleton' ) : array( 'spinner' );
+		$out['preloaderStyle'] = in_array( $cfg['preloaderStyle'] ?? 'spinner', $allowed_preloaders, true ) ? $cfg['preloaderStyle'] : 'spinner';
+
+		$out['colorFilterEnabled'] = $is_pro && ! empty( $cfg['colorFilterEnabled'] );
+		$out['proofingEnabled']    = $is_pro && ! empty( $cfg['proofingEnabled'] );
+		$out['shoppableEnabled']   = $is_pro && ! empty( $cfg['shoppableEnabled'] );
+		$out['sectionsEnabled']    = $is_pro && ! empty( $cfg['sectionsEnabled'] );
+
+		// Sanitize multi-section chapters (Pro)
 		$out['sections'] = array();
-		if ( ! empty( $cfg['sections'] ) && is_array( $cfg['sections'] ) ) {
+		if ( $is_pro && ! empty( $cfg['sections'] ) && is_array( $cfg['sections'] ) ) {
 			foreach ( $cfg['sections'] as $sec ) {
 				if ( is_array( $sec ) ) {
 					$out['sections'][] = array(
@@ -217,22 +238,31 @@ final class Gallery_CPT {
 			}
 		}
 
-		// Sanitize image geometric spans
+		// Sanitize image geometric spans (Pro)
 		$out['imageSpans'] = array();
-		if ( ! empty( $cfg['imageSpans'] ) && is_array( $cfg['imageSpans'] ) ) {
+		if ( $is_pro && ! empty( $cfg['imageSpans'] ) && is_array( $cfg['imageSpans'] ) ) {
+			$allowed_spans = array( '1x1', '2x1', '1x2', '2x2' );
 			foreach ( $cfg['imageSpans'] as $img_id => $span ) {
-				if ( is_array( $span ) ) {
-					$out['imageSpans'][ (int) $img_id ] = array(
-						'spanW' => max( 1, min( 4, (int) ( $span['spanW'] ?? 1 ) ) ),
-						'spanH' => max( 1, min( 4, (int) ( $span['spanH'] ?? 1 ) ) ),
-					);
+				$clean_id = absint( $img_id );
+				if ( ! $clean_id ) {
+					continue;
+				}
+				if ( is_string( $span ) && in_array( $span, $allowed_spans, true ) ) {
+					$out['imageSpans'][ (string) $clean_id ] = $span;
+				} elseif ( is_array( $span ) ) {
+					$w = max( 1, min( 2, (int) ( $span['spanW'] ?? 1 ) ) );
+					$h = max( 1, min( 2, (int) ( $span['spanH'] ?? 1 ) ) );
+					$str_span = "{$w}x{$h}";
+					if ( in_array( $str_span, $allowed_spans, true ) ) {
+						$out['imageSpans'][ (string) $clean_id ] = $str_span;
+					}
 				}
 			}
 		}
 
-		// Sanitize shoppable image links
+		// Sanitize shoppable image links (Pro)
 		$out['imageLinks'] = array();
-		if ( ! empty( $cfg['imageLinks'] ) && is_array( $cfg['imageLinks'] ) ) {
+		if ( $is_pro && ! empty( $cfg['imageLinks'] ) && is_array( $cfg['imageLinks'] ) ) {
 			foreach ( $cfg['imageLinks'] as $img_id => $link ) {
 				if ( is_array( $link ) ) {
 					$out['imageLinks'][ (int) $img_id ] = array(
@@ -245,7 +275,7 @@ final class Gallery_CPT {
 			}
 		}
 
-		// Sanitize focal points and zoom cropping
+		// Sanitize focal points (x/y in core, zoom scale in Pro)
 		$out['focalPoints'] = array();
 		if ( ! empty( $cfg['focalPoints'] ) && is_array( $cfg['focalPoints'] ) ) {
 			foreach ( $cfg['focalPoints'] as $img_id => $focal ) {
@@ -253,7 +283,7 @@ final class Gallery_CPT {
 					$out['focalPoints'][ (int) $img_id ] = array(
 						'x'    => max( 0.0, min( 100.0, (float) ( $focal['x'] ?? 50.0 ) ) ),
 						'y'    => max( 0.0, min( 100.0, (float) ( $focal['y'] ?? 50.0 ) ) ),
-						'zoom' => max( 1.0, min( 3.0, (float) ( $focal['zoom'] ?? 1.0 ) ) ),
+						'zoom' => $is_pro ? max( 1.0, min( 3.0, (float) ( $focal['zoom'] ?? 1.0 ) ) ) : 1.0,
 					);
 				}
 			}
@@ -302,24 +332,33 @@ final class Gallery_CPT {
 			'gutterSize'         => 16,
 			'rowHeight'          => 240,
 			'filtersEnabled'     => true,
+			'filterMultiSelect'  => false,
+			'filterLogic'        => 'or',
+			'orderedFilterTags'  => array(),
 			'filterStyle'        => 'pills',
 			'filterAlign'        => 'left',
 			'showFilterCount'    => true,
 			'allFilterLabel'     => 'All',
-			'accentColor'        => '#22c55e',
+			'accentColor'        => '#607d66',
 			'paginationType'     => 'none',
 			'itemsPerPage'       => 12,
 			'loadMoreStyle'      => 'pill',
 			'loadMoreLabel'      => 'Load More Photos',
-			'colorFilterEnabled' => true,
+			'colorFilterEnabled' => false,
 			'proofingEnabled'    => false,
-			'shoppableEnabled'   => true,
+			'shoppableEnabled'   => false,
 			'searchEnabled'      => true,
 			'maxFilterTags'      => 8,
 			'showAllFilter'      => true,
 			'showTitle'          => true,
 			'showCaption'        => false,
 			'lightboxEnabled'    => true,
+			'preloaderEnabled'   => true,
+			'preloaderStyle'     => 'spinner',
+			'instantFramesEnabled'=> true,
+			'sortBy'              => 'manual',
+			'randomizeOrder'      => false,
+			'frontendSortEnabled' => false,
 			'borderRadius'       => 10,
 			'mattingSize'        => 0,
 			'frameStyle'         => 'none',

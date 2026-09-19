@@ -39,6 +39,13 @@
     }
   });
 
+  // wp-global:@wordpress/components
+  var require_components = __commonJS({
+    "wp-global:@wordpress/components"(exports, module) {
+      module.exports = window.wp.components;
+    }
+  });
+
   // wp-global:@wordpress/data
   var require_data = __commonJS({
     "wp-global:@wordpress/data"(exports, module) {
@@ -57,13 +64,6 @@
   var require_i18n = __commonJS({
     "wp-global:@wordpress/i18n"(exports, module) {
       module.exports = window.wp.i18n;
-    }
-  });
-
-  // wp-global:@wordpress/components
-  var require_components = __commonJS({
-    "wp-global:@wordpress/components"(exports, module) {
-      module.exports = window.wp.components;
     }
   });
 
@@ -126,7 +126,15 @@
       layout: {
         type: "string",
         default: "grid",
-        enum: ["grid", "masonry"]
+        enum: ["grid", "masonry", "justified", "mosaic", "bento", "pinwheel"]
+      },
+      rowHeight: {
+        type: "number",
+        default: 240
+      },
+      hoverEffect: {
+        type: "string",
+        default: "zoom"
       },
       columns: {
         type: "number",
@@ -175,6 +183,7 @@
 
   // blocks/smart-gallery/edit.js
   var import_block_editor4 = __toESM(require_block_editor());
+  var import_components4 = __toESM(require_components());
   var import_data = __toESM(require_data());
   var import_element3 = __toESM(require_element());
 
@@ -224,7 +233,7 @@
       /* @__PURE__ */ window.wp.element.createElement("div", { className: "matcha-gallery-placeholder__actions", style: { display: "flex", flexDirection: "column", gap: "12px", width: "100%", maxWidth: "420px" } }, studioGalleries.length > 0 && /* @__PURE__ */ window.wp.element.createElement("div", { style: { width: "100%", padding: "10px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: "6px" } }, /* @__PURE__ */ window.wp.element.createElement(
         import_components.SelectControl,
         {
-          label: (0, import_i18n.__)("\u{1F375} Select Studio Gallery", "matcha-gallery"),
+          label: (0, import_i18n.__)("Select Studio Gallery", "matcha-gallery"),
           value: galleryId || 0,
           options: galleryOptions,
           onChange: (val) => {
@@ -248,7 +257,7 @@
               onClick: open,
               className: "matcha-gallery-placeholder__btn"
             },
-            (0, import_i18n.__)("\u{1F5BC} Select Images", "matcha-gallery")
+            (0, import_i18n.__)("Select Images", "matcha-gallery")
           )
         }
       )), /* @__PURE__ */ window.wp.element.createElement(
@@ -260,7 +269,7 @@
           className: "components-button is-secondary",
           style: { textDecoration: "none" }
         },
-        (0, import_i18n.__)("\u{1F3A8} Open Matcha Studio \u2197", "matcha-gallery")
+        (0, import_i18n.__)("Open Matcha Studio \u2197", "matcha-gallery")
       )), /* @__PURE__ */ window.wp.element.createElement("div", { className: "matcha-gallery-placeholder__divider" }, /* @__PURE__ */ window.wp.element.createElement("span", null, (0, import_i18n.__)("or dynamic mode", "matcha-gallery"))), /* @__PURE__ */ window.wp.element.createElement(
         import_components.ToggleControl,
         {
@@ -429,7 +438,7 @@
     return /* @__PURE__ */ window.wp.element.createElement(import_block_editor3.InspectorControls, null, /* @__PURE__ */ window.wp.element.createElement(
       import_components3.PanelBody,
       {
-        title: (0, import_i18n3.__)("\u{1F375} Matcha Studio Gallery", "matcha-gallery"),
+        title: (0, import_i18n3.__)("Matcha Studio Gallery", "matcha-gallery"),
         initialOpen: true
       },
       /* @__PURE__ */ window.wp.element.createElement(
@@ -520,13 +529,27 @@
           label: (0, import_i18n3.__)("Layout Type", "matcha-gallery"),
           value: layout,
           options: [
-            { label: (0, import_i18n3.__)("Grid", "matcha-gallery"), value: "grid" },
-            { label: (0, import_i18n3.__)("Masonry", "matcha-gallery"), value: "masonry" }
+            { label: (0, import_i18n3.__)("Classic Grid", "matcha-gallery"), value: "grid" },
+            { label: (0, import_i18n3.__)("Pinterest Masonry", "matcha-gallery"), value: "masonry" },
+            { label: (0, import_i18n3.__)("Flickr Justified Rows", "matcha-gallery"), value: "justified" },
+            { label: (0, import_i18n3.__)("PhotoBlocks Mosaic", "matcha-gallery"), value: "mosaic" },
+            { label: (0, import_i18n3.__)("Bento Showcase", "matcha-gallery"), value: "bento" },
+            { label: (0, import_i18n3.__)("Pinwheel Spiral", "matcha-gallery"), value: "pinwheel" }
           ],
           onChange: (value) => setAttributes({ layout: value })
         }
       ),
-      /* @__PURE__ */ window.wp.element.createElement(
+      layout === "justified" ? /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.RangeControl,
+        {
+          label: (0, import_i18n3.__)("Row Height (px)", "matcha-gallery"),
+          value: attributes.rowHeight || 240,
+          onChange: (value) => setAttributes({ rowHeight: value }),
+          min: 120,
+          max: 400,
+          step: 10
+        }
+      ) : /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Columns (Desktop)", "matcha-gallery"),
@@ -626,6 +649,21 @@
           checked: lightboxEnabled,
           onChange: (value) => setAttributes({ lightboxEnabled: value })
         }
+      ),
+      /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Hover Animation", "matcha-gallery"),
+          value: attributes.hoverEffect || "zoom",
+          options: [
+            { label: (0, import_i18n3.__)("Smooth Zoom (Default)", "matcha-gallery"), value: "zoom" },
+            { label: (0, import_i18n3.__)("3D Elevation Lift", "matcha-gallery"), value: "lift" },
+            { label: (0, import_i18n3.__)("Matcha Neon Glow", "matcha-gallery"), value: "glow" },
+            { label: (0, import_i18n3.__)("Monochrome to Color", "matcha-gallery"), value: "grayscale" },
+            { label: (0, import_i18n3.__)("Flat (No Animation)", "matcha-gallery"), value: "none" }
+          ],
+          onChange: (value) => setAttributes({ hoverEffect: value })
+        }
       )
     ));
   }
@@ -702,13 +740,21 @@
         console.error(e);
       }
     };
-    return /* @__PURE__ */ window.wp.element.createElement("div", { ...blockProps }, /* @__PURE__ */ window.wp.element.createElement(
+    return /* @__PURE__ */ window.wp.element.createElement("div", { ...blockProps }, /* @__PURE__ */ window.wp.element.createElement(import_block_editor4.BlockControls, null, /* @__PURE__ */ window.wp.element.createElement(import_components4.ToolbarGroup, null, /* @__PURE__ */ window.wp.element.createElement(
+      import_components4.ToolbarButton,
+      {
+        icon: "art",
+        label: galleryId > 0 ? "Edit Gallery in Matcha Studio" : "Open Matcha Studio Builder",
+        onClick: () => window.open(studioUrl, "_blank")
+      },
+      galleryId > 0 ? "Edit in Studio \u2197" : "Studio Builder \u2197"
+    ))), /* @__PURE__ */ window.wp.element.createElement(
       GalleryInspectorControls,
       {
         attributes,
         setAttributes
       }
-    ), galleryId > 0 ? /* @__PURE__ */ window.wp.element.createElement("div", { style: { padding: "10px 14px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "8px", marginBottom: "12px", fontSize: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" } }, /* @__PURE__ */ window.wp.element.createElement("div", null, /* @__PURE__ */ window.wp.element.createElement("strong", { style: { color: "#166534" } }, "\u{1F375} Matcha Studio Gallery #", galleryId), /* @__PURE__ */ window.wp.element.createElement("span", { style: { marginLeft: "8px", color: "#15803d", fontSize: "11px" } }, "(", effectiveImageIds.length, " photos)")), /* @__PURE__ */ window.wp.element.createElement("a", { href: studioUrl, target: "_blank", rel: "noreferrer", style: { padding: "4px 10px", background: "#16a34a", color: "#fff", borderRadius: "4px", textDecoration: "none", fontWeight: 700, fontSize: "11px" } }, "Edit in Studio \u2197")) : imageIds.length > 0 && /* @__PURE__ */ window.wp.element.createElement("div", { style: { padding: "8px 10px", background: "#fff8e1", border: "1px solid #ffe082", borderRadius: "6px", marginBottom: "8px", fontSize: "12px" } }, "Legacy inline block \u2014 ", /* @__PURE__ */ window.wp.element.createElement("button", { type: "button", className: "button button-small", onClick: convertToGallery }, "Convert to Matcha Studio Gallery")), !hasImages ? /* @__PURE__ */ window.wp.element.createElement(
+    ), galleryId > 0 ? /* @__PURE__ */ window.wp.element.createElement("div", { style: { padding: "10px 14px", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "8px", marginBottom: "12px", fontSize: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" } }, /* @__PURE__ */ window.wp.element.createElement("div", null, /* @__PURE__ */ window.wp.element.createElement("strong", { style: { color: "#166534" } }, "Matcha Studio Gallery #", galleryId), /* @__PURE__ */ window.wp.element.createElement("span", { style: { marginLeft: "8px", color: "#15803d", fontSize: "11px" } }, "(", effectiveImageIds.length, " photos)")), /* @__PURE__ */ window.wp.element.createElement("a", { href: studioUrl, target: "_blank", rel: "noreferrer", style: { padding: "4px 10px", background: "#16a34a", color: "#fff", borderRadius: "4px", textDecoration: "none", fontWeight: 700, fontSize: "11px" } }, "Edit in Studio \u2197")) : imageIds.length > 0 && /* @__PURE__ */ window.wp.element.createElement("div", { style: { padding: "8px 10px", background: "#fff8e1", border: "1px solid #ffe082", borderRadius: "6px", marginBottom: "8px", fontSize: "12px" } }, "Legacy inline block \u2014 ", /* @__PURE__ */ window.wp.element.createElement("button", { type: "button", className: "button button-small", onClick: convertToGallery }, "Convert to Matcha Studio Gallery")), !hasImages ? /* @__PURE__ */ window.wp.element.createElement(
       GalleryPlaceholder,
       {
         attributes,

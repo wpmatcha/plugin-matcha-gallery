@@ -39,7 +39,15 @@
 		"layout": {
 			"type": "string",
 			"default": "grid",
-			"enum": [ "grid", "masonry" ]
+			"enum": [ "grid", "masonry", "justified", "mosaic", "bento", "pinwheel" ]
+		},
+		"rowHeight": {
+			"type": "number",
+			"default": 240
+		},
+		"hoverEffect": {
+			"type": "string",
+			"default": "zoom"
 		},
 		"columns": {
 			"type": "number",

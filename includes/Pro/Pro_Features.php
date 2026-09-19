@@ -36,19 +36,21 @@ class Pro_Features {
 	}
 
 	/**
-	 * Check if Pro is active.
-	 *
-	 * Pro add-on will hook into this filter and return true when licensed.
+	 * Check if Pro is active and licensed.
 	 *
 	 * @return bool
 	 */
 	public static function is_active(): bool {
-		/**
-		 * Filters whether Pro features are active.
-		 *
-		 * @param bool $is_active Whether Pro is active. Default false.
-		 */
-		return (bool) apply_filters( 'matcha_gallery_pro_active', false );
+		return (bool) apply_filters( 'matcha_gallery_is_pro', (bool) apply_filters( 'matcha_gallery_pro_active', false ) );
+	}
+
+	/**
+	 * Check if Pro is active (alias for is_active).
+	 *
+	 * @return bool
+	 */
+	public static function is_pro(): bool {
+		return self::is_active();
 	}
 
 	/**

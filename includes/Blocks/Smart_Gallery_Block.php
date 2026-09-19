@@ -137,11 +137,14 @@ class Smart_Gallery_Block {
 					'rowHeight'       => $cfg['rowHeight'] ?? $attributes['rowHeight'] ?? 240,
 					'imageSpans'      => $cfg['imageSpans'] ?? $attributes['imageSpans'] ?? array(),
 					'filtersEnabled'     => $cfg['filtersEnabled'] ?? $attributes['filtersEnabled'] ?? true,
+					'filterMultiSelect'  => $cfg['filterMultiSelect'] ?? $attributes['filterMultiSelect'] ?? false,
+					'filterLogic'        => $cfg['filterLogic'] ?? $attributes['filterLogic'] ?? 'or',
+					'orderedFilterTags'  => $cfg['orderedFilterTags'] ?? $attributes['orderedFilterTags'] ?? array(),
 					'filterStyle'        => $cfg['filterStyle'] ?? $attributes['filterStyle'] ?? 'pills',
 					'filterAlign'        => $cfg['filterAlign'] ?? $attributes['filterAlign'] ?? 'left',
 					'showFilterCount'    => $cfg['showFilterCount'] ?? $attributes['showFilterCount'] ?? true,
 					'allFilterLabel'     => $cfg['allFilterLabel'] ?? $attributes['allFilterLabel'] ?? 'All',
-					'accentColor'        => $cfg['accentColor'] ?? $attributes['accentColor'] ?? '#22c55e',
+					'accentColor'        => $cfg['accentColor'] ?? $attributes['accentColor'] ?? '#607d66',
 					'colorFilterEnabled' => $cfg['colorFilterEnabled'] ?? $attributes['colorFilterEnabled'] ?? true,
 					'proofingEnabled'    => $cfg['proofingEnabled'] ?? $attributes['proofingEnabled'] ?? false,
 					'shoppableEnabled'   => $cfg['shoppableEnabled'] ?? $attributes['shoppableEnabled'] ?? true,
@@ -153,17 +156,24 @@ class Smart_Gallery_Block {
 					'showTitle'          => $cfg['showTitle'] ?? $attributes['showTitle'] ?? true,
 					'showCaption'        => $cfg['showCaption'] ?? $attributes['showCaption'] ?? false,
 					'lightboxEnabled'    => $cfg['lightboxEnabled'] ?? $attributes['lightboxEnabled'] ?? true,
+					'preloaderEnabled'   => $cfg['preloaderEnabled'] ?? $attributes['preloaderEnabled'] ?? true,
+					'preloaderStyle'     => $cfg['preloaderStyle'] ?? $attributes['preloaderStyle'] ?? 'spinner',
+					'instantFramesEnabled'=> $cfg['instantFramesEnabled'] ?? $attributes['instantFramesEnabled'] ?? true,
 					'borderRadius'       => $cfg['borderRadius'] ?? $attributes['borderRadius'] ?? 10,
 					'mattingSize'        => $cfg['mattingSize'] ?? $attributes['mattingSize'] ?? 0,
 					'frameStyle'         => $cfg['frameStyle'] ?? $attributes['frameStyle'] ?? 'none',
 					'shadowElevation'    => $cfg['shadowElevation'] ?? $attributes['shadowElevation'] ?? 'soft',
 					'canvasBackdrop'     => $cfg['canvasBackdrop'] ?? $attributes['canvasBackdrop'] ?? 'transparent',
 					'cardTheme'          => $cfg['cardTheme'] ?? $attributes['cardTheme'] ?? 'clean',
+					'hoverEffect'        => $cfg['hoverEffect'] ?? $attributes['hoverEffect'] ?? 'zoom',
 					'paginationType'     => $cfg['paginationType'] ?? $attributes['paginationType'] ?? 'none',
 					'itemsPerPage'       => $cfg['itemsPerPage'] ?? $attributes['itemsPerPage'] ?? 12,
 					'loadMoreStyle'      => $cfg['loadMoreStyle'] ?? $attributes['loadMoreStyle'] ?? 'pill',
 					'loadMoreLabel'      => $cfg['loadMoreLabel'] ?? $attributes['loadMoreLabel'] ?? 'Load More Photos',
 					'visibleFilterTags'  => $cfg['visibleFilterTags'] ?? $attributes['visibleFilterTags'] ?? array(),
+					'sortBy'             => $cfg['sortBy'] ?? $attributes['sortBy'] ?? 'manual',
+					'randomizeOrder'     => $cfg['randomizeOrder'] ?? $attributes['randomizeOrder'] ?? false,
+					'frontendSortEnabled'=> $cfg['frontendSortEnabled'] ?? $attributes['frontendSortEnabled'] ?? false,
 				) );
 			}
 		}
@@ -185,11 +195,14 @@ class Smart_Gallery_Block {
 				'gutterSize'         => 16,
 				'rowHeight'          => 240,
 				'filtersEnabled'     => true,
+				'filterMultiSelect'  => false,
+				'filterLogic'        => 'or',
+				'orderedFilterTags'  => array(),
 				'filterStyle'        => 'pills',
 				'filterAlign'        => 'left',
 				'showFilterCount'    => true,
 				'allFilterLabel'     => 'All',
-				'accentColor'        => '#22c55e',
+				'accentColor'        => '#607d66',
 				'colorFilterEnabled' => true,
 				'proofingEnabled'    => false,
 				'shoppableEnabled'   => true,
@@ -200,18 +213,56 @@ class Smart_Gallery_Block {
 				'showTitle'          => true,
 				'showCaption'        => false,
 				'lightboxEnabled'    => true,
+				'preloaderEnabled'   => true,
+				'preloaderStyle'     => 'spinner',
+				'instantFramesEnabled'=> true,
 				'borderRadius'       => 10,
 				'mattingSize'        => 0,
 				'frameStyle'         => 'none',
 				'shadowElevation'    => 'soft',
 				'canvasBackdrop'     => 'transparent',
 				'cardTheme'          => 'clean',
+				'hoverEffect'        => 'zoom',
 				'paginationType'     => 'none',
 				'itemsPerPage'       => 12,
 				'loadMoreStyle'      => 'pill',
 				'loadMoreLabel'      => 'Load More Photos',
+				'sortBy'             => 'manual',
+				'randomizeOrder'     => false,
+				'frontendSortEnabled'=> false,
 			)
 		);
+
+		// Fallback Pro features to free equivalents if Pro add-on is not active.
+		$is_pro = \Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT::is_pro_active();
+		if ( ! $is_pro ) {
+			if ( in_array( $attrs['layout'], array( 'pinwheel', 'bento' ), true ) ) {
+				$attrs['layout'] = 'grid';
+			}
+			if ( in_array( $attrs['cardTheme'], array( 'glass', 'glow' ), true ) ) {
+				$attrs['cardTheme'] = 'clean';
+			}
+			if ( in_array( $attrs['frameStyle'], array( 'black-metal', 'natural-oak', 'gold-brass', 'glass-float' ), true ) ) {
+				$attrs['frameStyle'] = 'none';
+			}
+			if ( in_array( $attrs['paginationType'], array( 'infinite', 'pages' ), true ) ) {
+				$attrs['paginationType'] = 'load-more';
+			}
+			if ( in_array( $attrs['preloaderStyle'], array( 'pulse', 'bar', 'logo', 'skeleton' ), true ) ) {
+				$attrs['preloaderStyle'] = 'spinner';
+			}
+			$attrs['colorFilterEnabled'] = false;
+			$attrs['proofingEnabled']    = false;
+			$attrs['shoppableEnabled']   = false;
+			$attrs['imageSpans']         = array();
+			$attrs['sectionsEnabled']    = false;
+			$attrs['sections']           = array();
+			$attrs['randomizeOrder']     = false;
+			$attrs['frontendSortEnabled']= false;
+			if ( ! in_array( $attrs['sortBy'], array( 'manual', 'name-asc', 'name-desc' ), true ) ) {
+				$attrs['sortBy'] = 'manual';
+			}
+		}
 
 		// Query items.
 		$query = new Gallery_Query(
@@ -226,6 +277,19 @@ class Smart_Gallery_Block {
 
 		if ( empty( $items ) ) {
 			return '';
+		}
+
+		// Apply server-rendered initial sort if not manual
+		if ( ! empty( $attrs['sortBy'] ) && 'manual' !== $attrs['sortBy'] ) {
+			if ( 'name-asc' === $attrs['sortBy'] ) {
+				usort( $items, static fn( $a, $b ) => strcasecmp( (string) ( $a['title'] ?? '' ), (string) ( $b['title'] ?? '' ) ) );
+			} elseif ( 'name-desc' === $attrs['sortBy'] ) {
+				usort( $items, static fn( $a, $b ) => strcasecmp( (string) ( $b['title'] ?? '' ), (string) ( $a['title'] ?? '' ) ) );
+			} elseif ( $is_pro && 'newest' === $attrs['sortBy'] ) {
+				usort( $items, static fn( $a, $b ) => ( $b['id'] ?? 0 ) <=> ( $a['id'] ?? 0 ) );
+			} elseif ( $is_pro && 'oldest' === $attrs['sortBy'] ) {
+				usort( $items, static fn( $a, $b ) => ( $a['id'] ?? 0 ) <=> ( $b['id'] ?? 0 ) );
+			}
 		}
 
 		// Enqueue frontend assets.
@@ -278,6 +342,7 @@ class Smart_Gallery_Block {
 			'matcha-gallery--theme-' . sanitize_html_class( $attrs['cardTheme'] ),
 			'matcha-gallery--frame-' . sanitize_html_class( $attrs['frameStyle'] ?? 'none' ),
 			'matcha-gallery--shadow-' . sanitize_html_class( $attrs['shadowElevation'] ?? 'soft' ),
+			'matcha-gallery--hover-' . sanitize_html_class( $attrs['hoverEffect'] ?? 'zoom' ),
 		);
 
 		if ( ! empty( $attrs['canvasBackdrop'] ) && 'transparent' !== $attrs['canvasBackdrop'] ) {
@@ -300,7 +365,7 @@ class Smart_Gallery_Block {
 			(int) $attrs['borderRadius'],
 			(int) $attrs['rowHeight'],
 			(int) $attrs['mattingSize'],
-			esc_attr( $attrs['accentColor'] ?? '#22c55e' )
+			esc_attr( $attrs['accentColor'] ?? '#607d66' )
 		);
 
 		$image_spans  = (array) ( $attrs['imageSpans'] ?? array() );
@@ -331,6 +396,9 @@ class Smart_Gallery_Block {
 			data-lightbox="<?php echo $attrs['lightboxEnabled'] ? 'true' : 'false'; ?>"
 			data-pagination="<?php echo esc_attr( $attrs['paginationType'] ?? 'none' ); ?>"
 			data-per-page="<?php echo (int) ( $attrs['itemsPerPage'] ?? 12 ); ?>"
+			data-sort-by="<?php echo esc_attr( $attrs['sortBy'] ?? 'manual' ); ?>"
+			data-randomize="<?php echo ( $is_pro && ! empty( $attrs['randomizeOrder'] ) ) ? 'true' : 'false'; ?>"
+			data-frontend-sort="<?php echo ( $is_pro && ! empty( $attrs['frontendSortEnabled'] ) ) ? 'true' : 'false'; ?>"
 			style="<?php echo esc_attr( $css_vars ); ?>"
 		>
 			<?php if ( $has_sections ) : ?>
@@ -347,7 +415,7 @@ class Smart_Gallery_Block {
 				</div>
 			<?php endif; ?>
 
-			<?php if ( $attrs['searchEnabled'] || ( $attrs['filtersEnabled'] && ! empty( $visible_tags ) ) || ( $attrs['colorFilterEnabled'] && ! empty( $sorted_colors ) ) ) : ?>
+			<?php if ( $attrs['searchEnabled'] || ( $attrs['filtersEnabled'] && ! empty( $visible_tags ) ) || ( $attrs['colorFilterEnabled'] && ! empty( $sorted_colors ) ) || ( $is_pro && ! empty( $attrs['frontendSortEnabled'] ) ) ) : ?>
 				<div class="matcha-gallery__toolbar">
 					<?php if ( $attrs['searchEnabled'] ) : ?>
 						<div class="matcha-gallery__search-wrap">
@@ -360,6 +428,19 @@ class Smart_Gallery_Block {
 								placeholder="<?php esc_attr_e( 'Search gallery...', 'matcha-gallery' ); ?>"
 								aria-label="<?php esc_attr_e( 'Search images', 'matcha-gallery' ); ?>"
 							/>
+						</div>
+					<?php endif; ?>
+
+					<?php if ( $is_pro && ! empty( $attrs['frontendSortEnabled'] ) ) : ?>
+						<div class="matcha-gallery__sort-wrap">
+							<select class="matcha-gallery__sort-select" aria-label="<?php esc_attr_e( 'Sort images', 'matcha-gallery' ); ?>">
+								<option value="default"><?php esc_html_e( 'Default Order', 'matcha-gallery' ); ?></option>
+								<option value="name-asc"><?php esc_html_e( 'Title (A → Z)', 'matcha-gallery' ); ?></option>
+								<option value="name-desc"><?php esc_html_e( 'Title (Z → A)', 'matcha-gallery' ); ?></option>
+								<option value="newest"><?php esc_html_e( 'Date Added (Newest)', 'matcha-gallery' ); ?></option>
+								<option value="oldest"><?php esc_html_e( 'Date Added (Oldest)', 'matcha-gallery' ); ?></option>
+								<option value="random"><?php esc_html_e( 'Random Shuffle', 'matcha-gallery' ); ?></option>
+							</select>
 						</div>
 					<?php endif; ?>
 
@@ -384,11 +465,28 @@ class Smart_Gallery_Block {
 						</div>
 					<?php endif; ?>
 
-					<?php if ( $attrs['filtersEnabled'] && ! empty( $visible_tags ) ) : ?>
-						<div class="matcha-gallery__filters matcha-gallery__filters--style-<?php echo esc_attr( $attrs['filterStyle'] ?? 'pills' ); ?> matcha-gallery__filters--align-<?php echo esc_attr( $attrs['filterAlign'] ?? 'left' ); ?> <?php echo empty( $attrs['showFilterCount'] ) ? 'matcha-gallery__filters--hide-count' : ''; ?>" role="toolbar" aria-label="<?php esc_attr_e( 'Gallery filters', 'matcha-gallery' ); ?>">
+					<?php if ( $attrs['filtersEnabled'] && ! empty( $visible_tags ) ) : 
+						// Sort tags by custom drag-and-drop order if available
+						$ordered_tags = ! empty( $attrs['orderedFilterTags'] ) ? $attrs['orderedFilterTags'] : array();
+						$sorted_visible_tags = array();
+						
+						// First, push tags that exist in the ordered list (in their defined order)
+						foreach ( $ordered_tags as $o_tag ) {
+							if ( in_array( $o_tag, $visible_tags, true ) ) {
+								$sorted_visible_tags[] = $o_tag;
+							}
+						}
+						// Then, append any remaining tags that weren't in the ordered list
+						foreach ( $visible_tags as $v_tag ) {
+							if ( ! in_array( $v_tag, $sorted_visible_tags, true ) ) {
+								$sorted_visible_tags[] = $v_tag;
+							}
+						}
+					?>
+						<div class="matcha-gallery__filters matcha-gallery__filters--style-<?php echo esc_attr( $attrs['filterStyle'] ?? 'pills' ); ?> matcha-gallery__filters--align-<?php echo esc_attr( $attrs['filterAlign'] ?? 'left' ); ?> <?php echo empty( $attrs['showFilterCount'] ) ? 'matcha-gallery__filters--hide-count' : ''; ?>" data-filter-logic="<?php echo esc_attr( $attrs['filterLogic'] ?? 'or' ); ?>" data-filter-multiselect="<?php echo $attrs['filterMultiSelect'] ? 'true' : 'false'; ?>" role="toolbar" aria-label="<?php esc_attr_e( 'Gallery filters', 'matcha-gallery' ); ?>">
 							<?php if ( $attrs['showAllFilter'] ) : ?>
 								<button
-									class="matcha-filter matcha-filter--active"
+									class="matcha-filter matcha-filter--active matcha-filter--all"
 									data-filter="*"
 									type="button"
 									aria-pressed="true"
@@ -400,7 +498,7 @@ class Smart_Gallery_Block {
 								</button>
 							<?php endif; ?>
 
-							<?php foreach ( $visible_tags as $tag ) : ?>
+							<?php foreach ( $sorted_visible_tags as $tag ) : ?>
 								<button
 									class="matcha-filter"
 									data-filter="<?php echo esc_attr( $tag ); ?>"
@@ -417,19 +515,31 @@ class Smart_Gallery_Block {
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
+			
+			<?php if ( $attrs['preloaderEnabled'] ) : ?>
+				<div class="matcha-gallery-preloader matcha-preloader--style-<?php echo esc_attr( $attrs['preloaderStyle'] ); ?>">
+					<?php if ( 'spinner' === $attrs['preloaderStyle'] ) : ?>
+						<div class="matcha-preloader-spinner"></div>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
 
-			<div class="matcha-gallery__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<?php
+			<div class="matcha-gallery__grid <?php echo $attrs['instantFramesEnabled'] ? 'matcha-gallery__grid--instant-frames' : ''; ?>">
+				<?php
+				$item_idx = 0;
+				$mosaic_rhythm = array( '2x2', '1x1', '1x1', '2x1', '1x1', '1x2', '1x1', '2x1' );
+				foreach ( $items as $item ) :
 					$item_tags   = array_map( 'sanitize_title', $item['keywords'] );
 					$tag_string  = implode( ' ', $item_tags );
 					$att_id      = (string) $item['id'];
 					$sec_string  = implode( ' ', $img_sections[ $att_id ] ?? array() );
-					$span        = $image_spans[ $att_id ] ?? '1x1';
-					$span_class  = 'mosaic' === $attrs['layout'] ? ' matcha-gallery__item--span-' . sanitize_html_class( $span ) : '';
+					$span        = ( $is_pro && ! empty( $image_spans[ $att_id ] ) && is_string( $image_spans[ $att_id ] ) )
+						? $image_spans[ $att_id ]
+						: ( 'mosaic' === $attrs['layout'] ? $mosaic_rhythm[ $item_idx % count( $mosaic_rhythm ) ] : ( is_string( $image_spans[ $att_id ] ?? null ) ? $image_spans[ $att_id ] : '1x1' ) );
+					$span_class  = in_array( $attrs['layout'], array( 'mosaic', 'pinwheel' ), true ) ? ' matcha-gallery__item--span-' . sanitize_html_class( $span ) : '';
 					$item_colors = implode( ',', (array) ( $item['colors'] ?? array() ) );
 					$fp          = $focal_points[ $att_id ] ?? ( $item['focal_point'] ?? array( 'x' => 50, 'y' => 50 ) );
-					$zoom        = (float) ( $fp['zoom'] ?? 1.0 );
+					$zoom        = $is_pro ? (float) ( $fp['zoom'] ?? 1.0 ) : 1.0;
 					$img_style   = sprintf(
 						'object-position: %d%% %d%%; transform: scale(%.2f); transform-origin: %d%% %d%%;',
 						(int) $fp['x'],
@@ -439,6 +549,32 @@ class Smart_Gallery_Block {
 						(int) $fp['y']
 					);
 					$link        = $image_links[ $att_id ] ?? null;
+
+					$item_extra_style = '';
+					
+					// Calculate Aspect Ratio for Zero-CLS Frame Reservation
+					$w = max( 1, (int) ( $item['width'] ?? 800 ) );
+					$h = max( 1, (int) ( $item['height'] ?? 600 ) );
+					$aspect_ratio = round( $w / $h, 4 );
+					
+					if ( $attrs['instantFramesEnabled'] ) {
+						if ( 'grid' === $attrs['layout'] ) {
+							$item_extra_style .= '--matcha-aspect: 1;';
+						} elseif ( 'justified' !== $attrs['layout'] ) {
+							$item_extra_style .= sprintf( '--matcha-aspect: %s;', $aspect_ratio );
+						}
+					}
+					
+					if ( 'justified' === $attrs['layout'] ) {
+						$item_extra_style .= sprintf(
+							' flex: %.3f 1 calc(var(--matcha-row-height) * %.3f); max-width: calc(var(--matcha-row-height) * %.3f * 2);',
+							$aspect_ratio,
+							$aspect_ratio,
+							$aspect_ratio
+						);
+					}
+					
+					$style_attr = ! empty( $item_extra_style ) ? 'style="' . esc_attr( trim( $item_extra_style ) ) . '"' : '';
 					?>
 					<div
 						class="matcha-gallery__item<?php echo ! empty( $item['ai_generated'] ) ? ' matcha-gallery__item--ai' : ''; ?><?php echo esc_attr( $span_class ); ?>"
@@ -449,6 +585,8 @@ class Smart_Gallery_Block {
 						data-full-src="<?php echo esc_url( $item['full_url'] ); ?>"
 						data-title="<?php echo esc_attr( $item['title'] ); ?>"
 						data-caption="<?php echo esc_attr( $item['caption'] ); ?>"
+						data-date="<?php echo esc_attr( get_post_time( 'U', true, $att_id ) ); ?>"
+						<?php echo $style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					>
 						<div class="matcha-gallery__item-inner">
 							<img
@@ -506,7 +644,7 @@ class Smart_Gallery_Block {
 							<?php endif; ?>
 						</div>
 					</div>
-				<?php endforeach; ?>
+				<?php $item_idx++; endforeach; ?>
 			</div>
 
 			<?php if ( ! empty( $attrs['paginationType'] ) && 'none' !== $attrs['paginationType'] ) : ?>
@@ -525,10 +663,10 @@ class Smart_Gallery_Block {
 			<?php if ( $attrs['proofingEnabled'] ) : ?>
 				<div class="matcha-gallery__favorites-tray">
 					<div class="matcha-gallery__favorites-info">
-						❤️ <strong class="matcha-fav-count">0</strong> <?php esc_html_e( 'Favorites Selected', 'matcha-gallery' ); ?>
+						<svg width="15" height="15" viewBox="0 0 24 24" fill="#ef4444" stroke="#ef4444" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg><strong class="matcha-fav-count">0</strong> <?php esc_html_e( 'Favorites Selected', 'matcha-gallery' ); ?>
 					</div>
 					<button type="button" class="matcha-gallery__export-btn button button-small">
-						📋 <?php esc_html_e( 'Copy ID List', 'matcha-gallery' ); ?>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><?php esc_html_e( 'Copy ID List', 'matcha-gallery' ); ?>
 					</button>
 				</div>
 			<?php endif; ?>
@@ -539,21 +677,26 @@ class Smart_Gallery_Block {
 	}
 
 	/**
-	 * Enqueue frontend CSS and JS when the block is rendered.
+	 * Enqueue frontend CSS and JS when the block or widget is rendered.
 	 */
-	private static function enqueue_frontend_assets(): void {
+	public static function enqueue_frontend_assets(): void {
+		$css_file = MATCHA_GALLERY_PATH . 'assets/css/frontend-gallery.css';
+		$js_file  = MATCHA_GALLERY_PATH . 'assets/js/frontend-gallery.js';
+		$css_ver  = file_exists( $css_file ) ? (string) filemtime( $css_file ) : MATCHA_GALLERY_VERSION;
+		$js_ver   = file_exists( $js_file ) ? (string) filemtime( $js_file ) : MATCHA_GALLERY_VERSION;
+
 		wp_enqueue_style(
 			'matcha-gallery-frontend',
 			MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css',
 			array(),
-			MATCHA_GALLERY_VERSION
+			$css_ver
 		);
 
 		wp_enqueue_script(
 			'matcha-gallery-frontend',
 			MATCHA_GALLERY_URL . 'assets/js/frontend-gallery.js',
 			array(),
-			MATCHA_GALLERY_VERSION,
+			$js_ver,
 			true
 		);
 	}

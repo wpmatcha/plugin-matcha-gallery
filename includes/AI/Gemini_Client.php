@@ -107,33 +107,57 @@ class Gemini_Client implements Client_Interface {
 			'generationConfig'  => array(
 				'responseMimeType' => 'application/json',
 				'temperature'      => 0.2,
-				'maxOutputTokens'  => 1000,
+				'maxOutputTokens'  => 4000,
+				'thinkingConfig'   => array(
+					'thinkingBudget' => 0,
+				),
 			),
 		);
 
-		$response = wp_remote_post(
-			$endpoint,
-			array(
-				'timeout' => 60,
-				'headers' => array(
-					'Content-Type' => 'application/json',
-				),
-				'body'    => wp_json_encode( $body ),
-			)
-		);
+		$max_attempts = 3;
+		$attempt      = 0;
+		$response     = null;
+		$status_code  = 0;
+		$raw_body     = '';
 
-		if ( is_wp_error( $response ) ) {
-			throw new \RuntimeException(
-				sprintf(
-					/* translators: %s: Error message */
-					esc_html__( 'Matcha AI: Gemini request failed — %s', 'matcha-gallery' ),
-					esc_html( $response->get_error_message() )
+		while ( $attempt < $max_attempts ) {
+			$attempt++;
+			$response = wp_remote_post(
+				$endpoint,
+				array(
+					'timeout' => 60,
+					'headers' => array(
+						'Content-Type' => 'application/json',
+					),
+					'body'    => wp_json_encode( $body ),
 				)
 			);
-		}
 
-		$status_code = wp_remote_retrieve_response_code( $response );
-		$raw_body    = wp_remote_retrieve_body( $response );
+			if ( is_wp_error( $response ) ) {
+				if ( $attempt < $max_attempts ) {
+					sleep( 2 );
+					continue;
+				}
+				throw new \RuntimeException(
+					sprintf(
+						/* translators: %s: Error message */
+						esc_html__( 'Matcha AI: Gemini request failed — %s', 'matcha-gallery' ),
+						esc_html( $response->get_error_message() )
+					)
+				);
+			}
+
+			$status_code = wp_remote_retrieve_response_code( $response );
+			$raw_body    = wp_remote_retrieve_body( $response );
+
+			// If rate-limited (429) or temporary server error (503), back off and retry.
+			if ( ( 429 === $status_code || 503 === $status_code ) && $attempt < $max_attempts ) {
+				sleep( 2 * $attempt );
+				continue;
+			}
+
+			break;
+		}
 
 		if ( $status_code < 200 || $status_code >= 300 ) {
 			$data = json_decode( $raw_body, true );
@@ -157,7 +181,11 @@ class Gemini_Client implements Client_Interface {
 			);
 		}
 
-		$metadata = json_decode( trim( $text ), true );
+		// Strip markdown code fences if present
+		$cleaned_text = preg_replace( '/^```(?:json)?\s*/i', '', trim( $text ) );
+		$cleaned_text = preg_replace( '/\s*```$/', '', $cleaned_text );
+
+		$metadata = json_decode( trim( $cleaned_text ), true );
 		if ( ! is_array( $metadata ) ) {
 			throw new \RuntimeException(
 				sprintf(

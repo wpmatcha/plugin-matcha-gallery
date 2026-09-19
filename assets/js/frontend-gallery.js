@@ -43,6 +43,10 @@
 		}
 
 		init() {
+			if ( this.el.dataset.randomize === 'true' ) {
+				this.shuffleItems();
+			}
+
 			this.bindImageLoading();
 			this.buildTagMap();
 			this.bindSections();
@@ -51,6 +55,10 @@
 			this.bindColorSwatches();
 			this.bindProofing();
 			this.bindPagination();
+
+			if ( this.el.dataset.frontendSort === 'true' ) {
+				this.bindSort();
+			}
 
 			if ( this.lightboxEnabled ) {
 				this.bindLightbox();
@@ -70,16 +78,46 @@
 		   ------------------------------------------------------------------- */
 
 		bindImageLoading() {
+			let loadedCount = 0;
+			const total = this.items.length;
+			const preloader = this.el.querySelector('.matcha-gallery-preloader');
+			
+			const checkComplete = () => {
+				if (loadedCount >= total) {
+					if (preloader) preloader.classList.add('is-hidden');
+				}
+			};
+
+			if (total === 0) checkComplete();
+
 			this.items.forEach( ( item ) => {
 				const img = item.querySelector( 'img' );
-				if ( ! img ) return;
+				if ( ! img ) {
+					loadedCount++;
+					return;
+				}
 				if ( img.complete && img.naturalWidth > 0 ) {
 					img.classList.add( 'is-loaded' );
+					item.classList.add( 'is-loaded' );
+					loadedCount++;
 				} else {
-					img.addEventListener( 'load', () => img.classList.add( 'is-loaded' ) );
-					img.addEventListener( 'error', () => img.classList.add( 'is-loaded' ) );
+					const onLoad = () => {
+						img.classList.add( 'is-loaded' );
+						item.classList.add( 'is-loaded' );
+						loadedCount++;
+						checkComplete();
+					};
+					img.addEventListener( 'load', onLoad, { once: true } );
+					img.addEventListener( 'error', onLoad, { once: true } );
 				}
 			} );
+			
+			checkComplete();
+			
+			// Failsafe timeout in case images hang
+			setTimeout(() => {
+				if (preloader) preloader.classList.add('is-hidden');
+			}, 3000);
 		}
 
 		/* -------------------------------------------------------------------
@@ -122,6 +160,12 @@
 		}
 
 		bindFilters() {
+			this.filterLogic = this.filterBar ? (this.filterBar.dataset.filterLogic || 'or') : 'or';
+			this.isMultiSelect = this.filterBar ? (this.filterBar.dataset.filterMultiselect === 'true') : false;
+			this.activeFilters = new Set();
+			
+			if (!this.isMultiSelect) this.activeFilter = '*';
+
 			this.filterButtons.forEach( ( btn ) => {
 				btn.addEventListener( 'click', () => {
 					this.setFilter( btn.dataset.filter );
@@ -239,16 +283,107 @@
 			}
 		}
 
+		/* -------------------------------------------------------------------
+		   Client-Side Shuffle (Randomize on Load - PRO)
+		   ------------------------------------------------------------------- */
+
+		shuffleItems() {
+			if ( ! this.grid || this.items.length <= 1 ) return;
+			for ( let i = this.items.length - 1; i > 0; i-- ) {
+				const j = Math.floor( Math.random() * ( i + 1 ) );
+				[ this.items[ i ], this.items[ j ] ] = [ this.items[ j ], this.items[ i ] ];
+			}
+			this.items.forEach( ( item ) => this.grid.appendChild( item ) );
+		}
+
+		/* -------------------------------------------------------------------
+		   Visitor Interactive Sorting (PRO)
+		   ------------------------------------------------------------------- */
+
+		bindSort() {
+			const sortSelect = this.el.querySelector( '.matcha-gallery__sort-select' );
+			if ( ! sortSelect || ! this.grid ) return;
+
+			// Store snapshot of initial DOM items order
+			const initialOrder = [ ...this.items ];
+
+			sortSelect.addEventListener( 'change', ( e ) => {
+				const val = e.target.value;
+				if ( val === 'default' ) {
+					this.items = [ ...initialOrder ];
+				} else if ( val === 'name-asc' ) {
+					this.items.sort( ( a, b ) => {
+						const nameA = ( a.dataset.title || '' ).toLowerCase();
+						const nameB = ( b.dataset.title || '' ).toLowerCase();
+						return nameA.localeCompare( nameB );
+					} );
+				} else if ( val === 'name-desc' ) {
+					this.items.sort( ( a, b ) => {
+						const nameA = ( a.dataset.title || '' ).toLowerCase();
+						const nameB = ( b.dataset.title || '' ).toLowerCase();
+						return nameB.localeCompare( nameA );
+					} );
+				} else if ( val === 'newest' ) {
+					this.items.sort( ( a, b ) => {
+						const dateA = parseInt( a.dataset.date || a.dataset.id || '0', 10 );
+						const dateB = parseInt( b.dataset.date || b.dataset.id || '0', 10 );
+						return dateB - dateA;
+					} );
+				} else if ( val === 'oldest' ) {
+					this.items.sort( ( a, b ) => {
+						const dateA = parseInt( a.dataset.date || a.dataset.id || '0', 10 );
+						const dateB = parseInt( b.dataset.date || b.dataset.id || '0', 10 );
+						return dateA - dateB;
+					} );
+				} else if ( val === 'random' ) {
+					for ( let i = this.items.length - 1; i > 0; i-- ) {
+						const j = Math.floor( Math.random() * ( i + 1 ) );
+						[ this.items[ i ], this.items[ j ] ] = [ this.items[ j ], this.items[ i ] ];
+					}
+				}
+
+				this.items.forEach( ( item ) => this.grid.appendChild( item ) );
+				this.currentPage = 1;
+				this.applyFilters();
+			} );
+		}
+
 		setFilter( filter ) {
-			this.activeFilter = filter;
+			if (this.isMultiSelect) {
+				if (filter === '*') {
+					this.activeFilters.clear();
+				} else {
+					if (this.activeFilters.has(filter)) {
+						this.activeFilters.delete(filter);
+					} else {
+						this.activeFilters.add(filter);
+					}
+				}
+			} else {
+				this.activeFilter = filter;
+			}
 			this.currentPage = 1;
 
 			// Update button states.
-			this.filterButtons.forEach( ( btn ) => {
-				const isActive = btn.dataset.filter === filter;
-				btn.classList.toggle( 'matcha-filter--active', isActive );
-				btn.setAttribute( 'aria-pressed', isActive ? 'true' : 'false' );
-			} );
+			if (this.isMultiSelect) {
+				this.filterButtons.forEach( ( btn ) => {
+					if (btn.dataset.filter === '*') {
+						const isActive = this.activeFilters.size === 0;
+						btn.classList.toggle( 'matcha-filter--active', isActive );
+						btn.setAttribute( 'aria-pressed', isActive ? 'true' : 'false' );
+					} else {
+						const isActive = this.activeFilters.has(btn.dataset.filter);
+						btn.classList.toggle( 'matcha-filter--active', isActive );
+						btn.setAttribute( 'aria-pressed', isActive ? 'true' : 'false' );
+					}
+				} );
+			} else {
+				this.filterButtons.forEach( ( btn ) => {
+					const isActive = btn.dataset.filter === filter;
+					btn.classList.toggle( 'matcha-filter--active', isActive );
+					btn.setAttribute( 'aria-pressed', isActive ? 'true' : 'false' );
+				} );
+			}
 
 			this.applyFilters();
 		}
@@ -277,7 +412,18 @@
 				const alt = ( item.querySelector( 'img' )?.alt || '' ).toLowerCase();
 
 				const matchesSection = sec === '*' || sections.includes( sec );
-				const matchesTag = f === '*' || tags.includes( f );
+				
+				let matchesTag = true;
+				if (this.isMultiSelect && this.activeFilters.size > 0) {
+					if (this.filterLogic === 'and') {
+						matchesTag = Array.from(this.activeFilters).every(t => tags.includes(t));
+					} else {
+						matchesTag = Array.from(this.activeFilters).some(t => tags.includes(t));
+					}
+				} else if (!this.isMultiSelect) {
+					matchesTag = f === '*' || tags.includes( f );
+				}
+				
 				const matchesSearch =
 					! q ||
 					tags.some( ( t ) => t.includes( q ) ) ||

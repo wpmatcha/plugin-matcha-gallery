@@ -91,7 +91,7 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 		<InspectorControls>
 			{ /* Studio Gallery Connection Panel */ }
 			<PanelBody
-				title={ __( '🍵 Matcha Studio Gallery', 'matcha-gallery' ) }
+				title={ __( 'Matcha Studio Gallery', 'matcha-gallery' ) }
 				initialOpen={ true }
 			>
 				<SelectControl
@@ -193,19 +193,34 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 					label={ __( 'Layout Type', 'matcha-gallery' ) }
 					value={ layout }
 					options={ [
-						{ label: __( 'Grid', 'matcha-gallery' ), value: 'grid' },
-						{ label: __( 'Masonry', 'matcha-gallery' ), value: 'masonry' },
+						{ label: __( 'Classic Grid', 'matcha-gallery' ), value: 'grid' },
+						{ label: __( 'Pinterest Masonry', 'matcha-gallery' ), value: 'masonry' },
+						{ label: __( 'Flickr Justified Rows', 'matcha-gallery' ), value: 'justified' },
+						{ label: __( 'PhotoBlocks Mosaic', 'matcha-gallery' ), value: 'mosaic' },
+						{ label: __( 'Bento Showcase', 'matcha-gallery' ), value: 'bento' },
+						{ label: __( 'Pinwheel Spiral', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
 					onChange={ ( value ) => setAttributes( { layout: value } ) }
 				/>
 
-				<RangeControl
-					label={ __( 'Columns (Desktop)', 'matcha-gallery' ) }
-					value={ columns }
-					onChange={ ( value ) => setAttributes( { columns: value } ) }
-					min={ 1 }
-					max={ 6 }
-				/>
+				{ layout === 'justified' ? (
+					<RangeControl
+						label={ __( 'Row Height (px)', 'matcha-gallery' ) }
+						value={ attributes.rowHeight || 240 }
+						onChange={ ( value ) => setAttributes( { rowHeight: value } ) }
+						min={ 120 }
+						max={ 400 }
+						step={ 10 }
+					/>
+				) : (
+					<RangeControl
+						label={ __( 'Columns (Desktop)', 'matcha-gallery' ) }
+						value={ columns }
+						onChange={ ( value ) => setAttributes( { columns: value } ) }
+						min={ 1 }
+						max={ 6 }
+					/>
+				) }
 
 				<RangeControl
 					label={ __( 'Columns (Tablet)', 'matcha-gallery' ) }
@@ -292,6 +307,19 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 					onChange={ ( value ) =>
 						setAttributes( { lightboxEnabled: value } )
 					}
+				/>
+
+				<SelectControl
+					label={ __( 'Hover Animation', 'matcha-gallery' ) }
+					value={ attributes.hoverEffect || 'zoom' }
+					options={ [
+						{ label: __( 'Smooth Zoom (Default)', 'matcha-gallery' ), value: 'zoom' },
+						{ label: __( '3D Elevation Lift', 'matcha-gallery' ), value: 'lift' },
+						{ label: __( 'Matcha Neon Glow', 'matcha-gallery' ), value: 'glow' },
+						{ label: __( 'Monochrome to Color', 'matcha-gallery' ), value: 'grayscale' },
+						{ label: __( 'Flat (No Animation)', 'matcha-gallery' ), value: 'none' },
+					] }
+					onChange={ ( value ) => setAttributes( { hoverEffect: value } ) }
 				/>
 			</PanelBody>
 		</InspectorControls>

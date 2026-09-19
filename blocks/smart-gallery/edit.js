@@ -6,7 +6,8 @@
  * @package matcha-gallery
  */
 
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, BlockControls } from '@wordpress/block-editor';
+import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 
@@ -109,6 +110,17 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	return (
 		<div { ...blockProps }>
+			<BlockControls>
+				<ToolbarGroup>
+					<ToolbarButton
+						icon="art"
+						label={ galleryId > 0 ? 'Edit Gallery in Matcha Studio' : 'Open Matcha Studio Builder' }
+						onClick={ () => window.open( studioUrl, '_blank' ) }
+					>
+						{ galleryId > 0 ? 'Edit in Studio ↗' : 'Studio Builder ↗' }
+					</ToolbarButton>
+				</ToolbarGroup>
+			</BlockControls>
 			<GalleryInspectorControls
 				attributes={ attributes }
 				setAttributes={ setAttributes }
@@ -116,7 +128,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			{ galleryId > 0 ? (
 				<div style={{padding:'10px 14px',background:'#f0fdf4',border:'1px solid #bbf7d0',borderRadius:'8px',marginBottom:'12px',fontSize:'12px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
 					<div>
-						<strong style={{color:'#166534'}}>🍵 Matcha Studio Gallery #{galleryId}</strong>
+						<strong style={{color:'#166534'}}>Matcha Studio Gallery #{galleryId}</strong>
 						<span style={{marginLeft:'8px',color:'#15803d',fontSize:'11px'}}>({effectiveImageIds.length} photos)</span>
 					</div>
 					<a href={studioUrl} target="_blank" rel="noreferrer" style={{padding:'4px 10px',background:'#16a34a',color:'#fff',borderRadius:'4px',textDecoration:'none',fontWeight:700,fontSize:'11px'}}>Edit in Studio ↗</a>

@@ -170,72 +170,105 @@ class Settings_Page {
 		$settings = Plugin::get_all_settings();
 		$stats    = self::get_stats();
 		$keywords = AI_Keywords_Taxonomy::get_all_terms( array( 'number' => 30, 'orderby' => 'count', 'order' => 'DESC' ) );
+		$is_pro   = class_exists( '\\MatchaGallery\\Gallery\\Gallery_CPT' ) ? \MatchaGallery\Gallery\Gallery_CPT::is_pro_active() : Pro_Features::is_active();
 		?>
-		<div class="wrap matcha-dashboard">
-			<!-- Header -->
-			<div class="matcha-dash-header">
-				<div class="matcha-dash-header__brand">
-					<div class="matcha-logo-icon" style="background:linear-gradient(135deg, #22c55e, #15803d);color:#fff;display:flex;align-items:center;justify-content:center;border-radius:10px;width:38px;height:38px;">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+		<div class="wrap matcha-hub-wrap">
+			<?php \Matcha_AI_Smart_Gallery\Admin\Admin_Header::render( 'settings' ); ?>
+
+			<div class="matcha-container">
+				<!-- Astra-Style Greeting Bar -->
+				<div class="matcha-page-title-bar">
+					<div class="matcha-page-title-bar__left">
+						<div class="matcha-greeting-tag">
+							<span><?php printf( esc_html__( 'Hello %s', 'matcha-gallery' ), esc_html( wp_get_current_user()->display_name ?: 'Admin' ) ); ?></span>
+							<span class="matcha-edition-pill"><?php echo $is_pro ? esc_html__( 'PRO VERSION', 'matcha-gallery' ) : esc_html__( 'FREE VERSION', 'matcha-gallery' ); ?></span>
+						</div>
+						<h1 class="matcha-page-main-heading"><?php esc_html_e( 'Matcha AI Settings', 'matcha-gallery' ); ?></h1>
+						<p class="matcha-page-sub-heading">
+							<?php esc_html_e( 'Configure neural vision models, automatic media library tagging, smart taxonomy keywords, and prompt automation presets.', 'matcha-gallery' ); ?>
+						</p>
 					</div>
-					<div>
-						<h1 class="matcha-dash-title"><?php esc_html_e( 'Matcha Gallery', 'matcha-gallery' ); ?></h1>
-						<p class="matcha-dash-subtitle"><?php esc_html_e( 'AI Vision Metadata & Smart Dynamic Photo Walls', 'matcha-gallery' ); ?></p>
+					<div class="matcha-page-title-bar__actions">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=matcha-ai-hub' ) ); ?>" class="matcha-btn-secondary">
+							<span class="dashicons dashicons-format-gallery"></span> <?php esc_html_e( 'All Galleries', 'matcha-gallery' ); ?>
+						</a>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=matcha-studio' ) ); ?>" class="matcha-btn-primary">
+							<span class="dashicons dashicons-plus-alt2"></span> <?php esc_html_e( 'Create Gallery', 'matcha-gallery' ); ?>
+						</a>
 					</div>
 				</div>
-				<div class="matcha-dash-header__meta">
-					<span class="matcha-version-pill">v<?php echo esc_html( MATCHA_GALLERY_VERSION ); ?></span>
-					<span class="matcha-status-pill <?php echo ! empty( $settings['api_key'] ) ? 'is-connected' : 'is-disconnected'; ?>">
-						<span class="matcha-status-dot"></span>
-						<?php echo ! empty( $settings['api_key'] ) ? esc_html__( 'AI Ready', 'matcha-gallery' ) : esc_html__( 'API Key Required', 'matcha-gallery' ); ?>
-					</span>
+
+			<!-- ==========================================
+			     2. KPI METRICS CARDS
+			     ========================================== -->
+			<div class="matcha-kpi-grid">
+				<div class="matcha-kpi-card">
+					<div class="matcha-kpi-card__icon matcha-kpi-card__icon--blue">
+						<span class="dashicons dashicons-admin-media"></span>
+					</div>
+					<div class="matcha-kpi-card__info">
+						<span class="matcha-kpi-card__value"><?php echo (int) $stats['total_images']; ?></span>
+						<span class="matcha-kpi-card__label"><?php esc_html_e( 'Media Library Images', 'matcha-gallery' ); ?></span>
+					</div>
+				</div>
+				<div class="matcha-kpi-card">
+					<div class="matcha-kpi-card__icon matcha-kpi-card__icon--green">
+						<span class="dashicons dashicons-visibility"></span>
+					</div>
+					<div class="matcha-kpi-card__info">
+						<span class="matcha-kpi-card__value"><?php echo (int) $stats['ai_tagged_images']; ?></span>
+						<span class="matcha-kpi-card__label"><?php esc_html_e( 'AI Enriched Photos', 'matcha-gallery' ); ?></span>
+					</div>
+				</div>
+				<div class="matcha-kpi-card">
+					<div class="matcha-kpi-card__icon matcha-kpi-card__icon--purple">
+						<span class="dashicons dashicons-tag"></span>
+					</div>
+					<div class="matcha-kpi-card__info">
+						<span class="matcha-kpi-card__value"><?php echo (int) $stats['total_keywords']; ?></span>
+						<span class="matcha-kpi-card__label"><?php esc_html_e( 'Unique Vision Keywords', 'matcha-gallery' ); ?></span>
+					</div>
+				</div>
+				<div class="matcha-kpi-card">
+					<div class="matcha-kpi-card__icon matcha-kpi-card__icon--amber">
+						<span class="dashicons dashicons-chart-pie"></span>
+					</div>
+					<div class="matcha-kpi-card__info">
+						<span class="matcha-kpi-card__value"><?php echo (int) $stats['coverage_percent']; ?>%</span>
+						<span class="matcha-kpi-card__label"><?php esc_html_e( 'Enrichment Coverage', 'matcha-gallery' ); ?></span>
+					</div>
 				</div>
 			</div>
 
-			<!-- Stats Banner -->
-			<div class="matcha-stats-grid">
-				<div class="matcha-stat-card">
-					<div class="matcha-stat-card__number"><?php echo (int) $stats['total_images']; ?></div>
-					<div class="matcha-stat-card__label"><?php esc_html_e( 'Media Library Images', 'matcha-gallery' ); ?></div>
-				</div>
-				<div class="matcha-stat-card matcha-stat-card--highlight">
-					<div class="matcha-stat-card__number"><?php echo (int) $stats['ai_tagged_images']; ?></div>
-					<div class="matcha-stat-card__label"><?php esc_html_e( 'AI Tagged Images', 'matcha-gallery' ); ?></div>
-				</div>
-				<div class="matcha-stat-card">
-					<div class="matcha-stat-card__number"><?php echo (int) $stats['total_keywords']; ?></div>
-					<div class="matcha-stat-card__label"><?php esc_html_e( 'Unique AI Keywords', 'matcha-gallery' ); ?></div>
-				</div>
-				<div class="matcha-stat-card">
-					<div class="matcha-stat-card__number"><?php echo (int) $stats['coverage_percent']; ?>%</div>
-					<div class="matcha-stat-card__label"><?php esc_html_e( 'AI Enrichment Coverage', 'matcha-gallery' ); ?></div>
-				</div>
-			</div>
+			<!-- ==========================================
+			     3. TWO-COLUMN CONTENT + SIDEBAR LAYOUT
+			     ========================================== -->
+			<div class="matcha-two-col">
+				<div class="matcha-main-col">
+					<!-- Navigation Tabs -->
+					<div class="matcha-tabs-nav">
+						<button type="button" class="matcha-tab-btn is-active" data-tab="tab-api">
+							<span class="dashicons dashicons-admin-network"></span> <?php esc_html_e( 'AI Provider & API', 'matcha-gallery' ); ?>
+						</button>
+						<button type="button" class="matcha-tab-btn" data-tab="tab-automation">
+							<span class="dashicons dashicons-admin-settings"></span> <?php esc_html_e( 'Automation & Rules', 'matcha-gallery' ); ?>
+						</button>
+						<button type="button" class="matcha-tab-btn" data-tab="tab-shortcode">
+							<span class="dashicons dashicons-shortcode"></span> <?php esc_html_e( 'Shortcode Builder', 'matcha-gallery' ); ?>
+						</button>
+						<button type="button" class="matcha-tab-btn" data-tab="tab-keywords">
+							<span class="dashicons dashicons-tag"></span> <?php esc_html_e( 'AI Keywords Cloud', 'matcha-gallery' ); ?>
+						</button>
+						<button type="button" class="matcha-tab-btn" data-tab="tab-pro">
+							<span class="dashicons dashicons-star-filled" style="color:#fbc02d;"></span> <?php esc_html_e( 'Pro Features', 'matcha-gallery' ); ?>
+						</button>
+					</div>
 
-			<!-- Navigation Tabs -->
-			<div class="matcha-tabs-nav">
-				<button type="button" class="matcha-tab-btn is-active" data-tab="tab-api">
-					<span class="dashicons dashicons-admin-network"></span> <?php esc_html_e( 'AI Provider & API', 'matcha-gallery' ); ?>
-				</button>
-				<button type="button" class="matcha-tab-btn" data-tab="tab-automation">
-					<span class="dashicons dashicons-admin-settings"></span> <?php esc_html_e( 'Automation & Rules', 'matcha-gallery' ); ?>
-				</button>
-				<button type="button" class="matcha-tab-btn" data-tab="tab-shortcode">
-					<span class="dashicons dashicons-shortcode"></span> <?php esc_html_e( 'Shortcode Builder', 'matcha-gallery' ); ?>
-				</button>
-				<button type="button" class="matcha-tab-btn" data-tab="tab-keywords">
-					<span class="dashicons dashicons-tag"></span> <?php esc_html_e( 'AI Keywords Cloud', 'matcha-gallery' ); ?>
-				</button>
-				<button type="button" class="matcha-tab-btn" data-tab="tab-pro">
-					<span class="dashicons dashicons-star-filled" style="color:#fbc02d;"></span> <?php esc_html_e( 'Pro Features', 'matcha-gallery' ); ?>
-				</button>
-			</div>
+					<form method="post" action="options.php" class="matcha-form">
+						<?php settings_fields( self::OPTION_GROUP ); ?>
 
-			<form method="post" action="options.php" class="matcha-form">
-				<?php settings_fields( self::OPTION_GROUP ); ?>
-
-				<!-- Tab 1: AI Provider & API -->
-				<div id="tab-api" class="matcha-tab-content is-active">
+						<!-- Tab 1: AI Provider & API -->
+						<div id="tab-api" class="matcha-tab-content is-active">
 					<div class="matcha-card">
 						<div class="matcha-card__header">
 							<h3><?php esc_html_e( 'AI Provider Credentials', 'matcha-gallery' ); ?></h3>
@@ -250,7 +283,7 @@ class Settings_Page {
 							<?php wp_nonce_field( 'matcha_ai_generate', 'matcha_api_test_nonce' ); ?>
 							<div class="matcha-input-group">
 								<input type="password" id="matcha_api_key" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_key]" value="<?php echo esc_attr( $settings['api_key'] ?? '' ); ?>" class="regular-text" placeholder="sk-proj-..." autocomplete="off" />
-								<button type="button" id="matcha-toggle-key-visibility" class="button" title="<?php esc_attr_e( 'Show / Hide Key', 'matcha-gallery' ); ?>">👁</button>
+								<button type="button" id="matcha-toggle-key-visibility" class="button" title="<?php esc_attr_e( 'Show / Hide Key', 'matcha-gallery' ); ?>"><span class="dashicons dashicons-visibility" style="vertical-align:middle;line-height:1.4;"></span></button>
 								<button type="button" id="matcha-test-api-btn" class="button button-secondary">
 									<span class="dashicons dashicons-update" style="vertical-align:middle; font-size:16px;"></span>
 									<?php esc_html_e( 'Test Connection', 'matcha-gallery' ); ?>
@@ -266,13 +299,13 @@ class Settings_Page {
 							<label><strong><?php esc_html_e( 'Select AI Provider Preset', 'matcha-gallery' ); ?></strong></label>
 							<div class="matcha-quick-presets" style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px;">
 								<button type="button" class="button matcha-provider-preset-btn" data-model="gpt-4o-mini" data-endpoint="https://api.openai.com/v1/chat/completions">
-									🟢 <strong>OpenAI</strong> (gpt-4o-mini)
+									<span class="matcha-dot matcha-dot--green"></span> <strong>OpenAI</strong> (gpt-4o-mini)
 								</button>
 								<button type="button" class="button matcha-provider-preset-btn" data-model="gemini-1.5-flash" data-endpoint="https://generativelanguage.googleapis.com/v1beta/openai/chat/completions">
-									🔵 <strong>Google Gemini</strong> (gemini-1.5-flash)
+									<span class="matcha-dot matcha-dot--blue"></span> <strong>Google Gemini</strong> (gemini-1.5-flash)
 								</button>
 								<button type="button" class="button matcha-provider-preset-btn" data-model="google/gemini-flash-1.5" data-endpoint="https://openrouter.ai/api/v1/chat/completions">
-									🟣 <strong>OpenRouter</strong> (Multi-provider)
+									<span class="matcha-dot matcha-dot--purple"></span> <strong>OpenRouter</strong> (Multi-provider)
 								</button>
 							</div>
 						</div>
@@ -444,7 +477,83 @@ class Settings_Page {
 					<?php submit_button( __( 'Save Changes', 'matcha-gallery' ), 'primary button-hero', 'submit', false ); ?>
 				</div>
 			</form>
-		</div>
+		</div><!-- .matcha-main-col -->
+
+		<!-- Sidebar Column -->
+		<div class="matcha-sidebar-col">
+			<!-- Quick API Setup Card -->
+			<div class="matcha-sidebar-card">
+				<div class="matcha-sidebar-card__header">
+					<span class="matcha-sidebar-card__icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>
+					<h3 class="matcha-sidebar-card__title"><?php esc_html_e( 'Quick API Setup', 'matcha-gallery' ); ?></h3>
+				</div>
+				<div class="matcha-sidebar-card__body">
+					<p><?php esc_html_e( 'Connect any OpenAI-compatible Vision API key. Recommended providers with high speed and low inference cost:', 'matcha-gallery' ); ?></p>
+					<div class="matcha-sidebar-links">
+						<a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+							<span><strong>OpenAI</strong> (gpt-4o-mini)</span>
+							<span class="dashicons dashicons-external"></span>
+						</a>
+						<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+							<span><strong>Google Gemini</strong> (gemini-1.5-flash)</span>
+							<span class="dashicons dashicons-external"></span>
+						</a>
+						<a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+							<span><strong>OpenRouter</strong> (Multi-provider)</span>
+							<span class="dashicons dashicons-external"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- Vision Superpowers Card -->
+			<div class="matcha-sidebar-card">
+				<div class="matcha-sidebar-card__header">
+					<span class="matcha-sidebar-card__icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+					<h3 class="matcha-sidebar-card__title"><?php esc_html_e( 'AI Vision Superpowers', 'matcha-gallery' ); ?></h3>
+				</div>
+				<div class="matcha-sidebar-card__body">
+					<ul class="matcha-sidebar-list">
+						<li>
+							<span class="dashicons dashicons-yes-alt"></span>
+							<span><strong><?php esc_html_e( 'Zero Front-End Latency', 'matcha-gallery' ); ?>:</strong> <?php esc_html_e( 'Tagging runs at upload or on-demand; visitor pages load at 0ms CLS.', 'matcha-gallery' ); ?></span>
+						</li>
+						<li>
+							<span class="dashicons dashicons-yes-alt"></span>
+							<span><strong><?php esc_html_e( 'Smart Taxonomies', 'matcha-gallery' ); ?>:</strong> <?php esc_html_e( 'Keywords are saved into standard WP taxonomies for instant filtering.', 'matcha-gallery' ); ?></span>
+						</li>
+						<li>
+							<span class="dashicons dashicons-yes-alt"></span>
+							<span><strong><?php esc_html_e( 'SEO & Accessibility', 'matcha-gallery' ); ?>:</strong> <?php esc_html_e( 'Generates descriptive alt text and captions for search engines and screen readers.', 'matcha-gallery' ); ?></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- Support & Docs Card -->
+			<div class="matcha-sidebar-card">
+				<div class="matcha-sidebar-card__header">
+					<span class="matcha-sidebar-card__icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></span>
+					<h3 class="matcha-sidebar-card__title"><?php esc_html_e( 'Documentation & Help', 'matcha-gallery' ); ?></h3>
+				</div>
+				<div class="matcha-sidebar-card__body">
+					<p><?php esc_html_e( 'Need help setting up custom prompt templates or troubleshooting API tokens?', 'matcha-gallery' ); ?></p>
+					<div class="matcha-sidebar-links">
+						<a href="https://wpmatcha.com/docs/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+							<span><?php esc_html_e( 'Read Documentation', 'matcha-gallery' ); ?></span>
+							<span class="dashicons dashicons-book"></span>
+						</a>
+						<a href="https://wpmatcha.com/support/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+							<span><?php esc_html_e( 'Get Priority Support', 'matcha-gallery' ); ?></span>
+							<span class="dashicons dashicons-sos"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div><!-- .matcha-sidebar-col -->
+	</div><!-- .matcha-two-col -->
+</div><!-- .matcha-container -->
+</div><!-- .matcha-hub-wrap -->
 		<?php
 	}
 
@@ -693,7 +802,7 @@ class Settings_Page {
 				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Social Sharing & High-Res Lightbox Zoom', 'matcha-gallery' ); ?></div>
 			</div>
 
-			<a href="https://wpmatcha.com/pro" class="button button-primary button-hero matcha-pro-upgrade-btn" target="_blank" rel="noopener">
+			<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" class="button button-primary button-hero matcha-pro-upgrade-btn" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade to Pro →', 'matcha-gallery' ); ?>
 			</a>
 		</div>
@@ -723,7 +832,7 @@ class Settings_Page {
 			var $input = $('#matcha_api_key');
 			var type = $input.attr('type') === 'password' ? 'text' : 'password';
 			$input.attr('type', type);
-			$(this).text(type === 'password' ? '👁' : '🔒');
+			$(this).html(type === 'password' ? '<span class="dashicons dashicons-visibility" style="vertical-align:middle;line-height:1.4;"></span>' : '<span class="dashicons dashicons-hidden" style="vertical-align:middle;line-height:1.4;"></span>');
 		});
 
 		// Quick Provider Presets

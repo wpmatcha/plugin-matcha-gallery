@@ -6,10 +6,14 @@ const pluginSlug = 'matcha-gallery';
 const rootDir = __dirname;
 const distDir = path.join(rootDir, 'dist');
 const stageDir = path.join(distDir, pluginSlug);
-const zipFile = path.join(rootDir, `${pluginSlug}.zip`);
+const zipFile = path.join(rootDir, '..', `${pluginSlug}.zip`);
+const localZip = path.join(rootDir, `${pluginSlug}.zip`);
 
 console.log('🍵 Step 1: Building production JavaScript & CSS assets...');
 execSync('node build.js', { stdio: 'inherit', cwd: rootDir });
+
+console.log('🍵 Step 1b: Generating translation template (.pot)...');
+execSync('node bin/make-pot.js', { stdio: 'inherit', cwd: rootDir });
 
 console.log('🍵 Step 2: Preparing clean staging directory...');
 if (fs.existsSync(distDir)) {
@@ -17,6 +21,9 @@ if (fs.existsSync(distDir)) {
 }
 if (fs.existsSync(zipFile)) {
     fs.rmSync(zipFile, { force: true });
+}
+if (fs.existsSync(localZip)) {
+    fs.rmSync(localZip, { force: true });
 }
 fs.mkdirSync(stageDir, { recursive: true });
 
@@ -31,6 +38,8 @@ const ignorePatterns = [
     'build.js',
     'pack.js',
     'studio/src',
+    'bin',
+    '.wordpress-org',
     'dist',
     '*.zip',
     '.DS_Store',
@@ -75,10 +84,9 @@ function copyRecursive(src, dest, base = '') {
 console.log('🍵 Step 3: Copying production runtime files...');
 copyRecursive(rootDir, stageDir);
 
-console.log('🍵 Step 4: Generating pristine distribution ZIP...');
-// Use PowerShell Compress-Archive for reliable native cross-platform zip
-const psCommand = `powershell -ExecutionPolicy Bypass -Command "Compress-Archive -Path '${stageDir}' -DestinationPath '${zipFile}' -Force"`;
-execSync(psCommand, { stdio: 'inherit' });
+console.log('🍵 Step 4: Generating pristine distribution ZIP (POSIX forward-slash compliant)...');
+const psCommand = `powershell -ExecutionPolicy Bypass -File bin/create-zip.ps1 -StageDir "${stageDir}" -ZipFile "${zipFile}"`;
+execSync(psCommand, { stdio: 'inherit', cwd: rootDir });
 
 console.log('🍵 Step 5: Validating package hygiene...');
 const stat = fs.statSync(zipFile);
