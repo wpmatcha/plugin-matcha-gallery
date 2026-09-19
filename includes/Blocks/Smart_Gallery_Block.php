@@ -560,7 +560,7 @@ class Smart_Gallery_Block {
 					if ( $attrs['instantFramesEnabled'] ) {
 						if ( 'grid' === $attrs['layout'] ) {
 							$item_extra_style .= '--matcha-aspect: 1;';
-						} elseif ( 'justified' !== $attrs['layout'] ) {
+						} elseif ( 'masonry' === $attrs['layout'] ) {
 							$item_extra_style .= sprintf( '--matcha-aspect: %s;', $aspect_ratio );
 						}
 					}
