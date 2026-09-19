@@ -119,6 +119,102 @@ if (root) {
     };
   }
 
+  // Smart Chapter Creation Dialog with Real-World Story Examples
+  function openCreateChapterModal(initialPhotoId = null) {
+    if (!isPro) {
+      showProModal(
+        'Multi-Section Gallery Chapters',
+        'Divide your gallery into tabbed story chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.'
+      );
+      return;
+    }
+
+    let backdrop = document.getElementById('matcha-chapter-modal-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'matcha-chapter-modal-backdrop';
+      backdrop.className = 'matcha-pro-modal-backdrop';
+      document.body.appendChild(backdrop);
+    }
+
+    backdrop.innerHTML = `
+      <div class="matcha-pro-modal" style="max-width:440px;" role="dialog" aria-modal="true">
+        <button type="button" class="close-btn" aria-label="Close" id="chapter-modal-close-btn">&times;</button>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(94,194,127,0.16);color:#5ec27f;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            ${Icons.folder}
+          </div>
+          <div>
+            <h3 style="font-size:15px;color:#ffffff;margin:0 0 2px;font-weight:700;">Create Story Chapter</h3>
+            <p style="font-size:11px;color:var(--st-text-secondary);margin:0;">Organize photos into tabbed story sections.</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;letter-spacing:0.5px;">CHAPTER TITLE</label>
+          <input type="text" id="new-chapter-name-inp" class="matcha-dark-input" placeholder="e.g. The Ceremony" style="width:100%;font-size:13px;padding:9px 12px;box-sizing:border-box;border-radius:8px;" autocomplete="off" />
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;letter-spacing:0.5px;">CLICK POPULAR EXAMPLES TO INSERT</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${['Ceremony', 'Reception', 'Portraits', 'Getting Ready', 'Exterior', 'Living Spaces', 'Drone Shots', 'Cocktails'].map(idea => `
+              <button type="button" class="chapter-preset-chip" data-title="${idea}" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:#cbd5e1;font-size:11px;padding:4px 9px;cursor:pointer;transition:all 0.15s;">
+                + ${idea}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button type="button" id="chapter-modal-cancel" class="matcha-exit-btn" style="padding:7px 14px;font-size:11px;">Cancel</button>
+          <button type="button" id="chapter-modal-submit" class="matcha-publish-btn" style="padding:7px 18px;font-size:11px;font-weight:700;">Create Chapter</button>
+        </div>
+      </div>
+    `;
+
+    backdrop.classList.add('is-visible');
+    const input = backdrop.querySelector('#new-chapter-name-inp');
+    setTimeout(() => input?.focus(), 60);
+
+    backdrop.querySelectorAll('.chapter-preset-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (input) {
+          input.value = btn.dataset.title;
+          input.focus();
+        }
+      });
+    });
+
+    const close = () => backdrop.classList.remove('is-visible');
+    backdrop.querySelector('#chapter-modal-close-btn').onclick = close;
+    backdrop.querySelector('#chapter-modal-cancel').onclick = close;
+    backdrop.onclick = (e) => { if (e.target === backdrop) close(); };
+
+    const submit = () => {
+      const name = input?.value.trim();
+      if (!name) return;
+      const secId = 'sec_' + Date.now().toString(36);
+      const sections = [...(getState().config.sections || [])];
+      const imageIds = initialPhotoId ? [initialPhotoId] : [];
+      sections.push({ id: secId, title: name, imageIds });
+      activeSectionId = secId;
+      trayPage = 1;
+      patchConfig({ sections, sectionsEnabled: true });
+      close();
+      renderRightPanel();
+      renderLeftTab('images');
+      renderCanvas();
+      autosaveSoon();
+    };
+
+    backdrop.querySelector('#chapter-modal-submit').onclick = submit;
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submit();
+      if (e.key === 'Escape') close();
+    });
+  }
+
   // In-memory caches & state
   const metaCache = new Map();
   const mediaCache = new Map();
@@ -1993,23 +2089,7 @@ if (root) {
     });
 
     document.getElementById('btn-inspector-create-chapter')?.addEventListener('click', () => {
-      if (!isPro) {
-        showProModal(
-          'Multi-Section Gallery Chapters',
-          'Divide your gallery into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.'
-        );
-        return;
-      }
-      const name = prompt('Enter Chapter Name:');
-      if (!name || !name.trim()) return;
-      const secId = 'sec_' + Date.now().toString(36);
-      const sections = [...(getState().config.sections || [])];
-      sections.push({ id: secId, title: name.trim(), imageIds: [id] });
-      patchConfig({ sections, sectionsEnabled: true });
-      renderRightPanel();
-      renderLeftTab('images');
-      renderCanvas();
-      autosaveSoon();
+      openCreateChapterModal(id);
     });
   }
 
@@ -2227,21 +2307,7 @@ if (root) {
 
     // Add Section button
     document.getElementById('btn-add-section')?.addEventListener('click', () => {
-      if (!isPro) {
-        showProModal('Multi-Section Gallery Chapters', 'Divide your story into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.');
-        return;
-      }
-      const name = prompt('Enter Chapter Name:');
-      if (!name || !name.trim()) return;
-      const secId = 'sec_' + Date.now().toString(36);
-      const sections = [...(getState().config.sections || [])];
-      sections.push({ id: secId, title: name.trim(), imageIds: [] });
-      activeSectionId = secId;
-      trayPage = 1;
-      patchConfig({ sections, sectionsEnabled: true });
-      renderLeftTab('images');
-      renderCanvas();
-      autosaveSoon();
+      openCreateChapterModal();
     });
   }
 
@@ -3149,11 +3215,15 @@ if (root) {
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
-              All Chapters <span class="matcha-section-tab__count">${allIds.length}</span>
+              <span class="tab-icon">${Icons.folder}</span>
+              <span>All Chapters</span>
+              <span class="matcha-section-tab__count">${allIds.length}</span>
             </button>
             ${sections.map(s => `
               <button type="button" class="matcha-section-tab ${activeSectionId === s.id ? 'matcha-section-tab--active' : ''}" data-section="${s.id}">
-                ${escapeHtml(s.title)} <span class="matcha-section-tab__count">${(s.imageIds || []).length}</span>
+                <span class="tab-icon">${Icons.folder}</span>
+                <span>${escapeHtml(s.title)}</span>
+                <span class="matcha-section-tab__count">${(s.imageIds || []).length}</span>
               </button>
             `).join('')}
           </div>
@@ -3416,6 +3486,64 @@ if (root) {
             });
           }
         }
+      }
+
+      // In-Canvas Helpful Empty State
+      const grid = canvas.querySelector('.matcha-gallery__grid');
+      let emptyMsg = canvas.querySelector('.matcha-canvas-empty-state');
+      if (matchingItems.length === 0) {
+        if (!emptyMsg && grid) {
+          emptyMsg = document.createElement('div');
+          emptyMsg.className = 'matcha-canvas-empty-state';
+          grid.parentNode.insertBefore(emptyMsg, grid.nextSibling);
+        }
+        if (emptyMsg) {
+          emptyMsg.style.display = 'block';
+          const sections = cfg.sections || [];
+          const currentSection = sections.find(s => s.id === activeSectionId);
+          if (currentSection) {
+            emptyMsg.innerHTML = `
+              <div style="text-align:center;padding:50px 20px;max-width:440px;margin:24px auto;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.15);border-radius:12px;">
+                <div style="width:42px;height:42px;border-radius:50%;background:rgba(94,194,127,0.15);color:#5ec27f;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">${Icons.folder}</div>
+                <h4 style="font-size:14px;color:#ffffff;margin:0 0 6px;font-weight:700;">Chapter "${escapeHtml(currentSection.title)}" is Empty</h4>
+                <p style="font-size:11px;color:#94a3b8;margin:0 0 16px;line-height:1.5;">Click "+ Add Photos" in the sidebar, or switch to "All Photos" to assign existing photos to this chapter.</p>
+                <div style="display:flex;gap:8px;justify-content:center;">
+                  <button type="button" id="btn-canvas-add-to-chapter" class="matcha-publish-btn" style="padding:6px 14px;font-size:11px;cursor:pointer;">+ Add Photos</button>
+                  <button type="button" id="btn-canvas-view-all" class="matcha-exit-btn" style="padding:6px 14px;font-size:11px;cursor:pointer;">View All Photos</button>
+                </div>
+              </div>
+            `;
+            emptyMsg.querySelector('#btn-canvas-add-to-chapter')?.addEventListener('click', () => {
+              document.getElementById('matcha-add-images')?.click();
+            });
+            emptyMsg.querySelector('#btn-canvas-view-all')?.addEventListener('click', () => {
+              document.querySelector('.matcha-studio-section-pill[data-sec="*"]')?.click();
+              canvas.querySelector('.matcha-section-tab[data-section="*"]')?.click();
+            });
+          } else {
+            emptyMsg.innerHTML = `
+              <div style="text-align:center;padding:50px 20px;max-width:400px;margin:24px auto;color:#94a3b8;">
+                <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.05);color:#94a3b8;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">${Icons.search}</div>
+                <h4 style="font-size:13px;color:#ffffff;margin:0 0 4px;font-weight:700;">No matching photos</h4>
+                <p style="font-size:11px;margin:0 0 14px;">No photos match the selected filter criteria.</p>
+                <button type="button" id="btn-canvas-reset-filters" class="matcha-exit-btn" style="padding:6px 14px;font-size:11px;cursor:pointer;">Reset Filters</button>
+              </div>
+            `;
+            emptyMsg.querySelector('#btn-canvas-reset-filters')?.addEventListener('click', () => {
+              currentFilter = '*';
+              activeFilterSet.clear();
+              currentSearch = '';
+              currentColor = '';
+              const sInp = canvas.querySelector('.matcha-gallery__search-input');
+              if (sInp) sInp.value = '';
+              canvas.querySelectorAll('.matcha-color-dot').forEach(d => d.classList.remove('is-active'));
+              updateFilterButtonsState();
+              applyCanvasFilter();
+            });
+          }
+        }
+      } else {
+        if (emptyMsg) emptyMsg.style.display = 'none';
       }
     }
 

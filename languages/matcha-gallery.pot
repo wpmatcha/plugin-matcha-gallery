@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-19 10:27:03+00:00\n"
+"POT-Creation-Date: 2026-09-19 11:11:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Add or remove AI keywords"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:612
+#: includes/Blocks/Smart_Gallery_Block.php:616
 msgid "Add to favorites"
 msgstr ""
 
@@ -192,7 +192,7 @@ msgstr ""
 msgid "AI Vision Tagging"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:495
+#: includes/Blocks/Smart_Gallery_Block.php:499
 msgid "All"
 msgstr ""
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "All Blueprints"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:408
+#: includes/Blocks/Smart_Gallery_Block.php:409
 msgid "All Chapters"
 msgstr ""
 
@@ -475,7 +475,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:670
+#: includes/Blocks/Smart_Gallery_Block.php:674
 msgid "Copy ID List"
 msgstr ""
 
@@ -527,11 +527,11 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:441
+#: includes/Blocks/Smart_Gallery_Block.php:445
 msgid "Date Added (Newest)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:442
+#: includes/Blocks/Smart_Gallery_Block.php:446
 msgid "Date Added (Oldest)"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgstr ""
 msgid "Dedicated VIP Priority Support"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:438
+#: includes/Blocks/Smart_Gallery_Block.php:442
 msgid "Default Order"
 msgstr ""
 
@@ -647,7 +647,7 @@ msgstr ""
 msgid "Favorite Tray + ID Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:667
+#: includes/Blocks/Smart_Gallery_Block.php:671
 msgid "Favorites Selected"
 msgstr ""
 
@@ -663,11 +663,11 @@ msgstr ""
 msgid "Filter by AI Keyword Tag"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:449
+#: includes/Blocks/Smart_Gallery_Block.php:453
 msgid "Filter by color"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:461
+#: includes/Blocks/Smart_Gallery_Block.php:465
 #. translators: %s: Hex color code
 msgid "Filter color %s"
 msgstr ""
@@ -760,7 +760,7 @@ msgstr ""
 msgid "Gallery duplicated successfully with all layout parameters and images cloned."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:487
+#: includes/Blocks/Smart_Gallery_Block.php:491
 msgid "Gallery filters"
 msgstr ""
 
@@ -772,7 +772,7 @@ msgstr ""
 msgid "Gallery not found."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:660
+#: includes/Blocks/Smart_Gallery_Block.php:664
 msgid "Gallery Pages"
 msgstr ""
 
@@ -1008,7 +1008,7 @@ msgstr ""
 msgid "Load More Button"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:655
+#: includes/Blocks/Smart_Gallery_Block.php:659
 msgid "Load More Photos"
 msgstr ""
 
@@ -1308,7 +1308,7 @@ msgstr ""
 msgid "Pagination Systems"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:450
+#: includes/Blocks/Smart_Gallery_Block.php:454
 msgid "Palette"
 msgstr ""
 
@@ -1452,7 +1452,7 @@ msgstr ""
 msgid "Quick Start Video & Docs"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:443
+#: includes/Blocks/Smart_Gallery_Block.php:447
 msgid "Random Shuffle"
 msgstr ""
 
@@ -1516,11 +1516,11 @@ msgstr ""
 msgid "Search Galleries"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:429
+#: includes/Blocks/Smart_Gallery_Block.php:433
 msgid "Search gallery..."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:430
+#: includes/Blocks/Smart_Gallery_Block.php:434
 msgid "Search images"
 msgstr ""
 
@@ -1584,7 +1584,7 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:628
+#: includes/Blocks/Smart_Gallery_Block.php:632
 msgid "Shop Now"
 msgstr ""
 
@@ -1645,7 +1645,7 @@ msgstr ""
 msgid "Social Sharing & High-Res Lightbox Zoom"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:437
+#: includes/Blocks/Smart_Gallery_Block.php:441
 msgid "Sort images"
 msgstr ""
 
@@ -1693,11 +1693,11 @@ msgstr ""
 msgid "These are the active AI keywords assigned to your media library images."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:439
+#: includes/Blocks/Smart_Gallery_Block.php:443
 msgid "Title (A → Z)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:440
+#: includes/Blocks/Smart_Gallery_Block.php:444
 msgid "Title (Z → A)"
 msgstr ""
 

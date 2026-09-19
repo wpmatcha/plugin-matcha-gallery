@@ -405,12 +405,16 @@ class Smart_Gallery_Block {
 			<?php if ( $has_sections ) : ?>
 				<div class="matcha-gallery__section-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Gallery Chapters', 'matcha-gallery' ); ?>">
 					<button type="button" class="matcha-section-tab matcha-section-tab--active" data-section="*" role="tab" aria-selected="true">
-						<?php esc_html_e( 'All Chapters', 'matcha-gallery' ); ?> <span class="matcha-section-tab__count"><?php echo (int) $total_items; ?></span>
+						<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
+						<span><?php esc_html_e( 'All Chapters', 'matcha-gallery' ); ?></span>
+						<span class="matcha-section-tab__count"><?php echo (int) $total_items; ?></span>
 					</button>
 					<?php foreach ( $sections as $sec ) : ?>
 						<?php $sec_count = count( (array) ( $sec['imageIds'] ?? array() ) ); ?>
 						<button type="button" class="matcha-section-tab" data-section="<?php echo esc_attr( $sec['id'] ); ?>" role="tab" aria-selected="false">
-							<?php echo esc_html( $sec['title'] ); ?> <span class="matcha-section-tab__count"><?php echo (int) $sec_count; ?></span>
+							<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
+							<span><?php echo esc_html( $sec['title'] ); ?></span>
+							<span class="matcha-section-tab__count"><?php echo (int) $sec_count; ?></span>
 						</button>
 					<?php endforeach; ?>
 				</div>
