@@ -703,10 +703,16 @@
 			// Header actions
 			this.lightbox
 				.querySelector( '.matcha-lb-close' )
-				.addEventListener( 'click', () => this.closeLightbox() );
+				.addEventListener( 'click', () => {
+					const inst = MatchaGallery.activeInstance || this;
+					inst.closeLightbox();
+				} );
 			this.lightbox
 				.querySelector( '.matcha-lightbox__backdrop' )
-				.addEventListener( 'click', () => this.closeLightbox() );
+				.addEventListener( 'click', () => {
+					const inst = MatchaGallery.activeInstance || this;
+					inst.closeLightbox();
+				} );
 			this.lightbox
 				.querySelector( '.matcha-lightbox__prev' )
 				.addEventListener( 'click', ( e ) => {
@@ -800,9 +806,15 @@
 		}
 
 		lockScroll() {
+			if ( MatchaGallery.isScrollLocked ) {
+				return;
+			}
+			MatchaGallery.isScrollLocked = true;
+
 			const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 			this.bodyOriginalPaddingRight = document.body.style.paddingRight || '';
 			this.bodyOriginalOverflow = document.body.style.overflow || '';
+
 			if ( scrollbarWidth > 0 ) {
 				document.body.style.paddingRight = `${ scrollbarWidth }px`;
 				document.documentElement.style.setProperty( '--matcha-scrollbar-width', `${ scrollbarWidth }px` );
@@ -812,8 +824,20 @@
 		}
 
 		unlockScroll() {
-			document.body.style.overflow = this.bodyOriginalOverflow || '';
-			document.body.style.paddingRight = this.bodyOriginalPaddingRight || '';
+			MatchaGallery.isScrollLocked = false;
+
+			if ( this.bodyOriginalOverflow && this.bodyOriginalOverflow !== 'hidden' ) {
+				document.body.style.overflow = this.bodyOriginalOverflow;
+			} else {
+				document.body.style.removeProperty( 'overflow' );
+			}
+
+			if ( this.bodyOriginalPaddingRight ) {
+				document.body.style.paddingRight = this.bodyOriginalPaddingRight;
+			} else {
+				document.body.style.removeProperty( 'padding-right' );
+			}
+
 			document.documentElement.style.removeProperty( '--matcha-scrollbar-width' );
 			document.documentElement.classList.remove( 'matcha-lightbox-open' );
 		}
@@ -1032,9 +1056,12 @@
 			if ( document.fullscreenElement ) {
 				document.exitFullscreen?.().catch( () => {} );
 			}
-			this.lightbox.setAttribute( 'hidden', '' );
-			this.lightbox.classList.remove( 'matcha-lightbox--open' );
-			this.lightbox.classList.remove( 'matcha-lightbox--active' );
+			const lb = this.lightbox || document.querySelector( '.matcha-lightbox' );
+			if ( lb ) {
+				lb.setAttribute( 'hidden', '' );
+				lb.classList.remove( 'matcha-lightbox--open' );
+				lb.classList.remove( 'matcha-lightbox--active' );
+			}
 			this.unlockScroll();
 		}
 
