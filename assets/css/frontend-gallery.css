@@ -1399,11 +1399,11 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Stage & Image Wrap (Giant Immersive Stage) */
+/* Stage & Image Wrap (Immersive Stage with Safe Viewport Clearance) */
 .matcha-lightbox__stage {
 	position: fixed !important;
-	top: 56px !important;
-	bottom: 80px !important;
+	top: 60px !important;
+	bottom: 132px !important;
 	left: 0 !important;
 	right: 0 !important;
 	display: flex !important;
@@ -1414,7 +1414,7 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	margin: 0 !important;
 	padding: 0 !important;
 	max-width: 100vw !important;
-	max-height: calc(100vh - 136px) !important;
+	max-height: calc(100vh - 192px) !important;
 }
 
 .matcha-lightbox__image-wrap {
@@ -1449,15 +1449,15 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	position: absolute !important;
 	inset: 0 !important;
 	margin: auto !important;
-	max-width: calc(100vw - 130px) !important;
-	max-height: calc(100% - 24px) !important;
+	max-width: calc(100vw - 140px) !important;
+	max-height: 100% !important;
 	width: auto !important;
 	height: auto !important;
 	object-fit: contain !important;
 	display: block !important;
-	border-radius: 6px !important;
+	border-radius: 8px !important;
 	border: 1px solid rgba(255, 255, 255, 0.08) !important;
-	box-shadow: 0 10px 32px -4px rgba(0, 0, 0, 0.35) !important;
+	box-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.45) !important;
 	will-change: opacity, transform !important;
 	user-select: none !important;
 	-webkit-user-drag: none !important;
@@ -1478,63 +1478,70 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	z-index: 2 !important;
 }
 
-/* Minimalist Caption (Pinned above Filmstrip - Zero Jumps) */
+/* Minimalist Caption (Positioned cleanly between photo and dock) */
 .matcha-lightbox__caption-bar {
 	position: fixed !important;
-	bottom: 64px !important;
+	bottom: 74px !important;
 	left: 50% !important;
 	transform: translateX(-50%) !important;
-	max-width: 680px !important;
-	width: 90% !important;
+	max-width: 640px !important;
+	width: 88% !important;
 	text-align: center !important;
 	z-index: 1000000 !important;
 	pointer-events: none !important;
 	margin: 0 !important;
-	padding: 0 20px !important;
+	padding: 0 16px !important;
 	transition: opacity 0.2s ease !important;
 	will-change: opacity !important;
 }
 
 .matcha-lightbox__title {
-	font-size: 15px;
-	font-weight: 600;
-	color: #ffffff;
-	letter-spacing: 0.2px;
-	margin: 0;
-	line-height: 1.3;
-	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	color: #f8fafc !important;
+	letter-spacing: 0.2px !important;
+	margin: 0 !important;
+	line-height: 1.3 !important;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
 .matcha-lightbox__caption {
-	font-size: 13px;
-	color: #cbd5e1;
-	margin: 3px 0 0;
-	line-height: 1.4;
-	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+	font-size: 12px !important;
+	color: #94a3b8 !important;
+	margin: 2px 0 0 !important;
+	line-height: 1.35 !important;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Bottom Filmstrip (Borderless & Edge-to-Edge) */
+/* Bottom Filmstrip (Sleek Floating Frosted Glass Dock) */
 .matcha-lightbox__filmstrip {
 	position: fixed !important;
-	bottom: 0 !important;
+	bottom: 14px !important;
 	left: 0 !important;
 	right: 0 !important;
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
-	padding: 10px 20px 16px !important;
+	padding: 0 16px !important;
 	z-index: 1000000 !important;
-	background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%) !important;
+	background: transparent !important;
 	pointer-events: none !important;
+	margin: 0 !important;
 }
 
 .matcha-lightbox__thumbnails {
-	display: flex !important;
+	display: inline-flex !important;
 	align-items: center !important;
-	gap: 10px !important;
+	gap: 8px !important;
+	padding: 6px 8px !important;
+	background: rgba(15, 23, 42, 0.7) !important;
+	backdrop-filter: blur(20px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+	border: 1px solid rgba(255, 255, 255, 0.12) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+	max-width: min(88vw, 720px) !important;
 	overflow-x: auto !important;
-	padding: 4px 10px !important;
-	max-width: 90vw !important;
 	scrollbar-width: none !important;
 	-ms-overflow-style: none !important;
 	pointer-events: auto !important;
@@ -1545,21 +1552,21 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 }
 
 .matcha-lb-thumb {
-	width: 58px !important;
-	height: 40px !important;
-	min-width: 58px !important;
-	min-height: 40px !important;
-	border-radius: 6px !important;
+	width: 50px !important;
+	height: 35px !important;
+	min-width: 50px !important;
+	min-height: 35px !important;
+	border-radius: 7px !important;
 	overflow: hidden !important;
-	border: 2px solid transparent !important;
-	opacity: 0.5 !important;
+	border: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+	opacity: 0.45 !important;
 	padding: 0 !important;
-	background: #000000 !important;
+	background: #0b0f19 !important;
 	cursor: pointer !important;
 	flex-shrink: 0 !important;
-	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+	transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 	box-sizing: border-box !important;
+	transform: scale(0.96) !important;
 }
 
 .matcha-lb-thumb img {
@@ -1567,56 +1574,72 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	height: 100% !important;
 	object-fit: cover !important;
 	display: block !important;
+	transition: transform 0.25s ease !important;
 }
 
 .matcha-lb-thumb:hover {
 	opacity: 0.85 !important;
-	transform: translateY(-2px) scale(1.06) !important;
-	border-color: rgba(255, 255, 255, 0.5) !important;
+	border-color: rgba(255, 255, 255, 0.45) !important;
+	transform: scale(1.04) !important;
+}
+
+.matcha-lb-thumb:hover img {
+	transform: scale(1.08) !important;
 }
 
 .matcha-lb-thumb.is-active {
 	opacity: 1 !important;
 	border-color: #ffffff !important;
-	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), 0 4px 14px rgba(0, 0, 0, 0.7) !important;
-	transform: translateY(-3px) scale(1.1) !important;
+	box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.95), 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+	transform: scale(1.08) !important;
 }
 
 @media (max-width: 768px) {
 	.matcha-lightbox__header {
-		top: 16px;
-		left: 16px;
-		right: 16px;
+		top: 14px;
+		left: 14px;
+		right: 14px;
 	}
 	.matcha-lightbox__nav {
-		width: 40px !important;
-		height: 40px !important;
-		min-width: 40px !important;
-		min-height: 40px !important;
+		width: 38px !important;
+		height: 38px !important;
+		min-width: 38px !important;
+		min-height: 38px !important;
 	}
 	.matcha-lightbox__nav svg {
-		width: 20px !important;
-		height: 20px !important;
+		width: 18px !important;
+		height: 18px !important;
 	}
 	.matcha-lightbox__prev { left: 8px !important; }
 	.matcha-lightbox__next { right: 8px !important; }
 	.matcha-lightbox__stage {
 		top: 50px !important;
-		bottom: 74px !important;
+		bottom: 114px !important;
+		max-height: calc(100vh - 164px) !important;
 	}
 	.matcha-lightbox__img {
-		max-width: calc(100vw - 24px) !important;
-		max-height: calc(100% - 16px) !important;
+		max-width: calc(100vw - 20px) !important;
+		max-height: 100% !important;
 	}
 	.matcha-lightbox__caption-bar {
-		bottom: 56px !important;
+		bottom: 58px !important;
 		width: 94% !important;
+		padding: 0 10px !important;
+	}
+	.matcha-lightbox__filmstrip {
+		bottom: 10px !important;
+	}
+	.matcha-lightbox__thumbnails {
+		gap: 6px !important;
+		padding: 4px 6px !important;
+		border-radius: 10px !important;
 	}
 	.matcha-lb-thumb {
-		width: 44px !important;
-		height: 32px !important;
-		min-width: 44px !important;
-		min-height: 32px !important;
+		width: 42px !important;
+		height: 30px !important;
+		min-width: 42px !important;
+		min-height: 30px !important;
+		border-radius: 5px !important;
 	}
 }
 
