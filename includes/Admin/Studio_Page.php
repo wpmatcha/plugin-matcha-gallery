@@ -1231,10 +1231,11 @@ final class Studio_Page {
 		$studio_js  = MATCHA_GALLERY_URL . 'assets/js/studio.js';
 		$studio_css = MATCHA_GALLERY_URL . 'assets/css/studio.css';
 		$css_ver    = file_exists( MATCHA_GALLERY_PATH . 'assets/css/studio.css' ) ? filemtime( MATCHA_GALLERY_PATH . 'assets/css/studio.css' ) : MATCHA_GALLERY_VERSION;
+		$css_front  = file_exists( MATCHA_GALLERY_PATH . 'assets/css/frontend-gallery.css' ) ? filemtime( MATCHA_GALLERY_PATH . 'assets/css/frontend-gallery.css' ) : MATCHA_GALLERY_VERSION;
 		$js_ver     = file_exists( MATCHA_GALLERY_PATH . 'assets/js/studio.js' ) ? filemtime( MATCHA_GALLERY_PATH . 'assets/js/studio.js' ) : MATCHA_GALLERY_VERSION;
 
 		wp_enqueue_style( 'matcha-studio', $studio_css, array(), $css_ver );
-		wp_enqueue_style( 'matcha-frontend-for-canvas', MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css', array(), MATCHA_GALLERY_VERSION );
+		wp_enqueue_style( 'matcha-frontend-for-canvas', MATCHA_GALLERY_URL . 'assets/css/frontend-gallery.css', array(), $css_front );
 		// Add full-screen hide for WP chrome for pure studio immersion
 		wp_add_inline_style( 'matcha-studio', '#wpadminbar,#adminmenumain,#adminmenuback,#wpfooter{display:none !important} #wpcontent{margin-left:0 !important;padding:0 !important;} #wpbody-content{padding:0 !important;} html.wp-toolbar{padding-top:0 !important;}' );
 

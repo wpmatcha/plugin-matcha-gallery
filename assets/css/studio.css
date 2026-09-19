@@ -977,6 +977,56 @@ body.matcha-is-dragging * {
 	width: 100% !important;
 }
 
+/* Tablet Preview Simulation */
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery {
+	--matcha-columns: var(--matcha-columns-tablet, 2) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--grid .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--bento .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--mosaic .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--pinwheel .matcha-gallery__grid {
+	grid-template-columns: repeat(var(--matcha-columns-tablet, 2), 1fr) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--masonry .matcha-gallery__grid {
+	column-count: var(--matcha-columns-tablet, 2) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--mosaic .matcha-gallery__item--span-2x1,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--mosaic .matcha-gallery__item--span-2x2,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--pinwheel .matcha-gallery__item--span-2x1,
+#matcha-studio-root .matcha-canvas.is-tablet .matcha-gallery--pinwheel .matcha-gallery__item--span-2x2 {
+	grid-column: span min(2, var(--matcha-columns-tablet, 2)) !important;
+}
+
+/* Mobile Preview Simulation */
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery {
+	--matcha-columns: var(--matcha-columns-mobile, 1) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--grid .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--bento .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--mosaic .matcha-gallery__grid,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--pinwheel .matcha-gallery__grid {
+	grid-template-columns: repeat(var(--matcha-columns-mobile, 1), 1fr) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--masonry .matcha-gallery__grid {
+	column-count: var(--matcha-columns-mobile, 1) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--mosaic .matcha-gallery__item--span-2x1,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--mosaic .matcha-gallery__item--span-2x2,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--pinwheel .matcha-gallery__item--span-2x1,
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--pinwheel .matcha-gallery__item--span-2x2 {
+	grid-column: span min(2, var(--matcha-columns-mobile, 1)) !important;
+}
+
+#matcha-studio-root .matcha-canvas.is-mobile .matcha-gallery--justified .matcha-gallery__item {
+	height: min(var(--matcha-row-height, 240px), 180px) !important;
+}
+
 /* Ensure canvas images are always visible and un-obscured */
 #matcha-studio-root .matcha-canvas .matcha-gallery__item {
 	opacity: 1 !important;

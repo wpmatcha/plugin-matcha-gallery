@@ -279,6 +279,7 @@ if (root) {
       setViewport(b.dataset.vp);
       const canvas = document.getElementById('studio-canvas');
       canvas.className = 'matcha-canvas' + (b.dataset.vp === 'tablet' ? ' is-tablet' : b.dataset.vp === 'mobile' ? ' is-mobile' : '');
+      renderCanvas();
     });
   });
 
@@ -1343,11 +1344,13 @@ if (root) {
     document.getElementById('st-colt')?.addEventListener('input', e => {
       e.target.nextElementSibling.textContent = e.target.value;
       patchConfig({ columnsTablet: parseInt(e.target.value) });
+      renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-colm')?.addEventListener('input', e => {
       e.target.nextElementSibling.textContent = e.target.value;
       patchConfig({ columnsMobile: parseInt(e.target.value) });
+      renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-gut')?.addEventListener('input', e => {
