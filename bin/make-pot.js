@@ -214,11 +214,17 @@ console.log(`Found ${entries.size} unique translatable strings.`);
 // Generate POT output
 const now = new Date().toISOString().replace('T', ' ').substring(0, 19) + '+00:00';
 
+let potVersion = '1.0.1';
+try {
+  const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
+  if (pkg.version) potVersion = pkg.version;
+} catch (e) {}
+
 let potOutput = `# Copyright (C) 2026 WP Matcha
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Matcha Gallery 1.0.0\\n"
+"Project-Id-Version: Matcha Gallery ${potVersion}\\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/matcha-gallery\\n"
 "Last-Translator: WP Matcha <support@wpmatcha.com>\\n"
 "Language-Team: English <support@wpmatcha.com>\\n"

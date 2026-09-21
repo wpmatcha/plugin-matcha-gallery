@@ -37,11 +37,14 @@ const ignorePatterns = [
     'package-lock.json',
     'build.js',
     'pack.js',
-    'studio/src',
+    'studio',
     'bin',
     '.wordpress-org',
+    'assets/images/wporg',
+    'PROJECT_MASTER_STATUS.md',
     'dist',
     '*.zip',
+    '*.log',
     '.DS_Store',
     'Thumbs.db'
 ];
@@ -62,6 +65,7 @@ function shouldIgnore(relPath) {
     return false;
 }
 
+let copiedFiles = [];
 function copyRecursive(src, dest, base = '') {
     const entries = fs.readdirSync(src, { withFileTypes: true });
     for (const entry of entries) {
@@ -77,16 +81,21 @@ function copyRecursive(src, dest, base = '') {
             copyRecursive(srcPath, destPath, rel);
         } else if (entry.isFile()) {
             fs.copyFileSync(srcPath, destPath);
+            copiedFiles.push(rel);
         }
     }
 }
 
 console.log('🍵 Step 3: Copying production runtime files...');
 copyRecursive(rootDir, stageDir);
+console.log(`   Copied ${copiedFiles.length} clean production files.`);
 
 console.log('🍵 Step 4: Generating pristine distribution ZIP (POSIX forward-slash compliant)...');
 const psCommand = `powershell -ExecutionPolicy Bypass -File bin/create-zip.ps1 -StageDir "${stageDir}" -ZipFile "${zipFile}"`;
 execSync(psCommand, { stdio: 'inherit', cwd: rootDir });
+
+// Copy to local root as well for convenience
+fs.copyFileSync(zipFile, localZip);
 
 console.log('🍵 Step 5: Validating package hygiene...');
 const stat = fs.statSync(zipFile);
@@ -96,7 +105,11 @@ const sizeMb = (stat.size / (1024 * 1024)).toFixed(2);
 console.log(`✅ Success: ${pluginSlug}.zip generated!`);
 console.log(`📦 File Size: ${sizeKb} KB (${sizeMb} MB)`);
 console.log(`📁 Root Entry: ${pluginSlug}/`);
+console.log(`📍 Output Locations:`);
+console.log(`   1. ${zipFile}`);
+console.log(`   2. ${localZip}`);
 console.log(`🚀 Ready for upload at https://wordpress.org/plugins/developers/add/`);
 
 // Cleanup staging dist folder
 fs.rmSync(distDir, { recursive: true, force: true });
+

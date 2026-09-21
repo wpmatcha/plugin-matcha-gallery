@@ -5,11 +5,11 @@ Tags: gallery, photo gallery, masonry, portfolio, lightbox
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-AI-powered image metadata generation, interactive mosaic photo walls, masonry layouts, framing, client proofing, and smart portfolios for WordPress.
+AI-powered image metadata generation, interactive mosaic photo walls, masonry layouts, framing, client proofing, and smart portfolio galleries.
 
 == Description ==
 
@@ -17,9 +17,9 @@ AI-powered image metadata generation, interactive mosaic photo walls, masonry la
 
 Matcha Gallery produces clean, modern HTML5/CSS3 output with zero jQuery dependencies and fast page load times (<15KB frontend runtime).
 
-[Live Demo & Documentation](https://wpmatcha.com) | [GitHub Repository](https://github.com/wpmatcha/plugin-matcha-gallery)
+[Live Demo & Documentation](https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/) | [Support & Help](https://wpmatcha.com/contact/)
 
-= 🍵 Key Highlights =
+=== Key Highlights ===
 
 * **Matcha Studio Visual Editor:** A distraction-free, 3-panel visual workspace inspired by Figma. Customize layouts, picture framing, drop shadows, and matting with real-time WYSIWYG preview.
 * **AI Vision & Metadata Generator:** Powered by Google Gemini AI. Automatically generates ADA-compliant alt text, human-readable titles, descriptive captions, and SEO keyword taxonomy.
@@ -88,15 +88,22 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 
 == Screenshots ==
 
-1. **Matcha Studio Editor** — 3-Panel visual workspace with dark studio theme and realistic wall preview.
-2. **Layout Blueprints** — 6 visual presets including Classic Grid, Pinterest Masonry, and PhotoBlocks Mosaic.
-3. **Picture Framing & Matting** — Realistic Oak Wood, Black Metal, Gold Brass, and White Matting frames.
-4. **In-Frame Pan & Zoom Cropper** — 2D interactive focal target reticle and zoom controls.
-5. **AI Color Swatches & Filters** — Frontend live keyword search, dynamic category pills, and color dot palette filtering.
-6. **Client Proofing & Shoppable Hotspots** — Heart favorite button with export tray and glassmorphic Buy Now buttons.
-7. **Client Proofing Sheet Export** — 1-Click print/PDF proposal generation with itemized specifications and prices.
+1. Matcha Studio Editor — 3-Panel visual workspace with dark studio theme and realistic wall preview.
+2. Layout Blueprints — 6 visual presets including Classic Grid, Pinterest Masonry, and PhotoBlocks Mosaic.
+3. Picture Framing & Matting — Realistic Oak Wood, Black Metal, Gold Brass, and White Matting frames.
+4. In-Frame Pan & Zoom Cropper — 2D interactive focal target reticle and zoom controls.
+5. AI Color Swatches & Filters — Frontend live keyword search, dynamic category pills, and color dot palette filtering.
+6. Client Proofing & Shoppable Hotspots — Heart favorite button with export tray and glassmorphic Buy Now buttons.
+7. Client Proofing Sheet Export — 1-Click print/PDF proposal generation with itemized specifications and prices.
+
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix: Admin sidebar menu icon sizing on the WordPress dashboard constrained to 20x20px with inline SVG data URI and global head style guard.
+* Feature: Curated Style Presets (Exhibition Hairline Frame, Architectural Curtain, Cinematic Pullback, Minimalist Drawer).
+* Enhancement: Layout rendering performance and zero-CLS image frame reservation.
+* Enhancement: Codebase hygiene, translation template updates, and package optimizations.
 
 = 1.0.0 =
 * Initial public release on WordPress.org.
@@ -113,6 +120,9 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 * Local vendored JS dependencies (zero CDN reliance).
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Fixes dashboard menu icon sizing and adds curated style presets.
 
 = 1.0.0 =
 Initial release of Matcha Gallery.

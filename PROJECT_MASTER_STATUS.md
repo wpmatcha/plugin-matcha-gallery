@@ -7,6 +7,7 @@
 ## 1. Project Overview & Commercial Strategy
 
 * **Product Name:** Matcha Gallery (Free) / Matcha Gallery Pro
+* **Current Free Version:** 1.0.1 (WordPress.org Release Candidate)
 * **Tagline:** AI-Powered Smart Photo Wall, Masonry & Portfolio Studio for WordPress
 * **Target Audience:** Photographers, designers, e-commerce stores, creative agencies, and portfolio owners who want intelligent auto-tagging, zero layout shift (CLS 0), and visual masonry galleries.
 * **Pricing & Monetization Model:**
@@ -77,6 +78,7 @@ Dynamic Gallery Wall
 | **Smart Focal Point** | Centering only (`1.0x` zoom) | Custom Focal Point + **1.0x – 3.0x Zoom Scale** |
 | **Layouts** | Grid, Masonry, Justified, Mosaic (standard) | Grid, Masonry, Justified, Mosaic + **Pinwheel, Bento, Custom Geometry Spans** |
 | **Filtering Modes** | Single-select filter pills (`All`, `Cats`, `Nature`) | Single-select + **Multi-Select Faceted Checkbox Filtering** |
+| **Toolbar & Controls Skins** | **Modern Capsule** (clean rounded pills, light & dark auto-adaptation) | **Modern Capsule** + **Minimalist Hairline**, **Obsidian Dark**, & **Frosted Glass** |
 | **Color Swatches** | Colors extracted and saved in meta | **Interactive Color Swatch Filter Bar** (click color pill to filter) |
 | **Smart Fill** | Triggers Pro Upgrade modal | **AI Smart Fill Geometry Matcher** (auto-arranges tile spans) |
 | **Picture Framing** | Frameless Clean (Modern) | Matte Black Metal, Natural Oak, Brushed Gold Brass, Glassmorphism 3D Float |
@@ -124,6 +126,31 @@ Dynamic Gallery Wall
 * **AI Brand Persona & Tone Presets:**
   * Added `ai_persona` setting in [Settings_Page.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Admin/Settings_Page.php) for E-Commerce, Wedding/Portraits, Architecture/Interiors, and Editorial/Fashion.
   * Injected via `matcha_gallery_ai_system_prompt` filter hook in [matcha-gallery-pro.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/matcha-gallery-pro.php) to calibrate vision classification.
+* **WooCommerce Shoppable Hotspots & Lightbox Buy Now:**
+  * Implemented in [WooCommerce_Integration.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/includes/WooCommerce_Integration.php), Studio Inspector, and Frontend Gallery Lightbox.
+  * REST API endpoint `/matcha-gallery-pro/v1/woocommerce/products` with live catalog search, stock status badges, formatted currency prices, and direct Lightbox "Shop The Look" floating action buttons.
+
+### 5. Unified Gallery Controls & Toolbar Skins Architecture (Completed)
+* **Problem:** Gallery controls (Search input, category filter buttons, sort dropdown, and color swatches) looked like generic, unstyled browser forms that clashed with custom gallery layouts and dark themes. Furthermore, theme stylesheets (Astra, Kadence, Divi) frequently overrode inputs with solid backgrounds.
+* **Solution:**
+  * Developed a unified 4-skin aesthetic system across Gutenberg, Visual Studio, PHP rendering, and frontend CSS:
+    1. `capsule` (Modern rounded pill, clean border/shadow, default Free)
+    2. `underline` (Minimalist hairline, editorial/fine-art borderless search + underline tabs, Pro)
+    3. `obsidian` (Deep charcoal `#1e293b` surface with matcha glow, Pro)
+    4. `glass` (Frosted glass with 14px blur, specular highlight borders, and smoked dark-mode adaptation, Pro)
+  * **Backend & CPT Storage:** Whitelisted and sanitized `toolbarSkin` in [Gallery_CPT.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Gallery/Gallery_CPT.php) and registered in [block.json](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/block.json).
+  * **PHP Renderer:** Injected `.matcha-gallery__toolbar--skin-{$toolbar_skin}` and `.matcha-gallery__filters--skin-{$toolbar_skin}` in [Smart_Gallery_Block.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Blocks/Smart_Gallery_Block.php) with automatic fallback harmonizing.
+  * **Inspector & Studio UI:** Added SelectControl in [InspectorControls.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/components/InspectorControls.js), [FilterTab.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/studio/src/components/Tabs/FilterTab.js), and [studio/src/index.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/studio/src/index.js). Selecting Pro skins without a license triggers the `showProModal` upgrade dialog and reverts to Capsule.
+  * **CSS Specificity Collision Fix:** Scoped legacy `.matcha-gallery__filters--style-dark` and dark theme overrides with `:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"])` in [frontend-gallery.css](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/assets/css/frontend-gallery.css), preventing style leaks on transparent or glass skins. Added mobile horizontal scroll (`< 640px`).
+
+### 6. Interactive Spatial 3D Tilt & Action Dock Architecture (Completed)
+* **Spatial 3D Perspective Tilt:** Cards dynamically track cursor offset to compute CSS 3D perspective transforms (`rotateX`, `rotateY`, and subtle specular glare gradients).
+* **Floating Action Dock:** Smooth hover dock offering 1-click Quick Zoom, Client Proofing Heart favorite toggles, and direct WooCommerce Shoppable product actions.
+
+### 7. 2026 AI-Native Intelligence Suite Prototype (`skin-studio-mockup.html`) (Completed)
+* **Floating AI Vibe Bar:** Real-time semantic natural language prompt search filtering against image keywords, vibes, and descriptions, paired with 1-click smart mood chips (`Emerald Flora`, `Sunset Warmth`, `Nordic Canopy`).
+* **AI Visual Echo / Semantic Re-Clustering:** Allows any photo to act as an anchor (`🎯 Echo Anchor`) with real-time confidence badges (`✨ 94% AI Match`) and a frosted twin count toast.
+* **Chromatic Palette Harmony Engine:** Clickable 6-swatch dominant harmony engine that highlights chromatic matches with hex backlight glow.
 
 ---
 
@@ -156,5 +183,12 @@ Dynamic Gallery Wall
 - [x] **AI Smart Fill Geometry Matcher:** Auto-calculates optimal Bento/Mosaic tile layouts.
 - [x] **Server-Side Unattended Background Queue:** Background batch processing for 500+ photos without keeping the tab open.
 - [x] **AI Brand Persona / Tone Presets:** E-Commerce, Wedding, Architecture, Editorial niche vision prompts.
+- [x] **Creative Architectural Hover Presets (The Grid Inspired):** Bogota (Cinematic Pullback), Brasilia (Editorial Hairline Frame), Sofia (Slide Curtain), Lome (Bottom Drawer), Grayscale to Vivid.
+- [x] **Dynamic Hover Customizer:** Brasilia hairline frame color picker (`--matcha-hover-frame-color`) and mobile touch interaction switcher (direct lightbox vs tap-to-reveal overlay).
+- [x] **Multimedia & Video Lightbox Support:** Multi-platform (YouTube nocookie, Vimeo, native MP4/WebM) with responsive 16:9 lightbox player, Play thumbnail badges, play icon actions, and zero-audio-leak memory destruction.
+- [x] **Unified Toolbar & Controls Skins System:** Modern Capsule (Free), Minimalist Hairline (Pro), Obsidian Dark (Pro), Frosted Glass (Pro) across Search, Filters, Sort, and Swatches.
+- [x] **Gutenberg & Studio Toolbar Customization:** Integrated skin controls in block inspector and Studio with Pro gating modal and mobile horizontal scroll.
+- [x] **Spatial 3D Tilt & Floating Action Dock:** Real-time perspective matrix transform with action dock on hover.
+- [x] **2026 AI-Native Intelligence Suite Prototype:** Floating AI Vibe Bar, Visual Echo semantic similarity re-clustering, and Chromatic Palette engine.
+- [x] **WooCommerce Shoppable Hotspots:** Native product search combobox in Studio, live prices/stock, and Lightbox "Shop The Look" button.
 - [ ] **WordPress.org Directory Review:** Complete directory review requirements (assets, banner, icon, tags, translations).
-- [ ] **WooCommerce Hotspots:** Native product search picker in Studio for tagging photos with products.

@@ -34,6 +34,7 @@ final class Studio_Page {
 		add_action( 'admin_init', array( static::class, 'handle_actions' ) );
 		add_action( 'admin_menu', array( static::class, 'register_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( static::class, 'enqueue_assets' ) );
+		add_action( 'admin_head', array( static::class, 'render_menu_icon_styles' ) );
 	}
 
 	/**
@@ -91,10 +92,49 @@ final class Studio_Page {
 	}
 
 	/**
+	 * Output inline CSS in wp-admin head to strictly constrain menu icon size across all admin pages.
+	 */
+	public static function render_menu_icon_styles(): void {
+		?>
+		<style id="matcha-admin-menu-icon-css">
+			#adminmenu #toplevel_page_matcha-ai-hub .wp-menu-image img,
+			#adminmenu .toplevel_page_matcha-ai-hub .wp-menu-image img {
+				width: 20px !important;
+				height: 20px !important;
+				max-width: 20px !important;
+				max-height: 20px !important;
+				padding: 7px 0 0 0 !important;
+				object-fit: contain !important;
+				box-sizing: content-box !important;
+				display: inline-block !important;
+			}
+			#adminmenu #toplevel_page_matcha-ai-hub .wp-menu-image svg,
+			#adminmenu .toplevel_page_matcha-ai-hub .wp-menu-image svg {
+				width: 18px !important;
+				height: 18px !important;
+				max-width: 18px !important;
+				max-height: 18px !important;
+				padding: 8px 0 0 0 !important;
+				box-sizing: content-box !important;
+				display: inline-block !important;
+			}
+			#adminmenu #toplevel_page_matcha-ai-hub:hover .wp-menu-image img,
+			#adminmenu #toplevel_page_matcha-ai-hub.wp-has-current-submenu .wp-menu-image img {
+				opacity: 1 !important;
+			}
+		</style>
+		<?php
+	}
+
+	/**
 	 * Register menu entries.
 	 * Top-level Matcha AI + Dashboard + All Galleries hub.
 	 */
 	public static function register_menu(): void {
+		// Crisp vector SVG Matcha Leaf icon matching modern WordPress standards (20x20)
+		$leaf_svg  = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#5ec27f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>';
+		$menu_icon = 'data:image/svg+xml;base64,' . base64_encode( $leaf_svg );
+
 		// Top-level menu
 		add_menu_page(
 			__( 'Matcha AI', 'matcha-gallery' ),
@@ -102,7 +142,7 @@ final class Studio_Page {
 			'edit_posts',
 			'matcha-ai-hub',
 			array( static::class, 'render_hub' ),
-			'dashicons-format-gallery',
+			$menu_icon,
 			30
 		);
 
@@ -326,7 +366,7 @@ final class Studio_Page {
 									<p class="matcha-getting-started-box__desc">
 										<?php esc_html_e( 'Learn how to auto-tag photos and publish your first responsive gallery in 60 seconds.', 'matcha-gallery' ); ?>
 									</p>
-									<a href="https://wpmatcha.com/docs/getting-started/" target="_blank" rel="noopener noreferrer" class="matcha-getting-started-box__link">
+									<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-getting-started-box__link">
 										<span><?php esc_html_e( 'Quick Start Video & Docs', 'matcha-gallery' ); ?></span>
 										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
 									</a>
@@ -401,7 +441,7 @@ final class Studio_Page {
 											<div class="matcha-setting-tile__name"><?php esc_html_e( 'Client Proofing', 'matcha-gallery' ); ?></div>
 											<div class="matcha-setting-tile__desc"><?php esc_html_e( 'Photo favoriting & review tray', 'matcha-gallery' ); ?></div>
 										</div>
-										<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-setting-tile__action" style="color:#ca8a04;">
+										<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-setting-tile__action" style="color:#ca8a04;">
 											<?php esc_html_e( 'Pro Feature', 'matcha-gallery' ); ?> ↗
 										</a>
 									</div>
@@ -410,7 +450,7 @@ final class Studio_Page {
 											<div class="matcha-setting-tile__name"><?php esc_html_e( 'Watermark & Shield', 'matcha-gallery' ); ?></div>
 											<div class="matcha-setting-tile__desc"><?php esc_html_e( 'Right-click photo protection', 'matcha-gallery' ); ?></div>
 										</div>
-										<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-setting-tile__action" style="color:#ca8a04;">
+										<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-setting-tile__action" style="color:#ca8a04;">
 											<?php esc_html_e( 'Pro Feature', 'matcha-gallery' ); ?> ↗
 										</a>
 									</div>
@@ -421,7 +461,7 @@ final class Studio_Page {
 							<div class="matcha-dashboard-card">
 								<div class="matcha-dashboard-card__header">
 									<h2 class="matcha-dashboard-card__title"><?php esc_html_e( 'Do more with Matcha AI Pro', 'matcha-gallery' ); ?></h2>
-									<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-dashboard-card__link">
+									<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-dashboard-card__link">
 										<?php esc_html_e( 'Get Full Control ↗', 'matcha-gallery' ); ?>
 									</a>
 								</div>
@@ -530,7 +570,7 @@ final class Studio_Page {
 									<?php esc_html_e( 'With Matcha AI Pro, you no longer have to manually tag photos, write custom CSS, or juggle multiple gallery tools. Everything works together seamlessly.', 'matcha-gallery' ); ?>
 								</p>
 								<?php if ( ! $is_pro ) : ?>
-									<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-pro-card__btn">
+									<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-pro-card__btn">
 										<?php esc_html_e( 'Upgrade Now', 'matcha-gallery' ); ?>
 									</a>
 								<?php else : ?>
@@ -574,7 +614,7 @@ final class Studio_Page {
 								</div>
 								<ul class="matcha-quick-access-list">
 									<li class="matcha-quick-access-item">
-										<a href="https://wpmatcha.com/support/" target="_blank" rel="noopener noreferrer">
+										<a href="https://wpmatcha.com/contact/" target="_blank" rel="noopener noreferrer">
 											<div class="matcha-quick-access-item__left">
 												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
 												<span><?php esc_html_e( 'VIP Priority Support', 'matcha-gallery' ); ?></span>
@@ -583,7 +623,7 @@ final class Studio_Page {
 										</a>
 									</li>
 									<li class="matcha-quick-access-item">
-										<a href="https://wpmatcha.com/docs/" target="_blank" rel="noopener noreferrer">
+										<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer">
 											<div class="matcha-quick-access-item__left">
 												<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
 												<span><?php esc_html_e( 'Help Center & Documentation', 'matcha-gallery' ); ?></span>
@@ -632,7 +672,7 @@ final class Studio_Page {
 						</div>
 						<div class="matcha-page-title-bar__actions">
 							<?php if ( ! $is_pro ) : ?>
-								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-btn-primary">
+								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-btn-primary">
 									<?php esc_html_e( 'Upgrade to Pro ↗', 'matcha-gallery' ); ?>
 								</a>
 							<?php else : ?>
@@ -726,7 +766,7 @@ final class Studio_Page {
 							<?php if ( $is_pro ) : ?>
 								<span class="matcha-hub-badge matcha-hub-badge--pro"><?php esc_html_e( 'All Pro Features Active', 'matcha-gallery' ); ?></span>
 							<?php else : ?>
-								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-hub-btn-primary" style="font-size:12px;padding:8px 16px;">
+								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-hub-btn-primary" style="font-size:12px;padding:8px 16px;">
 									<?php esc_html_e( 'Get Matcha Gallery Pro ↗', 'matcha-gallery' ); ?>
 								</a>
 							<?php endif; ?>
@@ -807,7 +847,7 @@ final class Studio_Page {
 								<?php esc_html_e( 'All licenses include 1 year of updates, customer support, and access to all upcoming superpowers.', 'matcha-gallery' ); ?>
 							</span>
 							<?php if ( ! $is_pro ) : ?>
-								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" target="_blank" rel="noopener noreferrer" class="matcha-hub-btn-primary">
+								<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-hub-btn-primary">
 									<?php esc_html_e( 'Upgrade to Pro at WPMatcha.com ↗', 'matcha-gallery' ); ?>
 								</a>
 							<?php endif; ?>
@@ -1248,23 +1288,27 @@ final class Studio_Page {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Gallery ID reading for script localization.
 		$id = isset( $_GET['id'] ) ? absint( wp_unslash( $_GET['id'] ) ) : 0;
+		$studio_data = array(
+			'root'       => esc_url_raw( rest_url() ),
+			'nonce'      => wp_create_nonce( 'wp_rest' ),
+			'galleryId'  => $id,
+			'config'     => $id ? Gallery_CPT::get_config( $id ) : Gallery_CPT::default_config(),
+			'title'      => $id ? get_the_title( $id ) : '',
+			'iconUrl'    => MATCHA_GALLERY_URL . 'assets/images/icon-128x128.png',
+			'isPro'      => Gallery_CPT::is_pro_active(),
+			'upgradeUrl' => apply_filters( 'matcha_gallery_upgrade_url', 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/' ),
+			'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+			'mediaNonce' => wp_create_nonce( 'matcha_ai_generate' ),
+			'i18n'       => array(
+				'untitled' => __( 'Untitled Gallery', 'matcha-gallery' ),
+			),
+		);
+		$studio_data = apply_filters( 'matcha_gallery_studio_localized_data', $studio_data );
+
 		wp_localize_script(
 			'matcha-studio',
 			'MatchaStudio',
-			array(
-				'root'      => esc_url_raw( rest_url() ),
-				'nonce'     => wp_create_nonce( 'wp_rest' ),
-				'galleryId' => $id,
-				'config'    => $id ? Gallery_CPT::get_config( $id ) : Gallery_CPT::default_config(),
-				'title'     => $id ? get_the_title( $id ) : '',
-				'isPro'      => Gallery_CPT::is_pro_active(),
-				'upgradeUrl' => apply_filters( 'matcha_gallery_upgrade_url', 'https://wpmatcha.com/wordpress-plugins/matcha-gallery/' ),
-				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-				'mediaNonce' => wp_create_nonce( 'matcha_ai_generate' ),
-				'i18n'       => array(
-					'untitled' => __( 'Untitled Gallery', 'matcha-gallery' ),
-				),
-			)
+			$studio_data
 		);
 	}
 }

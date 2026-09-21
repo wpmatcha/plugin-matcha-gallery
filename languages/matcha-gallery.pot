@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Matcha Gallery 1.0.0\n"
+"Project-Id-Version: Matcha Gallery 1.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/matcha-gallery\n"
 "Last-Translator: WP Matcha <support@wpmatcha.com>\n"
 "Language-Team: English <support@wpmatcha.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-19 11:42:17+00:00\n"
+"POT-Creation-Date: 2026-09-20 20:02:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
@@ -29,7 +29,7 @@ msgid_plural "%d images failed (check error log)."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Admin/Studio_Page.php:62
+#: includes/Admin/Studio_Page.php:63
 msgid "%s (Copy)"
 msgstr ""
 
@@ -37,59 +37,55 @@ msgstr ""
 msgid "← Go to AI Keywords"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:785
+#: includes/Admin/Studio_Page.php:825
 msgid "+ Infinite Scroll & Numbered Pages"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:750
+#: includes/Admin/Studio_Page.php:790
 msgid "+ Mosaic, Pinwheel, Bento"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:760
+#: includes/Admin/Studio_Page.php:800
 msgid "+ Oak, Black Metal, Brass, Acrylic"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:712 includes/Admin/Studio_Page.php:788
+#: includes/Admin/Studio_Page.php:752 includes/Admin/Studio_Page.php:828
 msgid "1-Click PDF Proposal Export"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:800
+#: includes/Admin/Studio_Page.php:840
 msgid "1-Click Updates & 1-on-1 Help"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:468
+#: includes/Admin/Studio_Page.php:508
 msgid "15+ Luxury Frame Styles"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:561
+#: includes/Admin/Studio_Page.php:601
 msgid "15+ Luxury Picture Frame Styles"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:513
+#: includes/Admin/Studio_Page.php:553
 msgid "24/7 priority ticket queue with < 2hr response"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:545
+#: includes/Admin/Studio_Page.php:585
 msgid "300+ Curated Layout Presets"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:317
-msgid "3D Elevation Lift"
-msgstr ""
-
-#: includes/Admin/Studio_Page.php:657
+#: includes/Admin/Studio_Page.php:697
 msgid "6 Algorithmic Blueprints"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:890
+#: includes/Admin/Studio_Page.php:930
 msgid "6 Layouts with Pro"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:366
+#: includes/Admin/Studio_Page.php:406
 msgid "Accelerated popup transitions"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:979
+#: includes/Admin/Studio_Page.php:1019
 msgid "Actions"
 msgstr ""
 
@@ -101,7 +97,7 @@ msgstr ""
 msgid "Add New AI Keyword"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:97 includes/Admin/Studio_Page.php:132 includes/Admin/Studio_Page.php:133 includes/Gallery/Gallery_CPT.php:48
+#: includes/Admin/Admin_Header.php:92 includes/Admin/Studio_Page.php:172 includes/Admin/Studio_Page.php:173 includes/Gallery/Gallery_CPT.php:48
 msgid "Add New Gallery"
 msgstr ""
 
@@ -114,11 +110,11 @@ msgstr ""
 msgid "Add or remove AI keywords"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:616
+#: includes/Blocks/Smart_Gallery_Block.php:657
 msgid "Add to favorites"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:998
+#: includes/Admin/Studio_Page.php:1038
 msgid "ago"
 msgstr ""
 
@@ -139,7 +135,7 @@ msgctxt "taxonomy singular name"
 msgid "AI Keyword"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:262 includes/Admin/Studio_Page.php:152 includes/Admin/Studio_Page.php:153 includes/Taxonomy/AI_Keywords_Taxonomy.php:54 blocks/smart-gallery/components/InspectorControls.js:172
+#: includes/Admin/Media_Actions.php:262 includes/Admin/Studio_Page.php:192 includes/Admin/Studio_Page.php:193 includes/Taxonomy/AI_Keywords_Taxonomy.php:54 blocks/smart-gallery/components/InspectorControls.js:209
 msgid "AI Keywords"
 msgstr ""
 
@@ -168,15 +164,15 @@ msgstr ""
 msgid "AI Provider Credentials"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:102 includes/Admin/Studio_Page.php:142 includes/Admin/Studio_Page.php:143
+#: includes/Admin/Admin_Header.php:97 includes/Admin/Studio_Page.php:182 includes/Admin/Studio_Page.php:183
 msgid "AI Settings"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:778
+#: includes/Admin/Studio_Page.php:818
 msgid "AI Vision Color Swatches"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:384
+#: includes/Admin/Studio_Page.php:424
 msgid "AI vision keywords cloud"
 msgstr ""
 
@@ -188,11 +184,11 @@ msgstr ""
 msgid "AI Vision Superpowers"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:356
+#: includes/Admin/Studio_Page.php:396
 msgid "AI Vision Tagging"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:499
+#: includes/Blocks/Smart_Gallery_Block.php:523
 msgid "All"
 msgstr ""
 
@@ -200,15 +196,15 @@ msgstr ""
 msgid "All AI Keywords"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:932
+#: includes/Admin/Studio_Page.php:972
 msgid "All Blueprints"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:409
+#: includes/Blocks/Smart_Gallery_Block.php:433
 msgid "All Chapters"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:92 includes/Admin/Settings_Page.php:199 includes/Admin/Studio_Page.php:122 includes/Admin/Studio_Page.php:123 includes/Admin/Studio_Page.php:828
+#: includes/Admin/Admin_Header.php:87 includes/Admin/Settings_Page.php:199 includes/Admin/Studio_Page.php:162 includes/Admin/Studio_Page.php:163 includes/Admin/Studio_Page.php:868
 msgid "All Galleries"
 msgstr ""
 
@@ -216,27 +212,27 @@ msgstr ""
 msgid "All Images (No Tag Filter)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:807
+#: includes/Admin/Studio_Page.php:847
 msgid "All licenses include 1 year of updates, customer support, and access to all upcoming superpowers."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:727
+#: includes/Admin/Studio_Page.php:767
 msgid "All Pro Features Active"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:887
+#: includes/Admin/Studio_Page.php:927
 msgid "All Superpowers Unlocked"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:302
+#: blocks/smart-gallery/components/InspectorControls.js:339
 msgid "Allow clicking images to view them in a larger overlay."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:703
+#: includes/Admin/Studio_Page.php:743
 msgid "Allow clients to favorite photos with 1-click ID list export. Sell art directly with customizable Buy Now buttons and dynamic price badges."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:458
+#: includes/Admin/Studio_Page.php:498
 msgid "Allow visitors to download high-res image sets"
 msgstr ""
 
@@ -269,7 +265,15 @@ msgstr ""
 msgid "Architectural & Interior Design (Spatial structure, lighting, decor)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1044
+#: blocks/smart-gallery/components/InspectorControls.js:160
+msgid "Architectural Curtain (The Grid: Sofia)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:356
+msgid "Architectural Slide Curtain (The Grid Sofia)"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:1084
 msgid "Are you sure you want to move this gallery to trash?"
 msgstr ""
 
@@ -281,15 +285,15 @@ msgstr ""
 msgid "Auto-analyze on Image Upload"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:436
+#: includes/Admin/Studio_Page.php:476
 msgid "Auto-enrich entire photo libraries in 1-click"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:375
+#: includes/Admin/Studio_Page.php:415
 msgid "Auto-generated alt text & captions"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:457
+#: includes/Admin/Studio_Page.php:497
 msgid "Automated Batch Zip Downloads"
 msgstr ""
 
@@ -309,19 +313,19 @@ msgstr ""
 msgid "Background Queue (Action Scheduler) for 1000+ Images"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:951 includes/Pro/Pro_Features.php:88
+#: includes/Admin/Studio_Page.php:991 includes/Pro/Pro_Features.php:88
 msgid "Bento"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:251
+#: includes/Admin/Studio_Page.php:291
 msgid "Bento Showcase"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:186 blocks/smart-gallery/components/InspectorControls.js:200
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:186 blocks/smart-gallery/components/InspectorControls.js:237
 msgid "Bento Showcase (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:258
+#: includes/Admin/Studio_Page.php:298
 msgid "Black Metal (PRO)"
 msgstr ""
 
@@ -329,7 +333,7 @@ msgstr ""
 msgid "Brushed Gold Brass (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:528
+#: includes/Admin/Studio_Page.php:568
 msgid "Build Complete Galleries Faster"
 msgstr ""
 
@@ -353,11 +357,19 @@ msgstr ""
 msgid "Choose from the most used AI keywords"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:246 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:178 blocks/smart-gallery/components/InspectorControls.js:196
+#: blocks/smart-gallery/components/InspectorControls.js:354
+msgid "Cinematic Pullback (The Grid Bogota)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:161
+msgid "Cinematic Pullback (The Grid: Bogota)"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:286 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:178 blocks/smart-gallery/components/InspectorControls.js:233
 msgid "Classic Grid"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:659
+#: includes/Admin/Studio_Page.php:699
 msgid "Classic Uniform Grid, Pinterest Vertical Masonry, Flickr Justified Rows, plus Pro PhotoBlocks Mosaic, Pinwheel Spiral, and Bento Showcase."
 msgstr ""
 
@@ -365,39 +377,43 @@ msgstr ""
 msgid "Claude 3.5 Sonnet & Google Gemini Pro Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:759
+#: includes/Admin/Studio_Page.php:799
 msgid "Clean & White Matting"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:255 includes/Admin/Studio_Page.php:992
+#: includes/Admin/Studio_Page.php:295 includes/Admin/Studio_Page.php:1032
 msgid "Clean Borderless"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:401
+#: blocks/smart-gallery/components/InspectorControls.js:359
+msgid "Clean Static (No Effect)"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:441
 msgid "Client Proofing"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:768
+#: includes/Admin/Studio_Page.php:808
 msgid "Client Proofing & Favorite Export"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:557
+#: includes/Admin/Studio_Page.php:597
 msgid "Client Proofing & Favorite Trays"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:446
+#: includes/Admin/Studio_Page.php:486
 msgid "Client Proofing & Favoriting"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:701
+#: includes/Admin/Studio_Page.php:741
 msgid "Client Proofing & Shoppable Hotspots"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1103
+#: includes/Admin/Studio_Page.php:1143
 msgid "Colors"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1061
+#: includes/Admin/Studio_Page.php:1101
 msgid "Cols"
 msgstr ""
 
@@ -405,35 +421,35 @@ msgstr ""
 msgid "Columns"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:449 blocks/smart-gallery/components/InspectorControls.js:217
+#: includes/Admin/Settings_Page.php:449 blocks/smart-gallery/components/InspectorControls.js:254
 msgid "Columns (Desktop)"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:234
+#: blocks/smart-gallery/components/InspectorControls.js:271
 msgid "Columns (Mobile)"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:226
+#: blocks/smart-gallery/components/InspectorControls.js:263
 msgid "Columns (Tablet)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:799
+#: includes/Admin/Studio_Page.php:839
 msgid "Community Forums"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:724
+#: includes/Admin/Studio_Page.php:764
 msgid "Compare capabilities and choose the right edition for your creative projects."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:630
+#: includes/Admin/Studio_Page.php:670
 msgid "Compare core features with Pro superpowers. Upgrade to unlock architectural mosaic and bento blueprints, 15+ museum framing styles, in-frame focal cropping, client proofing, and priority support."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:360 includes/Admin/Studio_Page.php:378
+#: includes/Admin/Studio_Page.php:400 includes/Admin/Studio_Page.php:418
 msgid "Configure"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:315
+#: includes/Admin/Studio_Page.php:355
 msgid "Configure AI Settings"
 msgstr ""
 
@@ -463,7 +479,7 @@ msgstr ""
 msgid "Connection successful! Responded in %1$dms using %2$s."
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:151
+#: blocks/smart-gallery/components/InspectorControls.js:188
 msgid "Content Source"
 msgstr ""
 
@@ -471,11 +487,11 @@ msgstr ""
 msgid "Control when AI triggers and what metadata fields get generated."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1132
+#: includes/Admin/Studio_Page.php:1172
 msgid "Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:674
+#: includes/Blocks/Smart_Gallery_Block.php:755
 msgid "Copy ID List"
 msgstr ""
 
@@ -483,11 +499,11 @@ msgstr ""
 msgid "Copy Shortcode"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1131
+#: includes/Admin/Studio_Page.php:1171
 msgid "Copy shortcode to clipboard"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:653 includes/Admin/Studio_Page.php:664 includes/Admin/Studio_Page.php:686
+#: includes/Admin/Studio_Page.php:693 includes/Admin/Studio_Page.php:704 includes/Admin/Studio_Page.php:726
 msgid "Core Engine"
 msgstr ""
 
@@ -495,23 +511,39 @@ msgstr ""
 msgid "Could not delete gallery."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:202 includes/Admin/Studio_Page.php:645
+#: includes/Admin/Settings_Page.php:202 includes/Admin/Studio_Page.php:685
 msgid "Create Gallery"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:311 includes/Admin/Studio_Page.php:836
+#: includes/Admin/Studio_Page.php:351 includes/Admin/Studio_Page.php:876
 msgid "Create New Gallery"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:868
+#: includes/Admin/Studio_Page.php:908
 msgid "Curated Photos"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:775
+#: blocks/smart-gallery/components/InspectorControls.js:164
+msgid "Curated preset that harmonizes layout, hover effects, and framing."
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:151
+msgid "Curated Style Preset (Skin)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:158
+msgid "Custom (Manual Adjustments)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:370
+msgid "Custom border color for Brasilia hairline frame."
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:815
 msgid "Custom Links & Price Tags"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:369
+#: includes/Admin/Studio_Page.php:409
 msgid "Customize"
 msgstr ""
 
@@ -523,39 +555,47 @@ msgstr ""
 msgid "Customize Toolbar Here"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:87 includes/Admin/Studio_Page.php:112 includes/Admin/Studio_Page.php:113
+#: includes/Admin/Admin_Header.php:82 includes/Admin/Studio_Page.php:152 includes/Admin/Studio_Page.php:153
 msgid "Dashboard"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:445
+#: includes/Blocks/Smart_Gallery_Block.php:469
 msgid "Date Added (Newest)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:446
+#: includes/Blocks/Smart_Gallery_Block.php:470
 msgid "Date Added (Oldest)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:512
+#: includes/Admin/Studio_Page.php:552
 msgid "Dedicated VIP Priority Support"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:442
+#: includes/Blocks/Smart_Gallery_Block.php:466
 msgid "Default Order"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:382
+msgid "Determine how touch devices handle tapping photos."
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:378
+msgid "Direct Lightbox Open (Fast)"
 msgstr ""
 
 #: includes/Admin/Admin_Header.php:61
 msgid "Dismiss notice"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:281
+#: blocks/smart-gallery/components/InspectorControls.js:318
 msgid "Display"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:423
+#: includes/Admin/Studio_Page.php:463
 msgid "Do more with Matcha AI Pro"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:140
+#: includes/Admin/Admin_Header.php:135
 msgid "Documentation"
 msgstr ""
 
@@ -563,19 +603,19 @@ msgstr ""
 msgid "Documentation & Help"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1041
+#: includes/Admin/Studio_Page.php:1081
 msgid "Duplicate"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1039
+#: includes/Admin/Studio_Page.php:1079
 msgid "Duplicate gallery settings and photos"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:163
+#: blocks/smart-gallery/components/InspectorControls.js:200
 msgid "Dynamic (by AI tags)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:780
+#: includes/Admin/Studio_Page.php:820
 msgid "Dynamic Color Dots"
 msgstr ""
 
@@ -595,7 +635,7 @@ msgstr ""
 msgid "Edit Gallery"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1036
+#: includes/Admin/Studio_Page.php:1076
 msgid "Edit in Studio"
 msgstr ""
 
@@ -603,31 +643,35 @@ msgstr ""
 msgid "Edit Selection"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1168
+#: includes/Admin/Studio_Page.php:1208
 msgid "Edit with Elementor, find the dedicated \"Matcha Gallery\" widget in the left panel under the Matcha Gallery category, drag it to your canvas, and choose your gallery ID."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1167
+#: blocks/smart-gallery/components/InspectorControls.js:355
+msgid "Editorial Hairline Frame (The Grid Brasilia)"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:1207
 msgid "Elementor Page Builder"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1174
+#: includes/Admin/Studio_Page.php:1214
 msgid "Embed anywhere in classic content, text widgets, sidebars, or page builder raw HTML blocks using the standard shortcode syntax."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:977
+#: includes/Admin/Studio_Page.php:1017
 msgid "Embed Shortcode"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:905
+#: includes/Admin/Studio_Page.php:945
 msgid "Embedding & Builders Guide"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:257
+#: blocks/smart-gallery/components/InspectorControls.js:294
 msgid "Enable filters"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:301
+#: blocks/smart-gallery/components/InspectorControls.js:338
 msgid "Enable lightbox"
 msgstr ""
 
@@ -643,19 +687,23 @@ msgstr ""
 msgid "Enrichment Coverage"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:770
+#: blocks/smart-gallery/components/InspectorControls.js:159
+msgid "Exhibition Hairline Frame (The Grid: Brasilia)"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:810
 msgid "Favorite Tray + ID Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:671
+#: includes/Blocks/Smart_Gallery_Block.php:752
 msgid "Favorites Selected"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:738
+#: includes/Admin/Studio_Page.php:778
 msgid "Feature / Superpower"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:902
+#: includes/Admin/Studio_Page.php:942
 msgid "Features & Pro Comparison"
 msgstr ""
 
@@ -663,32 +711,28 @@ msgstr ""
 msgid "Filter by AI Keyword Tag"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:453
+#: includes/Blocks/Smart_Gallery_Block.php:477
 msgid "Filter by color"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:465
+#: includes/Blocks/Smart_Gallery_Block.php:489
 #. translators: %s: Hex color code
 msgid "Filter color %s"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:929
+#: includes/Admin/Studio_Page.php:969
 msgid "Filter galleries by title or ID..."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1097 blocks/smart-gallery/components/InspectorControls.js:253
+#: includes/Admin/Studio_Page.php:1137 blocks/smart-gallery/components/InspectorControls.js:290
 msgid "Filters"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:320
-msgid "Flat (No Animation)"
-msgstr ""
-
-#: includes/Admin/Studio_Page.php:248
+#: includes/Admin/Studio_Page.php:288
 msgid "Flickr Justified"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:180 blocks/smart-gallery/components/InspectorControls.js:198
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:180 blocks/smart-gallery/components/InspectorControls.js:235
 msgid "Flickr Justified Rows"
 msgstr ""
 
@@ -696,43 +740,43 @@ msgstr ""
 msgid "For Google Gemini: https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:135
+#: includes/Admin/Admin_Header.php:130
 msgid "FREE"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:739
+#: includes/Admin/Studio_Page.php:779
 msgid "Free Core Edition"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:889
+#: includes/Admin/Studio_Page.php:929
 msgid "Free Edition"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:302 includes/Admin/Studio_Page.php:626 includes/Admin/Studio_Page.php:826
+#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:342 includes/Admin/Studio_Page.php:666 includes/Admin/Studio_Page.php:866
 msgid "FREE VERSION"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:107 includes/Admin/Studio_Page.php:162 includes/Admin/Studio_Page.php:163
+#: includes/Admin/Admin_Header.php:102 includes/Admin/Studio_Page.php:202 includes/Admin/Studio_Page.php:203
 msgid "Free vs Pro"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:840
+#: includes/Admin/Studio_Page.php:880
 msgid "Free vs. Pro ↗"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:723
+#: includes/Admin/Studio_Page.php:763
 msgid "Free vs. Pro Feature Comparison"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:765
+#: includes/Admin/Studio_Page.php:805
 msgid "Full 2D Reticle & Zoom"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:794
+#: includes/Admin/Studio_Page.php:834
 msgid "Full Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:795
+#: includes/Admin/Studio_Page.php:835
 msgid "Full Support + Pro Controls"
 msgstr ""
 
@@ -740,11 +784,11 @@ msgstr ""
 msgid "Fullscreen Lightbox"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:859
+#: includes/Admin/Studio_Page.php:899
 msgid "Galleries Created"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:899
+#: includes/Admin/Studio_Page.php:939
 msgid "Galleries Manager"
 msgstr ""
 
@@ -752,19 +796,19 @@ msgstr ""
 msgid "Gallery #%d"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:406
+#: includes/Blocks/Smart_Gallery_Block.php:430
 msgid "Gallery Chapters"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:282
+#: includes/Admin/Studio_Page.php:322
 msgid "Gallery duplicated successfully with all layout parameters and images cloned."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:491
+#: includes/Blocks/Smart_Gallery_Block.php:515
 msgid "Gallery filters"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:286
+#: includes/Admin/Studio_Page.php:326
 msgid "Gallery moved to trash."
 msgstr ""
 
@@ -772,7 +816,7 @@ msgstr ""
 msgid "Gallery not found."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:664
+#: includes/Blocks/Smart_Gallery_Block.php:745
 msgid "Gallery Pages"
 msgstr ""
 
@@ -780,7 +824,7 @@ msgstr ""
 msgid "Generate AI Metadata"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:714
+#: includes/Admin/Studio_Page.php:754
 msgid "Generate itemized PDF proposals and wall layout sheets directly from the visual builder, complete with dimensions, prices, and client info."
 msgstr ""
 
@@ -804,11 +848,11 @@ msgstr ""
 msgid "Get an API key from the OpenAI Platform or any compatible Vision API provider."
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:53 includes/Admin/Admin_Header.php:122 includes/Admin/Studio_Page.php:425
+#: includes/Admin/Admin_Header.php:53 includes/Admin/Admin_Header.php:117 includes/Admin/Studio_Page.php:465
 msgid "Get Full Control ↗"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:730
+#: includes/Admin/Studio_Page.php:770
 msgid "Get Matcha Gallery Pro ↗"
 msgstr ""
 
@@ -816,11 +860,11 @@ msgstr ""
 msgid "Get Priority Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:325
+#: includes/Admin/Studio_Page.php:365
 msgid "Getting Started with Matcha"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:260
+#: includes/Admin/Studio_Page.php:300
 msgid "Glass Float (PRO)"
 msgstr ""
 
@@ -828,51 +872,55 @@ msgstr ""
 msgid "Glass Float Acrylic (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:341
+#: includes/Admin/Studio_Page.php:381
 msgid "Go to AI Settings ↗"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:259
+#: includes/Admin/Studio_Page.php:299
 msgid "Gold Brass (PRO)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:444 includes/Admin/Studio_Page.php:935 includes/Pro/Pro_Features.php:83
+#: includes/Admin/Settings_Page.php:444 includes/Admin/Studio_Page.php:975 includes/Pro/Pro_Features.php:83
 msgid "Grid"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:749
+#: includes/Admin/Studio_Page.php:789
 msgid "Grid, Masonry, Justified"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:348
+#: includes/Admin/Studio_Page.php:388
 msgid "Grid, Masonry, Justified, Bento"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:793
+#: includes/Admin/Studio_Page.php:833
 msgid "Gutenberg Block & Elementor Widget"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1161
+#: includes/Admin/Studio_Page.php:1201
 msgid "Gutenberg Block Editor"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1067
+#: includes/Admin/Studio_Page.php:1107
 msgid "Gutter"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:221 blocks/smart-gallery/components/InspectorControls.js:242
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:221 blocks/smart-gallery/components/InspectorControls.js:279
 msgid "Gutter Size (px)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:189 includes/Admin/Studio_Page.php:301 includes/Admin/Studio_Page.php:625 includes/Admin/Studio_Page.php:825
+#: blocks/smart-gallery/components/InspectorControls.js:366
+msgid "Hairline Frame Color"
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:189 includes/Admin/Studio_Page.php:341 includes/Admin/Studio_Page.php:665 includes/Admin/Studio_Page.php:865
 msgid "Hello %s"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:143
+#: includes/Admin/Admin_Header.php:138
 msgid "Help & Priority Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:589
+#: includes/Admin/Studio_Page.php:629
 msgid "Help Center & Documentation"
 msgstr ""
 
@@ -880,7 +928,7 @@ msgstr ""
 msgid "High-Fashion & Editorial (Avant-garde styling, magazine mood)"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:313
+#: blocks/smart-gallery/components/InspectorControls.js:350
 msgid "Hover Animation"
 msgstr ""
 
@@ -900,15 +948,15 @@ msgstr ""
 msgid "images"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:763
+#: includes/Admin/Studio_Page.php:803
 msgid "In-Frame Pan & Zoom 2D Cropper"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1180
+#: includes/Admin/Studio_Page.php:1220
 msgid "Include your galleries directly inside custom page templates, archive headers, or theme hook callbacks using do_shortcode()."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:754 includes/Admin/Studio_Page.php:755
+#: includes/Admin/Studio_Page.php:794 includes/Admin/Studio_Page.php:795
 msgid "Included"
 msgstr ""
 
@@ -916,7 +964,7 @@ msgstr ""
 msgid "Inherit"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:480
+#: includes/Admin/Studio_Page.php:520
 msgid "Instant front-end AJAX pills with photo counters"
 msgstr ""
 
@@ -928,11 +976,11 @@ msgstr ""
 msgid "Invalid attachment ID."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:598
+#: includes/Admin/Studio_Page.php:638
 msgid "Join the Community"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:943 includes/Pro/Pro_Features.php:85
+#: includes/Admin/Studio_Page.php:983 includes/Pro/Pro_Features.php:85
 msgid "Justified"
 msgstr ""
 
@@ -940,11 +988,11 @@ msgstr ""
 msgid "Keywords are saved into standard WP taxonomies for instant filtering."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:920
+#: includes/Admin/Studio_Page.php:960
 msgid "Launch Matcha Studio Builder"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:189
+#: blocks/smart-gallery/components/InspectorControls.js:226
 msgid "Layout"
 msgstr ""
 
@@ -952,7 +1000,7 @@ msgstr ""
 msgid "Layout & Framing Overrides"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:975
+#: includes/Admin/Studio_Page.php:1015
 msgid "Layout & Geometry"
 msgstr ""
 
@@ -960,35 +1008,35 @@ msgstr ""
 msgid "Layout Blueprint"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:347 includes/Admin/Studio_Page.php:748
+#: includes/Admin/Studio_Page.php:387 includes/Admin/Studio_Page.php:788
 msgid "Layout Blueprints"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:877
+#: includes/Admin/Studio_Page.php:917
 msgid "Layout Engine Active"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:442 blocks/smart-gallery/components/InspectorControls.js:193
+#: includes/Admin/Settings_Page.php:442 blocks/smart-gallery/components/InspectorControls.js:230
 msgid "Layout Type"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:112
+#: includes/Admin/Admin_Header.php:107
 msgid "Learn & Docs"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:327
+#: includes/Admin/Studio_Page.php:367
 msgid "Learn how to auto-tag photos and publish your first responsive gallery in 60 seconds."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:538
+#: includes/Admin/Studio_Page.php:578
 msgid "License Active & Verified"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:845
+#: includes/Admin/Studio_Page.php:885
 msgid "License Manager"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:101
+#: blocks/smart-gallery/components/InspectorControls.js:102
 msgid "Link this block to a master gallery designed in Matcha Studio."
 msgstr ""
 
@@ -996,7 +1044,7 @@ msgstr ""
 msgid "Link to a master gallery designed in Matcha Studio, select photos from your Media Library, or use dynamic AI tag-based sourcing."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:479
+#: includes/Admin/Studio_Page.php:519
 msgid "Live Keyword & Category Filters"
 msgstr ""
 
@@ -1004,11 +1052,11 @@ msgstr ""
 msgid "Live Search Input"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:784
+#: includes/Admin/Studio_Page.php:824
 msgid "Load More Button"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:659
+#: includes/Blocks/Smart_Gallery_Block.php:740
 msgid "Load More Photos"
 msgstr ""
 
@@ -1016,31 +1064,31 @@ msgstr ""
 msgid "Loading gallery preview…"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:178
+#: blocks/smart-gallery/components/InspectorControls.js:215
 msgid "Loading…"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:679 includes/Admin/Studio_Page.php:758
+#: includes/Admin/Studio_Page.php:719 includes/Admin/Studio_Page.php:798
 msgid "Luxury Picture Framing"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:351
+#: includes/Admin/Studio_Page.php:391
 msgid "Manage"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:830
+#: includes/Admin/Studio_Page.php:870
 msgid "Manage and customize your photo galleries. Engineered for Zero-CLS instant loading, 6 architectural layouts, and luxury picture framing."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:640
+#: includes/Admin/Studio_Page.php:680
 msgid "Manage Pro License ↗"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:445 includes/Admin/Studio_Page.php:939 includes/Pro/Pro_Features.php:84
+#: includes/Admin/Settings_Page.php:445 includes/Admin/Studio_Page.php:979 includes/Pro/Pro_Features.php:84
 msgid "Masonry"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:331 includes/Admin/Studio_Page.php:100 includes/Admin/Studio_Page.php:101
+#: includes/Admin/Media_Actions.php:331 includes/Admin/Studio_Page.php:140 includes/Admin/Studio_Page.php:141
 msgid "Matcha AI"
 msgstr ""
 
@@ -1141,7 +1189,7 @@ msgctxt "post type general name"
 msgid "Matcha Galleries"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:80 includes/Integrations/Elementor/Elementor_Integration.php:52 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:39 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:117 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:359
+#: includes/Admin/Admin_Header.php:73 includes/Admin/Admin_Header.php:75 includes/Integrations/Elementor/Elementor_Integration.php:52 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:39 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:117 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:359
 msgid "Matcha Gallery"
 msgstr ""
 
@@ -1150,11 +1198,11 @@ msgctxt "post type singular name"
 msgid "Matcha Gallery"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:628
+#: includes/Admin/Studio_Page.php:668
 msgid "Matcha Gallery Free vs. Pro"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:85
+#: includes/Admin/Admin_Header.php:80
 msgid "Matcha Gallery Navigation"
 msgstr ""
 
@@ -1162,7 +1210,7 @@ msgstr ""
 msgid "Matcha Gallery Notice:"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:741
+#: includes/Admin/Studio_Page.php:781
 msgid "Matcha Gallery Pro"
 msgstr ""
 
@@ -1171,15 +1219,11 @@ msgstr ""
 msgid "Matcha Gallery requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade your PHP version."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:306
+#: includes/Admin/Studio_Page.php:346
 msgid "Matcha is the fast, intelligent WordPress photo gallery suite. Build high-converting masonry, grid, justified, and mosaic galleries with zero CLS layout shift and automated AI vision tagging."
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:318
-msgid "Matcha Neon Glow"
-msgstr ""
-
-#: blocks/smart-gallery/components/InspectorControls.js:94
+#: blocks/smart-gallery/components/InspectorControls.js:95
 msgid "Matcha Studio Gallery"
 msgstr ""
 
@@ -1191,20 +1235,32 @@ msgstr ""
 msgid "Metadata Fields to Generate"
 msgstr ""
 
+#: blocks/smart-gallery/components/InspectorControls.js:357
+msgid "Minimalist Bottom Drawer (The Grid Lome)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:162
+msgid "Minimalist Drawer (The Grid: Lome)"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:375
+msgid "Mobile Touch Action"
+msgstr ""
+
 #: includes/Admin/Settings_Page.php:726
 #. translators: 1: Current model name, 2: Comma-separated list of available models, 3: Recommended model name
 msgid "Model \"%1$s\" is not found on your key. Available on your key: %2$s. Recommended: \"%3$s\""
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:978
+#: includes/Admin/Studio_Page.php:1018
 msgid "Modified"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:319
-msgid "Monochrome to Color"
+#: blocks/smart-gallery/components/InspectorControls.js:358
+msgid "Monochrome to Vivid Color"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:947 includes/Pro/Pro_Features.php:86
+#: includes/Admin/Studio_Page.php:987 includes/Pro/Pro_Features.php:86
 msgid "Mosaic"
 msgstr ""
 
@@ -1216,7 +1272,7 @@ msgstr ""
 msgid "Natural Oak Wood (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:469
+#: includes/Admin/Studio_Page.php:509
 msgid "Natural oak, brass, black metal & glass matting"
 msgstr ""
 
@@ -1224,7 +1280,7 @@ msgstr ""
 msgid "Need help setting up custom prompt templates or troubleshooting API tokens?"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:357
+#: includes/Admin/Studio_Page.php:397
 msgid "Neural image analysis on upload"
 msgstr ""
 
@@ -1232,7 +1288,7 @@ msgstr ""
 msgid "New AI Keyword Name"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1202
+#: includes/Admin/Studio_Page.php:1242
 msgid "New Gallery"
 msgstr ""
 
@@ -1252,7 +1308,7 @@ msgstr ""
 msgid "No API key configured. Go to Settings → Matcha AI Gallery."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:916
+#: includes/Admin/Studio_Page.php:956
 msgid "No galleries created yet"
 msgstr ""
 
@@ -1264,15 +1320,15 @@ msgstr ""
 msgid "None (Clean Borderless)"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:81
+#: blocks/smart-gallery/components/InspectorControls.js:82
 msgid "None (Custom Block Settings)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:257
+#: includes/Admin/Studio_Page.php:297
 msgid "Oak Wood (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1162
+#: includes/Admin/Studio_Page.php:1202
 msgid "Open any post or page, click + to insert a new block, and search for \"Matcha Gallery\" or type /matcha. Select your saved gallery from the inspector dropdown on the right."
 msgstr ""
 
@@ -1284,11 +1340,11 @@ msgstr ""
 msgid "Open Matcha Studio Builder ↗"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:396
+#: includes/Admin/Studio_Page.php:436
 msgid "Open Studio"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1145
+#: includes/Admin/Studio_Page.php:1185
 msgid "Open Studio ↗"
 msgstr ""
 
@@ -1304,15 +1360,15 @@ msgstr ""
 msgid "Overwrite Existing Metadata"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:783
+#: includes/Admin/Studio_Page.php:823
 msgid "Pagination Systems"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:454
+#: includes/Blocks/Smart_Gallery_Block.php:478
 msgid "Palette"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:447
+#: includes/Admin/Studio_Page.php:487
 msgid "Password galleries, favorites & ID copy tray"
 msgstr ""
 
@@ -1320,11 +1376,11 @@ msgstr ""
 msgid "Permission denied."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:402
+#: includes/Admin/Studio_Page.php:442
 msgid "Photo favoriting & review tray"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:249 blocks/smart-gallery/components/InspectorControls.js:199
+#: includes/Admin/Studio_Page.php:289 blocks/smart-gallery/components/InspectorControls.js:236
 msgid "PhotoBlocks Mosaic"
 msgstr ""
 
@@ -1332,15 +1388,15 @@ msgstr ""
 msgid "PhotoBlocks Mosaic (PRO)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1078
+#: includes/Admin/Studio_Page.php:1118
 msgid "Photos"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:976
+#: includes/Admin/Studio_Page.php:1016
 msgid "Photos & Features"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1179
+#: includes/Admin/Studio_Page.php:1219
 msgid "PHP Theme Template Tag"
 msgstr ""
 
@@ -1348,20 +1404,24 @@ msgstr ""
 msgid "Picture Frame Style"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:247 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:179 blocks/smart-gallery/components/InspectorControls.js:197
+#: includes/Admin/Studio_Page.php:287 includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:179 blocks/smart-gallery/components/InspectorControls.js:234
 msgid "Pinterest Masonry"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:955 includes/Pro/Pro_Features.php:87
+#: includes/Admin/Studio_Page.php:995 includes/Pro/Pro_Features.php:87
 msgid "Pinwheel"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:250
+#: includes/Admin/Studio_Page.php:290
 msgid "Pinwheel Spiral"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:185 blocks/smart-gallery/components/InspectorControls.js:201
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:185 blocks/smart-gallery/components/InspectorControls.js:238
 msgid "Pinwheel Spiral (PRO)"
+msgstr ""
+
+#: includes/Blocks/Smart_Gallery_Block.php:678 includes/Blocks/Smart_Gallery_Block.php:679
+msgid "Play Video"
 msgstr ""
 
 #: includes/Admin/Settings_Page.php:610
@@ -1372,15 +1432,15 @@ msgstr ""
 msgid "Popular AI Keywords"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:670
+#: includes/Admin/Studio_Page.php:710
 msgid "Pre-calculated CSS aspect-ratio framing stops layout jumps on initial page render. Pass Google Core Web Vitals with 100 PageSpeed scores."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:974
+#: includes/Admin/Studio_Page.php:1014
 msgid "Preview & Title"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:790
+#: includes/Admin/Studio_Page.php:830
 msgid "Printable PDF Sheets"
 msgstr ""
 
@@ -1388,19 +1448,19 @@ msgstr ""
 msgid "Private IP endpoints are not allowed."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:401 includes/Admin/Studio_Page.php:582
+#: includes/Admin/Settings_Page.php:401 includes/Admin/Studio_Page.php:622
 msgid "PRO"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:886
+#: includes/Admin/Studio_Page.php:926
 msgid "Pro Active"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:131
+#: includes/Admin/Admin_Header.php:126
 msgid "PRO ACTIVE"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:405 includes/Admin/Studio_Page.php:414
+#: includes/Admin/Studio_Page.php:445 includes/Admin/Studio_Page.php:454
 msgid "Pro Feature"
 msgstr ""
 
@@ -1416,11 +1476,11 @@ msgstr ""
 msgid "Pro features are active. Thank you for your support!"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:117
+#: includes/Admin/Admin_Header.php:112
 msgid "Pro License"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:675 includes/Admin/Studio_Page.php:697 includes/Admin/Studio_Page.php:708
+#: includes/Admin/Studio_Page.php:715 includes/Admin/Studio_Page.php:737 includes/Admin/Studio_Page.php:748
 msgid "PRO Superpower"
 msgstr ""
 
@@ -1428,15 +1488,15 @@ msgstr ""
 msgid "PRO UPGRADE"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:302 includes/Admin/Studio_Page.php:626 includes/Admin/Studio_Page.php:826
+#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:342 includes/Admin/Studio_Page.php:666 includes/Admin/Studio_Page.php:866
 msgid "PRO VERSION"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1115
+#: includes/Admin/Studio_Page.php:1155
 msgid "Proofing"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:573
+#: includes/Admin/Studio_Page.php:613
 msgid "Quick Access"
 msgstr ""
 
@@ -1444,15 +1504,15 @@ msgstr ""
 msgid "Quick API Setup"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:339
+#: includes/Admin/Studio_Page.php:379
 msgid "Quick Settings"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:330
+#: includes/Admin/Studio_Page.php:370
 msgid "Quick Start Video & Docs"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:447
+#: includes/Blocks/Smart_Gallery_Block.php:471
 msgid "Random Shuffle"
 msgstr ""
 
@@ -1460,7 +1520,7 @@ msgstr ""
 msgid "Rate limit reached (max 60/min). Please wait a moment."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:607
+#: includes/Admin/Studio_Page.php:647
 msgid "Rate Matcha ★★★★★"
 msgstr ""
 
@@ -1468,11 +1528,11 @@ msgstr ""
 msgid "Read Documentation"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:393
+#: includes/Admin/Studio_Page.php:433
 msgid "Real-time drag & drop layout editing"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:692
+#: includes/Admin/Studio_Page.php:732
 msgid "Real-time keyword search, multi-select category pills with photo counters, and AI color-swatch dot palettes for intuitive browsing."
 msgstr ""
 
@@ -1484,19 +1544,19 @@ msgstr ""
 msgid "Required"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:490
+#: includes/Admin/Studio_Page.php:530
 msgid "Right-Click & Image Protection"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:411
+#: includes/Admin/Studio_Page.php:451
 msgid "Right-click photo protection"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:208
+#: blocks/smart-gallery/components/InspectorControls.js:245
 msgid "Row Height (px)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1064
+#: includes/Admin/Studio_Page.php:1104
 msgid "Rows"
 msgstr ""
 
@@ -1504,7 +1564,7 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1091
+#: includes/Admin/Studio_Page.php:1131
 msgid "Search"
 msgstr ""
 
@@ -1516,11 +1576,11 @@ msgstr ""
 msgid "Search Galleries"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:433
+#: includes/Blocks/Smart_Gallery_Block.php:457
 msgid "Search gallery..."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:434
+#: includes/Blocks/Smart_Gallery_Block.php:458
 msgid "Search images"
 msgstr ""
 
@@ -1540,7 +1600,7 @@ msgstr ""
 msgid "Select AI Provider Preset"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:125 blocks/smart-gallery/components/InspectorControls.js:98
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:125 blocks/smart-gallery/components/InspectorControls.js:99
 msgid "Select Gallery"
 msgstr ""
 
@@ -1556,11 +1616,11 @@ msgstr ""
 msgid "Selected gallery was not found. Please choose an existing gallery."
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:159
+#: blocks/smart-gallery/components/InspectorControls.js:196
 msgid "Selected images"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:502
+#: includes/Admin/Studio_Page.php:542
 msgid "Sell fine-art canvas prints & digital downloads"
 msgstr ""
 
@@ -1568,7 +1628,7 @@ msgstr ""
 msgid "SEO & Accessibility"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:374
+#: includes/Admin/Studio_Page.php:414
 msgid "SEO & Alt Text"
 msgstr ""
 
@@ -1576,19 +1636,27 @@ msgstr ""
 msgid "Separate AI keywords with commas"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:491
+#: includes/Admin/Studio_Page.php:531
 msgid "Shield photography against scrapers & theft"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1109
+#: includes/Admin/Studio_Page.php:1149
 msgid "Shop"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:632
+#: includes/Blocks/Smart_Gallery_Block.php:699 includes/Blocks/Smart_Gallery_Block.php:700
+msgid "Shop (%s)"
+msgstr ""
+
+#: includes/Blocks/Smart_Gallery_Block.php:631
 msgid "Shop Now"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:773
+#: includes/Blocks/Smart_Gallery_Block.php:699 includes/Blocks/Smart_Gallery_Block.php:700
+msgid "Shop Product"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:813
 msgid "Shoppable Hotspots & Buy Links"
 msgstr ""
 
@@ -1596,7 +1664,7 @@ msgstr ""
 msgid "Shortcode Builder"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:270
+#: blocks/smart-gallery/components/InspectorControls.js:307
 msgid "Show \"All\" filter"
 msgstr ""
 
@@ -1604,19 +1672,19 @@ msgstr ""
 msgid "Show / Hide Key"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:293
+#: blocks/smart-gallery/components/InspectorControls.js:330
 msgid "Show caption"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:258
+#: blocks/smart-gallery/components/InspectorControls.js:295
 msgid "Show filter buttons above the gallery based on AI keywords."
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:285
+#: blocks/smart-gallery/components/InspectorControls.js:322
 msgid "Show title"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:962
+#: includes/Admin/Studio_Page.php:1002
 #. translators: %d: number of galleries
 msgid "Showing %d galleries"
 msgstr ""
@@ -1637,19 +1705,19 @@ msgstr ""
 msgid "Smart Taxonomies"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:316
-msgid "Smooth Zoom (Default)"
+#: blocks/smart-gallery/components/InspectorControls.js:353
+msgid "Smooth Zoom (The Grid Malabo)"
 msgstr ""
 
 #: includes/Admin/Settings_Page.php:831
 msgid "Social Sharing & High-Res Lightbox Zoom"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:441
+#: includes/Blocks/Smart_Gallery_Block.php:465
 msgid "Sort images"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:155
+#: blocks/smart-gallery/components/InspectorControls.js:192
 msgid "Source"
 msgstr ""
 
@@ -1657,12 +1725,16 @@ msgstr ""
 msgid "Standard Studio (Balanced artistic analysis)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:917
+#: includes/Admin/Studio_Page.php:957
 msgid "Start by creating your first visual photo wall in the full-screen Matcha Studio editor."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:392
+#: includes/Admin/Studio_Page.php:432
 msgid "Studio Visual Builder"
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:155
+msgid "Style Preset"
 msgstr ""
 
 #: includes/Admin/Settings_Page.php:822
@@ -1677,11 +1749,15 @@ msgstr ""
 msgid "Tagging runs at upload or on-demand; visitor pages load at 0ms CLS."
 msgstr ""
 
+#: blocks/smart-gallery/components/InspectorControls.js:379
+msgid "Tap to Reveal Overlay (Captions & Links)"
+msgstr ""
+
 #: includes/Admin/Settings_Page.php:374
 msgid "Target Language / Locale"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:383
+#: includes/Admin/Studio_Page.php:423
 msgid "Taxonomy & Keywords"
 msgstr ""
 
@@ -1693,11 +1769,11 @@ msgstr ""
 msgid "These are the active AI keywords assigned to your media library images."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:443
+#: includes/Blocks/Smart_Gallery_Block.php:467
 msgid "Title (A → Z)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:444
+#: includes/Blocks/Smart_Gallery_Block.php:468
 msgid "Title (Z → A)"
 msgstr ""
 
@@ -1705,15 +1781,15 @@ msgstr ""
 msgid "Toolbar & Features"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1046
+#: includes/Admin/Studio_Page.php:1086
 msgid "Trash"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:681
+#: includes/Admin/Studio_Page.php:721
 msgid "Turn photos into museum wall art with realistic picture frames: Natural Oak Wood, Slim Black Metal, Brushed Brass, and Glass Float Acrylic."
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:179
+#: blocks/smart-gallery/components/InspectorControls.js:216
 msgid "Type to search AI keywords"
 msgstr ""
 
@@ -1725,11 +1801,11 @@ msgstr ""
 msgid "Unknown API error"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:549
+#: includes/Admin/Studio_Page.php:589
 msgid "Unlimited AI Vision Auto-Tagging"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:435
+#: includes/Admin/Studio_Page.php:475
 msgid "Unlimited AI Vision Tagging"
 msgstr ""
 
@@ -1737,7 +1813,7 @@ msgstr ""
 msgid "Unlock advanced layouts, background batch queues, multi-category filters, and WooCommerce support."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:62 includes/Admin/Studio_Page.php:1031 includes/Admin/Studio_Page.php:1265 includes/Gallery/Gallery_REST.php:294 includes/Gallery/Gallery_REST.php:309
+#: includes/Admin/Studio_Page.php:63 includes/Admin/Studio_Page.php:1071 includes/Admin/Studio_Page.php:1303 includes/Gallery/Gallery_REST.php:294 includes/Gallery/Gallery_REST.php:309
 msgid "Untitled Gallery"
 msgstr ""
 
@@ -1745,11 +1821,11 @@ msgstr ""
 msgid "Update AI Keyword"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:798
+#: includes/Admin/Studio_Page.php:838
 msgid "Updates & Premium Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:534
+#: includes/Admin/Studio_Page.php:574
 msgid "Upgrade Now"
 msgstr ""
 
@@ -1757,11 +1833,11 @@ msgstr ""
 msgid "Upgrade to Pro →"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:636
+#: includes/Admin/Studio_Page.php:676
 msgid "Upgrade to Pro ↗"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:811
+#: includes/Admin/Studio_Page.php:851
 msgid "Upgrade to Pro at WPMatcha.com ↗"
 msgstr ""
 
@@ -1773,15 +1849,19 @@ msgstr ""
 msgid "View Gallery"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:387
+#: includes/Blocks/Smart_Gallery_Block.php:678 includes/Blocks/Smart_Gallery_Block.php:679
+msgid "View Photo"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:427
 msgid "View Terms"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:580
+#: includes/Admin/Studio_Page.php:620
 msgid "VIP Priority Support"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:553
+#: includes/Admin/Studio_Page.php:593
 msgid "VIP Support – Skip the Queue"
 msgstr ""
 
@@ -1789,11 +1869,15 @@ msgstr ""
 msgid "Vision Model"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:690
+#: includes/Blocks/Smart_Gallery_Block.php:631 includes/Blocks/Smart_Gallery_Block.php:699 includes/Blocks/Smart_Gallery_Block.php:700
+msgid "Visit Link"
+msgstr ""
+
+#: includes/Admin/Studio_Page.php:730
 msgid "Visual Discovery Toolbar"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:410
+#: includes/Admin/Studio_Page.php:450
 msgid "Watermark & Shield"
 msgstr ""
 
@@ -1801,7 +1885,7 @@ msgstr ""
 msgid "Wedding & Portrait Photography (Emotional intimacy, attire, event mood)"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:304
+#: includes/Admin/Studio_Page.php:344
 msgid "Welcome To Matcha Gallery!"
 msgstr ""
 
@@ -1809,15 +1893,15 @@ msgstr ""
 msgid "White Gallery Matting"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:256
+#: includes/Admin/Studio_Page.php:296
 msgid "White Matting"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:530
+#: includes/Admin/Studio_Page.php:570
 msgid "With Matcha AI Pro, you no longer have to manually tag photos, write custom CSS, or juggle multiple gallery tools. Everything works together seamlessly."
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:501
+#: includes/Admin/Studio_Page.php:541
 msgid "WooCommerce Prints & Sales"
 msgstr ""
 
@@ -1825,7 +1909,7 @@ msgstr ""
 msgid "WooCommerce Products & Custom Post Type Grids"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1173
+#: includes/Admin/Studio_Page.php:1213
 msgid "WordPress Shortcode"
 msgstr ""
 
@@ -1833,7 +1917,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1197
+#: includes/Admin/Studio_Page.php:1237
 msgid "You do not have permission to access this page."
 msgstr ""
 
@@ -1858,23 +1942,23 @@ msgstr ""
 msgid "Zero Front-End Latency"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:876
+#: includes/Admin/Studio_Page.php:916
 msgid "Zero-CLS"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:753
+#: includes/Admin/Studio_Page.php:793
 msgid "Zero-CLS Aspect Ratio Frames"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:1081
+#: includes/Admin/Studio_Page.php:1121
 msgid "Zero-CLS Aspect Ratio Frames Active"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:668
+#: includes/Admin/Studio_Page.php:708
 msgid "Zero-CLS Instant Frames"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:565
+#: includes/Admin/Studio_Page.php:605
 msgid "Zero-CLS Layout Engine (100 PageSpeed)"
 msgstr ""
 
@@ -1882,7 +1966,7 @@ msgstr ""
 msgid "Zero-CLS Layout Engine:"
 msgstr ""
 
-#: includes/Admin/Studio_Page.php:365
+#: includes/Admin/Studio_Page.php:405
 msgid "Zero-CLS Lightbox"
 msgstr ""
 

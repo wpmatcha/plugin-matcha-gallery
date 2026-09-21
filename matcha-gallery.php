@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Matcha Gallery – AI Photo Wall, Masonry & Portfolio Studio
  * Description:       AI-powered image metadata generation, interactive mosaic photo walls, masonry layouts, picture framing, client proofing, and smart portfolios for WordPress.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.2
  * Requires PHP:      8.0
  * Author:            WP Matcha
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version constant.
  */
-define( 'MATCHA_GALLERY_VERSION', '1.0.0' );
+define( 'MATCHA_GALLERY_VERSION', '1.0.1' );
 
 /**
  * Plugin directory path (with trailing slash).

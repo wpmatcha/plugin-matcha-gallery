@@ -710,8 +710,39 @@
 }
 
 .matcha-nav-brand__icon {
-	font-size: 22px;
-	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 7px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	background: #73907F;
+	flex-shrink: 0;
+}
+
+.matcha-nav-brand__icon img {
+	width: 34px;
+	height: 34px;
+	display: block;
+	object-fit: cover;
+}
+
+/* WordPress Admin Menu Icon styling */
+#toplevel_page_matcha-ai-hub .wp-menu-image img {
+	width: 20px !important;
+	height: 20px !important;
+	border-radius: 4px !important;
+	padding: 7px 0 0 0 !important;
+	object-fit: cover !important;
+	opacity: 0.92;
+	transition: opacity 0.15s ease;
+}
+
+#toplevel_page_matcha-ai-hub:hover .wp-menu-image img,
+#toplevel_page_matcha-ai-hub.wp-has-current-submenu .wp-menu-image img {
+	opacity: 1;
 }
 
 .matcha-nav-menu {

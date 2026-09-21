@@ -11,7 +11,7 @@ import { getState, setState, subscribe, patchConfig, setViewport } from './store
 
 // Sleek Linear / Lucide Vector SVG Icon Library
 const Icons = {
-  leaf: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
+  leaf: `<svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 2.5 L11.5 2.5 A3.5 3.5 0 0 1 15 6 L15 12 L9 12 A3.5 3.5 0 0 1 5.5 8.5 Z" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="10" cy="7.25" rx="3.6" ry="2.8" transform="rotate(-22 10 7.25)" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.9"/><ellipse cx="10" cy="7.25" rx="3.2" ry="2.6" transform="rotate(24 10 7.25)" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.85"/><ellipse cx="10" cy="7.25" rx="2.6" ry="2.2" transform="rotate(-8 10 7.25)" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.8"/><ellipse cx="10" cy="7.25" rx="2.0" ry="1.6" transform="rotate(12 10 7.25)" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.95"/></svg>`,
   bolt: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
   desktop: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
   tablet: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>`,
@@ -46,7 +46,9 @@ const Icons = {
   check: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
   drag: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>`,
   edit: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`,
-  trash: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`
+  trash: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
+  link: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+  externalLink: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`
 };
 
 const root = document.getElementById('matcha-studio-root');
@@ -64,7 +66,8 @@ if (root) {
 
   // Free vs Pro status & upgrade target
   const isPro = Boolean(window.MatchaStudio && window.MatchaStudio.isPro);
-  const upgradeUrl = (window.MatchaStudio && window.MatchaStudio.upgradeUrl) || 'https://wpmatcha.com/wordpress-plugins/matcha-gallery/';
+  const isWooActive = Boolean(window.MatchaStudio && window.MatchaStudio.isWooActive);
+  const upgradeUrl = (window.MatchaStudio && window.MatchaStudio.upgradeUrl) || 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/';
 
   // Universal Upsell Modal
   function showProModal(featureTitle = 'Matcha Studio Pro Feature', featureDesc = 'Upgrade to Matcha Gallery Pro to unlock this advanced feature and take your WordPress galleries to the next level.') {
@@ -78,21 +81,25 @@ if (root) {
     backdrop.innerHTML = `
       <div class="matcha-pro-modal" role="dialog" aria-modal="true">
         <button type="button" class="close-btn" aria-label="Close" id="matcha-pro-close-btn">&times;</button>
+        
         <div class="matcha-pro-modal-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
         </div>
-        <div style="margin-bottom: 6px;"><span class="matcha-pro-badge" style="font-size: 10px; padding: 2px 8px;">MATCHA PRO</span></div>
+
+        <div class="matcha-pro-modal-badge-wrap">
+          <span class="matcha-pro-badge">PRO FEATURE</span>
+        </div>
+
         <h3 class="matcha-pro-modal-title">${escapeHtml(featureTitle)}</h3>
         <p class="matcha-pro-modal-desc">${escapeHtml(featureDesc)}</p>
         
         <div class="matcha-pro-features-list">
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>PhotoBlocks Mosaic, Pinwheel & Bento Layouts</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Pixel-Perfect 2D Focal Pan & Zoom Cropping</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>5 Realistic Luxury Picture Frames & Matting</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Client Proofing Sessions & Favorite Trays</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Shoppable Hotspots & Buy Now Buttons</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Multi-Section Animated Gallery Chapters</span></div>
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>1-Click High-Res Wall Snapshots & PDF Proposals</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>PhotoBlocks, Pinwheel & Bento Layouts</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>AI Smart Fill & 2D Focal Pan/Zoom Cropping</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Luxury Picture Frames & Shadow Matting</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Client Proofing Sessions & Story Chapters</span></div>
         </div>
 
         <a href="${upgradeUrl}" target="_blank" rel="noopener noreferrer" class="matcha-pro-modal-cta" id="matcha-pro-cta-btn">
@@ -246,7 +253,9 @@ if (root) {
         <div style="display:flex;gap:12px;align-items:center;">
           <a href="${window.location.origin + window.location.pathname + '?page=matcha-ai-hub'}" class="matcha-exit-btn">← Exit Studio</a>
           <a href="#" class="matcha-brand-badge">
-            <span class="brand-leaf">${Icons.leaf}</span>
+            <span class="brand-leaf" style="background:transparent;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px;width:24px;height:24px;">
+              <img src="${window.MatchaStudio?.iconUrl || ''}" width="24" height="24" style="border-radius:6px;display:block;object-fit:cover;" alt="Matcha" />
+            </span>
             <span>Matcha Studio</span>
             <span class="matcha-pro-tag" style="background:rgba(77,164,104,0.18);color:#5ec27f;border-color:rgba(77,164,104,0.35);font-weight:700;">STUDIO</span>
           </a>
@@ -911,6 +920,23 @@ if (root) {
     const curPag = cfg.paginationType || 'none';
 
     return `
+      <!-- Curated Style Preset (Skins) -->
+      <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.35); background: rgba(94, 194, 127, 0.04);">
+        <div class="matcha-card-title">
+          <span class="heading-wrap" style="color:#5ec27f;">${Icons.palette} Curated Style Preset (Skin)</span>
+        </div>
+        <select id="st-style-preset" class="matcha-dark-select" style="margin-bottom:6px;font-weight:600;">
+          <option value="custom" ${(cfg.stylePreset || 'custom') === 'custom' ? 'selected' : ''}>Custom (Manual Adjustments)</option>
+          <option value="exhibition-frame" ${cfg.stylePreset === 'exhibition-frame' ? 'selected' : ''}>Exhibition Hairline Frame (The Grid: Brasilia)</option>
+          <option value="architectural-curtain" ${cfg.stylePreset === 'architectural-curtain' ? 'selected' : ''}>Architectural Curtain (The Grid: Sofia)</option>
+          <option value="cinematic-pullback" ${cfg.stylePreset === 'cinematic-pullback' ? 'selected' : ''}>Cinematic Pullback (The Grid: Bogota)</option>
+          <option value="minimalist-drawer" ${cfg.stylePreset === 'minimalist-drawer' ? 'selected' : ''}>Minimalist Bottom Drawer (The Grid: Lome)</option>
+        </select>
+        <p style="font-size:9.5px;color:var(--st-text-muted);margin:0;line-height:1.35;">
+          Harmonizes layout, hover effects, frames, and elevation into 1-click cohesive aesthetics.
+        </p>
+      </div>
+
       <!-- Picture Frame Styles -->
       <div class="matcha-card">
         <div class="matcha-card-title">
@@ -955,12 +981,35 @@ if (root) {
 
         <div class="matcha-card-title" style="margin-top:14px;">Photo Hover Animation</div>
         <select id="st-hover-effect" class="matcha-dark-select">
-          <option value="zoom" ${(cfg.hoverEffect || 'zoom') === 'zoom' ? 'selected' : ''}>Smooth Zoom (Default)</option>
-          <option value="lift" ${(cfg.hoverEffect || 'zoom') === 'lift' ? 'selected' : ''}>3D Elevation Lift</option>
-          <option value="glow" ${(cfg.hoverEffect || 'zoom') === 'glow' ? 'selected' : ''}>Matcha Neon Glow</option>
+          <option value="zoom" ${(cfg.hoverEffect || 'zoom') === 'zoom' ? 'selected' : ''}>Smooth Zoom (The Grid Malabo)</option>
+          <option value="pullback" ${(cfg.hoverEffect || 'zoom') === 'pullback' ? 'selected' : ''}>Cinematic Pullback (The Grid Bogota)</option>
+          <option value="frame" ${(cfg.hoverEffect || 'zoom') === 'frame' ? 'selected' : ''}>Editorial Hairline Frame (The Grid Brasilia)</option>
+          <option value="curtain" ${(cfg.hoverEffect || 'zoom') === 'curtain' ? 'selected' : ''}>Architectural Curtain (The Grid Sofia)</option>
+          <option value="drawer" ${(cfg.hoverEffect || 'zoom') === 'drawer' ? 'selected' : ''}>Minimalist Bottom Drawer (The Grid Lome)</option>
           <option value="grayscale" ${(cfg.hoverEffect || 'zoom') === 'grayscale' ? 'selected' : ''}>Monochrome to Vibrant Color</option>
-          <option value="none" ${(cfg.hoverEffect || 'zoom') === 'none' ? 'selected' : ''}>Subtle Flat (No Effect)</option>
+          <option value="none" ${(cfg.hoverEffect || 'zoom') === 'none' ? 'selected' : ''}>Clean Static (No Effect)</option>
         </select>
+
+        <div id="wrap-hover-frame-color" style="margin-top:10px;display:${((cfg.hoverEffect || 'zoom') === 'frame') ? 'block' : 'none'};">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">
+            Brasilia Hairline Frame Color
+          </label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="color" id="st-hover-frame-color-picker" value="${cfg.hoverFrameColor || '#ffffff'}" style="width:28px;height:28px;padding:0;border:none;border-radius:4px;cursor:pointer;background:none;" />
+            <input type="text" id="st-hover-frame-color" class="matcha-dark-input" value="${escapeHtml(cfg.hoverFrameColor || '')}" placeholder="rgba(255,255,255,0.45) or #ffffff" style="font-size:11px;flex:1;" />
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="matcha-card-title" style="margin-bottom:4px;">Mobile Touch Behavior</div>
+          <select id="st-hover-mobile-tap" class="matcha-dark-select">
+            <option value="lightbox" ${(cfg.hoverMobileTap || 'lightbox') === 'lightbox' ? 'selected' : ''}>Direct Lightbox Open (Fast & Standard)</option>
+            <option value="reveal" ${cfg.hoverMobileTap === 'reveal' ? 'selected' : ''}>Tap to Reveal Overlay (Captions & Actions First)</option>
+          </select>
+          <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:4px;line-height:1.3;">
+            On touch screens, choose whether tapping immediately opens the lightbox or reveals titles and buttons first.
+          </div>
+        </div>
       </div>
 
       <!-- Grid Dimensions & Spacing -->
@@ -1099,6 +1148,16 @@ if (root) {
           Enable Fullscreen Lightbox
         </label>
 
+        <div style="margin-bottom:12px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Toolbar & Controls Aesthetic Skin</label>
+          <select id="st-toolbar-skin" class="matcha-dark-select">
+            <option value="capsule" ${(cfg.toolbarSkin || 'capsule') === 'capsule' ? 'selected' : ''}>Modern Capsule (Clean Rounded Pill)</option>
+            <option value="underline" ${(cfg.toolbarSkin || 'capsule') === 'underline' ? 'selected' : ''}>Minimalist Hairline (Fine-Art & Editorial) ${!isPro ? '(PRO)' : ''}</option>
+            <option value="obsidian" ${(cfg.toolbarSkin || 'capsule') === 'obsidian' ? 'selected' : ''}>Obsidian Dark (Deep Charcoal Glow) ${!isPro ? '(PRO)' : ''}</option>
+            <option value="glass" ${(cfg.toolbarSkin || 'capsule') === 'glass' ? 'selected' : ''}>Frosted Glass (Specular Blur) ${!isPro ? '(PRO)' : ''}</option>
+          </select>
+        </div>
+
         ${cfg.filtersEnabled ? `
           <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;">
             <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
@@ -1205,6 +1264,7 @@ if (root) {
   function photoInspectorHTML(id, cfg) {
     const m = metaCache.get(id) || {};
     const link = (cfg.imageLinks || {})[id] || {};
+    const videoUrl = (cfg.imageVideos || {})[id] || '';
     const fp = (cfg.focalPoints || {})[id] || m.focal_point || { x: 50, y: 50, zoom: 1.0 };
     const colors = m.colors || [];
     const currentSpan = (cfg.imageSpans || {})[id] || '1x1';
@@ -1365,32 +1425,158 @@ if (root) {
         </div>
       </div>
 
-      <!-- Shoppable Product Link -->
+      <!-- Image Link & Click Action -->
       <div class="matcha-card" style="position:relative;">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.shoppingBag} Shoppable Action Link ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ''}</span>
+          <span class="heading-wrap">${Icons.link} Image Link & Click Action</span>
         </div>
-        <div style="margin-bottom:8px;">
-          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Product / Page URL</label>
-          <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || '')}" placeholder="https://store.com/product" ${!isPro ? 'disabled' : ''} />
+
+        <!-- 1. Destination URL Input -->
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">
+            Target URL (Portfolio, Page, or External Site)
+          </label>
+          <div style="position:relative;display:flex;align-items:center;">
+            <span style="position:absolute;left:8px;color:#64748b;display:flex;pointer-events:none;">${Icons.link}</span>
+            <input type="url" id="prop-link-url" class="matcha-dark-input" value="${escapeHtml(link.url || '')}" placeholder="https://example.com/project-or-page" style="padding-left:26px;" />
+          </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+
+        <!-- 2. Dual Interaction: What happens when clicked? -->
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">
+            Click Behavior
+          </label>
+          <select id="prop-link-action" class="matcha-dark-input" style="height:32px;">
+            <option value="lightbox" ${(link.clickAction || 'lightbox') === 'lightbox' ? 'selected' : ''}>
+              🔍 Open Lightbox (Dual Action: Show Button in Lightbox & Hover)
+            </option>
+            <option value="direct" ${link.clickAction === 'direct' ? 'selected' : ''}>
+              ↗ Direct Link (Clicking image opens URL immediately)
+            </option>
+          </select>
+          <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:3px;line-height:1.3;">
+            ${(link.clickAction === 'direct')
+              ? 'Clicking this thumbnail bypasses the lightbox and opens the URL directly.'
+              : 'Best of both worlds: clicking opens the large preview, while a sleek button lets visitors visit the link.'}
+          </div>
+        </div>
+
+        <!-- 3. Target Window & Button Text -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
           <div>
-            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Price Tag</label>
-            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || '')}" placeholder="$45" ${!isPro ? 'disabled' : ''} />
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Open In</label>
+            <select id="prop-link-target" class="matcha-dark-input" style="height:32px;">
+              <option value="_blank" ${link.target !== '_self' ? 'selected' : ''}>New Tab (_blank)</option>
+              <option value="_self" ${link.target === '_self' ? 'selected' : ''}>Same Window (_self)</option>
+            </select>
           </div>
           <div>
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Text</label>
-            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || 'Shop Now')}" placeholder="Buy Now" ${!isPro ? 'disabled' : ''} />
+            <input type="text" id="prop-link-label" class="matcha-dark-input" value="${escapeHtml(link.label || (link.price ? 'Shop Now' : 'Visit Link'))}" placeholder="Visit Link" />
           </div>
         </div>
-        ${!isPro ? `
-          <div class="matcha-pro-lock-overlay" id="lock-shoppable-link" style="padding:10px;">
-            <div class="lock-icon" style="width:26px;height:26px;font-size:12px;">${Icons.lock}</div>
-            <div class="lock-title" style="font-size:11px;">Shoppable Product Links</div>
-            <span class="lock-cta" style="font-size:9px;padding:2px 8px;">Unlock with Pro →</span>
+
+        <!-- 4. Shoppable Hotspot & WooCommerce Section (Pro) -->
+        <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:10px;font-weight:700;color:#c084fc;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:4px;">
+              ${Icons.shoppingBag} E-Commerce Hotspot ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ''}
+            </span>
+            ${link.productId ? `
+              <button type="button" id="btn-unlink-woo-product" style="background:none;border:none;color:#ef4444;font-size:10px;cursor:pointer;padding:0;font-weight:600;">
+                ✕ Unlink Product
+              </button>
+            ` : ''}
           </div>
-        ` : ''}
+
+          ${(isPro && isWooActive) ? `
+            ${link.productId ? `
+              <div id="woo-linked-product-card" style="display:flex;align-items:center;gap:8px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);border-radius:6px;padding:6px 8px;margin-bottom:8px;">
+                <div style="width:28px;height:28px;border-radius:4px;overflow:hidden;background:#000;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <span style="font-size:14px;">🛍️</span>
+                </div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:11px;font-weight:600;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                    ${escapeHtml(link.label || 'Linked Store Product')}
+                  </div>
+                  <div style="font-size:10px;color:#a855f7;font-weight:700;">
+                    ${escapeHtml(link.price || 'In Catalog')} • Product #${link.productId}
+                  </div>
+                </div>
+              </div>
+            ` : `
+              <div style="position:relative;margin-bottom:8px;">
+                <input
+                  type="text"
+                  id="woo-product-search-input"
+                  class="matcha-dark-input"
+                  placeholder="Auto-connect WooCommerce product..."
+                  style="padding-left:26px;"
+                  autocomplete="off"
+                />
+                <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;opacity:0.5;pointer-events:none;">🔍</span>
+                <div id="woo-product-dropdown" class="matcha-woo-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;max-height:220px;overflow-y:auto;background:#1e1e24;border:1px solid rgba(255,255,255,0.15);border-radius:8px;box-shadow:0 12px 32px rgba(0,0,0,0.6);z-index:9999;padding:4px;"></div>
+              </div>
+            `}
+          ` : (isPro && !isWooActive ? `
+            <div style="margin-bottom:8px;padding:6px 10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.12);border-radius:6px;font-size:10px;color:var(--st-text-secondary);line-height:1.4;">
+              💡 <em>WooCommerce not detected. You can enter manual price tags below or install WooCommerce to auto-sync catalog products.</em>
+            </div>
+          ` : '')}
+
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">
+              Price Tag ${!isPro ? `<span class="matcha-pro-badge" style="font-size:8px;">PRO</span>` : ''}
+            </label>
+            <input type="text" id="prop-link-price" class="matcha-dark-input" value="${escapeHtml(link.price || '')}" placeholder="$45" ${!isPro ? 'disabled' : ''} />
+          </div>
+
+          ${!isPro ? `
+            <div style="margin-top:10px;padding:8px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.18);border-radius:6px;cursor:pointer;" id="promo-shoppable-pro">
+              <div style="font-size:10px;font-weight:700;color:#4ade80;margin-bottom:2px;">⚡ Unlock WooCommerce Integration</div>
+              <div style="font-size:9.5px;color:#94a3b8;line-height:1.35;">Auto-search store catalog, display floating price tags & Buy Now buttons with Matcha Pro.</div>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+
+      <!-- Multimedia & Video URL -->
+      <div class="matcha-card" style="position:relative;">
+        <div class="matcha-card-title">
+          <span class="heading-wrap" style="display:flex;align-items:center;gap:5px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color:#ef4444;"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+            Multimedia & Video URL
+          </span>
+          ${videoUrl ? `<span class="matcha-badge" style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.4);font-size:9px;padding:1px 5px;">VIDEO ACTIVE</span>` : ''}
+        </div>
+
+        <div style="margin-bottom:8px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">
+            Video Link (YouTube, Vimeo, or Direct MP4)
+          </label>
+          <div style="position:relative;display:flex;align-items:center;">
+            <span style="position:absolute;left:8px;color:#64748b;display:flex;pointer-events:none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+            </span>
+            <input type="url" id="prop-video-url" class="matcha-dark-input" value="${escapeHtml(videoUrl)}" placeholder="https://youtube.com/watch?v=... or .mp4" style="padding-left:26px;font-size:11px;" />
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:8px;">
+          <button type="button" id="btn-choose-video-media" class="matcha-exit-btn" style="font-size:10px;padding:4px 8px;display:flex;align-items:center;gap:4px;">
+            📁 Select MP4 from Media Library
+          </button>
+          ${videoUrl ? `
+            <button type="button" id="btn-remove-video-url" style="background:none;border:none;color:#ef4444;font-size:10px;cursor:pointer;padding:0;font-weight:600;">
+              ✕ Remove Video
+            </button>
+          ` : ''}
+        </div>
+
+        <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:6px;line-height:1.3;">
+          Attaching a video displays an architectural Play badge on this thumbnail and plays the video responsively in the fullscreen lightbox.
+        </div>
       </div>
     `;
   }
@@ -1413,6 +1599,28 @@ if (root) {
       renderCanvas();
       autosaveSoon();
     });
+    document.getElementById('st-style-preset')?.addEventListener('change', e => {
+      const val = e.target.value;
+      const patch = { stylePreset: val, contentPlacement: 'overlay' };
+      if (val === 'exhibition-frame') {
+        patch.hoverEffect = 'frame';
+        patch.layout = 'grid';
+      } else if (val === 'architectural-curtain') {
+        patch.hoverEffect = 'curtain';
+        patch.layout = 'justified';
+      } else if (val === 'cinematic-pullback') {
+        patch.hoverEffect = 'pullback';
+        patch.layout = 'masonry';
+      } else if (val === 'minimalist-drawer') {
+        patch.hoverEffect = 'drawer';
+        patch.layout = 'grid';
+      }
+      patchConfig(patch);
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    });
+
     document.getElementById('st-shadow')?.addEventListener('change', e => {
       patchConfig({ shadowElevation: e.target.value });
       renderCanvas();
@@ -1431,7 +1639,26 @@ if (root) {
     });
     document.getElementById('st-hover-effect')?.addEventListener('change', e => {
       patchConfig({ hoverEffect: e.target.value });
+      const wrapFrameColor = document.getElementById('wrap-hover-frame-color');
+      if (wrapFrameColor) wrapFrameColor.style.display = (e.target.value === 'frame') ? 'block' : 'none';
       renderCanvas();
+      autosaveSoon();
+    });
+    document.getElementById('st-hover-frame-color-picker')?.addEventListener('input', e => {
+      const hexInput = document.getElementById('st-hover-frame-color');
+      if (hexInput) hexInput.value = e.target.value;
+      patchConfig({ hoverFrameColor: e.target.value });
+      renderCanvas();
+      autosaveSoon();
+    });
+    document.getElementById('st-hover-frame-color')?.addEventListener('change', e => {
+      const val = e.target.value.trim();
+      patchConfig({ hoverFrameColor: val });
+      renderCanvas();
+      autosaveSoon();
+    });
+    document.getElementById('st-hover-mobile-tap')?.addEventListener('change', e => {
+      patchConfig({ hoverMobileTap: e.target.value });
       autosaveSoon();
     });
     document.getElementById('st-pagination')?.addEventListener('change', e => {
@@ -1530,6 +1757,20 @@ if (root) {
         return;
       }
       patchConfig({ randomizeOrder: e.target.checked });
+      autosaveSoon();
+    });
+    document.getElementById('st-toolbar-skin')?.addEventListener('change', e => {
+      const val = e.target.value;
+      if (!isPro && ['underline', 'obsidian', 'glass'].includes(val)) {
+        e.target.value = getState().config.toolbarSkin || 'capsule';
+        showProModal(
+          'Luxury Toolbar & Controls Skins',
+          'Aesthetic toolbar skins including Minimalist Hairline, Obsidian Dark, and Frosted Glass are available in Matcha Gallery Pro.'
+        );
+        return;
+      }
+      patchConfig({ toolbarSkin: val });
+      renderCanvas();
       autosaveSoon();
     });
     document.getElementById('st-search')?.addEventListener('change', e => {
@@ -2045,25 +2286,181 @@ if (root) {
       });
     });
 
-    document.getElementById('lock-shoppable-link')?.addEventListener('click', () => {
-      showProModal('Shoppable Product Links', 'Turn any photo into a shoppable product hotspot with custom price tags and direct buy buttons. Available in Matcha Gallery Pro.');
+    document.getElementById('promo-shoppable-pro')?.addEventListener('click', () => {
+      showProModal(
+        'Shoppable Product Hotspots & WooCommerce',
+        'Directly connect WooCommerce catalog products, auto-sync live prices and stock, and render sleek floating Buy Now buttons on hover and inside the fullscreen lightbox. Available in Matcha Gallery Pro.'
+      );
     });
 
     const updateLink = () => {
-      if (!isPro) return;
-      const url = document.getElementById('prop-link-url')?.value || '';
-      const price = document.getElementById('prop-link-price')?.value || '';
-      const label = document.getElementById('prop-link-label')?.value || 'Shop Now';
+      const url = (document.getElementById('prop-link-url')?.value || '').trim();
+      const clickAction = document.getElementById('prop-link-action')?.value || 'lightbox';
+      const target = document.getElementById('prop-link-target')?.value || '_blank';
+      const price = isPro ? (document.getElementById('prop-link-price')?.value || '').trim() : '';
+      const label = (document.getElementById('prop-link-label')?.value || '').trim() || (price ? 'Shop Now' : 'Visit Link');
       const currentLinks = { ...(getState().config.imageLinks || {}) };
-      currentLinks[id] = { url, price, label, target: '_blank' };
+      const prevData = currentLinks[id] || {};
+
+      if (!url) {
+        delete currentLinks[id];
+      } else {
+        currentLinks[id] = {
+          ...prevData,
+          url,
+          clickAction,
+          target,
+          label,
+          price,
+        };
+      }
       patchConfig({ imageLinks: currentLinks });
       renderCanvas();
       autosaveSoon();
     };
 
     document.getElementById('prop-link-url')?.addEventListener('change', updateLink);
+    document.getElementById('prop-link-action')?.addEventListener('change', updateLink);
+    document.getElementById('prop-link-target')?.addEventListener('change', updateLink);
     document.getElementById('prop-link-price')?.addEventListener('change', updateLink);
     document.getElementById('prop-link-label')?.addEventListener('change', updateLink);
+
+    // Multimedia & Video URL bindings
+    const updateVideo = (newUrl) => {
+      const currentVideos = { ...(getState().config.imageVideos || {}) };
+      const trimmed = (newUrl || '').trim();
+      if (trimmed) {
+        currentVideos[id] = trimmed;
+      } else {
+        delete currentVideos[id];
+      }
+      patchConfig({ imageVideos: currentVideos });
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    };
+
+    document.getElementById('prop-video-url')?.addEventListener('change', e => {
+      updateVideo(e.target.value);
+    });
+
+    document.getElementById('btn-remove-video-url')?.addEventListener('click', () => {
+      updateVideo('');
+    });
+
+    document.getElementById('btn-choose-video-media')?.addEventListener('click', () => {
+      if (typeof wp === 'undefined' || !wp.media) return;
+      const frame = wp.media({
+        title: 'Select Video for Matcha Gallery',
+        multiple: false,
+        library: { type: 'video' }
+      });
+      frame.on('select', () => {
+        const sel = frame.state().get('selection').first().toJSON();
+        if (sel && sel.url) {
+          updateVideo(sel.url);
+        }
+      });
+      frame.open();
+    });
+
+    // Unlink WooCommerce product button
+    document.getElementById('btn-unlink-woo-product')?.addEventListener('click', () => {
+      const currentLinks = { ...(getState().config.imageLinks || {}) };
+      if (currentLinks[id]) {
+        delete currentLinks[id].productId;
+        patchConfig({ imageLinks: currentLinks });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      }
+    });
+
+    // WooCommerce Live Search Input
+    const wooInput = document.getElementById('woo-product-search-input');
+    const wooDropdown = document.getElementById('woo-product-dropdown');
+    let searchDebounceTimer = null;
+
+    if (wooInput && wooDropdown) {
+      wooInput.addEventListener('input', e => {
+        const query = (e.target.value || '').trim();
+        clearTimeout(searchDebounceTimer);
+        if (query.length < 1) {
+          wooDropdown.style.display = 'none';
+          wooDropdown.innerHTML = '';
+          return;
+        }
+
+        wooDropdown.innerHTML = '<div style="padding:8px 12px;font-size:11px;color:#94a3b8;text-align:center;">Searching store catalog...</div>';
+        wooDropdown.style.display = 'block';
+
+        searchDebounceTimer = setTimeout(async () => {
+          try {
+            const endpoint = `${window.MatchaStudio.root}matcha-gallery-pro/v1/woocommerce/products?search=${encodeURIComponent(query)}&per_page=8`;
+            const res = await fetch(endpoint, {
+              headers: { 'X-WP-Nonce': window.MatchaStudio.nonce },
+            });
+            if (!res.ok) throw new Error('Search request failed');
+            const data = await res.json();
+            const products = data.products || [];
+
+            if (products.length === 0) {
+              wooDropdown.innerHTML = '<div style="padding:8px 12px;font-size:11px;color:#94a3b8;text-align:center;">No matching products found.</div>';
+              return;
+            }
+
+            wooDropdown.innerHTML = products.map(p => `
+              <div class="matcha-woo-item" data-id="${p.id}" style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background 0.15s ease;">
+                <img src="${p.thumbnail || ''}" style="width:28px;height:28px;border-radius:4px;object-fit:cover;background:#111;flex-shrink:0;" />
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:11px;font-weight:600;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                    ${escapeHtml(p.title)}
+                  </div>
+                  <div style="font-size:10px;color:#a855f7;font-weight:600;">
+                    ${escapeHtml(p.price || 'In Catalog')} ${p.in_stock ? '<span style="color:#22c55e;">• In Stock</span>' : '<span style="color:#ef4444;">• Out of stock</span>'}
+                  </div>
+                </div>
+              </div>
+            `).join('');
+
+            wooDropdown.querySelectorAll('.matcha-woo-item').forEach(itemEl => {
+              itemEl.addEventListener('mouseenter', () => {
+                itemEl.style.background = 'rgba(255,255,255,0.08)';
+              });
+              itemEl.addEventListener('mouseleave', () => {
+                itemEl.style.background = 'none';
+              });
+              itemEl.addEventListener('click', () => {
+                const prodId = parseInt(itemEl.dataset.id, 10);
+                const chosen = products.find(p => p.id === prodId);
+                if (chosen) {
+                  const currentLinks = { ...(getState().config.imageLinks || {}) };
+                  currentLinks[id] = {
+                    productId: chosen.id,
+                    url: chosen.permalink,
+                    price: chosen.price || '',
+                    label: 'Shop Now',
+                    target: '_blank',
+                  };
+                  patchConfig({ imageLinks: currentLinks });
+                  renderRightPanel();
+                  renderCanvas();
+                  autosaveSoon();
+                }
+              });
+            });
+          } catch (err) {
+            wooDropdown.innerHTML = '<div style="padding:8px 12px;font-size:11px;color:#ef4444;text-align:center;">Failed to search store catalog.</div>';
+          }
+        }, 280);
+      });
+
+      document.addEventListener('click', e => {
+        if (!wooInput.contains(e.target) && !wooDropdown.contains(e.target)) {
+          wooDropdown.style.display = 'none';
+        }
+      });
+    }
 
     document.querySelectorAll('.prop-chapter-checkbox').forEach(chk => {
       chk.addEventListener('change', e => {
@@ -3211,8 +3608,11 @@ if (root) {
     }
     const sortedColors = Array.from(uniqueColors).slice(0, 8);
 
-    const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || '#607d66'};`;
+    const hoverFrameCss = cfg.hoverFrameColor ? `--matcha-hover-frame-color:${cfg.hoverFrameColor};` : '';
+    const cardBgCss = cfg.cardBackground ? `--matcha-card-bg:${cfg.cardBackground};` : '';
+    const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || '#607d66'};${hoverFrameCss}${cardBgCss}`;
 
+    const stylePreset = cfg.stylePreset || 'custom';
     const activeCardTheme = (!isPro && ['glass', 'glow'].includes(cfg.cardTheme)) ? 'clean' : (cfg.cardTheme || 'clean');
     const activeFrameStyle = (!isPro && ['black-metal', 'natural-oak', 'gold-brass', 'glass-float'].includes(cfg.frameStyle)) ? 'none' : (cfg.frameStyle || 'none');
     const activeLayout = (!isPro && ['pinwheel', 'bento'].includes(cfg.layout)) ? 'grid' : (cfg.layout || 'grid');
@@ -3222,7 +3622,7 @@ if (root) {
     canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
 
     canvas.innerHTML = `
-      <div class="matcha-gallery matcha-gallery--${activeLayout} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect}" style="${style}">
+      <div class="matcha-gallery matcha-gallery--${activeLayout} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
@@ -3241,7 +3641,7 @@ if (root) {
         ` : ''}
 
         ${(cfg.searchEnabled !== false || cfg.filtersEnabled || (isPro && cfg.colorFilterEnabled && sortedColors.length > 0) || (isPro && cfg.frontendSortEnabled)) ? `
-          <div class="matcha-gallery__toolbar">
+          <div class="matcha-gallery__toolbar matcha-gallery__toolbar--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')}">
             ${cfg.searchEnabled !== false ? `
               <div class="matcha-gallery__search-wrap">
                 <span class="matcha-search-icon" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;display:flex;align-items:center;pointer-events:none;">
@@ -3274,7 +3674,7 @@ if (root) {
             ` : ''}
 
             ${(cfg.filtersEnabled && allTags.length > 0) ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar">
+              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')} matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar">
                 ${cfg.showAllFilter !== false ? `
                   <button type="button" class="matcha-filter matcha-filter--active" data-filter="*">
                     ${escapeHtml(cfg.allFilterLabel || 'All')}
@@ -3307,6 +3707,8 @@ if (root) {
               : (cfg.layout === 'mosaic' ? mosaicRhythm[idx % mosaicRhythm.length] : (imageSpans[m.id] || '1x1'));
             const spanClass = (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') ? `matcha-gallery__item--span-${currentSpan}` : '';
             const link = imageLinks[m.id] || {};
+            const videoUrl = (cfg.imageVideos || {})[m.id] || '';
+            const hasVideo = !!videoUrl;
             const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1.0 };
             const zoom = isPro ? (fp.zoom || 1.0) : 1.0;
             const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
@@ -3320,41 +3722,80 @@ if (root) {
               itemStyle += `flex:${ratio} 1 calc(${cfg.rowHeight || 240}px * ${ratio});max-width:calc(${cfg.rowHeight || 240}px * ${ratio} * 2);`;
             }
 
+            const isShop = !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
+
             return `
-              <div class="matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${spanClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" style="${itemStyle}">
-                <div class="matcha-gallery__item-inner">
-                  <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || '')}" style="${imgStyle}" />
-                  <div class="matcha-gallery__overlay">
-                    <span class="matcha-gallery__zoom-icon">${Icons.search}</span>
+              <div class="matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${hasVideo ? 'matcha-gallery__item--video' : ''} ${spanClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" style="${itemStyle}">
+                  <div class="matcha-gallery__item-inner">
+                    <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || '')}" style="${imgStyle}" />
+                    ${hasVideo ? `
+                      <div class="matcha-item-video-badge" aria-hidden="true" title="Watch Video">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                        </svg>
+                      </div>
+                    ` : ''}
                     ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ''}
                     ${(isPro && cfg.proofingEnabled) ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ''}
+
+                    ${(isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) ? `
+                      <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
+                        <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
+                        <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
+                        <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 ↕</button>
+                        <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" title="Hero Tile (2x2)">2x2 ⤢</button>
+                      </div>
+                    ` : ''}
+
+                    ${((cfg.showTitle && imgTitle) || (cfg.showCaption && imgCaption) || link.url || cfg.lightboxEnabled !== false) ? `
+                      <div class="matcha-item-overlay"></div>
+                      <div class="matcha-item-frame" aria-hidden="true"></div>
+                      <div class="matcha-item-content">
+                        ${(cfg.showTitle && imgTitle) ? `<h4 class="matcha-item-title">${escapeHtml(imgTitle)}</h4>` : ''}
+
+                        ${(cfg.lightboxEnabled !== false || link.url) ? `
+                          <div class="matcha-item-actions">
+                            ${cfg.lightboxEnabled !== false ? `
+                              <button type="button" class="matcha-action-btn matcha-action-btn--media" title="${hasVideo ? 'Play Video' : 'View Photo'}" aria-label="${hasVideo ? 'Play Video' : 'View Photo'}">
+                                ${hasVideo ? `
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                                  </svg>
+                                ` : `
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                  </svg>
+                                `}
+                              </button>
+                            ` : ''}
+
+                            ${link.url ? `
+                              <span class="matcha-action-btn matcha-action-btn--link ${isShop ? 'matcha-action-btn--shop' : ''}" title="${escapeHtml(link.label || (link.price ? `Shop (${link.price})` : (isShop ? 'Shop Product' : 'Visit Link')))}">
+                                ${isShop ? `
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                ` : `
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                                `}
+                              </span>
+                            ` : ''}
+                          </div>
+                        ` : ''}
+
+                        ${(link.price || (cfg.showCaption && imgCaption) || (meta?.tags && meta.tags[0])) ? `
+                          <div class="matcha-item-meta">
+                            ${link.price ? `
+                              <span class="matcha-item-price">${escapeHtml(link.price)}</span>
+                            ` : (cfg.showCaption && imgCaption) ? `
+                              <p class="matcha-item-caption">${escapeHtml(imgCaption)}</p>
+                            ` : meta?.tags && meta.tags[0] ? `
+                              <span class="matcha-item-category">${escapeHtml(meta.tags[0])}</span>
+                            ` : ''}
+                          </div>
+                        ` : ''}
+                      </div>
+                    ` : ''}
                   </div>
-
-                  ${(isPro && cfg.shoppableEnabled && link.url) ? `
-                    <div class="matcha-gallery__shop-bar">
-                      <span class="matcha-gallery__shop-btn" style="display:inline-flex;align-items:center;gap:5px;">
-                        <span>${Icons.shoppingBag}</span> ${escapeHtml(link.label || 'Shop Now')}
-                        ${link.price ? `<span class="matcha-gallery__shop-price">${escapeHtml(link.price)}</span>` : ''}
-                      </span>
-                    </div>
-                  ` : ''}
-
-                  ${(isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) ? `
-                    <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
-                      <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
-                      <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
-                      <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 ↕</button>
-                      <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" title="Hero Tile (2x2)">2x2 ⤢</button>
-                    </div>
-                  ` : ''}
-
-                  ${(cfg.showTitle && imgTitle) ? `
-                    <div class="matcha-gallery__info">
-                      <h4 class="matcha-gallery__title">${escapeHtml(imgTitle)}</h4>
-                      ${(cfg.showCaption && imgCaption) ? `<p class="matcha-gallery__caption">${escapeHtml(imgCaption)}</p>` : ''}
-                    </div>
-                  ` : ''}
-                </div>
               </div>
             `;
           }).join('')}

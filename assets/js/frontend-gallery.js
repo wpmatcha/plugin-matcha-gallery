@@ -621,19 +621,64 @@
 			}
 
 			this.items.forEach( ( item, index ) => {
-				item.addEventListener( 'click', ( e ) => {
-					if ( e.target.closest( '.matcha-gallery__proof-btn' ) || e.target.closest( '.matcha-gallery__shop-bar' ) ) {
+				const handleItemAction = ( e ) => {
+					if (
+						e.target.closest( '.matcha-gallery__proof-btn' ) ||
+						e.target.closest( '.matcha-gallery__bar-btn' ) ||
+						e.target.closest( '.matcha-gallery__corner-badge' ) ||
+						e.target.closest( '.matcha-gallery__action-btn--link' ) ||
+						e.target.closest( '.matcha-gallery__action-btn--shop' ) ||
+						e.target.closest( '.matcha-action-btn--link' )
+					) {
 						return;
 					}
+
+					const clickedMedia = !! e.target.closest( '.matcha-action-btn--media' );
+
+					// Mobile Tap to Reveal: on touch screens, first tap reveals the overlay/caption/actions
+					if ( this.el.dataset.mobileTap === 'reveal' && ! clickedMedia ) {
+						const isTouch = window.matchMedia( '(pointer: coarse)' ).matches || 'ontouchstart' in window;
+						if ( isTouch && ! item.classList.contains( 'is-touch-revealed' ) ) {
+							this.items.forEach( ( it ) => it.classList.remove( 'is-touch-revealed' ) );
+							item.classList.add( 'is-touch-revealed' );
+
+							const onDocTap = ( docEvt ) => {
+								if ( ! item.contains( docEvt.target ) ) {
+									item.classList.remove( 'is-touch-revealed' );
+									document.removeEventListener( 'click', onDocTap );
+									document.removeEventListener( 'touchend', onDocTap );
+								}
+							};
+							setTimeout( () => {
+								document.addEventListener( 'click', onDocTap );
+								document.addEventListener( 'touchend', onDocTap );
+							}, 60 );
+							return;
+						}
+					}
+
+					// Direct URL click action bypasses lightbox (unless media button was explicitly clicked)
+					if ( ! clickedMedia && item.dataset.clickAction === 'direct' && item.dataset.shopUrl ) {
+						const target = item.dataset.shopTarget || '_self';
+						if ( target === '_blank' ) {
+							window.open( item.dataset.shopUrl, '_blank', 'noopener,noreferrer' );
+						} else {
+							window.location.href = item.dataset.shopUrl;
+						}
+						return;
+					}
+
 					this.openLightbox( index );
-				} );
+				};
+
+				item.addEventListener( 'click', handleItemAction );
 
 				item.setAttribute( 'tabindex', '0' );
 				item.setAttribute( 'role', 'button' );
 				item.addEventListener( 'keydown', ( e ) => {
 					if ( e.key === 'Enter' || e.key === ' ' ) {
 						e.preventDefault();
-						this.openLightbox( index );
+						handleItemAction( e );
 					}
 				} );
 			} );
@@ -657,26 +702,26 @@
 					</div>
 					<div class="matcha-lightbox__header-right">
 						<button class="matcha-lb-tool matcha-lb-zoom" type="button" aria-label="Toggle Zoom" title="Zoom In/Out (Z)">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
 						</button>
 						<button class="matcha-lb-tool matcha-lb-fullscreen" type="button" aria-label="Toggle Fullscreen" title="Fullscreen (F)">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
 						</button>
 						<a class="matcha-lb-tool matcha-lb-download" href="" download target="_blank" aria-label="Download image" title="Download">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+							<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
 						</a>
 						<button class="matcha-lb-tool matcha-lb-close" type="button" aria-label="Close lightbox" title="Close (Esc)">
-							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
 						</button>
 					</div>
 				</header>
 
 				<!-- Nav Arrows -->
 				<button class="matcha-lightbox__nav matcha-lightbox__prev" type="button" aria-label="Previous image" title="Previous (←)">
-					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
 				</button>
 				<button class="matcha-lightbox__nav matcha-lightbox__next" type="button" aria-label="Next image" title="Next (→)">
-					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
 				</button>
 
 				<!-- Center Stage -->
@@ -687,6 +732,7 @@
 					<div class="matcha-lightbox__caption-bar">
 						<div class="matcha-lightbox__title"></div>
 						<div class="matcha-lightbox__caption"></div>
+						<div class="matcha-lightbox__shop"></div>
 					</div>
 				</main>
 
@@ -856,6 +902,39 @@
 			} );
 		}
 
+		parseVideoUrl( url ) {
+			if ( ! url || typeof url !== 'string' ) return null;
+			const trimmed = url.trim();
+
+			// YouTube (watch, embed, youtu.be, shorts)
+			const ytMatch = trimmed.match( /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i );
+			if ( ytMatch && ytMatch[ 1 ] ) {
+				return {
+					type: 'youtube',
+					embedUrl: `https://www.youtube-nocookie.com/embed/${ ytMatch[ 1 ] }?autoplay=1&rel=0&modestbranding=1`,
+				};
+			}
+
+			// Vimeo (vimeo.com/ID)
+			const vmMatch = trimmed.match( /(?:vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/[^\/]*\/videos\/|album\/(?:\d+\/)?video\/|video\/|))(\d+)/i );
+			if ( vmMatch && vmMatch[ 1 ] ) {
+				return {
+					type: 'vimeo',
+					embedUrl: `https://player.vimeo.com/video/${ vmMatch[ 1 ] }?autoplay=1&badge=0&autopause=0`,
+				};
+			}
+
+			// Direct MP4 / WebM video
+			if ( /\.(mp4|webm|ogg)(\?.*)?$/i.test( trimmed ) ) {
+				return {
+					type: 'video',
+					src: trimmed,
+				};
+			}
+
+			return null;
+		}
+
 		openLightbox( index, direction = 0 ) {
 			MatchaGallery.activeInstance = this;
 			this.currentIndex = index;
@@ -870,87 +949,153 @@
 			const alt = item.querySelector( 'img' )?.alt || '';
 			const title = item.dataset.title || '';
 			const caption = item.dataset.caption || '';
+			const shopUrl = item.dataset.shopUrl || '';
+			const shopLabel = item.dataset.shopLabel || 'Shop Now';
+			const shopPrice = item.dataset.shopPrice || '';
+			const shopTarget = item.dataset.shopTarget || '_blank';
+			const videoUrl = item.dataset.videoUrl || '';
+			const videoParsed = videoUrl ? this.parseVideoUrl( videoUrl ) : null;
 
 			const titleEl = this.lightbox.querySelector( '.matcha-lightbox__title' );
 			const captionEl = this.lightbox.querySelector( '.matcha-lightbox__caption' );
+			const shopEl = this.lightbox.querySelector( '.matcha-lightbox__shop' );
 			const captionBar = this.lightbox.querySelector( '.matcha-lightbox__caption-bar' );
 			const counterEl = this.lightbox.querySelector( '.matcha-lightbox__counter' );
 			const downloadLink = this.lightbox.querySelector( '.matcha-lb-download' );
+			const zoomBtn = this.lightbox.querySelector( '.matcha-lb-zoom' );
 
-			// Luxury zero-shift cross-dissolve transition (zero scale distortion, zero black flicker)
+			if ( zoomBtn ) {
+				zoomBtn.style.display = videoParsed ? 'none' : '';
+			}
+
+			const renderCaptionContent = () => {
+				if ( titleEl ) {
+					titleEl.textContent = title;
+					titleEl.style.display = title ? 'block' : 'none';
+				}
+				if ( captionEl ) {
+					captionEl.textContent = caption;
+					captionEl.style.display = caption ? 'block' : 'none';
+				}
+				if ( shopEl ) {
+					if ( shopUrl ) {
+						const iconSvg = shopPrice
+							? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>'
+							: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>';
+						shopEl.innerHTML = `
+							<a href="${shopUrl}" target="${shopTarget}" rel="noopener noreferrer" class="matcha-lb-shop-btn">
+								${iconSvg}
+								<span>${shopLabel || (shopPrice ? 'Shop Now' : 'Visit Link')}</span>
+								${shopPrice ? `<span class="matcha-lb-shop-price">${shopPrice}</span>` : ''}
+							</a>
+						`;
+						shopEl.style.display = 'block';
+					} else {
+						shopEl.innerHTML = '';
+						shopEl.style.display = 'none';
+					}
+				}
+			};
+
 			if ( imgWrap ) {
-				const oldImgs = Array.from( imgWrap.querySelectorAll( '.matcha-lightbox__img' ) );
+				if ( videoParsed ) {
+					// Stop and purge previous media immediately
+					imgWrap.innerHTML = '';
+					const vContainer = document.createElement( 'div' );
+					vContainer.className = 'matcha-lightbox__video-container';
 
-				if ( direction !== 0 && oldImgs.length > 0 ) {
-					// Create incoming image in the exact centered stage coordinates
-					const newImg = document.createElement( 'img' );
-					newImg.className = 'matcha-lightbox__img matcha-lightbox__img--incoming';
-					newImg.alt = alt;
-					newImg.style.transition = 'none';
-					newImg.style.opacity = '0';
-					newImg.style.transform = `translateX(${ direction * 16 }px)`;
-					newImg.src = fullSrc;
-					imgWrap.appendChild( newImg );
+					if ( videoParsed.type === 'youtube' || videoParsed.type === 'vimeo' ) {
+						vContainer.innerHTML = `
+							<iframe
+								class="matcha-lightbox__video-iframe"
+								src="${ videoParsed.embedUrl }"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								allowfullscreen
+							></iframe>
+						`;
+					} else if ( videoParsed.type === 'video' ) {
+						vContainer.innerHTML = `
+							<video
+								class="matcha-lightbox__video-player"
+								src="${ videoParsed.src }"
+								controls
+								autoplay
+								playsinline
+							></video>
+						`;
+					}
+					imgWrap.appendChild( vContainer );
+				} else {
+					// Photo Mode: Luxury zero-shift cross-dissolve transition
+					const oldImgs = Array.from( imgWrap.querySelectorAll( '.matcha-lightbox__img, .matcha-lightbox__video-container' ) );
 
-					const performTransition = () => {
-						requestAnimationFrame( () => {
+					if ( direction !== 0 && oldImgs.length > 0 ) {
+						const newImg = document.createElement( 'img' );
+						newImg.className = 'matcha-lightbox__img matcha-lightbox__img--incoming';
+						newImg.alt = alt;
+						newImg.style.transition = 'none';
+						newImg.style.opacity = '0';
+						newImg.style.transform = `translateX(${ direction * 16 }px)`;
+						newImg.src = fullSrc;
+						imgWrap.appendChild( newImg );
+
+						const performTransition = () => {
 							requestAnimationFrame( () => {
-								// Smoothly dissolve out existing image(s)
-								oldImgs.forEach( ( oldImg ) => {
-									oldImg.classList.add( 'matcha-lightbox__img--exiting' );
-									oldImg.style.pointerEvents = 'none';
-									oldImg.style.transition = 'opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1), transform 0.22s cubic-bezier(0.25, 1, 0.5, 1)';
-									oldImg.style.opacity = '0';
-									oldImg.style.transform = `translateX(${ -direction * 16 }px)`;
-									setTimeout( () => {
-										if ( oldImg.parentNode ) oldImg.remove();
-									}, 240 );
-								} );
+								requestAnimationFrame( () => {
+									oldImgs.forEach( ( oldEl ) => {
+										oldEl.classList.add( 'matcha-lightbox__img--exiting' );
+										oldEl.style.pointerEvents = 'none';
+										oldEl.style.transition = 'opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1), transform 0.22s cubic-bezier(0.25, 1, 0.5, 1)';
+										oldEl.style.opacity = '0';
+										oldEl.style.transform = `translateX(${ -direction * 16 }px)`;
+										setTimeout( () => {
+											if ( oldEl.parentNode ) oldEl.remove();
+										}, 240 );
+									} );
 
-								// Reveal incoming image
-								newImg.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+									newImg.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+									newImg.style.opacity = '1';
+									newImg.style.transform = 'none';
+									newImg.classList.remove( 'matcha-lightbox__img--incoming' );
+								} );
+							} );
+						};
+
+						if ( newImg.complete && newImg.naturalWidth > 0 ) {
+							performTransition();
+						} else {
+							newImg.onload = performTransition;
+							newImg.onerror = () => {
 								newImg.style.opacity = '1';
 								newImg.style.transform = 'none';
-								newImg.classList.remove( 'matcha-lightbox__img--incoming' );
-							} );
-						} );
-					};
-
-					if ( newImg.complete && newImg.naturalWidth > 0 ) {
-						performTransition();
+								oldImgs.forEach( ( oldEl ) => oldEl.remove() );
+							};
+						}
 					} else {
-						newImg.onload = performTransition;
-						newImg.onerror = () => {
-							newImg.style.opacity = '1';
-							newImg.style.transform = 'none';
-							oldImgs.forEach( ( oldImg ) => oldImg.remove() );
-						};
-					}
-				} else {
-					// Initial opening or direct jump: clean smooth fade-in
-					imgWrap.innerHTML = '';
-					const img = document.createElement( 'img' );
-					img.className = 'matcha-lightbox__img';
-					img.alt = alt;
-					img.style.transition = 'none';
-					img.style.opacity = '0';
-					img.style.transform = 'none';
-					img.src = fullSrc;
-					imgWrap.appendChild( img );
+						imgWrap.innerHTML = '';
+						const img = document.createElement( 'img' );
+						img.className = 'matcha-lightbox__img';
+						img.alt = alt;
+						img.style.transition = 'none';
+						img.style.opacity = '0';
+						img.style.transform = 'none';
+						img.src = fullSrc;
+						imgWrap.appendChild( img );
 
-					const onInitialReady = () => {
-						requestAnimationFrame( () => {
+						const onInitialReady = () => {
 							requestAnimationFrame( () => {
-								img.style.transition = 'opacity 0.22s ease';
-								img.style.opacity = '1';
+								requestAnimationFrame( () => {
+									img.style.transition = 'opacity 0.22s ease';
+									img.style.opacity = '1';
+								} );
 							} );
-						} );
-					};
+						};
 
-					if ( img.complete && img.naturalWidth > 0 ) {
-						onInitialReady();
-					} else {
-						img.onload = onInitialReady;
+						if ( img.complete && img.naturalWidth > 0 ) {
+							onInitialReady();
+						} else {
+							img.onload = onInitialReady;
+						}
 					}
 				}
 			}
@@ -960,7 +1105,7 @@
 
 			// Smooth, instant caption cross-fade
 			if ( captionBar ) {
-				const hasContent = Boolean( title || caption );
+				const hasContent = Boolean( title || caption || shopUrl );
 				if ( ! hasContent ) {
 					captionBar.style.opacity = '0';
 					captionBar.style.display = 'none';
@@ -969,28 +1114,14 @@
 						captionBar.style.transition = 'opacity 0.15s ease';
 						captionBar.style.opacity = '0';
 						setTimeout( () => {
-							if ( titleEl ) {
-								titleEl.textContent = title;
-								titleEl.style.display = title ? 'block' : 'none';
-							}
-							if ( captionEl ) {
-								captionEl.textContent = caption;
-								captionEl.style.display = caption ? 'block' : 'none';
-							}
+							renderCaptionContent();
 							captionBar.style.display = 'block';
 							requestAnimationFrame( () => {
 								captionBar.style.opacity = '1';
 							} );
 						}, 150 );
 					} else {
-						if ( titleEl ) {
-							titleEl.textContent = title;
-							titleEl.style.display = title ? 'block' : 'none';
-						}
-						if ( captionEl ) {
-							captionEl.textContent = caption;
-							captionEl.style.display = caption ? 'block' : 'none';
-						}
+						renderCaptionContent();
 						captionBar.style.display = 'block';
 						captionBar.style.opacity = '1';
 					}
@@ -1058,6 +1189,10 @@
 			}
 			const lb = this.lightbox || document.querySelector( '.matcha-lightbox' );
 			if ( lb ) {
+				const imgWrap = lb.querySelector( '.matcha-lightbox__image-wrap' );
+				if ( imgWrap ) {
+					imgWrap.innerHTML = '';
+				}
 				lb.setAttribute( 'hidden', '' );
 				lb.classList.remove( 'matcha-lightbox--open' );
 				lb.classList.remove( 'matcha-lightbox--active' );

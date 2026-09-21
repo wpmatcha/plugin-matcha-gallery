@@ -89,7 +89,7 @@
     $schema: "https://schemas.wp.org/trunk/block.json",
     apiVersion: 3,
     name: "matcha-ai/smart-gallery",
-    version: "1.0.0",
+    version: "1.0.1",
     title: "Matcha AI Smart Gallery",
     category: "media",
     icon: "format-gallery",
@@ -136,6 +136,14 @@
         type: "string",
         default: "zoom"
       },
+      hoverFrameColor: {
+        type: "string",
+        default: ""
+      },
+      hoverMobileTap: {
+        type: "string",
+        default: "lightbox"
+      },
       columns: {
         type: "number",
         default: 3
@@ -156,6 +164,11 @@
         type: "boolean",
         default: true
       },
+      toolbarSkin: {
+        type: "string",
+        default: "capsule",
+        enum: ["capsule", "underline", "obsidian", "glass"]
+      },
       showAllFilter: {
         type: "boolean",
         default: true
@@ -175,6 +188,18 @@
       galleryId: {
         type: "number",
         default: 0
+      },
+      stylePreset: {
+        type: "string",
+        default: "custom"
+      },
+      contentPlacement: {
+        type: "string",
+        default: "overlay"
+      },
+      cardBackground: {
+        type: "string",
+        default: ""
       }
     },
     editorScript: "file:../../build/smart-gallery/index.js",
@@ -482,6 +507,44 @@
         },
         "+ Create New Gallery in Studio \u2197"
       ))
+    ), /* @__PURE__ */ window.wp.element.createElement(
+      import_components3.PanelBody,
+      {
+        title: (0, import_i18n3.__)("Curated Style Preset (Skin)", "matcha-gallery"),
+        initialOpen: true
+      },
+      /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Style Preset", "matcha-gallery"),
+          value: attributes.stylePreset || "custom",
+          options: [
+            { label: (0, import_i18n3.__)("Custom (Manual Adjustments)", "matcha-gallery"), value: "custom" },
+            { label: (0, import_i18n3.__)("Exhibition Hairline Frame (The Grid: Brasilia)", "matcha-gallery"), value: "exhibition-frame" },
+            { label: (0, import_i18n3.__)("Architectural Curtain (The Grid: Sofia)", "matcha-gallery"), value: "architectural-curtain" },
+            { label: (0, import_i18n3.__)("Cinematic Pullback (The Grid: Bogota)", "matcha-gallery"), value: "cinematic-pullback" },
+            { label: (0, import_i18n3.__)("Minimalist Drawer (The Grid: Lome)", "matcha-gallery"), value: "minimalist-drawer" }
+          ],
+          help: (0, import_i18n3.__)("Curated preset that harmonizes layout, hover effects, and framing.", "matcha-gallery"),
+          onChange: (val) => {
+            const patch = { stylePreset: val, contentPlacement: "overlay" };
+            if (val === "exhibition-frame") {
+              patch.hoverEffect = "frame";
+              patch.layout = "grid";
+            } else if (val === "architectural-curtain") {
+              patch.hoverEffect = "curtain";
+              patch.layout = "justified";
+            } else if (val === "cinematic-pullback") {
+              patch.hoverEffect = "pullback";
+              patch.layout = "masonry";
+            } else if (val === "minimalist-drawer") {
+              patch.hoverEffect = "drawer";
+              patch.layout = "grid";
+            }
+            setAttributes(patch);
+          }
+        }
+      )
     ), (!galleryId || galleryId === 0) && /* @__PURE__ */ window.wp.element.createElement(
       import_components3.PanelBody,
       {
@@ -593,7 +656,7 @@
     ), /* @__PURE__ */ window.wp.element.createElement(
       import_components3.PanelBody,
       {
-        title: (0, import_i18n3.__)("Filters", "matcha-gallery"),
+        title: (0, import_i18n3.__)("Toolbar & Filters", "matcha-gallery"),
         initialOpen: false
       },
       /* @__PURE__ */ window.wp.element.createElement(
@@ -606,6 +669,24 @@
           ),
           checked: filtersEnabled,
           onChange: (value) => setAttributes({ filtersEnabled: value })
+        }
+      ),
+      /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Toolbar & Controls Skin", "matcha-gallery"),
+          value: attributes.toolbarSkin || "capsule",
+          options: [
+            { label: (0, import_i18n3.__)("Modern Capsule (Clean Pill)", "matcha-gallery"), value: "capsule" },
+            { label: (0, import_i18n3.__)("Minimalist Hairline (Fine Art Underline)", "matcha-gallery"), value: "underline" },
+            { label: (0, import_i18n3.__)("Obsidian Dark (Charcoal Pro)", "matcha-gallery"), value: "obsidian" },
+            { label: (0, import_i18n3.__)("Frosted Glass (Glassmorphism Pro)", "matcha-gallery"), value: "glass" }
+          ],
+          help: (0, import_i18n3.__)(
+            "Harmonizes search bar, filter buttons, sort dropdown, and swatches in a unified design language.",
+            "matcha-gallery"
+          ),
+          onChange: (value) => setAttributes({ toolbarSkin: value })
         }
       ),
       filtersEnabled && /* @__PURE__ */ window.wp.element.createElement(
@@ -656,13 +737,38 @@
           label: (0, import_i18n3.__)("Hover Animation", "matcha-gallery"),
           value: attributes.hoverEffect || "zoom",
           options: [
-            { label: (0, import_i18n3.__)("Smooth Zoom (Default)", "matcha-gallery"), value: "zoom" },
-            { label: (0, import_i18n3.__)("3D Elevation Lift", "matcha-gallery"), value: "lift" },
-            { label: (0, import_i18n3.__)("Matcha Neon Glow", "matcha-gallery"), value: "glow" },
-            { label: (0, import_i18n3.__)("Monochrome to Color", "matcha-gallery"), value: "grayscale" },
-            { label: (0, import_i18n3.__)("Flat (No Animation)", "matcha-gallery"), value: "none" }
+            { label: (0, import_i18n3.__)("Smooth Zoom (The Grid Malabo)", "matcha-gallery"), value: "zoom" },
+            { label: (0, import_i18n3.__)("Cinematic Pullback (The Grid Bogota)", "matcha-gallery"), value: "pullback" },
+            { label: (0, import_i18n3.__)("Editorial Hairline Frame (The Grid Brasilia)", "matcha-gallery"), value: "frame" },
+            { label: (0, import_i18n3.__)("Architectural Slide Curtain (The Grid Sofia)", "matcha-gallery"), value: "curtain" },
+            { label: (0, import_i18n3.__)("Minimalist Bottom Drawer (The Grid Lome)", "matcha-gallery"), value: "drawer" },
+            { label: (0, import_i18n3.__)("Monochrome to Vivid Color", "matcha-gallery"), value: "grayscale" },
+            { label: (0, import_i18n3.__)("Clean Static (No Effect)", "matcha-gallery"), value: "none" }
           ],
           onChange: (value) => setAttributes({ hoverEffect: value })
+        }
+      ),
+      attributes.hoverEffect === "frame" && /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.TextControl,
+        {
+          label: (0, import_i18n3.__)("Hairline Frame Color", "matcha-gallery"),
+          value: attributes.hoverFrameColor || "",
+          placeholder: "rgba(255, 255, 255, 0.45) or #ffffff",
+          onChange: (value) => setAttributes({ hoverFrameColor: value }),
+          help: (0, import_i18n3.__)("Custom border color for Brasilia hairline frame.", "matcha-gallery")
+        }
+      ),
+      /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Mobile Touch Action", "matcha-gallery"),
+          value: attributes.hoverMobileTap || "lightbox",
+          options: [
+            { label: (0, import_i18n3.__)("Direct Lightbox Open (Fast)", "matcha-gallery"), value: "lightbox" },
+            { label: (0, import_i18n3.__)("Tap to Reveal Overlay (Captions & Links)", "matcha-gallery"), value: "reveal" }
+          ],
+          onChange: (value) => setAttributes({ hoverMobileTap: value }),
+          help: (0, import_i18n3.__)("Determine how touch devices handle tapping photos.", "matcha-gallery")
         }
       )
     ));

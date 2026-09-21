@@ -174,6 +174,9 @@ final class Gallery_CPT {
 		$out['orderedFilterTags']  = array_values( array_filter( array_map( 'sanitize_title', (array) ( $cfg['orderedFilterTags'] ?? array() ) ) ) );
 		$allowed_filter_styles     = apply_filters( 'matcha_gallery_allowed_filter_styles', array( 'pills', 'underline' ) );
 		$out['filterStyle']        = in_array( $cfg['filterStyle'] ?? 'pills', (array) $allowed_filter_styles, true ) ? $cfg['filterStyle'] : 'pills';
+		$default_toolbar_skins     = $is_pro ? array( 'capsule', 'underline', 'obsidian', 'glass' ) : array( 'capsule', 'underline' );
+		$allowed_toolbar_skins     = apply_filters( 'matcha_gallery_allowed_toolbar_skins', $default_toolbar_skins );
+		$out['toolbarSkin']        = in_array( $cfg['toolbarSkin'] ?? 'capsule', (array) $allowed_toolbar_skins, true ) ? $cfg['toolbarSkin'] : ( in_array( $cfg['filterStyle'] ?? '', array( 'underline', 'obsidian', 'glass' ), true ) ? $cfg['filterStyle'] : 'capsule' );
 		$out['filterAlign']        = in_array( $cfg['filterAlign'] ?? 'left', array( 'left', 'center', 'right', 'between' ), true ) ? $cfg['filterAlign'] : 'left';
 		$out['showFilterCount']    = ! isset( $cfg['showFilterCount'] ) || ! empty( $cfg['showFilterCount'] );
 		$out['allFilterLabel']     = sanitize_text_field( $cfg['allFilterLabel'] ?? 'All' );
@@ -192,8 +195,14 @@ final class Gallery_CPT {
 		$allowed_card_themes       = apply_filters( 'matcha_gallery_allowed_card_themes', $default_card_themes );
 		$out['cardTheme']          = in_array( $cfg['cardTheme'] ?? 'clean', (array) $allowed_card_themes, true ) ? $cfg['cardTheme'] : 'clean';
 		$out['canvasBackdrop']     = in_array( $cfg['canvasBackdrop'] ?? 'transparent', array( 'transparent', 'white', 'cream', 'sage', 'charcoal', 'dark-slate' ), true ) ? $cfg['canvasBackdrop'] : 'transparent';
-		$allowed_hover_effects = apply_filters( 'matcha_gallery_allowed_hover_effects', array( 'none', 'zoom', 'lift', 'glow', 'grayscale' ) );
+		$allowed_style_presets     = apply_filters( 'matcha_gallery_allowed_style_presets', array( 'custom', 'exhibition-frame', 'architectural-curtain', 'cinematic-pullback', 'minimalist-drawer' ) );
+		$out['stylePreset']        = in_array( $cfg['stylePreset'] ?? 'custom', (array) $allowed_style_presets, true ) ? $cfg['stylePreset'] : 'custom';
+		$out['contentPlacement']   = 'overlay';
+		$out['cardBackground']     = sanitize_hex_color( $cfg['cardBackground'] ?? '' ) ?: '';
+		$allowed_hover_effects = apply_filters( 'matcha_gallery_allowed_hover_effects', array( 'none', 'zoom', 'pullback', 'frame', 'curtain', 'drawer', 'grayscale', 'lift', 'glow' ) );
 		$out['hoverEffect']    = in_array( $cfg['hoverEffect'] ?? 'zoom', (array) $allowed_hover_effects, true ) ? $cfg['hoverEffect'] : 'zoom';
+		$out['hoverFrameColor'] = sanitize_hex_color( $cfg['hoverFrameColor'] ?? '' ) ?: '';
+		$out['hoverMobileTap']  = in_array( $cfg['hoverMobileTap'] ?? 'lightbox', array( 'lightbox', 'reveal' ), true ) ? $cfg['hoverMobileTap'] : 'lightbox';
 
 		$default_frames     = $is_pro ? array( 'none', 'white-mat', 'black-metal', 'natural-oak', 'gold-brass', 'glass-float' ) : array( 'none', 'white-mat' );
 		$allowed_frames     = apply_filters( 'matcha_gallery_allowed_frames', $default_frames );
@@ -266,17 +275,33 @@ final class Gallery_CPT {
 			}
 		}
 
-		// Sanitize shoppable image links (Pro)
+		// Sanitize image links (Free: external URL & target; Pro: price, label, productId)
 		$out['imageLinks'] = array();
-		if ( $is_pro && ! empty( $cfg['imageLinks'] ) && is_array( $cfg['imageLinks'] ) ) {
+		if ( ! empty( $cfg['imageLinks'] ) && is_array( $cfg['imageLinks'] ) ) {
 			foreach ( $cfg['imageLinks'] as $img_id => $link ) {
 				if ( is_array( $link ) ) {
-					$out['imageLinks'][ (int) $img_id ] = array(
-						'url'    => esc_url_raw( $link['url'] ?? '' ),
-						'target' => in_array( $link['target'] ?? '_self', array( '_self', '_blank' ), true ) ? $link['target'] : '_self',
-						'label'  => sanitize_text_field( $link['label'] ?? '' ),
-						'price'  => sanitize_text_field( $link['price'] ?? '' ),
-					);
+					$clean_url = esc_url_raw( $link['url'] ?? '' );
+					if ( ! empty( $clean_url ) ) {
+						$out['imageLinks'][ (int) $img_id ] = array(
+							'url'         => $clean_url,
+							'target'      => in_array( $link['target'] ?? '_self', array( '_self', '_blank' ), true ) ? $link['target'] : '_self',
+							'clickAction' => in_array( $link['clickAction'] ?? 'lightbox', array( 'lightbox', 'direct' ), true ) ? $link['clickAction'] : 'lightbox',
+							'label'       => sanitize_text_field( $link['label'] ?? '' ),
+							'price'       => $is_pro ? sanitize_text_field( $link['price'] ?? '' ) : '',
+							'productId'   => $is_pro && ! empty( $link['productId'] ) ? absint( $link['productId'] ) : 0,
+						);
+					}
+				}
+			}
+		}
+
+		// Sanitize image videos (YouTube, Vimeo, MP4 URLs)
+		$out['imageVideos'] = array();
+		if ( ! empty( $cfg['imageVideos'] ) && is_array( $cfg['imageVideos'] ) ) {
+			foreach ( $cfg['imageVideos'] as $img_id => $video_url ) {
+				$clean_url = esc_url_raw( is_string( $video_url ) ? $video_url : '' );
+				if ( ! empty( $clean_url ) ) {
+					$out['imageVideos'][ (int) $img_id ] = $clean_url;
 				}
 			}
 		}
@@ -371,7 +396,13 @@ final class Gallery_CPT {
 			'shadowElevation'    => 'soft',
 			'canvasBackdrop'     => 'transparent',
 			'cardTheme'          => 'clean',
+			'stylePreset'        => 'custom',
+			'contentPlacement'   => 'overlay',
+			'cardBackground'     => '',
 			'hoverEffect'        => 'zoom',
+			'hoverFrameColor'    => '',
+			'hoverMobileTap'     => 'lightbox',
+			'imageVideos'        => array(),
 		);
 	}
 

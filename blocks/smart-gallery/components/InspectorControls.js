@@ -13,6 +13,7 @@ import {
 	RangeControl,
 	ToggleControl,
 	SelectControl,
+	TextControl,
 	FormTokenField,
 	RadioControl,
 } from '@wordpress/components';
@@ -145,6 +146,42 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 				) }
 			</PanelBody>
 
+			{ /* Curated Style Preset (Skin) Panel */ }
+			<PanelBody
+				title={ __( 'Curated Style Preset (Skin)', 'matcha-gallery' ) }
+				initialOpen={ true }
+			>
+				<SelectControl
+					label={ __( 'Style Preset', 'matcha-gallery' ) }
+					value={ attributes.stylePreset || 'custom' }
+					options={ [
+						{ label: __( 'Custom (Manual Adjustments)', 'matcha-gallery' ), value: 'custom' },
+						{ label: __( 'Exhibition Hairline Frame (The Grid: Brasilia)', 'matcha-gallery' ), value: 'exhibition-frame' },
+						{ label: __( 'Architectural Curtain (The Grid: Sofia)', 'matcha-gallery' ), value: 'architectural-curtain' },
+						{ label: __( 'Cinematic Pullback (The Grid: Bogota)', 'matcha-gallery' ), value: 'cinematic-pullback' },
+						{ label: __( 'Minimalist Drawer (The Grid: Lome)', 'matcha-gallery' ), value: 'minimalist-drawer' },
+					] }
+					help={ __( 'Curated preset that harmonizes layout, hover effects, and framing.', 'matcha-gallery' ) }
+					onChange={ ( val ) => {
+						const patch = { stylePreset: val, contentPlacement: 'overlay' };
+						if ( val === 'exhibition-frame' ) {
+							patch.hoverEffect = 'frame';
+							patch.layout = 'grid';
+						} else if ( val === 'architectural-curtain' ) {
+							patch.hoverEffect = 'curtain';
+							patch.layout = 'justified';
+						} else if ( val === 'cinematic-pullback' ) {
+							patch.hoverEffect = 'pullback';
+							patch.layout = 'masonry';
+						} else if ( val === 'minimalist-drawer' ) {
+							patch.hoverEffect = 'drawer';
+							patch.layout = 'grid';
+						}
+						setAttributes( patch );
+					} }
+				/>
+			</PanelBody>
+
 			{ /* Content Panel */ }
 			{ ( ! galleryId || galleryId === 0 ) && (
 			<PanelBody
@@ -248,9 +285,9 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 				/>
 			</PanelBody>
 
-			{ /* Filters Panel */ }
+			{ /* Filters & Toolbar Panel */ }
 			<PanelBody
-				title={ __( 'Filters', 'matcha-gallery' ) }
+				title={ __( 'Toolbar & Filters', 'matcha-gallery' ) }
 				initialOpen={ false }
 			>
 				<ToggleControl
@@ -262,6 +299,24 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 					checked={ filtersEnabled }
 					onChange={ ( value ) =>
 						setAttributes( { filtersEnabled: value } )
+					}
+				/>
+
+				<SelectControl
+					label={ __( 'Toolbar & Controls Skin', 'matcha-gallery' ) }
+					value={ attributes.toolbarSkin || 'capsule' }
+					options={ [
+						{ label: __( 'Modern Capsule (Clean Pill)', 'matcha-gallery' ), value: 'capsule' },
+						{ label: __( 'Minimalist Hairline (Fine Art Underline)', 'matcha-gallery' ), value: 'underline' },
+						{ label: __( 'Obsidian Dark (Charcoal Pro)', 'matcha-gallery' ), value: 'obsidian' },
+						{ label: __( 'Frosted Glass (Glassmorphism Pro)', 'matcha-gallery' ), value: 'glass' },
+					] }
+					help={ __(
+						'Harmonizes search bar, filter buttons, sort dropdown, and swatches in a unified design language.',
+						'matcha-gallery'
+					) }
+					onChange={ ( value ) =>
+						setAttributes( { toolbarSkin: value } )
 					}
 				/>
 
@@ -313,13 +368,36 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 					label={ __( 'Hover Animation', 'matcha-gallery' ) }
 					value={ attributes.hoverEffect || 'zoom' }
 					options={ [
-						{ label: __( 'Smooth Zoom (Default)', 'matcha-gallery' ), value: 'zoom' },
-						{ label: __( '3D Elevation Lift', 'matcha-gallery' ), value: 'lift' },
-						{ label: __( 'Matcha Neon Glow', 'matcha-gallery' ), value: 'glow' },
-						{ label: __( 'Monochrome to Color', 'matcha-gallery' ), value: 'grayscale' },
-						{ label: __( 'Flat (No Animation)', 'matcha-gallery' ), value: 'none' },
+						{ label: __( 'Smooth Zoom (The Grid Malabo)', 'matcha-gallery' ), value: 'zoom' },
+						{ label: __( 'Cinematic Pullback (The Grid Bogota)', 'matcha-gallery' ), value: 'pullback' },
+						{ label: __( 'Editorial Hairline Frame (The Grid Brasilia)', 'matcha-gallery' ), value: 'frame' },
+						{ label: __( 'Architectural Slide Curtain (The Grid Sofia)', 'matcha-gallery' ), value: 'curtain' },
+						{ label: __( 'Minimalist Bottom Drawer (The Grid Lome)', 'matcha-gallery' ), value: 'drawer' },
+						{ label: __( 'Monochrome to Vivid Color', 'matcha-gallery' ), value: 'grayscale' },
+						{ label: __( 'Clean Static (No Effect)', 'matcha-gallery' ), value: 'none' },
 					] }
 					onChange={ ( value ) => setAttributes( { hoverEffect: value } ) }
+				/>
+
+				{ attributes.hoverEffect === 'frame' && (
+					<TextControl
+						label={ __( 'Hairline Frame Color', 'matcha-gallery' ) }
+						value={ attributes.hoverFrameColor || '' }
+						placeholder="rgba(255, 255, 255, 0.45) or #ffffff"
+						onChange={ ( value ) => setAttributes( { hoverFrameColor: value } ) }
+						help={ __( 'Custom border color for Brasilia hairline frame.', 'matcha-gallery' ) }
+					/>
+				) }
+
+				<SelectControl
+					label={ __( 'Mobile Touch Action', 'matcha-gallery' ) }
+					value={ attributes.hoverMobileTap || 'lightbox' }
+					options={ [
+						{ label: __( 'Direct Lightbox Open (Fast)', 'matcha-gallery' ), value: 'lightbox' },
+						{ label: __( 'Tap to Reveal Overlay (Captions & Links)', 'matcha-gallery' ), value: 'reveal' },
+					] }
+					onChange={ ( value ) => setAttributes( { hoverMobileTap: value } ) }
+					help={ __( 'Determine how touch devices handle tapping photos.', 'matcha-gallery' ) }
 				/>
 			</PanelBody>
 		</InspectorControls>

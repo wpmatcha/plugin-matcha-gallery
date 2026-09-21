@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "matcha-ai/smart-gallery",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"title": "Matcha AI Smart Gallery",
 	"category": "media",
 	"icon": "format-gallery",
@@ -49,6 +49,14 @@
 			"type": "string",
 			"default": "zoom"
 		},
+		"hoverFrameColor": {
+			"type": "string",
+			"default": ""
+		},
+		"hoverMobileTap": {
+			"type": "string",
+			"default": "lightbox"
+		},
 		"columns": {
 			"type": "number",
 			"default": 3
@@ -69,6 +77,11 @@
 			"type": "boolean",
 			"default": true
 		},
+		"toolbarSkin": {
+			"type": "string",
+			"default": "capsule",
+			"enum": [ "capsule", "underline", "obsidian", "glass" ]
+		},
 		"showAllFilter": {
 			"type": "boolean",
 			"default": true
@@ -88,6 +101,18 @@
 		"galleryId": {
 			"type": "number",
 			"default": 0
+		},
+		"stylePreset": {
+			"type": "string",
+			"default": "custom"
+		},
+		"contentPlacement": {
+			"type": "string",
+			"default": "overlay"
+		},
+		"cardBackground": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"editorScript": "file:../../build/smart-gallery/index.js",

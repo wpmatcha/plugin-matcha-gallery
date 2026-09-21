@@ -176,7 +176,7 @@ class Settings_Page {
 		$settings = Plugin::get_all_settings();
 		$stats    = self::get_stats();
 		$keywords = AI_Keywords_Taxonomy::get_all_terms( array( 'number' => 30, 'orderby' => 'count', 'order' => 'DESC' ) );
-		$is_pro   = class_exists( '\\MatchaGallery\\Gallery\\Gallery_CPT' ) ? \MatchaGallery\Gallery\Gallery_CPT::is_pro_active() : Pro_Features::is_active();
+		$is_pro   = class_exists( '\\Matcha_AI_Smart_Gallery\\Gallery\\Gallery_CPT' ) ? \Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT::is_pro_active() : Pro_Features::is_active();
 		?>
 		<div class="wrap matcha-hub-wrap">
 			<?php \Matcha_AI_Smart_Gallery\Admin\Admin_Header::render( 'settings' ); ?>
@@ -568,11 +568,11 @@ class Settings_Page {
 				<div class="matcha-sidebar-card__body">
 					<p><?php esc_html_e( 'Need help setting up custom prompt templates or troubleshooting API tokens?', 'matcha-gallery' ); ?></p>
 					<div class="matcha-sidebar-links">
-						<a href="https://wpmatcha.com/docs/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+						<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
 							<span><?php esc_html_e( 'Read Documentation', 'matcha-gallery' ); ?></span>
 							<span class="dashicons dashicons-book"></span>
 						</a>
-						<a href="https://wpmatcha.com/support/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
+						<a href="https://wpmatcha.com/contact/" target="_blank" rel="noopener noreferrer" class="matcha-sidebar-link-btn">
 							<span><?php esc_html_e( 'Get Priority Support', 'matcha-gallery' ); ?></span>
 							<span class="dashicons dashicons-sos"></span>
 						</a>
@@ -831,7 +831,7 @@ class Settings_Page {
 				<div class="matcha-pro-feat">✦ <?php esc_html_e( 'Social Sharing & High-Res Lightbox Zoom', 'matcha-gallery' ); ?></div>
 			</div>
 
-			<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery/" class="button button-primary button-hero matcha-pro-upgrade-btn" target="_blank" rel="noopener">
+			<a href="https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/" class="button button-primary button-hero matcha-pro-upgrade-btn" target="_blank" rel="noopener">
 				<?php esc_html_e( 'Upgrade to Pro →', 'matcha-gallery' ); ?>
 			</a>
 		</div>

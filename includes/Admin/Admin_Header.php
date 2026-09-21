@@ -29,8 +29,8 @@ class Admin_Header {
 	 * @param string $active_tab Active tab identifier ('dashboard', 'galleries', 'settings', 'comparison', 'license').
 	 */
 	public static function render( string $active_tab = 'dashboard' ): void {
-		$is_pro = class_exists( '\\MatchaGallery\\Gallery\\Gallery_CPT' )
-			? \MatchaGallery\Gallery\Gallery_CPT::is_pro_active()
+		$is_pro = class_exists( '\\Matcha_AI_Smart_Gallery\\Gallery\\Gallery_CPT' )
+			? \Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT::is_pro_active()
 			: Pro_Features::is_active();
 
 		$dashboard_url  = admin_url( 'admin.php?page=matcha-ai-hub' );
@@ -39,9 +39,9 @@ class Admin_Header {
 		$settings_url   = admin_url( 'admin.php?page=matcha-ai-settings' );
 		$comparison_url = admin_url( 'admin.php?page=matcha-ai-hub&tab=comparison' );
 		$license_url    = admin_url( 'admin.php?page=matcha-pro-license' );
-		$upgrade_url    = 'https://wpmatcha.com/wordpress-plugins/matcha-gallery/';
-		$docs_url       = 'https://wpmatcha.com/docs/';
-		$support_url    = 'https://wpmatcha.com/support/';
+		$upgrade_url    = 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/';
+		$docs_url       = 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/';
+		$support_url    = 'https://wpmatcha.com/contact/';
 		?>
 		<!-- Astra-Style Top Announcement Notice -->
 		<aside class="matcha-announcement-bar" id="matcha-announcement-bar" aria-label="<?php esc_attr_e( 'Matcha Announcement', 'matcha-gallery' ); ?>">
@@ -70,12 +70,7 @@ class Admin_Header {
 				<div class="matcha-nav-brand">
 					<a href="<?php echo esc_url( $dashboard_url ); ?>" class="matcha-nav-brand__link">
 						<span class="matcha-nav-brand__icon">
-							<svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<rect width="32" height="32" rx="8" fill="#10B981"/>
-								<path d="M9 16C9 12.134 12.134 9 16 9C19.866 9 23 12.134 23 16C23 19.866 19.866 23 16 23C12.134 23 9 19.866 9 16Z" stroke="#FFFFFF" stroke-width="2.2"/>
-								<path d="M16 11V21M11 16H21" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
-								<circle cx="16" cy="16" r="3" fill="#FFFFFF"/>
-							</svg>
+							<img src="<?php echo esc_url( MATCHA_GALLERY_URL . 'assets/images/icon-128x128.png?v=' . MATCHA_GALLERY_VERSION . '.2' ); ?>" alt="<?php esc_attr_e( 'Matcha Gallery', 'matcha-gallery' ); ?>" width="34" height="34" style="border-radius:7px;object-fit:cover;display:block;" />
 						</span>
 						<span class="matcha-nav-brand__title"><?php esc_html_e( 'Matcha Gallery', 'matcha-gallery' ); ?></span>
 					</a>

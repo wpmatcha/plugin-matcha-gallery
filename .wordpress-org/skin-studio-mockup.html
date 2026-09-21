@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matcha Studio — Layout & Skin Architecture Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-studio: #0d110f;
+      --bg-surface: #141916;
+      --bg-card: #1c231f;
+      --bg-card-hover: #222b26;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-focus: #5ec27f;
+      --text-primary: #e6ede8;
+      --text-secondary: #94a399;
+      --text-muted: #5e6f64;
+      --accent-matcha: #5ec27f;
+      --accent-matcha-glow: rgba(94, 194, 127, 0.22);
+      --accent-pro-gold: #eab308;
+      --accent-pro-bg: rgba(234, 179, 8, 0.12);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-studio);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* --- TOPBAR --- */
+    .studio-topbar {
+      height: 54px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .brand-icon {
+      width: 22px;
+      height: 22px;
+      background: var(--accent-matcha);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0d110f;
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .badge-prototype {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(94, 194, 127, 0.12);
+      color: var(--accent-matcha);
+      border: 1px solid rgba(94, 194, 127, 0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .topbar-center {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+    .viewport-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .viewport-btn.active {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-update {
+      background: var(--accent-matcha);
+      color: #0a1710;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(94, 194, 127, 0.25);
+    }
+
+    /* --- STUDIO BODY THREE-PANEL GRID --- */
+    .studio-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 310px 1fr 280px;
+      overflow: hidden;
+    }
+
+    /* --- LEFT SIDEBAR (LAYOUTS & SKINS) --- */
+    .sidebar-left {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(0,0,0,0.15);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--accent-matcha);
+      border-bottom-color: var(--accent-matcha);
+      background: rgba(94, 194, 127, 0.04);
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-scroll::-webkit-scrollbar { width: 5px; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    /* Layout Blueprint Grid Cards */
+    .layout-blueprints-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .layout-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .layout-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
+    }
+    .layout-card.active {
+      border-color: var(--accent-matcha);
+      background: rgba(94, 194, 127, 0.08);
+      box-shadow: 0 0 0 1px var(--accent-matcha), 0 4px 12px rgba(94, 194, 127, 0.12);
+    }
+    .layout-card-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      margin-bottom: 2px;
+    }
+    .layout-card.active .layout-card-icon {
+      color: var(--accent-matcha);
+    }
+    .layout-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .layout-card-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+    .pro-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent-pro-gold);
+      background: var(--accent-pro-bg);
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Auto-Filter Notice Banner */
+    .filter-notice {
+      background: rgba(94, 194, 127, 0.06);
+      border: 1px dashed rgba(94, 194, 127, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 11px;
+      color: var(--accent-matcha);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    /* Filtered Skins List */
+    .skins-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .skin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .skin-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .skin-card.active {
+      border-color: var(--accent-matcha);
+      background: rgba(94, 194, 127, 0.08);
+      box-shadow: 0 0 0 1px var(--accent-matcha);
+    }
+    .skin-card.hidden {
+      display: none !important;
+    }
+
+    /* Mini visual thumbnail preview for each skin */
+    .skin-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      background: #000;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+    }
+    .thumb-minimalist {
+      background: linear-gradient(135deg, #2b3930, #141c17);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-minimalist::after {
+      content: '';
+      width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+    }
+    .thumb-card {
+      background: #19201c;
+      display: flex;
+      flex-direction: column;
+    }
+    .thumb-card-img {
+      height: 25px;
+      background: linear-gradient(135deg, #44594c, #26332b);
+    }
+    .thumb-card-body {
+      flex: 1;
+      background: #fff;
+      padding: 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .thumb-card-line {
+      height: 3px;
+      width: 80%;
+      background: #334155;
+      border-radius: 1px;
+    }
+    .thumb-card-line.sub {
+      width: 50%;
+      background: #94a3b8;
+    }
+    .thumb-exhibition {
+      background: #0b0f0d;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-exhibition-inner {
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--accent-matcha);
+      background: #1e2822;
+      border-radius: 2px;
+    }
+    .thumb-aura {
+      background: radial-gradient(circle at center, rgba(94, 194, 127, 0.8) 0%, rgba(20, 25, 22, 0.9) 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-aura-photo {
+      width: 22px;
+      height: 22px;
+      border-radius: 3px;
+      background: #2a3730;
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 0 10px rgba(94, 194, 127, 0.9);
+    }
+
+    .skin-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .skin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+    .skin-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .skin-badge {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.07);
+      color: var(--text-secondary);
+    }
+    .skin-badge.match {
+      background: rgba(94, 194, 127, 0.15);
+      color: var(--accent-matcha);
+    }
+    .skin-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* --- CENTER LIVE CANVAS --- */
+    .canvas-viewport {
+      background: #080a09;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .canvas-bar {
+      height: 42px;
+      background: rgba(18, 23, 20, 0.7);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .canvas-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-chip {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+    .status-chip strong {
+      color: var(--accent-matcha);
+      font-weight: 600;
+    }
+
+    /* --- SPATIAL 3D TOGGLE BUTTON --- */
+    .spatial-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(234, 179, 8, 0.12);
+      border: 1px solid rgba(234, 179, 8, 0.4);
+      color: #fde047;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.15);
+    }
+    .spatial-toggle-btn:hover {
+      background: rgba(234, 179, 8, 0.22);
+      box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+      transform: translateY(-1px);
+    }
+    .spatial-toggle-btn.active {
+      background: rgba(94, 194, 127, 0.15);
+      border-color: var(--accent-matcha);
+      color: var(--accent-matcha);
+      box-shadow: 0 0 18px rgba(94, 194, 127, 0.25);
+    }
+    .spatial-status-text {
+      font-size: 9px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      letter-spacing: 0.05em;
+    }
+
+    .canvas-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      padding: 36px;
+      display: flex;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 30%, rgba(94, 194, 127, 0.03) 0%, transparent 60%);
+    }
+    .canvas-scrollable::-webkit-scrollbar { width: 6px; }
+    .canvas-scrollable::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+
+    .gallery-stage {
+      width: 100%;
+      max-width: 980px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gallery-stage.viewport-mobile {
+      max-width: 390px !important;
+    }
+    .gallery-stage.viewport-tablet {
+      max-width: 720px !important;
+    }
+
+    /* --- GALLERY ITEM ARCHITECTURE --- */
+    .matcha-gallery-container {
+      width: 100%;
+      display: grid;
+      gap: 22px;
+      transition: all 0.3s ease;
+    }
+
+    /* --- SPATIAL 3D DEPTH ENGINE (PRO 2026) --- */
+    .spatial-3d-active {
+      perspective: 1200px;
+      perspective-origin: center center;
+    }
+    .spatial-3d-active .gallery-item {
+      overflow: visible !important;
+      transform-style: preserve-3d !important;
+      transition: transform 0.12s ease-out, box-shadow 0.25s ease-out;
+      will-change: transform, box-shadow;
+    }
+    .spatial-3d-active .gallery-item:hover {
+      transform: none; /* Prevent flat CSS hover from overriding 3D JS physics */
+    }
+    .spatial-3d-active .gallery-item .item-media-wrap {
+      transform-style: preserve-3d !important;
+    }
+    /* Multi-plane Z-axis depth pop: elements float in physical space! */
+    .spatial-3d-active .gallery-item .item-img {
+      transform: translateZ(0);
+    }
+    .spatial-3d-active .gallery-item .item-badge-video {
+      transform: translateZ(36px) !important;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6) !important;
+    }
+    .spatial-3d-active .gallery-item .item-badge-heart {
+      transform: translateZ(38px) !important;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6) !important;
+    }
+    .spatial-3d-active .gallery-item .item-action-dock {
+      transform: translate(-50%, -50%) translateZ(70px) !important;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.7), 0 0 30px rgba(94, 194, 127, 0.35) !important;
+    }
+    .spatial-3d-active .gallery-item .item-overlay {
+      transform: translateZ(30px) !important;
+    }
+    .spatial-3d-active .gallery-item .item-card-body {
+      transform: translateZ(26px) !important;
+      border-radius: 0 0 12px 12px;
+    }
+
+    /* Specular Light Sheen Overlay */
+    .item-specular-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 15;
+      opacity: 0;
+      mix-blend-mode: screen;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+      transition: opacity 0.3s ease;
+      background: radial-gradient(circle 380px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 35%, transparent 75%);
+    }
+    .spatial-3d-active .gallery-item:hover .item-specular-glare {
+      opacity: 1;
+    }
+
+    /* 1. Classic Grid */
+    .layout-classic-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .layout-classic-grid .gallery-item {
+      aspect-ratio: 1 / 1;
+    }
+    .layout-classic-grid.skin-editorial .gallery-item {
+      aspect-ratio: auto;
+    }
+    .layout-classic-grid.skin-editorial .item-media-wrap {
+      aspect-ratio: 1 / 1;
+    }
+
+    /* 2. Pinterest Masonry */
+    .layout-pinterest-masonry {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: start;
+    }
+    .layout-pinterest-masonry .gallery-item:nth-child(1) { aspect-ratio: 4/5; }
+    .layout-pinterest-masonry .gallery-item:nth-child(2) { aspect-ratio: 3/4; }
+    .layout-pinterest-masonry .gallery-item:nth-child(3) { aspect-ratio: 1/1; }
+    .layout-pinterest-masonry .gallery-item:nth-child(4) { aspect-ratio: 16/9; }
+    .layout-pinterest-masonry .gallery-item:nth-child(5) { aspect-ratio: 4/5; }
+    .layout-pinterest-masonry .gallery-item:nth-child(6) { aspect-ratio: 3/4; }
+
+    .layout-pinterest-masonry.skin-editorial .gallery-item {
+      aspect-ratio: auto;
+    }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(1) .item-media-wrap { aspect-ratio: 4/5; }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(2) .item-media-wrap { aspect-ratio: 3/4; }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(3) .item-media-wrap { aspect-ratio: 1/1; }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(4) .item-media-wrap { aspect-ratio: 16/9; }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(5) .item-media-wrap { aspect-ratio: 4/5; }
+    .layout-pinterest-masonry.skin-editorial .gallery-item:nth-child(6) .item-media-wrap { aspect-ratio: 3/4; }
+
+    /* 3. Justified Rows */
+    .layout-justified-rows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .layout-justified-rows .gallery-item {
+      height: 240px;
+      flex-grow: 1;
+      aspect-ratio: auto !important;
+    }
+    .layout-justified-rows .gallery-item:nth-child(1) { flex-basis: 340px; }
+    .layout-justified-rows .gallery-item:nth-child(2) { flex-basis: 220px; }
+    .layout-justified-rows .gallery-item:nth-child(3) { flex-basis: 300px; }
+    .layout-justified-rows .gallery-item:nth-child(4) { flex-basis: 260px; }
+    .layout-justified-rows .gallery-item:nth-child(5) { flex-basis: 380px; }
+    .layout-justified-rows .gallery-item:nth-child(6) { flex-basis: 220px; }
+
+    /* 4. Bento Spans (PRO) */
+    .layout-bento-showcase {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 190px;
+    }
+    .layout-bento-showcase .gallery-item {
+      aspect-ratio: auto !important;
+    }
+    .layout-bento-showcase .gallery-item:nth-child(1) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .layout-bento-showcase .gallery-item:nth-child(4) {
+      grid-column: span 2;
+      grid-row: span 1;
+    }
+
+    /* 5. Asymmetric Lookbook Duet (NEW 2026 Trend) */
+    .layout-lookbook-duet {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: start;
+    }
+    .layout-lookbook-duet .gallery-item:nth-child(2) {
+      transform: translateY(40px); /* Staggered column rhythm! */
+    }
+    .layout-lookbook-duet .gallery-item:nth-child(5) {
+      transform: translateY(40px);
+    }
+    .layout-lookbook-duet .gallery-item:nth-child(1) { aspect-ratio: 3/4; }
+    .layout-lookbook-duet .gallery-item:nth-child(2) { aspect-ratio: 1/1; }
+    .layout-lookbook-duet .gallery-item:nth-child(3) { aspect-ratio: 4/5; }
+    .layout-lookbook-duet .gallery-item:nth-child(4) { aspect-ratio: 1/1; }
+    .layout-lookbook-duet .gallery-item:nth-child(5) { aspect-ratio: 3/4; }
+    .layout-lookbook-duet .gallery-item:nth-child(6) { aspect-ratio: 4/5; }
+
+    /* 6. Cinema Reel (Horizontal Runway Strip - 2026 Trend) */
+    .layout-cinema-reel {
+      display: flex !important;
+      flex-direction: row !important;
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory;
+      gap: 24px;
+      padding: 10px 4px 24px !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    .layout-cinema-reel::-webkit-scrollbar {
+      height: 7px;
+    }
+    .layout-cinema-reel::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 4px;
+    }
+    .layout-cinema-reel::-webkit-scrollbar-thumb {
+      background: var(--accent-matcha);
+      border-radius: 4px;
+    }
+    .layout-cinema-reel .gallery-item {
+      flex: 0 0 460px !important;
+      aspect-ratio: 16 / 9 !important;
+      scroll-snap-align: start;
+    }
+    .layout-cinema-reel.skin-editorial .gallery-item {
+      aspect-ratio: auto !important;
+    }
+    .layout-cinema-reel.skin-editorial .item-media-wrap {
+      aspect-ratio: 16 / 9 !important;
+      height: 220px;
+    }
+
+    /* 7. Curator Specimen Archive (Swiss Museum Style) */
+    .layout-curator-specimen {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 40px !important; /* Generous negative space */
+    }
+    .layout-curator-specimen .gallery-item {
+      aspect-ratio: 4 / 3;
+      background: #111613;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 18px; /* Luxury matting frame */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .layout-curator-specimen .item-media-wrap {
+      border-radius: 4px;
+    }
+    .layout-curator-specimen.skin-editorial .gallery-item {
+      aspect-ratio: auto !important;
+      padding: 0 !important;
+    }
+
+    /* 8. Art Wall Canvas (Freeform Draggable Frames - PRO 2026) */
+    .layout-art-wall {
+      display: block !important;
+      position: relative !important;
+      min-height: 860px !important;
+      width: 100% !important;
+      background: radial-gradient(circle at 50% 35%, #232c26 0%, #141916 65%, #0d110f 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.65);
+      transition: background 0.4s ease;
+      user-select: none;
+      padding: 30px !important;
+      box-sizing: border-box;
+    }
+    .gallery-stage.art-wall-mode {
+      max-width: 1160px;
+    }
+    .gallery-stage.art-wall-mode.viewport-mobile {
+      max-width: 400px !important;
+    }
+    .gallery-stage.art-wall-mode.viewport-tablet {
+      max-width: 720px !important;
+    }
+    .art-wall-guide-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.2);
+      pointer-events: none;
+      z-index: 2;
+      display: none;
+      transition: all 0.2s ease;
+    }
+    .layout-art-wall .art-wall-guide-line {
+      display: block;
+    }
+    .art-wall-guide-line.snapped {
+      border-top: 1px solid var(--accent-matcha) !important;
+      box-shadow: 0 0 14px var(--accent-matcha-glow);
+    }
+    .art-wall-guide-label {
+      position: absolute;
+      right: 20px;
+      top: -10px;
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      color: rgba(255, 255, 255, 0.45);
+      background: #141916;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .art-wall-hint {
+      position: absolute;
+      bottom: 14px;
+      left: 18px;
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      background: rgba(20, 25, 22, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: 999px;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .layout-art-wall .art-wall-hint {
+      display: inline-flex;
+    }
+
+    /* Art Wall Items (Frames) */
+    .layout-art-wall .gallery-item {
+      position: absolute !important;
+      cursor: grab;
+      border-radius: 2px !important;
+      overflow: visible !important; /* CRITICAL: Always visible so controls & badges never get clipped when 3D tilt is OFF */
+      box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.85), 0 8px 18px rgba(0, 0, 0, 0.5);
+      transition: box-shadow 0.25s ease, outline 0.15s ease;
+      touch-action: none;
+    }
+    .layout-art-wall .gallery-item:active,
+    .layout-art-wall .gallery-item.is-dragging {
+      cursor: grabbing !important;
+      z-index: 45 !important;
+      box-shadow: 0 38px 75px -10px rgba(0, 0, 0, 0.95), 0 16px 30px rgba(0, 0, 0, 0.6) !important;
+      transition: none !important;
+    }
+    .layout-art-wall .gallery-item.selected-frame {
+      outline: 2px solid var(--accent-matcha) !important;
+      outline-offset: 4px;
+    }
+
+    /* Frame Moldings */
+    .layout-art-wall .gallery-item.mold-black {
+      border: 11px solid #101412 !important;
+      box-shadow: 0 26px 56px -12px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+    }
+    .layout-art-wall .gallery-item.mold-oak {
+      border: 11px solid #9e744a !important;
+      box-shadow: 0 26px 56px -12px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(0, 0, 0, 0.35) !important;
+    }
+    .layout-art-wall .gallery-item.mold-white {
+      border: 11px solid #f8fafc !important;
+      box-shadow: 0 26px 56px -12px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    /* Museum Passe-Partout Matting */
+    .layout-art-wall .gallery-item .item-media-wrap {
+      padding: 12px;
+      background: #faf8f5;
+      border-radius: 0 !important;
+      box-sizing: border-box;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22);
+    }
+    .layout-art-wall .gallery-item .item-img {
+      border-radius: 0 !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Frame Dimension Badge */
+    .frame-dim-badge {
+      display: none;
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13, 17, 15, 0.92);
+      border: 1px solid var(--border-subtle);
+      color: #94a399;
+      font-size: 9.5px;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 0.04em;
+    }
+    .layout-art-wall .frame-dim-badge {
+      display: block;
+    }
+
+    /* Floating Frame Action Bar */
+    .frame-action-floating-bar {
+      position: absolute;
+      transform: translateX(-50%);
+      background: #141916;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 7px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      z-index: 80 !important;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+    .layout-art-wall #artWallFloatingToolbar {
+      display: flex;
+    }
+    .frame-bar-btn {
+      background: transparent;
+      border: none;
+      color: #a3b3a8;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .frame-bar-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .frame-bar-divider {
+      width: 1px;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 2px;
+    }
+
+    /* Mobile Vertical Exhibition Stack Mode */
+    .layout-art-wall.art-wall-mobile-stack {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 32px !important;
+      min-height: auto !important;
+      padding: 28px 16px 44px !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .layout-art-wall.art-wall-mobile-stack .art-wall-guide-line {
+      display: none !important;
+    }
+    .layout-art-wall.art-wall-mobile-stack .gallery-item {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      width: 100% !important;
+      max-width: 320px !important;
+      height: auto !important;
+      cursor: default !important;
+      margin: 0 auto !important;
+    }
+    .layout-art-wall.art-wall-mobile-stack .gallery-item .item-media-wrap {
+      width: 100%;
+      height: auto;
+    }
+    .layout-art-wall.art-wall-mobile-stack .gallery-item .item-img {
+      width: 100%;
+      height: auto;
+      max-height: 420px;
+      object-fit: cover;
+      display: block;
+    }
+    .layout-art-wall.art-wall-mobile-stack .frame-dim-badge {
+      display: inline-block !important;
+      position: static !important;
+      transform: none !important;
+      margin: 8px auto 0 !important;
+      text-align: center;
+    }
+    .layout-art-wall.art-wall-mobile-stack #artWallFloatingToolbar {
+      display: none !important;
+    }
+    .layout-art-wall.art-wall-mobile-stack .art-wall-hint {
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      margin-bottom: 6px !important;
+      background: rgba(94, 194, 127, 0.15) !important;
+      border-color: rgba(94, 194, 127, 0.3) !important;
+      color: #e6ede8 !important;
+    }
+
+    /* Tablet 2-Column Museum Salon Grid */
+    .layout-art-wall.art-wall-tablet-salon {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 24px !important;
+      min-height: auto !important;
+      padding: 32px 20px 48px !important;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .layout-art-wall.art-wall-tablet-salon .art-wall-guide-line {
+      display: none !important;
+    }
+    .layout-art-wall.art-wall-tablet-salon .gallery-item {
+      position: relative !important;
+      left: auto !important;
+      top: auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      cursor: default !important;
+    }
+    .layout-art-wall.art-wall-tablet-salon .gallery-item .item-media-wrap {
+      width: 100%;
+      height: auto;
+    }
+    .layout-art-wall.art-wall-tablet-salon .gallery-item .item-img {
+      width: 100%;
+      height: auto;
+      max-height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+    .layout-art-wall.art-wall-tablet-salon .frame-dim-badge {
+      display: inline-block !important;
+      position: static !important;
+      transform: none !important;
+      margin: 8px auto 0 !important;
+      text-align: center;
+    }
+    .layout-art-wall.art-wall-tablet-salon #artWallFloatingToolbar {
+      display: none !important;
+    }
+    .layout-art-wall.art-wall-tablet-salon .art-wall-hint {
+      grid-column: 1 / -1;
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      margin-bottom: 6px !important;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Wall finish variants */
+    .layout-art-wall.wall-gallery-white {
+      background: radial-gradient(circle at 50% 35%, #f4f1ea 0%, #ded9ce 70%, #d5cec2 100%) !important;
+      border-color: #c9c2b4 !important;
+    }
+    .layout-art-wall.wall-gallery-white .art-wall-guide-line {
+      border-top-color: rgba(0, 0, 0, 0.18) !important;
+    }
+    .layout-art-wall.wall-gallery-white .art-wall-guide-label {
+      background: #e8e4dc !important;
+      color: #4a554e !important;
+      border-color: #ccc5b8 !important;
+    }
+    .layout-art-wall.wall-gallery-white .art-wall-hint {
+      background: rgba(240, 236, 228, 0.9) !important;
+      color: #334139 !important;
+      border-color: #d1c9bd !important;
+    }
+    .layout-art-wall.wall-warm-linen {
+      background: radial-gradient(circle at 50% 35%, #2d241f 0%, #1c1613 70%, #140f0c 100%) !important;
+    }
+    .layout-art-wall.wall-sage-green {
+      background: radial-gradient(circle at 50% 35%, #1d2c22 0%, #111b15 70%, #0a110d 100%) !important;
+    }
+
+    /* Base Gallery Item */
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #161c18;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .item-media-wrap {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+    .item-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+    }
+
+    /* --- PASSIVE CORNER BADGES (VIDEO & FAVORITE HEART) --- */
+    .item-badge-video {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 10;
+      background: rgba(13, 17, 15, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 3px 8px 3px 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      font-family: var(--font-mono);
+      letter-spacing: 0.02em;
+      pointer-events: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .item-badge-video svg {
+      color: var(--accent-matcha);
+      fill: var(--accent-matcha);
+    }
+
+    .item-badge-heart {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 10;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      pointer-events: auto;
+    }
+    .item-badge-heart:hover {
+      color: #ef4444;
+      transform: scale(1.1);
+    }
+    .item-badge-heart.active {
+      color: #ef4444;
+      background: #fff;
+      animation: matchaHeartPop 0.35s ease;
+    }
+    .item-badge-heart.active svg {
+      fill: #ef4444;
+    }
+    @keyframes matchaHeartPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* --- FLOATING FROSTED GLASS ACTION DOCK (HOVER: CENTER VIEWFINDER) --- */
+    .item-action-dock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.92);
+      z-index: 15;
+      background: rgba(18, 23, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+      pointer-events: none;
+    }
+    .gallery-item:hover .item-action-dock {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+    .dock-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+    }
+    .dock-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .dock-btn.btn-shop {
+      width: auto;
+      border-radius: 20px;
+      padding: 0 12px;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-matcha);
+      background: rgba(94, 194, 127, 0.18);
+      border: 1px solid rgba(94, 194, 127, 0.35);
+    }
+    .dock-btn.btn-shop:hover {
+      background: var(--accent-matcha);
+      color: #0d110f;
+    }
+
+    /* --- SKIN SPECIFIC RULES --- */
+
+    /* SKIN 1: PURE MINIMALIST */
+    .skin-pure-minimalist .gallery-item {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    .skin-pure-minimalist .gallery-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+    }
+    .skin-pure-minimalist .gallery-item:hover .item-img {
+      transform: scale(1.04);
+      filter: contrast(1.05) brightness(0.85); /* Gentle focus dim so center dock pops! */
+    }
+    .skin-pure-minimalist .item-card-body {
+      display: none !important;
+    }
+    .skin-pure-minimalist .item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 40%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; /* Clean bottom anchor */
+      padding: 16px;
+      pointer-events: none;
+    }
+    .skin-pure-minimalist .gallery-item:hover .item-overlay {
+      opacity: 1;
+    }
+    .skin-pure-minimalist .overlay-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .skin-pure-minimalist .overlay-meta {
+      font-size: 11px;
+      color: var(--accent-matcha);
+      font-family: var(--font-mono);
+    }
+    .skin-pure-minimalist .aura-palette-bar {
+      display: none;
+    }
+
+    /* SKIN 2: EDITORIAL CARD */
+    .skin-editorial .gallery-item {
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .skin-editorial .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+    }
+    .skin-editorial .item-media-wrap {
+      height: 210px;
+      flex-shrink: 0;
+      border-radius: 12px 12px 0 0;
+    }
+    .skin-editorial.layout-pinterest-masonry .item-media-wrap,
+    .skin-editorial.layout-lookbook-duet .item-media-wrap {
+      height: auto;
+    }
+    .skin-editorial .gallery-item:hover .item-img {
+      transform: scale(1.03);
+    }
+    .skin-editorial .item-overlay,
+    .skin-editorial .item-action-dock {
+      display: none !important; /* Actions are clean in card footer! */
+    }
+    .skin-editorial .item-card-body {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #ffffff;
+      color: #1e293b;
+    }
+    .card-category-pill {
+      align-self: flex-start;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #eef7f1;
+      color: #2e7d4a;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.25;
+    }
+    .card-caption {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.35;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .card-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      font-family: var(--font-mono);
+    }
+    .card-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .card-icon-btn:hover {
+      background: #0f172a;
+      color: #fff;
+      border-color: #0f172a;
+    }
+    .card-shop-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: #2e7d4a;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .card-shop-btn:hover {
+      background: #24633b;
+    }
+
+    /* SKIN 3: EXHIBITION HAIRLINE */
+    .skin-exhibition .gallery-item {
+      background: #111613;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .skin-exhibition .item-card-body {
+      display: none !important;
+    }
+    .skin-exhibition .item-media-wrap {
+      border-radius: 2px;
+      position: relative;
+    }
+    .skin-exhibition .item-media-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+      opacity: 0;
+      transform: scale(0.97);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .skin-exhibition .gallery-item:hover .item-media-wrap::after {
+      opacity: 1;
+      transform: scale(1);
+      border-color: var(--accent-matcha);
+    }
+    .skin-exhibition .gallery-item:hover .item-img {
+      transform: scale(1.02);
+    }
+    .skin-exhibition .item-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(13, 17, 15, 0.65);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      text-align: center;
+      padding: 20px;
+    }
+    .skin-exhibition .gallery-item:hover .item-overlay {
+      opacity: 1;
+    }
+    .skin-exhibition .exhibition-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .skin-exhibition .exhibition-specimen {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--accent-matcha);
+      margin-top: 4px;
+      margin-bottom: 12px;
+    }
+    .skin-exhibition .aura-palette-bar {
+      display: none;
+    }
+
+    /* SKIN 4: AI ATMOSPHERIC AURA */
+    .skin-aura .gallery-item {
+      border-radius: var(--radius-lg);
+      position: relative;
+      box-shadow: 0 8px 32px var(--ambient-glow, rgba(94, 194, 127, 0.2));
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .skin-aura .item-card-body {
+      display: none !important;
+    }
+    .skin-aura .gallery-item:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 18px 48px var(--ambient-glow, rgba(94, 194, 127, 0.45));
+    }
+    .skin-aura .item-img {
+      transform-origin: var(--focal-x, 50%) var(--focal-y, 50%);
+    }
+    .skin-aura .gallery-item:hover .item-img {
+      transform: scale(1.08);
+    }
+    .skin-aura .ai-focal-dot {
+      position: absolute;
+      left: var(--focal-x, 50%);
+      top: var(--focal-y, 50%);
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      margin-top: -5px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background: var(--accent-matcha);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .skin-aura .gallery-item:hover .ai-focal-dot {
+      opacity: 1;
+    }
+    .skin-aura .item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+      padding-bottom: 50px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .skin-aura .gallery-item:hover .item-overlay {
+      opacity: 1;
+    }
+    .skin-aura .aura-palette-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+    .skin-aura .aura-palette-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    /* --- RIGHT SIDEBAR --- */
+    .sidebar-right {
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-right::-webkit-scrollbar { width: 5px; }
+    .sidebar-right::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .control-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .control-value {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-matcha);
+    }
+    .range-input {
+      width: 100%;
+      accent-color: var(--accent-matcha);
+    }
+
+    /* Contextual Skin Inspector Panels */
+    .contextual-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    .contextual-panel.hidden {
+      display: none;
+    }
+    .contextual-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-matcha);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <header class="studio-topbar">
+    <div class="topbar-left">
+      <div class="brand-pill">
+        <div class="brand-icon">M</div>
+        <span>Matcha Studio</span>
+      </div>
+      <span class="badge-prototype">2026 Layouts + Pro Actions</span>
+    </div>
+
+    <div class="topbar-center">
+      <button class="viewport-btn active" onclick="setViewport('desktop')">Desktop</button>
+      <button class="viewport-btn" onclick="setViewport('tablet')">Tablet</button>
+      <button class="viewport-btn" onclick="setViewport('mobile')">Mobile</button>
+    </div>
+
+    <div class="topbar-right">
+      <button class="btn-update">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Gallery
+      </button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE -->
+  <main class="studio-workspace">
+
+    <!-- LEFT SIDEBAR: LAYOUTS & AUTO-FILTERED SKINS -->
+    <aside class="sidebar-left">
+      <nav class="sidebar-tabs">
+        <button class="tab-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Photos</button>
+        <button class="tab-btn active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Layouts & Skins</button>
+        <button class="tab-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Superpowers</button>
+      </nav>
+
+      <div class="sidebar-scroll">
+
+        <!-- 1. LAYOUT BLUEPRINTS -->
+        <section>
+          <div class="section-header">
+            <span class="section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> 1. Layout Blueprint</span>
+            <span class="section-tag" id="layoutCountTag">7 Types</span>
+          </div>
+
+          <div class="layout-blueprints-grid">
+            <!-- Classic Grid -->
+            <div class="layout-card active" data-layout="classic-grid" onclick="selectLayout('classic-grid')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              </div>
+              <div class="layout-card-title">Classic Grid</div>
+              <div class="layout-card-desc">Uniform aspect ratio</div>
+            </div>
+
+            <!-- Pinterest Masonry -->
+            <div class="layout-card" data-layout="pinterest-masonry" onclick="selectLayout('pinterest-masonry')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="11"/><rect x="14" y="3" width="7" height="6"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="17" width="7" height="4"/></svg>
+              </div>
+              <div class="layout-card-title">Masonry</div>
+              <div class="layout-card-desc">Dynamic natural heights</div>
+            </div>
+
+            <!-- Asymmetric Lookbook Duet (NEW 2026) -->
+            <div class="layout-card" data-layout="lookbook-duet" onclick="selectLayout('lookbook-duet')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="10"/><rect x="14" y="7" width="7" height="12"/><circle cx="6.5" cy="18" r="2"/></svg>
+              </div>
+              <div class="layout-card-title">
+                Lookbook Duet
+                <span class="badge-prototype" style="font-size: 8px; padding: 1px 4px;">2026</span>
+              </div>
+              <div class="layout-card-desc">Staggered editorial rhythm</div>
+            </div>
+
+            <!-- Cinema Reel (NEW 2026 Horizontal Strip) -->
+            <div class="layout-card" data-layout="cinema-reel" onclick="selectLayout('cinema-reel')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="7" y1="5" x2="7" y2="10"/><line x1="12" y1="5" x2="12" y2="10"/><line x1="17" y1="5" x2="17" y2="10"/></svg>
+              </div>
+              <div class="layout-card-title">
+                Cinema Reel
+                <span class="badge-prototype" style="font-size: 8px; padding: 1px 4px;">2026</span>
+              </div>
+              <div class="layout-card-desc">Horizontal widescreen runway</div>
+            </div>
+
+            <!-- Curator Archive (Swiss Museum Style) -->
+            <div class="layout-card" data-layout="curator-specimen" onclick="selectLayout('curator-specimen')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="10" height="10"/></svg>
+              </div>
+              <div class="layout-card-title">Curator Archive</div>
+              <div class="layout-card-desc">Swiss negative space matting</div>
+            </div>
+
+            <!-- Justified Rows -->
+            <div class="layout-card" data-layout="justified-rows" onclick="selectLayout('justified-rows')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="16" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              </div>
+              <div class="layout-card-title">Justified Rows</div>
+              <div class="layout-card-desc">Flickr edge-to-edge</div>
+            </div>
+
+            <!-- Bento Showcase (PRO) -->
+            <div class="layout-card" data-layout="bento-showcase" onclick="selectLayout('bento-showcase')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="10" height="10"/><rect x="15" y="3" width="6" height="4"/><rect x="15" y="9" width="6" height="12"/><rect x="3" y="15" width="10" height="6"/></svg>
+              </div>
+              <div class="layout-card-title">
+                Bento Spans
+                <span class="pro-badge">PRO</span>
+              </div>
+              <div class="layout-card-desc">Modern hero anchors</div>
+            </div>
+
+            <!-- Art Wall Canvas (NEW PRO 2026) -->
+            <div class="layout-card" data-layout="art-wall" onclick="selectLayout('art-wall')">
+              <div class="layout-card-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="11" rx="1"/><rect x="13" y="3" width="8" height="6" rx="1"/><rect x="13" y="11" width="8" height="10" rx="1"/><line x1="1" y1="14" x2="23" y2="14" stroke-dasharray="2 2" opacity="0.6"/></svg>
+              </div>
+              <div class="layout-card-title">
+                Art Wall
+                <span class="pro-badge">PRO</span>
+              </div>
+              <div class="layout-card-desc">Freeform draggable frames</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. AUTO-FILTERED SKINS -->
+        <section>
+          <div class="section-header">
+            <span class="section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg> 2. Best-Fitting Skins</span>
+            <span class="section-tag" id="skinFilterTag">Filtered</span>
+          </div>
+
+          <div class="filter-notice" id="filterNoticeBar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span id="filterNoticeText">Showing skins tuned for <strong>Classic Grid</strong>.</span>
+          </div>
+
+          <div class="skins-list" id="skinsListContainer">
+
+            <!-- SKIN 1: PURE MINIMALIST (Universal) -->
+            <div class="skin-card active" data-skin="skin-pure-minimalist" data-supports="classic-grid,pinterest-masonry,justified-rows,bento-showcase,lookbook-duet,cinema-reel,curator-specimen" onclick="selectSkin('skin-pure-minimalist')">
+              <div class="skin-thumb thumb-minimalist"></div>
+              <div class="skin-info">
+                <div class="skin-header">
+                  <span class="skin-name">Pure Minimalist</span>
+                  <span class="skin-badge">Universal</span>
+                </div>
+                <div class="skin-desc">Frameless edge-to-edge photo with floating glass action dock.</div>
+              </div>
+            </div>
+
+            <!-- SKIN 2: EDITORIAL CARD (Grid & Masonry & Lookbook & Reel & Curator) -->
+            <div class="skin-card" data-skin="skin-editorial" data-supports="classic-grid,pinterest-masonry,lookbook-duet,cinema-reel,curator-specimen" onclick="selectSkin('skin-editorial')">
+              <div class="skin-thumb thumb-card">
+                <div class="thumb-card-img"></div>
+                <div class="thumb-card-body">
+                  <div class="thumb-card-line"></div>
+                  <div class="thumb-card-line sub"></div>
+                </div>
+              </div>
+              <div class="skin-info">
+                <div class="skin-header">
+                  <span class="skin-name">Editorial Card</span>
+                  <span class="skin-badge match">Recommended</span>
+                </div>
+                <div class="skin-desc">Photo on top with category pill, title, price, and shop/view buttons below.</div>
+              </div>
+            </div>
+
+            <!-- SKIN 3: EXHIBITION HAIRLINE (Grid & Masonry & Lookbook & Curator) -->
+            <div class="skin-card" data-skin="skin-exhibition" data-supports="classic-grid,pinterest-masonry,lookbook-duet,curator-specimen" onclick="selectSkin('skin-exhibition')">
+              <div class="skin-thumb thumb-exhibition">
+                <div class="thumb-exhibition-inner"></div>
+              </div>
+              <div class="skin-info">
+                <div class="skin-header">
+                  <span class="skin-name">Exhibition Hairline</span>
+                  <span class="skin-badge">Fine-Art</span>
+                </div>
+                <div class="skin-desc">Gallery matting margin with crisp inner hairline frame & specimen actions.</div>
+              </div>
+            </div>
+
+            <!-- SKIN 4: AI ATMOSPHERIC AURA (PRO) -->
+            <div class="skin-card" data-skin="skin-aura" data-supports="classic-grid,pinterest-masonry,bento-showcase,lookbook-duet,cinema-reel" onclick="selectSkin('skin-aura')">
+              <div class="skin-thumb thumb-aura">
+                <div class="thumb-aura-photo"></div>
+              </div>
+              <div class="skin-info">
+                <div class="skin-header">
+                  <span class="skin-name">Atmospheric Aura</span>
+                  <span class="pro-badge">PRO</span>
+                </div>
+                <div class="skin-desc">Ambient backlight glow extracted from photo's AI palette with focal pan.</div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </aside>
+
+    <!-- CENTER CANVAS -->
+    <section class="canvas-viewport">
+      <div class="canvas-bar">
+        <div class="canvas-status">
+          <span class="status-chip">Layout: <strong id="activeLayoutLabel">Classic Grid</strong></span>
+          <span class="status-chip">Active Skin: <strong id="activeSkinLabel">Pure Minimalist</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button class="spatial-toggle-btn" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); color: #e6ede8;" onclick="trigger3DWaveDemo()" title="Watch all cards execute a sequential 3D spatial wave">
+            <span>▶ 3D Wave Demo</span>
+          </button>
+          <button id="toggleSpatialBtn" class="spatial-toggle-btn active" onclick="toggleSpatial3D()" title="Toggle Hardware-Accelerated 3D Holographic Tilt">
+            <span class="spatial-icon">⚡</span>
+            <span>Spatial 3D Tilt</span>
+            <span class="pro-badge">PRO</span>
+            <span class="spatial-status-text">ON</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="canvas-scrollable">
+        <div class="gallery-stage" id="galleryStage">
+
+          <!-- LIVE GALLERY CONTAINER -->
+          <div class="matcha-gallery-container layout-classic-grid skin-pure-minimalist" id="galleryContainer">
+
+            <!-- Art Wall 57" Eye-Level Guide Line -->
+            <div class="art-wall-guide-line" id="artWallGuide">
+              <span class="art-wall-guide-label">57" Museum Eye-Level</span>
+            </div>
+            <!-- Art Wall Floating Drag Hint -->
+            <div class="art-wall-hint">
+              <span>💡</span>
+              <span>Drag frames anywhere on wall • Magnetic snap active</span>
+            </div>
+
+            <!-- Art Wall Shared Floating Toolbar (Anchors to selected frame) -->
+            <div class="frame-action-floating-bar" id="artWallFloatingToolbar" style="display: none;">
+              <button class="frame-bar-btn" onclick="alignActiveFrameEyeLevel(event)" title="Snap Center to 57' Eye-Level"><span>📐</span><span>Eye-Level</span></button>
+              <div class="frame-bar-divider"></div>
+              <button class="frame-bar-btn" onclick="cycleActiveFrameMolding(event)" title="Cycle Frame Molding"><span>🎨</span><span id="floatingBarMoldLabel">Black</span></button>
+              <div class="frame-bar-divider"></div>
+              <button class="frame-bar-btn" onclick="cycleActiveFrameRatio(event)" title="Cycle Frame Aspect Ratio"><span>🔲</span><span id="floatingBarRatioLabel">24×36</span></button>
+              <div class="frame-bar-divider"></div>
+              <button class="frame-bar-btn" onclick="bringActiveFrameToFront(event)" title="Bring Frame to Front"><span>⬆️</span></button>
+            </div>
+
+            <!-- Item 1: Botanical (Has Video + Shop Link) -->
+            <div class="gallery-item" data-frame-id="frame-1" data-frame-ratio="24x36" style="--ambient-glow: rgba(94, 194, 127, 0.4); --focal-x: 62%; --focal-y: 35%;">
+              <div class="item-media-wrap">
+                <!-- Video Badge Top-Left -->
+                <div class="item-badge-video" title="Video Reel (0:48)">
+                  <svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>0:48</span>
+                </div>
+                <!-- Heart Proofing Button Top-Right -->
+                <button class="item-badge-heart" onclick="toggleHeart(this)" title="Favorite for Proofing">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&auto=format&fit=crop&q=80" alt="Botany">
+                <div class="ai-focal-dot"></div>
+
+                <!-- Floating Glassmorphic Action Dock (Hover) -->
+                <div class="item-action-dock">
+                  <button class="dock-btn" title="Open Lightbox Zoom" onclick="alert('Open Lightbox Zoom: Monstera Deliciosa')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                  <button class="dock-btn" title="Open External Project Link" onclick="alert('Navigate to Project URL')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </button>
+                  <button class="dock-btn btn-shop" title="Shop Botanical Print" onclick="alert('Added $48.00 Botanical Print to WooCommerce cart!')">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>$48</span>
+                  </button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #5ec27f;"></span>
+                    <span class="aura-palette-dot" style="background: #2e593d;"></span>
+                    <span class="aura-palette-dot" style="background: #e8f5ec;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Monstera Deliciosa</div>
+                  <div class="overlay-meta exhibition-specimen">#01 / BOTANY / ISO 100</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Botany</span>
+                <h4 class="card-title">Monstera Deliciosa</h4>
+                <p class="card-caption">Natural sunlight filtering through tropical indoor flora.</p>
+                <div class="card-footer">
+                  <span class="card-price">$48.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" title="Quick View Lightbox" onclick="alert('Lightbox')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    </button>
+                    <button class="card-icon-btn" title="External Link" onclick="alert('Open Link')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                    </button>
+                    <button class="card-shop-btn" onclick="alert('Added $48.00 to cart')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                      Buy
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Frame Dimension Badge (Art Wall) -->
+              <div class="frame-dim-badge">24" × 36"</div>
+            </div>
+
+            <!-- Item 2: Architecture (Has Heart Proofing + Lightbox + Link) -->
+            <div class="gallery-item" data-frame-id="frame-2" data-frame-ratio="18x24" style="--ambient-glow: rgba(234, 179, 8, 0.35); --focal-x: 48%; --focal-y: 42%;">
+              <div class="item-media-wrap">
+                <button class="item-badge-heart" onclick="toggleHeart(this)" title="Favorite for Proofing">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&auto=format&fit=crop&q=80" alt="Architecture">
+                <div class="ai-focal-dot"></div>
+
+                <div class="item-action-dock">
+                  <button class="dock-btn" title="Open Lightbox" onclick="alert('Open Lightbox Zoom: Cerulean Glass Facade')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                  <button class="dock-btn" title="Project Story" onclick="alert('Navigate to Architecture Case Study')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </button>
+                  <button class="dock-btn btn-shop" onclick="alert('Added $65.00 Print to Cart')">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>$65</span>
+                  </button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #38bdf8;"></span>
+                    <span class="aura-palette-dot" style="background: #0369a1;"></span>
+                    <span class="aura-palette-dot" style="background: #e0f2fe;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Cerulean Facade</div>
+                  <div class="overlay-meta exhibition-specimen">#02 / ARCHITECTURE / 24mm</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Architecture</span>
+                <h4 class="card-title">Cerulean Glass Facade</h4>
+                <p class="card-caption">Geometric skyscraper reflections against clear autumn skies.</p>
+                <div class="card-footer">
+                  <span class="card-price">$65.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" title="Quick View" onclick="alert('Lightbox')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                    </button>
+                    <button class="card-shop-btn" onclick="alert('Buy $65')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                      Buy
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-dim-badge">18" × 24"</div>
+            </div>
+
+            <!-- Item 3: Abstract (Video Reel) -->
+            <div class="gallery-item" data-frame-id="frame-3" data-frame-ratio="12x12" style="--ambient-glow: rgba(236, 72, 153, 0.35); --focal-x: 52%; --focal-y: 38%;">
+              <div class="item-media-wrap">
+                <div class="item-badge-video" title="Video Reel (1:12)">
+                  <svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>1:12</span>
+                </div>
+                <button class="item-badge-heart" onclick="toggleHeart(this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Abstract">
+                <div class="ai-focal-dot"></div>
+
+                <div class="item-action-dock">
+                  <button class="dock-btn" title="Play Video Lightbox" onclick="alert('Play 16:9 Video Lightbox Player: Aurora Nebula')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </button>
+                  <button class="dock-btn btn-shop" onclick="alert('Added $80.00 Video License to Cart')">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                    <span>$80</span>
+                  </button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #ec4899;"></span>
+                    <span class="aura-palette-dot" style="background: #831843;"></span>
+                    <span class="aura-palette-dot" style="background: #fdf2f8;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Aurora Nebula</div>
+                  <div class="overlay-meta exhibition-specimen">#03 / 4K VIDEO / 50mm</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Abstract</span>
+                <h4 class="card-title">Aurora Nebula Spectrum</h4>
+                <p class="card-caption">Long exposure optical refraction of iridescent spectrum waves.</p>
+                <div class="card-footer">
+                  <span class="card-price">$80.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" title="Play Video" onclick="alert('Play Video')">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </button>
+                    <button class="card-shop-btn" onclick="alert('License $80')">
+                      Buy License
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-dim-badge">12" × 12"</div>
+            </div>
+
+            <!-- Item 4: Seascape -->
+            <div class="gallery-item" data-frame-id="frame-4" data-frame-ratio="16x20" style="--ambient-glow: rgba(249, 115, 22, 0.35); --focal-x: 45%; --focal-y: 40%;">
+              <div class="item-media-wrap">
+                <button class="item-badge-heart" onclick="toggleHeart(this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80" alt="Coastline">
+                <div class="ai-focal-dot"></div>
+
+                <div class="item-action-dock">
+                  <button class="dock-btn" onclick="alert('Lightbox Zoom')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                  <button class="dock-btn" onclick="alert('External Link')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </button>
+                  <button class="dock-btn btn-shop" onclick="alert('Buy $55')">
+                    <span>$55</span>
+                  </button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #f97316;"></span>
+                    <span class="aura-palette-dot" style="background: #0284c7;"></span>
+                    <span class="aura-palette-dot" style="background: #fef3c7;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Golden Solitude</div>
+                  <div class="overlay-meta exhibition-specimen">#04 / SEASCAPE / 35mm</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Seascape</span>
+                <h4 class="card-title">Golden Solitude</h4>
+                <p class="card-caption">Sun setting over coastal shoreline sand dunes.</p>
+                <div class="card-footer">
+                  <span class="card-price">$55.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" onclick="alert('Lightbox')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+                    <button class="card-shop-btn" onclick="alert('Buy $55')">Buy</button>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-dim-badge">16" × 20"</div>
+            </div>
+
+            <!-- Item 5: Forest -->
+            <div class="gallery-item" data-frame-id="frame-5" data-frame-ratio="18x24" style="--ambient-glow: rgba(168, 85, 247, 0.35); --focal-x: 50%; --focal-y: 45%;">
+              <div class="item-media-wrap">
+                <button class="item-badge-heart" onclick="toggleHeart(this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&auto=format&fit=crop&q=80" alt="Forest">
+                <div class="ai-focal-dot"></div>
+
+                <div class="item-action-dock">
+                  <button class="dock-btn" onclick="alert('Lightbox Zoom')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+                  <button class="dock-btn btn-shop" onclick="alert('Buy $72')"><span>$72</span></button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #a855f7;"></span>
+                    <span class="aura-palette-dot" style="background: #15803d;"></span>
+                    <span class="aura-palette-dot" style="background: #5ec27f;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Emerald Canopy</div>
+                  <div class="overlay-meta exhibition-specimen">#05 / WILDERNESS / 85mm</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Wilderness</span>
+                <h4 class="card-title">Emerald Forest Canopy</h4>
+                <p class="card-caption">Deep mountain mist rolling through ancient cedar groves.</p>
+                <div class="card-footer">
+                  <span class="card-price">$72.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" onclick="alert('Lightbox')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+                    <button class="card-shop-btn" onclick="alert('Buy $72')">Buy</button>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-dim-badge">18" × 24"</div>
+            </div>
+
+            <!-- Item 6: Snow -->
+            <div class="gallery-item" data-frame-id="frame-6" data-frame-ratio="20x30" style="--ambient-glow: rgba(20, 184, 166, 0.35); --focal-x: 55%; --focal-y: 50%;">
+              <div class="item-media-wrap">
+                <div class="item-badge-video" title="Video Reel (2:05)">
+                  <svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>2:05</span>
+                </div>
+                <button class="item-badge-heart" onclick="toggleHeart(this)">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+
+                <img class="item-img" src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&auto=format&fit=crop&q=80" alt="Snow">
+                <div class="ai-focal-dot"></div>
+
+                <div class="item-action-dock">
+                  <button class="dock-btn" onclick="alert('Play Video: Nordic Winter')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                  <button class="dock-btn btn-shop" onclick="alert('Buy $50')"><span>$50</span></button>
+                </div>
+
+                <div class="item-overlay">
+                  <div class="aura-palette-bar">
+                    <span class="aura-palette-dot" style="background: #14b8a6;"></span>
+                    <span class="aura-palette-dot" style="background: #334155;"></span>
+                    <span class="aura-palette-dot" style="background: #f1f5f9;"></span>
+                  </div>
+                  <div class="overlay-title exhibition-title">Nordic Winter</div>
+                  <div class="overlay-meta exhibition-specimen">#06 / ALPINE / 28mm</div>
+                </div>
+              </div>
+              <div class="item-card-body">
+                <span class="card-category-pill">Alpine</span>
+                <h4 class="card-title">Nordic Winter Pine</h4>
+                <p class="card-caption">Frosted evergreen branches in Scandinavian twilight.</p>
+                <div class="card-footer">
+                  <span class="card-price">$50.00</span>
+                  <div class="card-actions-group">
+                    <button class="card-icon-btn" onclick="alert('Play Video')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+                    <button class="card-shop-btn" onclick="alert('Buy $50')">Buy</button>
+                  </div>
+                </div>
+              </div>
+              <div class="frame-dim-badge">20" × 30"</div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR: CONTEXTUAL FINE-TUNING INSPECTOR -->
+    <aside class="sidebar-right">
+      <div class="section-header">
+        <span class="section-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Fine-Tuning</span>
+        <span class="section-tag">Inspector</span>
+      </div>
+
+      <!-- Geometry Sliders (Always Visible) -->
+      <div class="control-group">
+        <label class="control-label">
+          <span>Desktop Columns</span>
+          <span class="control-value" id="columnsVal">3</span>
+        </label>
+        <input type="range" class="range-input" min="2" max="6" value="3" oninput="updateColumns(this.value)">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Gutter Gap</span>
+          <span class="control-value" id="gapVal">22px</span>
+        </label>
+        <input type="range" class="range-input" min="0" max="48" value="22" oninput="updateGap(this.value)">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
+          <span>Corner Radius</span>
+          <span class="control-value" id="radiusVal">10px</span>
+        </label>
+        <input type="range" class="range-input" min="0" max="24" value="10" oninput="updateRadius(this.value)">
+      </div>
+
+      <!-- Spatial 3D Physics Toggle (Inspector) -->
+      <div class="control-group" style="padding: 12px; background: rgba(94, 194, 127, 0.06); border: 1px solid rgba(94, 194, 127, 0.2); border-radius: var(--radius-md);">
+        <label class="control-label" style="color: #fff;">
+          <span style="display: flex; align-items: center; gap: 6px;">
+            <span>⚡ 3D Spatial Tilt</span>
+            <span class="pro-badge">PRO</span>
+          </span>
+          <input type="checkbox" id="spatialInspectorToggle" checked onchange="toggleSpatial3D(this.checked)" style="accent-color: var(--accent-matcha); cursor: pointer; width: 16px; height: 16px;">
+        </label>
+        <div style="font-size: 10.5px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
+          Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
+        </div>
+      </div>
+
+
+      <!-- Contextual Panel 1: Card Skin Inspector -->
+      <div class="contextual-panel hidden" id="panelEditorialCard">
+        <span class="contextual-badge">Card Properties</span>
+        <div class="control-group">
+          <label class="control-label"><span>Card Background</span></label>
+          <div style="display: flex; gap: 8px;">
+            <button style="flex:1; padding: 6px; font-size: 11px; background: #fff; color: #000; border: 1px solid #ccc; border-radius: 4px; cursor: pointer;" onclick="setCardTheme('light')">White Card</button>
+            <button style="flex:1; padding: 6px; font-size: 11px; background: #1c231f; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; cursor: pointer;" onclick="setCardTheme('dark')">Dark Card</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label"><span>Category Tag Pill</span></label>
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-primary); cursor: pointer;">
+            <input type="checkbox" checked onchange="toggleCategoryPills(this.checked)"> Show AI Category Pill
+          </label>
+        </div>
+      </div>
+
+      <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
+      <div class="contextual-panel hidden" id="panelExhibition">
+        <span class="contextual-badge">Fine-Art Matting</span>
+        <div class="control-group">
+          <label class="control-label"><span>Matting Margin</span><span class="control-value" id="mattingVal">10px</span></label>
+          <input type="range" class="range-input" min="4" max="24" value="10" oninput="updateMatting(this.value)">
+        </div>
+        <div class="control-group">
+          <label class="control-label"><span>Hairline Accent Color</span></label>
+          <div style="display: flex; gap: 6px;">
+            <span style="width: 22px; height: 22px; border-radius: 4px; background: #5ec27f; cursor: pointer; border: 2px solid #fff;" onclick="setHairlineColor('#5ec27f')"></span>
+            <span style="width: 22px; height: 22px; border-radius: 4px; background: #f59e0b; cursor: pointer;" onclick="setHairlineColor('#f59e0b')"></span>
+            <span style="width: 22px; height: 22px; border-radius: 4px; background: #38bdf8; cursor: pointer;" onclick="setHairlineColor('#38bdf8')"></span>
+            <span style="width: 22px; height: 22px; border-radius: 4px; background: #ffffff; cursor: pointer;" onclick="setHairlineColor('#ffffff')"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
+      <div class="contextual-panel hidden" id="panelAura">
+        <span class="contextual-badge">AI Atmosphere (PRO)</span>
+        <div class="control-group">
+          <label class="control-label"><span>Backlight Bloom Blur</span><span class="control-value">32px</span></label>
+          <input type="range" class="range-input" min="12" max="64" value="32">
+        </div>
+        <div class="control-group">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-primary); cursor: pointer;">
+            <input type="checkbox" checked> Smart Focal-Point Pan on Hover
+          </label>
+        </div>
+      </div>
+
+      <!-- Contextual Panel 4: Art Wall Canvas Inspector (PRO) -->
+      <div class="contextual-panel hidden" id="panelArtWall">
+        <span class="contextual-badge">Art Wall Controls (PRO)</span>
+        
+        <div class="control-group">
+          <label class="control-label"><span>Wall Texture & Material</span></label>
+          <div style="display: flex; gap: 5px;">
+            <button class="wall-color-btn active" style="flex:1; padding: 6px 2px; font-size: 10px; font-weight: 600; background: #161c18; border: 1px solid var(--accent-matcha); color: #fff; border-radius: 4px; cursor: pointer;" onclick="setWallColor('charcoal', this)">Charcoal</button>
+            <button class="wall-color-btn" style="flex:1; padding: 6px 2px; font-size: 10px; font-weight: 600; background: #e8e4dc; border: 1px solid #ccc; color: #222; border-radius: 4px; cursor: pointer;" onclick="setWallColor('gallery-white', this)">Plaster</button>
+            <button class="wall-color-btn" style="flex:1; padding: 6px 2px; font-size: 10px; font-weight: 600; background: #261f1b; border: 1px solid var(--border-subtle); color: #fff; border-radius: 4px; cursor: pointer;" onclick="setWallColor('warm-linen', this)">Linen</button>
+            <button class="wall-color-btn" style="flex:1; padding: 6px 2px; font-size: 10px; font-weight: 600; background: #14221a; border: 1px solid var(--border-subtle); color: #fff; border-radius: 4px; cursor: pointer;" onclick="setWallColor('sage-green', this)">Sage</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><span>Curated Wall Presets</span></label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <button class="preset-wall-btn" style="padding: 7px 8px; font-size: 10.5px; font-weight: 600; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; cursor: pointer; text-align: left;" onclick="applyWallPreset('salon')">🏛️ Salon Wall</button>
+            <button class="preset-wall-btn" style="padding: 7px 8px; font-size: 10.5px; font-weight: 600; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; cursor: pointer; text-align: left;" onclick="applyWallPreset('triptych')">🖼️ Hero Triptych</button>
+            <button class="preset-wall-btn" style="padding: 7px 8px; font-size: 10.5px; font-weight: 600; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; cursor: pointer; text-align: left;" onclick="applyWallPreset('staircase')">📐 Staircase</button>
+            <button class="preset-wall-btn" style="padding: 7px 8px; font-size: 10.5px; font-weight: 600; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; cursor: pointer; text-align: left;" onclick="applyWallPreset('symmetric')">⚖️ Symmetric Quad</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" style="display: flex; align-items: center; justify-content: space-between;">
+            <span>57" Museum Eye-Level</span>
+            <input type="checkbox" id="toggleEyeLevelGuide" checked onchange="toggleEyeLevelGuideLine(this.checked)" style="accent-color: var(--accent-matcha); cursor: pointer; width: 15px; height: 15px;">
+          </label>
+          <div style="font-size: 10.5px; color: var(--text-muted); line-height: 1.4; margin-top: 4px;">
+            Standard international gallery hanging reference (57" from floor) with magnetic snapping.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><span>Selected Frame Molding</span></label>
+          <div style="display: flex; gap: 6px;">
+            <button class="frame-mold-btn mold-opt-black active" style="flex:1; padding: 6px; font-size: 10px; font-weight: 600; background: #0f1311; border: 1px solid var(--accent-matcha); color: #fff; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameMolding('mold-black', this)">Matte Black</button>
+            <button class="frame-mold-btn mold-opt-oak" style="flex:1; padding: 6px; font-size: 10px; font-weight: 600; background: #9e744a; border: 1px solid #7a5834; color: #fff; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameMolding('mold-oak', this)">Natural Oak</button>
+            <button class="frame-mold-btn mold-opt-white" style="flex:1; padding: 6px; font-size: 10px; font-weight: 600; background: #f8fafc; border: 1px solid #ccc; color: #222; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameMolding('mold-white', this)">Nordic White</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><span>Selected Frame Ratio</span></label>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('24x36')">24"×36"</button>
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('18x24')">18"×24"</button>
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('12x12')">12"×12"</button>
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('16x20')">16"×20"</button>
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('20x30')">20"×30"</button>
+            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('panoramic')">16:9 Wide</button>
+          </div>
+        </div>
+
+        <div class="control-group" style="padding: 10px; background: rgba(94, 194, 127, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(94, 194, 127, 0.2);">
+          <div style="font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span>📱 Responsive Strategy</span>
+          </div>
+          <div style="font-size: 10.5px; color: var(--text-secondary); line-height: 1.4;">
+            On mobile (&lt;768px), coordinates automatically convert into an elegant vertical exhibition tour with frames preserved.
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <script>
+    // State
+    let currentLayout = 'classic-grid';
+    let currentSkin = 'skin-pure-minimalist';
+
+    // Layout compatibility mapping
+    const layoutCompatibility = {
+      'classic-grid': {
+        name: 'Classic Grid',
+        allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+        defaultSkin: 'skin-pure-minimalist',
+        notice: 'Showing skins tuned for <strong>Classic Grid</strong> (Uniform aspect ratio).'
+      },
+      'pinterest-masonry': {
+        name: 'Pinterest Masonry',
+        allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+        defaultSkin: 'skin-editorial',
+        notice: 'Showing skins tuned for <strong>Masonry</strong> (Dynamic organic heights).'
+      },
+      'lookbook-duet': {
+        name: 'Lookbook Duet (2026 Editorial)',
+        allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+        defaultSkin: 'skin-editorial',
+        notice: '<strong>Lookbook Duet:</strong> Staggered editorial columns with alternating vertical offsets.'
+      },
+      'justified-rows': {
+        name: 'Justified Rows',
+        allowedSkins: ['skin-pure-minimalist'],
+        defaultSkin: 'skin-pure-minimalist',
+        notice: '<strong>Justified Rows:</strong> Filtered to pure photography overlays. (Card containers below photo are disabled to keep rows flush).'
+      },
+      'bento-showcase': {
+        name: 'Bento Spans (PRO)',
+        allowedSkins: ['skin-pure-minimalist', 'skin-aura'],
+        defaultSkin: 'skin-aura',
+        notice: '<strong>Bento Spans:</strong> Optimized for Atmospheric Aura & Minimalist tiles.'
+      },
+      'cinema-reel': {
+        name: 'Cinema Reel (2026 Runway)',
+        allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-aura'],
+        defaultSkin: 'skin-pure-minimalist',
+        notice: '<strong>Cinema Reel:</strong> 16:9 widescreen horizontal runway strip with smooth touch & scroll-snap momentum.'
+      },
+      'curator-specimen': {
+        name: 'Curator Archive (Swiss Studio)',
+        allowedSkins: ['skin-pure-minimalist', 'skin-exhibition', 'skin-editorial'],
+        defaultSkin: 'skin-exhibition',
+        notice: '<strong>Curator Archive:</strong> Architectural 2-column museum showcase with 40px negative space and specimen matting.'
+      },
+      'art-wall': {
+        name: 'Art Wall Canvas (PRO)',
+        allowedSkins: ['skin-exhibition', 'skin-pure-minimalist', 'skin-aura'],
+        defaultSkin: 'skin-exhibition',
+        notice: '<strong>Art Wall Canvas:</strong> Interactive exhibition wall with eye-level horizon guide, realistic picture frames, and freeform drag-and-drop positioning.'
+      }
+    };
+
+    function selectLayout(layoutKey) {
+      currentLayout = layoutKey;
+
+      // Update layout cards UI
+      document.querySelectorAll('.layout-card').forEach(el => {
+        el.classList.toggle('active', el.dataset.layout === layoutKey);
+      });
+
+      const layoutConfig = layoutCompatibility[layoutKey];
+      document.getElementById('activeLayoutLabel').textContent = layoutConfig.name;
+      document.getElementById('filterNoticeText').innerHTML = layoutConfig.notice;
+
+      // Filter the skin cards automatically
+      const skinCards = document.querySelectorAll('.skin-card');
+      let isCurrentSkinSupported = false;
+
+      skinCards.forEach(card => {
+        const skinId = card.dataset.skin;
+        const isSupported = layoutConfig.allowedSkins.includes(skinId);
+        card.classList.toggle('hidden', !isSupported);
+
+        if (skinId === currentSkin && isSupported) {
+          isCurrentSkinSupported = true;
+        }
+      });
+
+      // Toggle Art Wall contextual panel & stage width
+      const artWallPanel = document.getElementById('panelArtWall');
+      if (artWallPanel) artWallPanel.classList.toggle('hidden', layoutKey !== 'art-wall');
+      document.getElementById('galleryStage').classList.toggle('art-wall-mode', layoutKey === 'art-wall');
+
+      // If current skin was filtered out, automatically switch to layout's recommended default skin
+      if (!isCurrentSkinSupported) {
+        selectSkin(layoutConfig.defaultSkin);
+      } else {
+        updateGalleryDOM();
+      }
+
+      if (layoutKey === 'art-wall') {
+        initArtWall();
+        applyArtWallViewport(currentViewport);
+      } else {
+        teardownArtWall();
+      }
+    }
+
+    function selectSkin(skinKey) {
+      currentSkin = skinKey;
+
+      // Update skin cards UI
+      document.querySelectorAll('.skin-card').forEach(el => {
+        el.classList.toggle('active', el.dataset.skin === skinKey);
+      });
+
+      // Update active label
+      const activeCard = document.querySelector(`.skin-card[data-skin="${skinKey}"]`);
+      const skinName = activeCard ? activeCard.querySelector('.skin-name').textContent : skinKey;
+      document.getElementById('activeSkinLabel').textContent = skinName;
+
+      // Adapt Right Sidebar Contextual Panels
+      document.getElementById('panelEditorialCard').classList.toggle('hidden', skinKey !== 'skin-editorial');
+      document.getElementById('panelExhibition').classList.toggle('hidden', skinKey !== 'skin-exhibition');
+      document.getElementById('panelAura').classList.toggle('hidden', skinKey !== 'skin-aura');
+      const artWallPanel = document.getElementById('panelArtWall');
+      if (artWallPanel) artWallPanel.classList.toggle('hidden', currentLayout !== 'art-wall');
+
+      updateGalleryDOM();
+    }
+
+    function updateGalleryDOM() {
+      const container = document.getElementById('galleryContainer');
+      // Reset classes
+      container.className = 'matcha-gallery-container';
+      container.classList.add(`layout-${currentLayout}`);
+      container.classList.add(currentSkin);
+      if (isSpatial3D) {
+        container.classList.add('spatial-3d-active');
+      }
+
+      // Clean up inline grid overrides when switching layouts
+      if (currentLayout === 'cinema-reel' || currentLayout === 'justified-rows' || currentLayout === 'bento-showcase' || currentLayout === 'art-wall') {
+        container.style.gridTemplateColumns = '';
+      } else if (currentLayout === 'curator-specimen') {
+        container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+      }
+    }
+
+    // ==========================================================================
+    // ART WALL CANVAS ENGINE (PRO 2026)
+    // ==========================================================================
+    let currentWallPreset = 'salon';
+    let selectedFrameItem = null;
+    let isDraggingFrame = false;
+    let dragTarget = null;
+    let dragStartX = 0, dragStartY = 0;
+    let frameStartLeft = 0, frameStartTop = 0;
+
+    const wallPresets = {
+      salon: [
+        { left: 40,  top: 60,  width: 330, height: 440, ratio: '24x36', molding: 'mold-black' },
+        { left: 410, top: 80,  width: 290, height: 380, ratio: '18x24', molding: 'mold-oak' },
+        { left: 740, top: 60,  width: 240, height: 240, ratio: '12x12', molding: 'mold-white' },
+        { left: 740, top: 340, width: 240, height: 300, ratio: '16x20', molding: 'mold-black' },
+        { left: 410, top: 500, width: 290, height: 380, ratio: '18x24', molding: 'mold-oak' },
+        { left: 40,  top: 540, width: 330, height: 420, ratio: '20x30', molding: 'mold-black' }
+      ],
+      triptych: [
+        { left: 40,  top: 180, width: 320, height: 440, ratio: '24x36', molding: 'mold-black' },
+        { left: 395, top: 140, width: 370, height: 510, ratio: '24x36', molding: 'mold-oak' },
+        { left: 795, top: 180, width: 320, height: 440, ratio: '24x36', molding: 'mold-black' },
+        { left: 100, top: 660, width: 270, height: 340, ratio: '18x24', molding: 'mold-white' },
+        { left: 440, top: 690, width: 270, height: 270, ratio: '12x12', molding: 'mold-oak' },
+        { left: 780, top: 660, width: 270, height: 340, ratio: '18x24', molding: 'mold-black' }
+      ],
+      staircase: [
+        { left: 50,  top: 70,  width: 290, height: 380, ratio: '18x24', molding: 'mold-black' },
+        { left: 240, top: 180, width: 290, height: 380, ratio: '18x24', molding: 'mold-oak' },
+        { left: 430, top: 290, width: 290, height: 380, ratio: '18x24', molding: 'mold-white' },
+        { left: 620, top: 400, width: 290, height: 380, ratio: '18x24', molding: 'mold-black' },
+        { left: 810, top: 160, width: 280, height: 280, ratio: '12x12', molding: 'mold-oak' },
+        { left: 840, top: 490, width: 280, height: 370, ratio: '18x24', molding: 'mold-black' }
+      ],
+      symmetric: [
+        { left: 120, top: 70,  width: 400, height: 280, ratio: '18x24', molding: 'mold-black' },
+        { left: 600, top: 70,  width: 400, height: 280, ratio: '18x24', molding: 'mold-black' },
+        { left: 120, top: 380, width: 400, height: 280, ratio: '18x24', molding: 'mold-oak' },
+        { left: 600, top: 380, width: 400, height: 280, ratio: '18x24', molding: 'mold-oak' },
+        { left: 120, top: 690, width: 400, height: 280, ratio: '18x24', molding: 'mold-white' },
+        { left: 600, top: 690, width: 400, height: 280, ratio: '18x24', molding: 'mold-white' }
+      ]
+    };
+
+    function initArtWall() {
+      applyWallPreset(currentWallPreset);
+      setupArtWallDragEvents();
+      const firstItem = document.querySelector('.gallery-item');
+      if (firstItem) selectArtFrame(firstItem);
+    }
+
+    function teardownArtWall() {
+      const toolbar = document.getElementById('artWallFloatingToolbar');
+      if (toolbar) toolbar.style.display = 'none';
+
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach(item => {
+        item.style.position = '';
+        item.style.left = '';
+        item.style.top = '';
+        item.style.width = '';
+        item.style.height = '';
+        item.style.zIndex = '';
+        item.classList.remove('selected-frame', 'is-dragging', 'mold-black', 'mold-oak', 'mold-white');
+      });
+      const container = document.getElementById('galleryContainer');
+      if (container) container.style.minHeight = '';
+    }
+
+    function applyWallPreset(presetName) {
+      currentWallPreset = presetName;
+      const preset = wallPresets[presetName] || wallPresets.salon;
+      const items = document.querySelectorAll('.gallery-item');
+
+      items.forEach((item, index) => {
+        const config = preset[index];
+        if (!config) return;
+        item.style.left = `${config.left}px`;
+        item.style.top = `${config.top}px`;
+        item.style.width = `${config.width}px`;
+        item.style.height = `${config.height}px`;
+        item.classList.remove('mold-black', 'mold-oak', 'mold-white');
+        item.classList.add(config.molding);
+
+        const badge = item.querySelector('.frame-dim-badge');
+        if (badge) badge.textContent = getRatioLabel(config.ratio);
+      });
+
+      if (selectedFrameItem) {
+        positionFloatingToolbar(selectedFrameItem);
+      } else if (items[0]) {
+        selectArtFrame(items[0]);
+      }
+    }
+
+    function getRatioLabel(ratioKey) {
+      const map = {
+        '24x36': '24" × 36"',
+        '18x24': '18" × 24"',
+        '12x12': '12" × 12"',
+        '16x20': '16" × 20"',
+        '20x30': '20" × 30"',
+        'panoramic': '16:9 Wide'
+      };
+      return map[ratioKey] || ratioKey;
+    }
+
+    function positionFloatingToolbar(item) {
+      const toolbar = document.getElementById('artWallFloatingToolbar');
+      if (!toolbar || !item || currentLayout !== 'art-wall') {
+        if (toolbar) toolbar.style.display = 'none';
+        return;
+      }
+      toolbar.style.display = 'flex';
+      const itemLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const itemTop = parseInt(item.style.top, 10) || item.offsetTop;
+      const itemWidth = item.offsetWidth || 300;
+
+      const centerX = itemLeft + (itemWidth / 2);
+      const topY = Math.max(10, itemTop - 46);
+
+      toolbar.style.left = `${Math.round(centerX)}px`;
+      toolbar.style.top = `${Math.round(topY)}px`;
+
+      // Update toolbar labels
+      const moldLabel = document.getElementById('floatingBarMoldLabel');
+      if (moldLabel) {
+        if (item.classList.contains('mold-oak')) moldLabel.textContent = 'Oak';
+        else if (item.classList.contains('mold-white')) moldLabel.textContent = 'White';
+        else moldLabel.textContent = 'Black';
+      }
+
+      const ratioLabel = document.getElementById('floatingBarRatioLabel');
+      const badge = item.querySelector('.frame-dim-badge');
+      if (ratioLabel && badge) {
+        ratioLabel.textContent = badge.textContent.replace(/"/g, '').trim();
+      }
+    }
+
+    function selectArtFrame(item) {
+      document.querySelectorAll('.gallery-item').forEach(el => el.classList.remove('selected-frame'));
+      item.classList.add('selected-frame');
+      selectedFrameItem = item;
+      positionFloatingToolbar(item);
+
+      // Sync active buttons in inspector
+      document.querySelectorAll('.frame-mold-btn').forEach(b => {
+        b.classList.toggle('active', 
+          (b.classList.contains('mold-opt-oak') && item.classList.contains('mold-oak')) ||
+          (b.classList.contains('mold-opt-white') && item.classList.contains('mold-white')) ||
+          (b.classList.contains('mold-opt-black') && !item.classList.contains('mold-oak') && !item.classList.contains('mold-white'))
+        );
+      });
+    }
+
+    function setupArtWallDragEvents() {
+      const container = document.getElementById('galleryContainer');
+      if (!container || container._artWallEventsAttached) return;
+      container._artWallEventsAttached = true;
+
+      container.addEventListener('pointerdown', (e) => {
+        if (currentLayout !== 'art-wall') return;
+        if (e.target.closest('button, svg, input, #artWallFloatingToolbar')) return;
+
+        const item = e.target.closest('.gallery-item');
+        if (!item) return;
+
+        isDraggingFrame = true;
+        dragTarget = item;
+        selectArtFrame(item);
+
+        const rect = item.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        frameStartLeft = rect.left - containerRect.left;
+        frameStartTop = rect.top - containerRect.top;
+
+        item.classList.add('is-dragging');
+        try { item.setPointerCapture(e.pointerId); } catch(err) {}
+      });
+
+      container.addEventListener('pointermove', (e) => {
+        if (!isDraggingFrame || !dragTarget || currentLayout !== 'art-wall') return;
+
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+
+        let newLeft = frameStartLeft + dx;
+        let newTop = frameStartTop + dy;
+
+        const containerRect = container.getBoundingClientRect();
+        const itemWidth = dragTarget.offsetWidth;
+        const itemHeight = dragTarget.offsetHeight;
+
+        newLeft = Math.max(15, Math.min(newLeft, containerRect.width - itemWidth - 15));
+        newTop = Math.max(15, Math.min(newTop, containerRect.height - itemHeight - 15));
+
+        // 57" Eye-Level Magnetic Snapping
+        const guide = document.getElementById('artWallGuide');
+        const eyeLevelY = containerRect.height * 0.5;
+        const frameCenterY = newTop + (itemHeight / 2);
+
+        if (Math.abs(frameCenterY - eyeLevelY) < 18) {
+          newTop = eyeLevelY - (itemHeight / 2);
+          if (guide) guide.classList.add('snapped');
+        } else {
+          if (guide) guide.classList.remove('snapped');
+        }
+
+        dragTarget.style.left = `${Math.round(newLeft)}px`;
+        dragTarget.style.top = `${Math.round(newTop)}px`;
+
+        const toolbar = document.getElementById('artWallFloatingToolbar');
+        if (toolbar) {
+          toolbar.style.left = `${Math.round(newLeft + itemWidth / 2)}px`;
+          toolbar.style.top = `${Math.round(Math.max(10, newTop - 46))}px`;
+        }
+      });
+
+      const endDrag = (e) => {
+        if (!isDraggingFrame) return;
+        isDraggingFrame = false;
+        if (dragTarget) {
+          dragTarget.classList.remove('is-dragging');
+          try { dragTarget.releasePointerCapture(e.pointerId); } catch(err) {}
+          positionFloatingToolbar(dragTarget);
+          dragTarget = null;
+        }
+        const guide = document.getElementById('artWallGuide');
+        if (guide) guide.classList.remove('snapped');
+      };
+
+      container.addEventListener('pointerup', endDrag);
+      container.addEventListener('pointercancel', endDrag);
+    }
+
+    // Actions from floating toolbar & inspector
+    function alignActiveFrameEyeLevel(e) {
+      if (e) e.stopPropagation();
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      const container = document.getElementById('galleryContainer');
+      const eyeLevelY = container.offsetHeight * 0.5;
+      const newTop = eyeLevelY - (item.offsetHeight / 2);
+      item.style.top = `${Math.round(newTop)}px`;
+      positionFloatingToolbar(item);
+
+      const guide = document.getElementById('artWallGuide');
+      if (guide) {
+        guide.classList.add('snapped');
+        setTimeout(() => guide.classList.remove('snapped'), 800);
+      }
+    }
+
+    function cycleActiveFrameMolding(e) {
+      if (e) e.stopPropagation();
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      if (item.classList.contains('mold-oak')) {
+        setSelectedFrameMolding('mold-white');
+      } else if (item.classList.contains('mold-white')) {
+        setSelectedFrameMolding('mold-black');
+      } else {
+        setSelectedFrameMolding('mold-oak');
+      }
+    }
+
+    function cycleActiveFrameRatio(e) {
+      if (e) e.stopPropagation();
+      const ratios = ['24x36', '18x24', '12x12', '16x20', 'panoramic'];
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      const currentRatio = item.dataset.frameRatio || '18x24';
+      const nextIdx = (ratios.indexOf(currentRatio) + 1) % ratios.length;
+      const nextRatio = ratios[nextIdx];
+      item.dataset.frameRatio = nextRatio;
+      setSelectedFrameRatio(nextRatio);
+      positionFloatingToolbar(item);
+    }
+
+    function bringActiveFrameToFront(e) {
+      if (e) e.stopPropagation();
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      let maxZ = 10;
+      document.querySelectorAll('.gallery-item').forEach(el => {
+        const z = parseInt(el.style.zIndex || '10', 10);
+        if (z > maxZ) maxZ = z;
+      });
+      item.style.zIndex = maxZ + 2;
+    }
+
+    function setSelectedFrameMolding(moldClass, btnEl) {
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      item.classList.remove('mold-black', 'mold-oak', 'mold-white');
+      item.classList.add(moldClass);
+
+      if (btnEl) {
+        document.querySelectorAll('.frame-mold-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+      positionFloatingToolbar(item);
+    }
+
+    function setSelectedFrameRatio(ratioKey) {
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+
+      const currentW = item.offsetWidth || 300;
+      let newH = currentW * 1.33;
+
+      if (ratioKey === '24x36' || ratioKey === '20x30') newH = currentW * 1.4;
+      else if (ratioKey === '18x24') newH = currentW * 1.33;
+      else if (ratioKey === '12x12') newH = currentW;
+      else if (ratioKey === '16x20') newH = currentW * 1.25;
+      else if (ratioKey === 'panoramic') newH = currentW * 0.5625;
+
+      item.style.height = `${Math.round(newH)}px`;
+      const badge = item.querySelector('.frame-dim-badge');
+      if (badge) badge.textContent = getRatioLabel(ratioKey);
+      positionFloatingToolbar(item);
+    }
+
+    function setWallColor(colorKey, btnEl) {
+      const container = document.getElementById('galleryContainer');
+      if (!container) return;
+      container.classList.remove('wall-gallery-white', 'wall-warm-linen', 'wall-sage-green');
+      if (colorKey !== 'charcoal') {
+        container.classList.add(`wall-${colorKey}`);
+      }
+      if (btnEl) {
+        document.querySelectorAll('.wall-color-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+    }
+
+    function toggleEyeLevelGuideLine(show) {
+      const guide = document.getElementById('artWallGuide');
+      if (guide) guide.style.display = show ? 'block' : 'none';
+    }
+
+    function toggleHeart(btn) {
+      btn.classList.toggle('active');
+    }
+
+    // --- SPATIAL 3D DEPTH ENGINE (PRO 2026) ---
+    let isSpatial3D = true;
+
+    function toggleSpatial3D(enable) {
+      isSpatial3D = enable !== undefined ? enable : !isSpatial3D;
+      const container = document.getElementById('galleryContainer');
+      container.classList.toggle('spatial-3d-active', isSpatial3D);
+
+      const toggleBtn = document.getElementById('toggleSpatialBtn');
+      if (toggleBtn) {
+        toggleBtn.classList.toggle('active', isSpatial3D);
+        toggleBtn.querySelector('.spatial-status-text').textContent = isSpatial3D ? 'ON' : 'OFF';
+      }
+
+      const inspectorToggle = document.getElementById('spatialInspectorToggle');
+      if (inspectorToggle) {
+        inspectorToggle.checked = isSpatial3D;
+      }
+
+      if (!isSpatial3D) {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          item.style.transform = '';
+          item.style.boxShadow = '';
+        });
+      }
+    }
+
+    function initSpatial3DPhysics() {
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach(item => {
+        // Inject specular light glare element if not already present
+        if (!item.querySelector('.item-specular-glare')) {
+          const glare = document.createElement('div');
+          glare.className = 'item-specular-glare';
+          item.appendChild(glare);
+        }
+
+        item.addEventListener('mousemove', (e) => {
+          if (!isSpatial3D || isDraggingFrame) return;
+          const rect = item.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const normX = (x - centerX) / centerX;
+          const normY = (y - centerY) / centerY;
+
+          const tiltX = -(normY * 16).toFixed(2);
+          const tiltY = (normX * 16).toFixed(2);
+
+          item.style.setProperty('transform', `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.04, 1.04, 1.04)`, 'important');
+          item.style.setProperty('--glare-x', `${x}px`);
+          item.style.setProperty('--glare-y', `${y}px`);
+
+          const shadowX = (-normX * 24).toFixed(1);
+          const shadowY = (-normY * 24 + 20).toFixed(1);
+          item.style.setProperty('box-shadow', `${shadowX}px ${shadowY}px 40px rgba(0,0,0,0.6), ${(-normX * 16).toFixed(1)}px ${(-normY * 16).toFixed(1)}px 36px var(--ambient-glow, rgba(94, 194, 127, 0.4))`, 'important');
+        });
+
+        item.addEventListener('mouseleave', () => {
+          if (!isSpatial3D || isDraggingFrame) return;
+          item.style.setProperty('transform', 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 'important');
+          item.style.removeProperty('box-shadow');
+        });
+      });
+    }
+
+    // Sliders & Fine Tuning
+    function updateColumns(val) {
+      document.getElementById('columnsVal').textContent = val;
+      const container = document.getElementById('galleryContainer');
+      if (currentLayout === 'classic-grid' || currentLayout === 'pinterest-masonry' || currentLayout === 'lookbook-duet' || currentLayout === 'curator-specimen') {
+        container.style.gridTemplateColumns = `repeat(${val}, 1fr)`;
+      }
+    }
+
+    function updateGap(val) {
+      document.getElementById('gapVal').textContent = val + 'px';
+      document.getElementById('galleryContainer').style.gap = val + 'px';
+    }
+
+    function updateRadius(val) {
+      document.getElementById('radiusVal').textContent = val + 'px';
+      document.querySelectorAll('.gallery-item').forEach(el => {
+        el.style.borderRadius = val + 'px';
+      });
+    }
+
+    function updateMatting(val) {
+      document.getElementById('mattingVal').textContent = val + 'px';
+      document.querySelectorAll('.gallery-item').forEach(el => {
+        el.style.padding = val + 'px';
+      });
+    }
+
+    function setHairlineColor(color) {
+      document.documentElement.style.setProperty('--accent-matcha', color);
+    }
+
+    function setCardTheme(theme) {
+      document.querySelectorAll('.item-card-body').forEach(el => {
+        if (theme === 'dark') {
+          el.style.background = '#1c231f';
+          el.style.color = '#e6ede8';
+          el.querySelector('.card-title').style.color = '#fff';
+          el.querySelector('.card-caption').style.color = '#94a399';
+          el.querySelector('.card-price').style.color = '#5ec27f';
+          el.closest('.gallery-item').style.background = '#1c231f';
+        } else {
+          el.style.background = '#ffffff';
+          el.style.color = '#1e293b';
+          el.querySelector('.card-title').style.color = '#0f172a';
+          el.querySelector('.card-caption').style.color = '#64748b';
+          el.querySelector('.card-price').style.color = '#0f172a';
+          el.closest('.gallery-item').style.background = '#ffffff';
+        }
+      });
+    }
+
+    function toggleCategoryPills(show) {
+      document.querySelectorAll('.card-category-pill').forEach(el => {
+        el.style.display = show ? 'inline-block' : 'none';
+      });
+    }
+
+    let currentViewport = 'desktop';
+
+    function setViewport(size) {
+      currentViewport = size;
+      document.querySelectorAll('.viewport-btn').forEach(btn => {
+        const btnText = btn.textContent.toLowerCase().trim();
+        btn.classList.toggle('active', btnText === size);
+      });
+
+      const stage = document.getElementById('galleryStage');
+      stage.classList.remove('viewport-desktop', 'viewport-tablet', 'viewport-mobile');
+      stage.classList.add(`viewport-${size}`);
+
+      if (currentLayout === 'art-wall') {
+        if (size === 'mobile') stage.style.maxWidth = '400px';
+        else if (size === 'tablet') stage.style.maxWidth = '720px';
+        else stage.style.maxWidth = '1160px';
+        applyArtWallViewport(size);
+      } else {
+        if (size === 'mobile') stage.style.maxWidth = '390px';
+        else if (size === 'tablet') stage.style.maxWidth = '720px';
+        else stage.style.maxWidth = '980px';
+      }
+    }
+
+    function applyArtWallViewport(size) {
+      const container = document.getElementById('galleryContainer');
+      const hintSpan = document.querySelector('.art-wall-hint span:last-child');
+      const toolbar = document.getElementById('artWallFloatingToolbar');
+      if (!container) return;
+
+      if (size === 'mobile') {
+        // Save desktop coordinates before stacking
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          if (!item.dataset.dtLeft && item.style.left) {
+            item.dataset.dtLeft = item.style.left;
+            item.dataset.dtTop = item.style.top;
+            item.dataset.dtWidth = item.style.width;
+            item.dataset.dtHeight = item.style.height;
+          }
+        });
+        container.classList.remove('art-wall-tablet-salon');
+        container.classList.add('art-wall-mobile-stack');
+        if (hintSpan) hintSpan.textContent = '📱 Mobile Exhibition Feed • Clean vertical museum stack';
+        if (toolbar) toolbar.style.display = 'none';
+      } else if (size === 'tablet') {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          if (!item.dataset.dtLeft && item.style.left) {
+            item.dataset.dtLeft = item.style.left;
+            item.dataset.dtTop = item.style.top;
+            item.dataset.dtWidth = item.style.width;
+            item.dataset.dtHeight = item.style.height;
+          }
+        });
+        container.classList.remove('art-wall-mobile-stack');
+        container.classList.add('art-wall-tablet-salon');
+        if (hintSpan) hintSpan.textContent = 'Tablet Salon View • 2-column balanced museum wall';
+        if (toolbar) toolbar.style.display = 'none';
+      } else {
+        // Desktop freeform mode
+        container.classList.remove('art-wall-mobile-stack', 'art-wall-tablet-salon');
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          if (item.dataset.dtLeft) item.style.left = item.dataset.dtLeft;
+          if (item.dataset.dtTop) item.style.top = item.dataset.dtTop;
+          if (item.dataset.dtWidth) item.style.width = item.dataset.dtWidth;
+          if (item.dataset.dtHeight) item.style.height = item.dataset.dtHeight;
+        });
+        if (hintSpan) hintSpan.textContent = 'Drag frames anywhere on wall • Magnetic snap active';
+        if (selectedFrameItem) {
+          positionFloatingToolbar(selectedFrameItem);
+        }
+      }
+    }
+
+    function trigger3DWaveDemo() {
+      if (!isSpatial3D) toggleSpatial3D(true);
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach((item, idx) => {
+        setTimeout(() => {
+          item.style.setProperty('transform', 'perspective(1200px) rotateX(-12deg) rotateY(14deg) scale3d(1.06, 1.06, 1.06)', 'important');
+          item.style.setProperty('box-shadow', '-22px 24px 44px rgba(0,0,0,0.65), -14px 14px 34px var(--ambient-glow, rgba(94, 194, 127, 0.45))', 'important');
+          const glare = item.querySelector('.item-specular-glare');
+          if (glare) {
+            glare.style.setProperty('--glare-x', '120px');
+            glare.style.setProperty('--glare-y', '80px');
+            glare.style.opacity = '1';
+          }
+
+          setTimeout(() => {
+            item.style.setProperty('transform', 'perspective(1200px) rotateX(10deg) rotateY(-10deg) scale3d(1.03, 1.03, 1.03)', 'important');
+            setTimeout(() => {
+              item.style.setProperty('transform', 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 'important');
+              item.style.removeProperty('box-shadow');
+              if (glare) glare.style.opacity = '';
+            }, 350);
+          }, 400);
+        }, idx * 110);
+      });
+    }
+
+    // Ambient Darkroom Spotlight across canvas
+    const canvasStageScroll = document.querySelector('.canvas-scrollable');
+    if (canvasStageScroll) {
+      canvasStageScroll.addEventListener('mousemove', (e) => {
+        const rect = canvasStageScroll.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        canvasStageScroll.style.background = `radial-gradient(circle 650px at ${x}px ${y}px, rgba(94, 194, 127, 0.06) 0%, rgba(8, 10, 9, 0.98) 70%)`;
+      });
+      canvasStageScroll.addEventListener('mouseleave', () => {
+        canvasStageScroll.style.background = '';
+      });
+    }
+
+
+    // Initial setup
+    selectLayout('classic-grid');
+    selectSkin('skin-pure-minimalist');
+    initSpatial3DPhysics();
+    toggleSpatial3D(true);
+  </script>
+</body>
+</html>

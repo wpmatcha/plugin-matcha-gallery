@@ -316,24 +316,161 @@
 	color: #ffffff;
 }
 
-/* --- Filter Visual Themes --- */
-/* 1. Minimalist Underline Tabs (Apple / Unsplash style) */
-.matcha-gallery__filters--style-underline .matcha-filter {
-	background: transparent;
-	border: none;
-	border-radius: 0;
-	box-shadow: none;
-	padding: 8px 14px;
-	color: #64748b;
-	position: relative;
-	border-bottom: 2px solid transparent;
-}
-.matcha-gallery__filters--style-underline .matcha-filter:hover {
+/* ==========================================================================
+   Unified Toolbar & Control Skins (Search, Filters, Sort & Swatches)
+   ========================================================================== */
+
+/* --- 1. Modern Capsule Skin (Free Default) --- */
+.matcha-gallery__toolbar--skin-capsule .matcha-gallery__search-input {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 100px;
 	color: #0f172a;
-	background: transparent;
-	transform: none;
-	border-bottom-color: #cbd5e1;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
+.matcha-gallery__toolbar--skin-capsule .matcha-gallery__search-input:focus {
+	border-color: var(--matcha-accent, #607d66);
+	box-shadow: 0 0 0 3px rgba(96, 125, 102, 0.15);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-gallery__sort-select {
+	background-color: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 100px;
+	color: #334155;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-gallery__sort-select:focus {
+	border-color: var(--matcha-accent, #607d66);
+	box-shadow: 0 0 0 3px rgba(96, 125, 102, 0.15);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-gallery__color-swatches {
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	border-radius: 100px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-filter,
+.matcha-gallery__filters--skin-capsule .matcha-filter,
+.matcha-gallery__filters--style-pills .matcha-filter {
+	border-radius: 100px;
+	background: #ffffff;
+	border: 1px solid #e2e8f0;
+	color: #334155;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-filter:hover,
+.matcha-gallery__filters--skin-capsule .matcha-filter:hover,
+.matcha-gallery__filters--style-pills .matcha-filter:hover {
+	border-color: var(--matcha-accent, #607d66);
+	color: var(--matcha-accent, #607d66);
+	background: rgba(96, 125, 102, 0.08);
+}
+.matcha-gallery__toolbar--skin-capsule .matcha-filter--active,
+.matcha-gallery__filters--skin-capsule .matcha-filter--active,
+.matcha-gallery__filters--style-pills .matcha-filter--active {
+	background: var(--matcha-accent, #607d66) !important;
+	border-color: var(--matcha-accent, #607d66) !important;
+	color: #ffffff !important;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18) !important;
+}
+/* Capsule Dark Theme Adaptation */
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-gallery__search-input,
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-gallery__sort-select,
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-gallery__color-swatches {
+	background: #1e293b;
+	border-color: #334155;
+	color: #f1f5f9;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-capsule .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-pills .matcha-filter {
+	background: #1e293b !important;
+	border-color: #334155 !important;
+	color: #cbd5e1 !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-capsule .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-pills .matcha-filter:hover {
+	background: #334155 !important;
+	color: #ffffff !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-filter--active,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-capsule .matcha-filter--active,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-pills .matcha-filter--active {
+	background: var(--matcha-accent, #607d66) !important;
+	border-color: var(--matcha-accent, #607d66) !important;
+	color: #ffffff !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-capsule .matcha-filter__count,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-capsule .matcha-filter__count,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-pills .matcha-filter__count {
+	background: rgba(255, 255, 255, 0.1);
+	color: #cbd5e1;
+}
+
+/* --- 2. Minimalist Hairline Skin (Fine-Art / Editorial - PRO) --- */
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__search-wrap {
+	border-bottom: 1.5px solid #cbd5e1;
+	transition: border-color 0.2s ease;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__search-wrap:focus-within {
+	border-bottom-color: var(--matcha-accent, #607d66);
+}
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__search-input {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 8px 12px 8px 30px !important;
+	color: #0f172a;
+	font-weight: 500;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-search-icon {
+	left: 4px;
+	color: #64748b;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__sort-select {
+	background-color: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	border-bottom: 1.5px solid #cbd5e1 !important;
+	box-shadow: none !important;
+	padding: 8px 30px 8px 8px !important;
+	color: #0f172a !important;
+	font-weight: 600;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__sort-select:focus {
+	border-bottom-color: var(--matcha-accent, #607d66) !important;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-gallery__color-swatches {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 4px 0 !important;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-filter,
+.matcha-gallery__filters--skin-underline .matcha-filter,
+.matcha-gallery__filters--style-underline .matcha-filter {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 8px 14px;
+	color: #64748b !important;
+	position: relative;
+	border-bottom: 2px solid transparent !important;
+	font-weight: 600;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-filter:hover,
+.matcha-gallery__filters--skin-underline .matcha-filter:hover,
+.matcha-gallery__filters--style-underline .matcha-filter:hover {
+	color: #0f172a !important;
+	background: transparent !important;
+	transform: none;
+	border-bottom-color: #cbd5e1 !important;
+}
+.matcha-gallery__toolbar--skin-underline .matcha-filter--active,
+.matcha-gallery__filters--skin-underline .matcha-filter--active,
 .matcha-gallery__filters--style-underline .matcha-filter--active {
 	background: transparent !important;
 	color: #0f172a !important;
@@ -341,76 +478,200 @@
 	border-bottom: 2px solid var(--matcha-accent, #607d66) !important;
 	box-shadow: none !important;
 }
+.matcha-gallery__toolbar--skin-underline .matcha-filter--active .matcha-filter__count,
+.matcha-gallery__filters--skin-underline .matcha-filter--active .matcha-filter__count,
 .matcha-gallery__filters--style-underline .matcha-filter--active .matcha-filter__count {
 	background: #e2e8f0;
 	color: #0f172a;
 }
-
-/* 2. Solid Obsidian Dark (PRO) */
-.matcha-gallery__filters--style-dark .matcha-filter {
-	background: #1e293b;
-	border-color: #334155;
-	color: #f1f5f9;
+/* Underline Dark Theme Adaptation */
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-gallery__search-wrap,
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-gallery__sort-select {
+	border-bottom-color: #475569 !important;
 }
-.matcha-gallery__filters--style-dark .matcha-filter:hover {
-	background: #334155;
-	border-color: #475569;
-	color: #fff;
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-gallery__search-input {
+	color: #f1f5f9 !important;
 }
-.matcha-gallery__filters--style-dark .matcha-filter--active {
-	background: var(--matcha-accent, #607d66) !important;
-	border-color: var(--matcha-accent, #607d66) !important;
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-gallery__sort-select {
+	color: #f1f5f9 !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-underline .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-underline .matcha-filter {
+	background: transparent !important;
+	border: none !important;
+	color: #94a3b8 !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-underline .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-underline .matcha-filter:hover {
 	color: #ffffff !important;
-	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+	border-bottom-color: #64748b !important;
 }
-.matcha-gallery__filters--style-dark .matcha-filter__count {
-	background: rgba(255,255,255,0.1);
-	color: #cbd5e1;
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-filter--active,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-underline .matcha-filter--active,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-underline .matcha-filter--active {
+	background: transparent !important;
+	color: #ffffff !important;
+	border-bottom-color: var(--matcha-accent, #5ec27f) !important;
 }
-.matcha-gallery__filters--style-dark .matcha-filter--active .matcha-filter__count {
-	background: rgba(0,0,0,0.25);
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-underline .matcha-filter--active .matcha-filter__count,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-underline .matcha-filter--active .matcha-filter__count,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-underline .matcha-filter--active .matcha-filter__count {
+	background: rgba(255, 255, 255, 0.15);
 	color: #ffffff;
 }
 
-/* 3. Ghost / Minimalist Text (PRO) */
-.matcha-gallery__filters--style-minimal .matcha-filter {
-	background: transparent;
-	border: 1px solid transparent;
-	box-shadow: none;
+/* --- 3. Obsidian Dark Skin (Charcoal Pro) --- */
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__search-input {
+	background: #1e293b !important;
+	border: 1px solid #334155 !important;
+	border-radius: 100px;
+	color: #f8fafc !important;
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__search-input::placeholder {
 	color: #64748b;
-	padding: 5px 12px;
 }
-.matcha-gallery__filters--style-minimal .matcha-filter:hover {
-	color: #0f172a;
-	background: rgba(0,0,0,0.04);
-	transform: none;
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__search-input:focus {
+	border-color: var(--matcha-accent, #5ec27f) !important;
+	box-shadow: 0 0 0 3px rgba(94, 194, 127, 0.25) !important;
 }
-.matcha-gallery__filters--style-minimal .matcha-filter--active {
-	background: rgba(0,0,0,0.06) !important;
-	color: var(--matcha-accent, #607d66) !important;
-	border-color: rgba(0,0,0,0.08) !important;
-	box-shadow: none !important;
+.matcha-gallery__toolbar--skin-obsidian .matcha-search-icon {
+	color: #94a3b8;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__sort-select {
+	background-color: #1e293b !important;
+	border: 1px solid #334155 !important;
+	border-radius: 100px;
+	color: #e2e8f0 !important;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__sort-select:focus {
+	border-color: var(--matcha-accent, #5ec27f) !important;
+	box-shadow: 0 0 0 3px rgba(94, 194, 127, 0.25) !important;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-gallery__color-swatches {
+	background: #1e293b !important;
+	border: 1px solid #334155 !important;
+	border-radius: 100px;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-filter,
+.matcha-gallery__filters--skin-obsidian .matcha-filter,
+.matcha-gallery__filters--style-dark:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"]) .matcha-filter {
+	background: #1e293b !important;
+	border: 1px solid #334155 !important;
+	color: #cbd5e1 !important;
+	border-radius: 100px;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-filter:hover,
+.matcha-gallery__filters--skin-obsidian .matcha-filter:hover,
+.matcha-gallery__filters--style-dark:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"]) .matcha-filter:hover {
+	background: #334155 !important;
+	border-color: #475569 !important;
+	color: #ffffff !important;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-filter--active,
+.matcha-gallery__filters--skin-obsidian .matcha-filter--active,
+.matcha-gallery__filters--style-dark:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"]) .matcha-filter--active {
+	background: var(--matcha-accent, #5ec27f) !important;
+	border-color: var(--matcha-accent, #5ec27f) !important;
+	color: #0c140e !important;
 	font-weight: 700;
+	box-shadow: 0 4px 14px rgba(94, 194, 127, 0.35) !important;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-filter__count,
+.matcha-gallery__filters--skin-obsidian .matcha-filter__count,
+.matcha-gallery__filters--style-dark:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"]) .matcha-filter__count {
+	background: rgba(255, 255, 255, 0.1) !important;
+	color: #cbd5e1 !important;
+}
+.matcha-gallery__toolbar--skin-obsidian .matcha-filter--active .matcha-filter__count,
+.matcha-gallery__filters--skin-obsidian .matcha-filter--active .matcha-filter__count,
+.matcha-gallery__filters--style-dark:not([class*="--skin-capsule"]):not([class*="--skin-underline"]):not([class*="--skin-glass"]) .matcha-filter--active .matcha-filter__count {
+	background: rgba(0, 0, 0, 0.25) !important;
+	color: #0c140e !important;
 }
 
-/* 4. Frosted Glassmorphism (PRO) */
+/* --- 4. Frosted Glass Skin (Glassmorphism Pro) --- */
+.matcha-gallery__toolbar--skin-glass .matcha-gallery__search-input {
+	background: rgba(255, 255, 255, 0.55) !important;
+	backdrop-filter: blur(14px) !important;
+	-webkit-backdrop-filter: blur(14px) !important;
+	border: 1px solid rgba(255, 255, 255, 0.85) !important;
+	border-radius: 100px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+	color: #0f172a !important;
+}
+.matcha-gallery__toolbar--skin-glass .matcha-gallery__search-input:focus {
+	border-color: var(--matcha-accent, #607d66) !important;
+	box-shadow: 0 0 0 3px rgba(96, 125, 102, 0.2), 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+.matcha-gallery__toolbar--skin-glass .matcha-gallery__sort-select {
+	background-color: rgba(255, 255, 255, 0.55) !important;
+	backdrop-filter: blur(14px) !important;
+	-webkit-backdrop-filter: blur(14px) !important;
+	border: 1px solid rgba(255, 255, 255, 0.85) !important;
+	border-radius: 100px;
+	color: #1e293b !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+.matcha-gallery__toolbar--skin-glass .matcha-gallery__color-swatches {
+	background: rgba(255, 255, 255, 0.55) !important;
+	backdrop-filter: blur(14px) !important;
+	-webkit-backdrop-filter: blur(14px) !important;
+	border: 1px solid rgba(255, 255, 255, 0.85) !important;
+	border-radius: 100px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+.matcha-gallery__toolbar--skin-glass .matcha-filter,
+.matcha-gallery__filters--skin-glass .matcha-filter,
 .matcha-gallery__filters--style-glass .matcha-filter {
-	background: rgba(255, 255, 255, 0.45);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	border: 1px solid rgba(255, 255, 255, 0.8);
-	box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-	color: #1e293b;
+	background: rgba(255, 255, 255, 0.48) !important;
+	backdrop-filter: blur(10px) !important;
+	-webkit-backdrop-filter: blur(10px) !important;
+	border: 1px solid rgba(255, 255, 255, 0.85) !important;
+	border-radius: 100px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+	color: #1e293b !important;
 }
+.matcha-gallery__toolbar--skin-glass .matcha-filter:hover,
+.matcha-gallery__filters--skin-glass .matcha-filter:hover,
 .matcha-gallery__filters--style-glass .matcha-filter:hover {
-	background: rgba(255, 255, 255, 0.7);
-	color: #0f172a;
+	background: rgba(255, 255, 255, 0.75) !important;
+	color: #0f172a !important;
 }
+.matcha-gallery__toolbar--skin-glass .matcha-filter--active,
+.matcha-gallery__filters--skin-glass .matcha-filter--active,
 .matcha-gallery__filters--style-glass .matcha-filter--active {
 	background: var(--matcha-accent, #607d66) !important;
 	border-color: var(--matcha-accent, #607d66) !important;
-	color: #fff !important;
+	color: #ffffff !important;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+/* Glass Dark Mode Adaptation (Smoked Glassmorphism) */
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-glass .matcha-gallery__search-input,
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-glass .matcha-gallery__sort-select,
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-glass .matcha-gallery__color-swatches {
+	background: rgba(15, 23, 42, 0.75) !important;
+	border-color: rgba(255, 255, 255, 0.18) !important;
+	color: #f8fafc !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25) !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-glass .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-glass .matcha-filter,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-glass .matcha-filter {
+	background: rgba(15, 23, 42, 0.65) !important;
+	border-color: rgba(255, 255, 255, 0.16) !important;
+	color: #f8fafc !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+}
+.matcha-gallery--theme-dark .matcha-gallery__toolbar--skin-glass .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--skin-glass .matcha-filter:hover,
+.matcha-gallery--theme-dark .matcha-gallery__filters--style-glass .matcha-filter:hover {
+	background: rgba(30, 41, 59, 0.85) !important;
+	border-color: rgba(255, 255, 255, 0.3) !important;
+	color: #ffffff !important;
 }
 
 /* --- Filter Toolbar Alignments --- */
@@ -422,6 +683,29 @@
 /* --- Option: Hide Filter Count --- */
 .matcha-gallery__filters--hide-count .matcha-filter__count {
 	display: none !important;
+}
+
+/* --- Responsive Mobile Toolbar & Horizontal Filter Swipe --- */
+@media (max-width: 640px) {
+	.matcha-gallery__toolbar {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 14px;
+	}
+	.matcha-gallery__search-wrap {
+		max-width: 100%;
+	}
+	.matcha-gallery__filters {
+		overflow-x: auto;
+		flex-wrap: nowrap !important;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		padding-bottom: 6px;
+		max-width: 100%;
+	}
+	.matcha-gallery__filters::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 /* --- Load More Button (Dynamic Accent & Visual Themes) --- */
@@ -636,52 +920,235 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	100% { transform: scale(1); }
 }
 
-/* Shoppable Button Bar */
-.matcha-gallery__shop-bar {
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
-	right: 10px;
-	z-index: 5;
-	display: flex;
-	justify-content: center;
-	opacity: 0;
-	transform: translateY(6px);
-	transition: all 0.25s ease;
+/* Gallery Item Pointer & Zoom Cursors */
+.matcha-gallery__item {
+	cursor: zoom-in;
+}
+.matcha-gallery__item[data-click-action="direct"] {
+	cursor: pointer;
 }
 
-.matcha-gallery__item:hover .matcha-gallery__shop-bar {
-	opacity: 1;
-	transform: translateY(0);
+/* ==========================================================================
+   The Grid (Malabo Skin) — Ultra-Sleek Choreographed Hover Experience
+   ========================================================================== */
+
+/* Full-card Scrim Overlay */
+.matcha-item-overlay {
+	position: absolute !important;
+	inset: 0 !important;
+	z-index: 10 !important;
+	background: rgba(15, 23, 42, 0.78) !important;
+	backdrop-filter: blur(2px) !important;
+	-webkit-backdrop-filter: blur(2px) !important;
+	opacity: 0 !important;
+	transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1) !important;
+	pointer-events: none !important;
 }
 
-.matcha-gallery__shop-btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	background: rgba(27, 94, 32, 0.95);
-	color: #fff !important;
+.matcha-gallery__item-inner:hover .matcha-item-overlay,
+.matcha-gallery__item:hover .matcha-item-overlay {
+	opacity: 1 !important;
+}
+
+/* Image Base Transition */
+.matcha-gallery__item-inner img {
+	transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.35s ease !important;
+}
+
+/* Default Zoom (The Grid Malabo) */
+.matcha-gallery--hover-zoom .matcha-gallery__item-inner:hover img,
+.matcha-gallery:not([class*="matcha-gallery--hover-"]) .matcha-gallery__item-inner:hover img {
+	transform: scale(1.08) !important;
+}
+
+/* Base Hairline Frame Element (Brasilia) */
+.matcha-item-frame {
+	display: none;
+}
+
+/* Centered Content Stack (Zero Horizontal Collision) */
+.matcha-item-content {
+	position: absolute !important;
+	inset: 0 !important;
+	z-index: 15 !important;
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+	text-align: center !important;
+	padding: 16px 14px !important;
+	box-sizing: border-box !important;
+	pointer-events: none !important;
+	opacity: 0 !important;
+	transition: opacity 0.28s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.matcha-gallery__item-inner:hover .matcha-item-content,
+.matcha-gallery__item:hover .matcha-item-content {
+	opacity: 1 !important;
+}
+
+/* Drop-Down Title */
+.matcha-item-title {
+	margin: 0 0 10px 0 !important;
+	padding: 0 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	line-height: 1.35 !important;
+	color: #ffffff !important;
+	letter-spacing: 0.3px !important;
+	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+	max-width: 96% !important;
+	overflow: hidden !important;
+	display: -webkit-box !important;
+	-webkit-line-clamp: 2 !important;
+	-webkit-box-orient: vertical !important;
+	opacity: 0 !important;
+	transform: translateY(-22px) !important;
+	transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.matcha-gallery__item-inner:hover .matcha-item-title,
+.matcha-gallery__item:hover .matcha-item-title {
+	opacity: 1 !important;
+	transform: translateY(0) !important;
+}
+
+/* Micro-Action Buttons Container */
+.matcha-item-actions {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 12px !important;
+	margin: 0 0 10px 0 !important;
+	pointer-events: none !important;
+}
+
+/* Choreographed Micro-Action Buttons */
+.matcha-gallery .matcha-action-btn,
+.matcha-gallery__item .matcha-action-btn,
+button.matcha-action-btn,
+a.matcha-action-btn,
+span.matcha-action-btn {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 36px !important;
+	height: 36px !important;
+	min-width: 36px !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border-radius: 50% !important;
+	box-sizing: border-box !important;
+	background: rgba(255, 255, 255, 0.16) !important;
+	border: 1px solid rgba(255, 255, 255, 0.35) !important;
+	backdrop-filter: blur(8px) !important;
+	-webkit-backdrop-filter: blur(8px) !important;
+	color: #ffffff !important;
+	cursor: pointer !important;
 	text-decoration: none !important;
-	padding: 6px 14px;
-	border-radius: 100px;
-	font-size: 12px;
-	font-weight: 700;
-	box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-	backdrop-filter: blur(8px);
-	transition: all 0.2s ease;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+	pointer-events: auto !important;
+	opacity: 0 !important;
+	transform: scale(0.7) !important;
+	transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.04s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.04s, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.matcha-gallery__shop-btn:hover {
-	background: #1b5e20;
-	transform: scale(1.05);
-	box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+.matcha-action-btn svg {
+	width: 15px !important;
+	height: 15px !important;
+	stroke: currentColor !important;
+	stroke-width: 2.2 !important;
+	flex-shrink: 0 !important;
+	display: block !important;
 }
 
-.matcha-gallery__shop-price {
-	background: rgba(255,255,255,0.2);
-	padding: 1px 6px;
-	border-radius: 999px;
-	font-size: 11px;
+/* Choreographed Staggered Entrance */
+/* Duo buttons: slide in from left & right */
+.matcha-gallery .matcha-action-btn:first-child:not(:only-child) {
+	transform: translateX(-24px) !important;
+}
+
+.matcha-gallery .matcha-action-btn:last-child:not(:only-child) {
+	transform: translateX(24px) !important;
+}
+
+.matcha-gallery__item-inner:hover .matcha-action-btn,
+.matcha-gallery__item:hover .matcha-action-btn {
+	opacity: 1 !important;
+	transform: translate(0) scale(1) !important;
+}
+
+/* Micro-Action Hover States */
+.matcha-action-btn--media:hover {
+	background: #ffffff !important;
+	color: #0f172a !important;
+	border-color: #ffffff !important;
+	transform: translate(0) scale(1.15) !important;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+.matcha-action-btn--link:hover,
+.matcha-action-btn--shop:hover {
+	background: #16a34a !important;
+	color: #ffffff !important;
+	border-color: #16a34a !important;
+	transform: translate(0) scale(1.15) !important;
+	box-shadow: 0 6px 20px rgba(22, 163, 74, 0.5) !important;
+}
+
+.matcha-action-btn:active {
+	transform: translate(0) scale(0.95) !important;
+}
+
+/* Slide-Up Metadata & Price */
+.matcha-item-meta {
+	margin: 0 !important;
+	padding: 0 !important;
+	opacity: 0 !important;
+	transform: translateY(20px) !important;
+	transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.06s !important;
+}
+
+.matcha-gallery__item-inner:hover .matcha-item-meta,
+.matcha-gallery__item:hover .matcha-item-meta {
+	opacity: 1 !important;
+	transform: translateY(0) !important;
+}
+
+.matcha-item-category {
+	display: inline-block !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.8px !important;
+	text-transform: uppercase !important;
+	color: rgba(255, 255, 255, 0.75) !important;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+.matcha-item-price {
+	display: inline-flex !important;
+	align-items: center !important;
+	padding: 3px 10px !important;
+	border-radius: 999px !important;
+	background: rgba(255, 255, 255, 0.2) !important;
+	border: 1px solid rgba(255, 255, 255, 0.3) !important;
+	backdrop-filter: blur(8px) !important;
+	-webkit-backdrop-filter: blur(8px) !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	color: #ffffff !important;
+	letter-spacing: 0.2px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.matcha-item-caption {
+	font-size: 11px !important;
+	line-height: 1.35 !important;
+	color: rgba(255, 255, 255, 0.8) !important;
+	margin: 0 !important;
+	max-width: 90% !important;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* Sticky Client Proofing Favorites Tray */
@@ -1009,13 +1476,13 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	--matcha-text-muted: #aaaaaa;
 }
 
-.matcha-gallery--theme-dark .matcha-filter {
+/* Fallback for un-skinned galleries */
+.matcha-gallery--theme-dark .matcha-gallery__toolbar:not([class*="--skin-"]) .matcha-gallery__search-input {
 	background: #2a2a2a;
 	color: #e0e0e0;
 	border-color: #3e3e3e;
 }
-
-.matcha-gallery--theme-dark .matcha-gallery__search-input {
+.matcha-gallery--theme-dark .matcha-gallery__filters:not([class*="--skin-"]):not([class*="--style-"]) .matcha-filter {
 	background: #2a2a2a;
 	color: #e0e0e0;
 	border-color: #3e3e3e;
@@ -1120,45 +1587,190 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	to { transform: rotate(360deg); }
 }
 
-.matcha-gallery__item-inner:hover img {
-	transform: scale(1.05);
+/* ==========================================================================
+   Creative Gallery Hover Presets (Inspired by The Grid — No AI Tropes)
+   ========================================================================== */
+
+/* 1. Cinematic Pullback (The Grid: Bogota) — Scales down into matte canvas */
+.matcha-gallery--hover-pullback .matcha-gallery__item-inner {
+	background: #090d16 !important;
+}
+.matcha-gallery--hover-pullback .matcha-gallery__item-inner img {
+	transform-origin: center center !important;
+}
+.matcha-gallery--hover-pullback .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-pullback .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	transform: scale(0.93) !important;
+	border-radius: 6px !important;
 }
 
-/* Specific Hover Effect Presets */
-.matcha-gallery--hover-none .matcha-gallery__item-inner:hover {
-	transform: none;
-	box-shadow: var(--matcha-shadow);
+/* 2. Editorial Hairline Frame (The Grid: Brasilia) — Fine art matting border */
+.matcha-gallery--hover-frame .matcha-item-frame {
+	display: block !important;
+	position: absolute !important;
+	inset: 12px !important;
+	border: 1px solid var(--matcha-hover-frame-color, rgba(255, 255, 255, 0.45)) !important;
+	border-radius: 4px !important;
+	pointer-events: none !important;
+	opacity: 0 !important;
+	transform: scale(0.92) !important;
+	transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
+	z-index: 12 !important;
 }
-.matcha-gallery--hover-none .matcha-gallery__item-inner:hover img {
-	transform: none;
+.matcha-gallery--hover-frame .matcha-gallery__item-inner:hover .matcha-item-frame,
+.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed .matcha-item-frame {
+	opacity: 1 !important;
+	transform: scale(1) !important;
+	border-color: var(--matcha-hover-frame-color, rgba(255, 255, 255, 0.85)) !important;
 }
-
-.matcha-gallery--hover-zoom .matcha-gallery__item-inner:hover img {
-	transform: scale(1.07);
-}
-
-.matcha-gallery--hover-lift .matcha-gallery__item-inner:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
-}
-.matcha-gallery--hover-lift .matcha-gallery__item-inner:hover img {
-	transform: scale(1.02);
-}
-
-.matcha-gallery--hover-glow .matcha-gallery__item-inner:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 0 0 2px var(--matcha-accent, #607d66), 0 10px 30px rgba(96, 125, 102, 0.28);
-}
-.matcha-gallery--hover-glow .matcha-gallery__item-inner:hover img {
-	transform: scale(1.04);
+.matcha-gallery--hover-frame .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	transform: scale(1.04) !important;
 }
 
-.matcha-gallery--hover-grayscale .matcha-gallery__item img {
-	filter: grayscale(100%);
+/* 3. Architectural Slide Curtain (The Grid: Sofia) — Mechanical bottom-up wipe */
+.matcha-gallery--hover-curtain .matcha-item-overlay {
+	opacity: 1 !important;
+	transform: translateY(101%) !important;
+	transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-.matcha-gallery--hover-grayscale .matcha-gallery__item-inner:hover img {
-	filter: grayscale(0%);
-	transform: scale(1.05);
+.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover .matcha-item-overlay,
+.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-item-overlay {
+	transform: translateY(0) !important;
+}
+.matcha-gallery--hover-curtain .matcha-item-content {
+	transform: translateY(22px) !important;
+	transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) 0.04s, opacity 0.25s ease 0.04s !important;
+}
+.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover .matcha-item-content,
+.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-item-content {
+	transform: translateY(0) !important;
+	opacity: 1 !important;
+}
+.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	transform: scale(1.05) translateY(-3px) !important;
+}
+
+/* 4. Minimalist Bottom Drawer (The Grid: Lome) — Leaves top 60% photo crystal clear */
+.matcha-gallery--hover-drawer .matcha-item-overlay {
+	top: auto !important;
+	bottom: 0 !important;
+	height: 44% !important;
+	background: linear-gradient(to top, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.82) 75%, transparent 100%) !important;
+	transform: translateY(101%) !important;
+	opacity: 1 !important;
+	transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover .matcha-item-overlay,
+.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-item-overlay {
+	transform: translateY(0) !important;
+}
+.matcha-gallery--hover-drawer .matcha-item-content {
+	top: auto !important;
+	bottom: 0 !important;
+	height: 44% !important;
+	justify-content: flex-end !important;
+	padding: 10px 14px 14px !important;
+	transform: translateY(16px) !important;
+	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
+}
+.matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover .matcha-item-content,
+.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-item-content {
+	transform: translateY(0) !important;
+	opacity: 1 !important;
+}
+.matcha-gallery--hover-drawer .matcha-item-title {
+	margin-bottom: 6px !important;
+	font-size: 13px !important;
+}
+.matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	transform: scale(1.04) translateY(-3%) !important;
+}
+
+/* 5. Editorial Monochrome to Vivid */
+.matcha-gallery--hover-grayscale .matcha-gallery__item-inner img {
+	filter: grayscale(100%) contrast(92%) !important;
+}
+.matcha-gallery--hover-grayscale .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-grayscale .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	filter: grayscale(0%) contrast(105%) !important;
+	transform: scale(1.05) !important;
+}
+
+/* 6. Clean Static (No Motion) */
+.matcha-gallery--hover-none .matcha-gallery__item-inner:hover img,
+.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+	transform: none !important;
+}
+.matcha-gallery--hover-none .matcha-gallery__item-inner:hover,
+.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner {
+	transform: none !important;
+	box-shadow: none !important;
+}
+
+/* Multimedia Video Badges & Lightbox Player */
+.matcha-item-video-badge {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: rgba(15, 23, 42, 0.78);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 11;
+	pointer-events: none;
+	transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.matcha-item-video-badge svg {
+	margin-left: 1px;
+}
+.matcha-gallery__item-inner:hover .matcha-item-video-badge,
+.matcha-gallery__item.is-touch-revealed .matcha-item-video-badge {
+	transform: scale(1.1);
+	background: var(--matcha-accent, #607d66);
+	border-color: rgba(255, 255, 255, 0.7);
+}
+
+.matcha-lightbox__video-container {
+	position: relative;
+	width: 82vw;
+	max-width: 1040px;
+	aspect-ratio: 16 / 9;
+	background: #000000;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 25px 60px rgba(0, 0, 0, 0.88);
+	animation: matcha-video-appear 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes matcha-video-appear {
+	from {
+		opacity: 0;
+		transform: scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+.matcha-lightbox__video-iframe,
+.matcha-lightbox__video-player {
+	width: 100%;
+	height: 100%;
+	border: none;
+	display: block;
+}
+.matcha-lightbox__video-player {
+	object-fit: contain;
 }
 
 /* Hover overlay */
@@ -1169,23 +1781,26 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	align-items: center;
 	justify-content: center;
 	background: rgba(0, 0, 0, 0);
-	transition: background var(--matcha-transition);
+	transition: background var(--matcha-transition, 0.28s ease);
 	pointer-events: none;
+	z-index: 4;
 }
 
-.matcha-gallery__item-inner:hover .matcha-gallery__overlay {
-	background: rgba(0, 0, 0, 0.2);
+.matcha-gallery__item-inner:hover .matcha-gallery__overlay,
+.matcha-gallery__item:hover .matcha-gallery__overlay {
+	background: transparent;
 }
 
 .matcha-gallery__zoom-icon {
 	color: #fff;
 	opacity: 0;
 	transform: scale(0.7);
-	transition: all var(--matcha-transition);
+	transition: all var(--matcha-transition, 0.25s ease);
 	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.matcha-gallery__item-inner:hover .matcha-gallery__zoom-icon {
+.matcha-gallery__item-inner:hover .matcha-gallery__zoom-icon,
+.matcha-gallery__item:hover .matcha-gallery__zoom-icon {
 	opacity: 1;
 	transform: scale(1);
 }
@@ -1546,6 +2161,48 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
+.matcha-lightbox__shop {
+	margin-top: 8px !important;
+	display: none;
+}
+
+.matcha-lb-shop-btn {
+	pointer-events: auto !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 7px !important;
+	background: rgba(22, 101, 52, 0.94) !important;
+	border: 1px solid rgba(74, 222, 128, 0.35) !important;
+	color: #ffffff !important;
+	text-decoration: none !important;
+	padding: 6px 16px !important;
+	border-radius: 100px !important;
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 12px rgba(34, 197, 94, 0.25) !important;
+	backdrop-filter: blur(12px) !important;
+	-webkit-backdrop-filter: blur(12px) !important;
+	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+	cursor: pointer !important;
+}
+
+.matcha-lb-shop-btn:hover {
+	background: #15803d !important;
+	border-color: rgba(74, 222, 128, 0.7) !important;
+	transform: translateY(-1px) scale(1.04) !important;
+	box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45), 0 0 18px rgba(34, 197, 94, 0.4) !important;
+	color: #ffffff !important;
+}
+
+.matcha-lb-shop-price {
+	background: rgba(255, 255, 255, 0.22) !important;
+	padding: 1px 7px !important;
+	border-radius: 999px !important;
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.2px !important;
+}
+
 /* Bottom Filmstrip (Sleek Floating Frosted Glass Dock) */
 .matcha-lightbox__filmstrip {
 	position: fixed !important;
@@ -1849,4 +2506,6 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 	color: #ffffff;
 	box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+
 
