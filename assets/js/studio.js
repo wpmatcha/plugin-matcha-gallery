@@ -1605,6 +1605,407 @@
         </div>
       </div>
     `;
+    }, getRatioLabel = function(ratioKey, orientation = "portrait") {
+      const isLandscape = orientation === "landscape";
+      const map = {
+        "24x36": isLandscape ? '36" \xD7 24"' : '24" \xD7 36"',
+        "18x24": isLandscape ? '24" \xD7 18"' : '18" \xD7 24"',
+        "12x12": '12" \xD7 12"',
+        "16x20": isLandscape ? '20" \xD7 16"' : '16" \xD7 20"',
+        "20x30": isLandscape ? '30" \xD7 20"' : '20" \xD7 30"',
+        "panoramic": isLandscape ? "16:9 Wide" : "9:16 Tall"
+      };
+      return map[ratioKey] || ratioKey;
+    }, positionFloatingToolbar = function(item) {
+      const toolbar = document.getElementById("artWallFloatingToolbar");
+      if (!toolbar || !item || getState().config.layout !== "art-wall") {
+        if (toolbar) toolbar.style.display = "none";
+        return;
+      }
+      toolbar.style.display = "flex";
+      const itemLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const itemTop = parseInt(item.style.top, 10) || item.offsetTop;
+      const itemWidth = item.offsetWidth || 300;
+      const centerX = itemLeft + itemWidth / 2;
+      const topY = Math.max(10, itemTop - 46);
+      toolbar.style.left = `${Math.round(centerX)}px`;
+      toolbar.style.top = `${Math.round(topY)}px`;
+      const moldClass = item.dataset.frameMolding || (item.classList.contains("mold-oak") ? "mold-oak" : item.classList.contains("mold-white") ? "mold-white" : "mold-black");
+      const moldLabel = document.getElementById("floatingBarMoldLabel");
+      if (moldLabel) {
+        moldLabel.textContent = moldClass === "mold-oak" ? "Oak" : moldClass === "mold-white" ? "White" : "Black";
+      }
+      const ratioKey = item.dataset.frameRatio || "18x24";
+      const orientation = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? "landscape" : "portrait");
+      const isLandscape = orientation === "landscape";
+      const ratioLabel = document.getElementById("floatingBarRatioLabel");
+      if (ratioLabel) {
+        ratioLabel.textContent = getRatioLabel(ratioKey, orientation).replace(/"/g, "").trim();
+      }
+      const orientLabel = document.getElementById("floatingBarOrientLabel");
+      if (orientLabel) {
+        orientLabel.textContent = isLandscape ? "Landscape" : "Portrait";
+      }
+      const rotateBtn = document.getElementById("floatingBarRotateBtn");
+      if (rotateBtn) {
+        rotateBtn.classList.toggle("active", isLandscape);
+      }
+    }, selectArtFrame = function(item) {
+      if (!item) return;
+      const canvas = document.getElementById("studio-canvas");
+      if (canvas) {
+        canvas.querySelectorAll(".matcha-gallery__item--wall-frame").forEach((el) => el.classList.remove("selected-frame"));
+      }
+      item.classList.add("selected-frame");
+      selectedArtFrameEl = item;
+      positionFloatingToolbar(item);
+      const moldClass = item.dataset.frameMolding || (item.classList.contains("mold-oak") ? "mold-oak" : item.classList.contains("mold-white") ? "mold-white" : "mold-black");
+      document.querySelectorAll(".frame-mold-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.mold === moldClass);
+      });
+      const ratioKey = item.dataset.frameRatio || "18x24";
+      document.querySelectorAll(".ratio-opt-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.ratio === ratioKey);
+      });
+      const orientation = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? "landscape" : "portrait");
+      updateOrientationUI(orientation === "landscape");
+    }, updateOrientationUI = function(isLandscape) {
+      const portraitBtn = document.querySelector('.frame-orient-btn[data-orient="portrait"]');
+      const landscapeBtn = document.querySelector('.frame-orient-btn[data-orient="landscape"]');
+      if (portraitBtn && landscapeBtn) {
+        portraitBtn.classList.toggle("active", !isLandscape);
+        landscapeBtn.classList.toggle("active", isLandscape);
+      }
+      const badge = document.getElementById("st-wall-orient-badge");
+      if (badge) {
+        badge.textContent = isLandscape ? "LANDSCAPE" : "PORTRAIT";
+        badge.style.color = isLandscape ? "#60a5fa" : "#5ec27f";
+      }
+      syncRatioButtonsText(isLandscape);
+    }, syncRatioButtonsText = function(isLandscape) {
+      document.querySelectorAll(".ratio-opt-btn").forEach((btn) => {
+        const r = btn.dataset.ratio;
+        btn.textContent = getRatioLabel(r, isLandscape ? "landscape" : "portrait");
+      });
+    }, alignActiveFrameEyeLevel = function(e) {
+      if (e) e.stopPropagation();
+      const canvas = document.getElementById("studio-canvas");
+      const item = selectedArtFrameEl || canvas?.querySelector(".matcha-gallery__item--wall-frame");
+      if (!item) return;
+      const grid = item.closest(".matcha-gallery__grid");
+      if (!grid) return;
+      const gridHeight = grid.offsetHeight || 860;
+      const eyeLevelY = gridHeight * 0.5;
+      const newTop = Math.max(10, Math.round(eyeLevelY - item.offsetHeight / 2));
+      item.style.top = `${newTop}px`;
+      positionFloatingToolbar(item);
+      const guide = document.getElementById("artWallGuide");
+      if (guide) {
+        guide.classList.add("snapped");
+        setTimeout(() => guide.classList.remove("snapped"), 800);
+      }
+      saveArtWallFramesFromDOM();
+    }, cycleActiveFrameMolding = function(e) {
+      if (e) e.stopPropagation();
+      const canvas = document.getElementById("studio-canvas");
+      const item = selectedArtFrameEl || canvas?.querySelector(".matcha-gallery__item--wall-frame");
+      if (!item) return;
+      const currentMold = item.dataset.frameMolding || (item.classList.contains("mold-oak") ? "mold-oak" : item.classList.contains("mold-white") ? "mold-white" : "mold-black");
+      let nextMold = "mold-black";
+      if (currentMold === "mold-black") nextMold = "mold-oak";
+      else if (currentMold === "mold-oak") nextMold = "mold-white";
+      else nextMold = "mold-black";
+      if (!isPro && nextMold !== "mold-black") {
+        showProModal("Luxury Frame Moldings", "Natural Oak and Nordic White museum picture moldings are available in Matcha Gallery Pro.");
+        return;
+      }
+      setFrameMolding(item, nextMold);
+    }, setFrameMolding = function(item, moldClass) {
+      item.classList.remove("mold-black", "mold-oak", "mold-white", "matcha-wall-mold--mold-black", "matcha-wall-mold--mold-oak", "matcha-wall-mold--mold-white");
+      item.classList.add(moldClass, `matcha-wall-mold--${moldClass}`);
+      item.dataset.frameMolding = moldClass;
+      const moldLabel = document.getElementById("floatingBarMoldLabel");
+      if (moldLabel) {
+        moldLabel.textContent = moldClass === "mold-oak" ? "Oak" : moldClass === "mold-white" ? "White" : "Black";
+      }
+      document.querySelectorAll(".frame-mold-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.mold === moldClass);
+      });
+      saveArtWallFramesFromDOM();
+    }, cycleActiveFrameRatio = function(e) {
+      if (e) e.stopPropagation();
+      const canvas = document.getElementById("studio-canvas");
+      const item = selectedArtFrameEl || canvas?.querySelector(".matcha-gallery__item--wall-frame");
+      if (!item) return;
+      const currentRatio = item.dataset.frameRatio || "18x24";
+      const nextIdx = (wallRatios.indexOf(currentRatio) + 1) % wallRatios.length;
+      setFrameRatio(item, wallRatios[nextIdx]);
+    }, setFrameRatio = function(item, ratioKey) {
+      item.dataset.frameRatio = ratioKey;
+      const orientation = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? "landscape" : "portrait");
+      const isLandscape = orientation === "landscape";
+      let targetW, targetH;
+      if (ratioKey === "24x36") {
+        targetW = isLandscape ? 440 : 330;
+        targetH = isLandscape ? 330 : 440;
+      } else if (ratioKey === "18x24") {
+        targetW = isLandscape ? 380 : 290;
+        targetH = isLandscape ? 290 : 380;
+      } else if (ratioKey === "12x12") {
+        targetW = 260;
+        targetH = 260;
+      } else if (ratioKey === "16x20") {
+        targetW = isLandscape ? 300 : 240;
+        targetH = isLandscape ? 240 : 300;
+      } else if (ratioKey === "20x30") {
+        targetW = isLandscape ? 420 : 330;
+        targetH = isLandscape ? 330 : 420;
+      } else if (ratioKey === "panoramic") {
+        targetW = isLandscape ? 400 : 230;
+        targetH = isLandscape ? 230 : 400;
+      } else {
+        targetW = isLandscape ? 380 : 300;
+        targetH = isLandscape ? 300 : 380;
+      }
+      const currentLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const currentTop = parseInt(item.style.top, 10) || item.offsetTop;
+      const currentW = item.offsetWidth || 300;
+      const currentH = item.offsetHeight || 380;
+      const centerX = currentLeft + currentW / 2;
+      const centerY = currentTop + currentH / 2;
+      const grid = item.closest(".matcha-gallery__grid");
+      const gridW = grid ? grid.offsetWidth : 1180;
+      const gridH = grid ? grid.offsetHeight : 860;
+      let newLeft = Math.round(centerX - targetW / 2);
+      let newTop = Math.round(centerY - targetH / 2);
+      newLeft = Math.max(10, Math.min(newLeft, gridW - targetW - 10));
+      newTop = Math.max(10, Math.min(newTop, gridH - targetH - 10));
+      item.style.width = `${targetW}px`;
+      item.style.height = `${targetH}px`;
+      item.style.left = `${newLeft}px`;
+      item.style.top = `${newTop}px`;
+      const badge = item.querySelector(".matcha-wall-dim-badge");
+      if (badge) badge.textContent = getRatioLabel(ratioKey, orientation);
+      const ratioLabel = document.getElementById("floatingBarRatioLabel");
+      if (ratioLabel) ratioLabel.textContent = getRatioLabel(ratioKey, orientation).replace(/"/g, "").trim();
+      document.querySelectorAll(".ratio-opt-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.ratio === ratioKey);
+      });
+      positionFloatingToolbar(item);
+      saveArtWallFramesFromDOM();
+    }, toggleActiveFrameOrientation = function(e) {
+      if (e) e.stopPropagation();
+      const canvas = document.getElementById("studio-canvas");
+      const item = selectedArtFrameEl || canvas?.querySelector(".matcha-gallery__item--wall-frame");
+      if (!item) return;
+      const currentOrient = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? "landscape" : "portrait");
+      const nextOrient = currentOrient === "portrait" ? "landscape" : "portrait";
+      setFrameOrientation(item, nextOrient);
+    }, setFrameOrientation = function(item, orientation) {
+      item.dataset.frameOrientation = orientation;
+      const ratioKey = item.dataset.frameRatio || "18x24";
+      const isLandscape = orientation === "landscape";
+      let newW, newH;
+      if (ratioKey === "24x36") {
+        newW = isLandscape ? 440 : 330;
+        newH = isLandscape ? 330 : 440;
+      } else if (ratioKey === "18x24") {
+        newW = isLandscape ? 380 : 290;
+        newH = isLandscape ? 290 : 380;
+      } else if (ratioKey === "12x12") {
+        newW = 260;
+        newH = 260;
+      } else if (ratioKey === "16x20") {
+        newW = isLandscape ? 300 : 240;
+        newH = isLandscape ? 240 : 300;
+      } else if (ratioKey === "20x30") {
+        newW = isLandscape ? 420 : 330;
+        newH = isLandscape ? 330 : 420;
+      } else if (ratioKey === "panoramic") {
+        newW = isLandscape ? 400 : 225;
+        newH = isLandscape ? 225 : 400;
+      } else {
+        const curW2 = parseInt(item.style.width, 10) || item.offsetWidth || 300;
+        const curH2 = parseInt(item.style.height, 10) || item.offsetHeight || 380;
+        newW = isLandscape ? Math.max(curW2, curH2) : Math.min(curW2, curH2);
+        newH = isLandscape ? Math.min(curW2, curH2) : Math.max(curW2, curH2);
+      }
+      const currentLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const currentTop = parseInt(item.style.top, 10) || item.offsetTop;
+      const curW = parseInt(item.style.width, 10) || item.offsetWidth || 300;
+      const curH = parseInt(item.style.height, 10) || item.offsetHeight || 380;
+      const centerX = currentLeft + curW / 2;
+      const centerY = currentTop + curH / 2;
+      const grid = item.closest(".matcha-gallery__grid");
+      const gridW = grid ? grid.offsetWidth : 1180;
+      const gridH = grid ? grid.offsetHeight : 860;
+      let newLeft = Math.round(centerX - newW / 2);
+      let newTop = Math.round(centerY - newH / 2);
+      newLeft = Math.max(10, Math.min(newLeft, gridW - newW - 10));
+      newTop = Math.max(10, Math.min(newTop, gridH - newH - 10));
+      item.style.width = `${newW}px`;
+      item.style.height = `${newH}px`;
+      item.style.left = `${newLeft}px`;
+      item.style.top = `${newTop}px`;
+      const badge = item.querySelector(".matcha-wall-dim-badge");
+      if (badge) badge.textContent = getRatioLabel(ratioKey, orientation);
+      const orientLabel = document.getElementById("floatingBarOrientLabel");
+      if (orientLabel) orientLabel.textContent = isLandscape ? "Landscape" : "Portrait";
+      const rotateBtn = document.getElementById("floatingBarRotateBtn");
+      if (rotateBtn) rotateBtn.classList.toggle("active", isLandscape);
+      updateOrientationUI(isLandscape);
+      positionFloatingToolbar(item);
+      saveArtWallFramesFromDOM();
+    }, bringActiveFrameToFront = function(e) {
+      if (e) e.stopPropagation();
+      const canvas = document.getElementById("studio-canvas");
+      const item = selectedArtFrameEl || canvas?.querySelector(".matcha-gallery__item--wall-frame");
+      if (!item) return;
+      let maxZ = 10;
+      canvas?.querySelectorAll(".matcha-gallery__item--wall-frame").forEach((el) => {
+        const z = parseInt(el.style.zIndex || "10", 10);
+        if (z > maxZ) maxZ = z;
+      });
+      item.style.zIndex = maxZ + 2;
+      saveArtWallFramesFromDOM();
+    }, saveArtWallFramesFromDOM = function() {
+      const canvas = document.getElementById("studio-canvas");
+      if (!canvas) return;
+      const items = Array.from(canvas.querySelectorAll(".matcha-gallery__item--wall-frame"));
+      if (!items.length) return;
+      const frames = items.map((el) => {
+        const id = parseInt(el.dataset.id, 10);
+        const left = parseInt(el.style.left, 10) || 0;
+        const top = parseInt(el.style.top, 10) || 0;
+        const width = parseInt(el.style.width, 10) || el.offsetWidth;
+        const height = parseInt(el.style.height, 10) || el.offsetHeight;
+        const ratio = el.dataset.frameRatio || "18x24";
+        const orientation = el.dataset.frameOrientation || (width > height ? "landscape" : "portrait");
+        const molding = el.dataset.frameMolding || (el.classList.contains("mold-oak") ? "mold-oak" : el.classList.contains("mold-white") ? "mold-white" : "mold-black");
+        const zIndex = parseInt(el.style.zIndex, 10) || 10;
+        return { id, left, top, width, height, ratio, orientation, molding, zIndex };
+      });
+      patchConfig({ artWallFrames: frames });
+      autosaveSoon();
+    }, applyWallPreset = function(presetName) {
+      const preset = wallPresets[presetName] || wallPresets.triptych;
+      const canvas = document.getElementById("studio-canvas");
+      if (!canvas) return;
+      const items = Array.from(canvas.querySelectorAll(".matcha-gallery__item--wall-frame"));
+      const newFrames = [];
+      items.forEach((item, index) => {
+        const config = preset[index % preset.length];
+        if (!config) return;
+        const isLandscape = config.orientation === "landscape" || config.width > config.height;
+        const orient = isLandscape ? "landscape" : "portrait";
+        const mold = config.molding || "mold-black";
+        const ratio = config.ratio || "18x24";
+        item.style.left = `${config.left}px`;
+        item.style.top = `${config.top}px`;
+        item.style.width = `${config.width}px`;
+        item.style.height = `${config.height}px`;
+        item.dataset.frameRatio = ratio;
+        item.dataset.frameOrientation = orient;
+        item.dataset.frameMolding = mold;
+        item.classList.remove("mold-black", "mold-oak", "mold-white", "matcha-wall-mold--mold-black", "matcha-wall-mold--mold-oak", "matcha-wall-mold--mold-white");
+        item.classList.add(mold, `matcha-wall-mold--${mold}`);
+        const badge = item.querySelector(".matcha-wall-dim-badge");
+        if (badge) badge.textContent = getRatioLabel(ratio, orient);
+        newFrames.push({
+          id: parseInt(item.dataset.id, 10),
+          left: config.left,
+          top: config.top,
+          width: config.width,
+          height: config.height,
+          ratio,
+          orientation: orient,
+          molding: mold,
+          zIndex: 10 + index
+        });
+      });
+      patchConfig({ wallPreset: presetName, artWallFrames: newFrames });
+      renderRightPanel();
+      if (items[0]) selectArtFrame(items[0]);
+      autosaveSoon();
+    }, setupArtWallEvents = function(canvas) {
+      const grid = canvas.querySelector(".matcha-gallery--art-wall .matcha-gallery__grid");
+      if (!grid) return;
+      document.getElementById("artWallBtnEyeLevel")?.addEventListener("click", alignActiveFrameEyeLevel);
+      document.getElementById("artWallBtnMold")?.addEventListener("click", cycleActiveFrameMolding);
+      document.getElementById("artWallBtnRatio")?.addEventListener("click", cycleActiveFrameRatio);
+      document.getElementById("floatingBarRotateBtn")?.addEventListener("click", toggleActiveFrameOrientation);
+      document.getElementById("artWallBtnFront")?.addEventListener("click", bringActiveFrameToFront);
+      grid.addEventListener("pointerdown", (e) => {
+        const cfg = getState().config;
+        if (cfg.layout !== "art-wall") return;
+        if (e.target.closest("button, svg, input, #artWallFloatingToolbar, .matcha-span-btn")) return;
+        const item = e.target.closest(".matcha-gallery__item--wall-frame");
+        if (!item) return;
+        isDraggingArtFrame = true;
+        artDragTarget = item;
+        selectArtFrame(item);
+        const gridRect = grid.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+        const scale = typeof canvasZoom === "number" && canvasZoom > 0 ? canvasZoom / 100 : 1;
+        artDragStartX = e.clientX;
+        artDragStartY = e.clientY;
+        frameStartLeft = parseInt(item.style.left, 10) || Math.round((itemRect.left - gridRect.left) / scale);
+        frameStartTop = parseInt(item.style.top, 10) || Math.round((itemRect.top - gridRect.top) / scale);
+        item.classList.add("is-dragging");
+        try {
+          item.setPointerCapture(e.pointerId);
+        } catch (err) {
+        }
+      });
+      grid.addEventListener("pointermove", (e) => {
+        if (!isDraggingArtFrame || !artDragTarget) return;
+        const scale = typeof canvasZoom === "number" && canvasZoom > 0 ? canvasZoom / 100 : 1;
+        const dx = (e.clientX - artDragStartX) / scale;
+        const dy = (e.clientY - artDragStartY) / scale;
+        let newLeft = frameStartLeft + dx;
+        let newTop = frameStartTop + dy;
+        const gridW = grid.offsetWidth;
+        const gridH = grid.offsetHeight;
+        const itemW = artDragTarget.offsetWidth;
+        const itemH = artDragTarget.offsetHeight;
+        newLeft = Math.max(10, Math.min(newLeft, gridW - itemW - 10));
+        newTop = Math.max(10, Math.min(newTop, gridH - itemH - 10));
+        const cfg = getState().config;
+        const guide = document.getElementById("artWallGuide");
+        const eyeLevelY = gridH * 0.5;
+        const frameCenterY = newTop + itemH / 2;
+        if (cfg.artWallEyeLevel !== false && Math.abs(frameCenterY - eyeLevelY) < 18) {
+          newTop = eyeLevelY - itemH / 2;
+          if (guide) guide.classList.add("snapped");
+        } else {
+          if (guide) guide.classList.remove("snapped");
+        }
+        artDragTarget.style.left = `${Math.round(newLeft)}px`;
+        artDragTarget.style.top = `${Math.round(newTop)}px`;
+        positionFloatingToolbar(artDragTarget);
+      });
+      const endDrag = (e) => {
+        if (!isDraggingArtFrame) return;
+        isDraggingArtFrame = false;
+        if (artDragTarget) {
+          artDragTarget.classList.remove("is-dragging");
+          try {
+            artDragTarget.releasePointerCapture(e.pointerId);
+          } catch (err) {
+          }
+          positionFloatingToolbar(artDragTarget);
+          artDragTarget = null;
+        }
+        const guide = document.getElementById("artWallGuide");
+        if (guide) guide.classList.remove("snapped");
+        saveArtWallFramesFromDOM();
+      };
+      grid.addEventListener("pointerup", endDrag);
+      grid.addEventListener("pointercancel", endDrag);
+      const firstFrame = grid.querySelector(".matcha-gallery__item--wall-frame");
+      if (firstFrame) {
+        selectArtFrame(firstFrame);
+      }
     }, bindWallProperties = function() {
       document.querySelectorAll(".wall-color-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -1624,14 +2025,18 @@
       document.querySelectorAll(".preset-wall-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const preset = btn.dataset.preset;
-          patchConfig({ wallPreset: preset });
-          renderRightPanel();
-          renderCanvas();
-          autosaveSoon();
+          if (!isPro && preset !== "triptych") {
+            showProModal("Curated Wall Presets", "Salon Wall, Staircase, and Symmetric Quad curated presets are available in Matcha Gallery Pro.");
+            return;
+          }
+          applyWallPreset(preset);
         });
       });
       document.getElementById("st-eyelevel-toggle")?.addEventListener("change", (e) => {
-        patchConfig({ artWallEyeLevel: e.target.checked });
+        const active = e.target.checked;
+        patchConfig({ artWallEyeLevel: active });
+        const guide = document.getElementById("artWallGuide");
+        if (guide) guide.style.display = active ? "block" : "none";
         updateStatusChips();
         autosaveSoon();
       });
@@ -1643,35 +2048,51 @@
             return;
           }
           patchConfig({ wallMolding: mold });
-          renderRightPanel();
-          renderCanvas();
-          autosaveSoon();
+          if (selectedArtFrameEl) {
+            setFrameMolding(selectedArtFrameEl, mold);
+          } else {
+            renderRightPanel();
+            renderCanvas();
+            autosaveSoon();
+          }
         });
       });
       document.querySelectorAll(".frame-orient-btn[data-orient]").forEach((btn) => {
         btn.addEventListener("click", () => {
           const orient = btn.dataset.orient;
           patchConfig({ wallFrameOrientation: orient });
-          renderRightPanel();
-          renderCanvas();
-          autosaveSoon();
+          if (selectedArtFrameEl) {
+            setFrameOrientation(selectedArtFrameEl, orient);
+          } else {
+            renderRightPanel();
+            renderCanvas();
+            autosaveSoon();
+          }
         });
       });
       document.getElementById("btn-wall-flip-orient")?.addEventListener("click", () => {
         const cur = getState().config.wallFrameOrientation || "portrait";
         const next = cur === "portrait" ? "landscape" : "portrait";
         patchConfig({ wallFrameOrientation: next });
-        renderRightPanel();
-        renderCanvas();
-        autosaveSoon();
+        if (selectedArtFrameEl) {
+          setFrameOrientation(selectedArtFrameEl, next);
+        } else {
+          renderRightPanel();
+          renderCanvas();
+          autosaveSoon();
+        }
       });
       document.querySelectorAll(".ratio-opt-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const ratio = btn.dataset.ratio;
           patchConfig({ wallFrameRatio: ratio });
-          renderRightPanel();
-          renderCanvas();
-          autosaveSoon();
+          if (selectedArtFrameEl) {
+            setFrameRatio(selectedArtFrameEl, ratio);
+          } else {
+            renderRightPanel();
+            renderCanvas();
+            autosaveSoon();
+          }
         });
       });
       document.getElementById("st-spatial-tilt-toggle")?.addEventListener("change", (e) => {
@@ -3343,9 +3764,6 @@
                 Active Skin: <strong id="activeSkinLabel" style="color:#5ec27f;">Pure Minimalist</strong>
               </span>
             </div>
-            <div id="artWallGuide" class="art-wall-guide-line">
-              <span class="art-wall-guide-label">57" Museum Eye-Level</span>
-            </div>
           </div>
 
           <div id="studio-canvas-container">
@@ -3581,6 +3999,48 @@
       }
     };
     let isSpatial3D = true;
+    const wallPresets = {
+      triptych: [
+        { left: 40, top: 180, width: 320, height: 440, ratio: "24x36", molding: "mold-black" },
+        { left: 395, top: 140, width: 370, height: 510, ratio: "24x36", molding: "mold-oak" },
+        { left: 795, top: 180, width: 320, height: 440, ratio: "24x36", molding: "mold-black" },
+        { left: 100, top: 660, width: 270, height: 340, ratio: "18x24", molding: "mold-white" },
+        { left: 440, top: 690, width: 270, height: 270, ratio: "12x12", molding: "mold-oak" },
+        { left: 780, top: 660, width: 270, height: 340, ratio: "18x24", molding: "mold-black" }
+      ],
+      salon: [
+        { left: 40, top: 60, width: 330, height: 440, ratio: "24x36", molding: "mold-black" },
+        { left: 410, top: 80, width: 290, height: 380, ratio: "18x24", molding: "mold-oak" },
+        { left: 740, top: 60, width: 240, height: 240, ratio: "12x12", molding: "mold-white" },
+        { left: 740, top: 340, width: 240, height: 300, ratio: "16x20", molding: "mold-black" },
+        { left: 410, top: 500, width: 290, height: 380, ratio: "18x24", molding: "mold-oak" },
+        { left: 40, top: 540, width: 330, height: 420, ratio: "20x30", molding: "mold-black" }
+      ],
+      staircase: [
+        { left: 50, top: 70, width: 290, height: 380, ratio: "18x24", molding: "mold-black" },
+        { left: 240, top: 180, width: 290, height: 380, ratio: "18x24", molding: "mold-oak" },
+        { left: 430, top: 290, width: 290, height: 380, ratio: "18x24", molding: "mold-white" },
+        { left: 620, top: 400, width: 290, height: 380, ratio: "18x24", molding: "mold-black" },
+        { left: 810, top: 160, width: 280, height: 280, ratio: "12x12", molding: "mold-oak" },
+        { left: 840, top: 490, width: 280, height: 370, ratio: "18x24", molding: "mold-black" }
+      ],
+      symmetric: [
+        { left: 120, top: 70, width: 400, height: 280, ratio: "18x24", molding: "mold-black", orientation: "landscape" },
+        { left: 600, top: 70, width: 400, height: 280, ratio: "18x24", molding: "mold-black", orientation: "landscape" },
+        { left: 120, top: 380, width: 400, height: 280, ratio: "18x24", molding: "mold-oak", orientation: "landscape" },
+        { left: 600, top: 380, width: 400, height: 280, ratio: "18x24", molding: "mold-oak", orientation: "landscape" },
+        { left: 120, top: 690, width: 400, height: 280, ratio: "18x24", molding: "mold-white", orientation: "landscape" },
+        { left: 600, top: 690, width: 400, height: 280, ratio: "18x24", molding: "mold-white", orientation: "landscape" }
+      ]
+    };
+    const wallRatios = ["24x36", "18x24", "12x12", "16x20", "20x30", "panoramic"];
+    let selectedArtFrameEl = null;
+    let isDraggingArtFrame = false;
+    let artDragTarget = null;
+    let artDragStartX = 0;
+    let artDragStartY = 0;
+    let frameStartLeft = 0;
+    let frameStartTop = 0;
     async function runAI() {
       const ids = getState().config.imageIds || [];
       if (!ids.length) return alert("Please add images first.");
@@ -4020,146 +4480,179 @@
             ` : ""}
           </div>
         ` : ""}
-        <div class="matcha-gallery__grid">
-          ${medias.map((m, idx) => {
-        const meta = metaCache.get(m.id);
-        const keywords = (meta?.keywords || []).map((k) => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-"));
-        const tagStr = keywords.join(" ");
-        const secStr = (imgSectionsMap[m.id] || []).join(" ");
-        const colorStr = (meta?.colors || []).join(",");
-        const imgTitle = meta?.title || stripHtml(m.title?.rendered || "");
-        const imgCaption = meta?.caption || "";
-        const isAi = meta?.ai_generated && keywords.length > 0;
-        const mosaicRhythm = ["2x2", "1x1", "1x1", "2x1", "1x1", "1x2", "1x1", "2x1"];
-        const currentSpan = isPro && imageSpans[m.id] ? imageSpans[m.id] : cfg.layout === "mosaic" ? mosaicRhythm[idx % mosaicRhythm.length] : imageSpans[m.id] || "1x1";
-        const spanClass = cfg.layout === "mosaic" || cfg.layout === "pinwheel" ? `matcha-gallery__item--span-${currentSpan}` : "";
-        const link = imageLinks[m.id] || {};
-        const videoUrl = (cfg.imageVideos || {})[m.id] || "";
-        const hasVideo = !!videoUrl;
-        const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1 };
-        const zoom = isPro ? fp.zoom || 1 : 1;
-        const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
-        const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || "";
-        let itemStyle = "cursor:pointer;";
-        if (cfg.layout === "justified") {
-          const w = m.media_details?.width || 800;
-          const h = m.media_details?.height || 600;
-          const ratio = (w / h).toFixed(3);
-          itemStyle += `flex:${ratio} 1 calc(${cfg.rowHeight || 240}px * ${ratio});max-width:calc(${cfg.rowHeight || 240}px * ${ratio} * 2);`;
-        }
-        const isShop = !!(link.url && (link.price || link.productId || link.label && /shop/i.test(link.label) || link.url.includes("/product/")));
-        let itemExtraClass = "";
-        let itemExtraStyle = "";
-        let dimLabel = "";
-        const maxWallFrames = 3;
-        if (activeLayout === "art-wall") {
-          const orient = cfg.wallFrameOrientation || "portrait";
-          const ratio = cfg.wallFrameRatio || "18x24";
-          const isLand = orient === "landscape";
-          const ratioLabels = {
-            "24x36": isLand ? '36" \xD7 24"' : '24" \xD7 36"',
-            "18x24": isLand ? '24" \xD7 18"' : '18" \xD7 24"',
-            "12x12": '12" \xD7 12"',
-            "16x20": isLand ? '20" \xD7 16"' : '16" \xD7 20"',
-            "20x30": isLand ? '30" \xD7 20"' : '20" \xD7 30"',
-            "panoramic": isLand ? "16:9 Wide" : "9:16 Tall"
-          };
-          const currentLabel = ratioLabels[ratio] || (isLand ? '24" \xD7 18"' : '18" \xD7 24"');
-          if (idx >= maxWallFrames) {
-            itemExtraClass += " matcha-gallery__item--surplus";
-            itemExtraStyle += "display:none;";
-          } else {
-            itemExtraClass += ` matcha-gallery__item--wall-frame matcha-wall-mold--${cfg.wallMolding || "mold-black"}`;
-            if (idx === 1) itemExtraClass += " matcha-gallery__item--hero-frame";
-            dimLabel = idx === 1 ? `${currentLabel} (Centerpiece)` : currentLabel;
+        <div class="matcha-gallery__grid ${activeLayout === "art-wall" ? "matcha-wall-stage" : ""}">
+          ${activeLayout === "art-wall" ? `
+            <div class="art-wall-hint" id="artWallHint" style="display:flex;">
+              <span>\u{1F4A1}</span>
+              <span>Drag frames anywhere on wall \u2022 Magnetic snap active</span>
+            </div>
+            <div id="artWallGuide" class="art-wall-guide-line" style="${cfg.artWallEyeLevel !== false ? "display:block;" : "display:none;"}">
+              <span class="art-wall-guide-label">57" Museum Eye-Level</span>
+            </div>
+            <div class="frame-action-floating-bar" id="artWallFloatingToolbar" style="display:none;">
+              <button type="button" class="frame-bar-btn" id="artWallBtnEyeLevel" title="Snap Center to 57&quot; Eye-Level"><span>\u{1F4D0}</span><span>Eye-Level</span></button>
+              <div class="frame-bar-divider"></div>
+              <button type="button" class="frame-bar-btn" id="artWallBtnMold" title="Cycle Frame Molding"><span>\u{1F3A8}</span><span id="floatingBarMoldLabel">Black</span></button>
+              <div class="frame-bar-divider"></div>
+              <button type="button" class="frame-bar-btn" id="artWallBtnRatio" title="Cycle Frame Aspect Ratio"><span>\u{1F532}</span><span id="floatingBarRatioLabel">24\xD736</span></button>
+              <div class="frame-bar-divider"></div>
+              <button type="button" class="frame-bar-btn" id="floatingBarRotateBtn" title="Rotate Orientation (Portrait \u2194 Landscape)"><span>\u{1F504}</span><span id="floatingBarOrientLabel">Portrait</span></button>
+              <div class="frame-bar-divider"></div>
+              <button type="button" class="frame-bar-btn" id="artWallBtnFront" title="Bring Frame to Front"><span>\u2B06\uFE0F</span></button>
+            </div>
+          ` : ""}
+          ${(() => {
+        const presetKey = cfg.wallPreset || "triptych";
+        const preset = wallPresets[presetKey] || wallPresets.triptych;
+        const maxWallFrames = activeLayout === "art-wall" ? Math.max(preset.length, (cfg.artWallFrames || []).length, Math.min(medias.length, 6)) : 3;
+        return medias.map((m, idx) => {
+          const meta = metaCache.get(m.id);
+          const keywords = (meta?.keywords || []).map((k) => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-"));
+          const tagStr = keywords.join(" ");
+          const secStr = (imgSectionsMap[m.id] || []).join(" ");
+          const colorStr = (meta?.colors || []).join(",");
+          const imgTitle = meta?.title || stripHtml(m.title?.rendered || "");
+          const imgCaption = meta?.caption || "";
+          const isAi = meta?.ai_generated && keywords.length > 0;
+          const mosaicRhythm = ["2x2", "1x1", "1x1", "2x1", "1x1", "1x2", "1x1", "2x1"];
+          const currentSpan = isPro && imageSpans[m.id] ? imageSpans[m.id] : cfg.layout === "mosaic" ? mosaicRhythm[idx % mosaicRhythm.length] : imageSpans[m.id] || "1x1";
+          const spanClass = cfg.layout === "mosaic" || cfg.layout === "pinwheel" ? `matcha-gallery__item--span-${currentSpan}` : "";
+          const link = imageLinks[m.id] || {};
+          const videoUrl = (cfg.imageVideos || {})[m.id] || "";
+          const hasVideo = !!videoUrl;
+          const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1 };
+          const zoom = isPro ? fp.zoom || 1 : 1;
+          const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
+          const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || "";
+          let itemStyle = "cursor:pointer;";
+          if (cfg.layout === "justified") {
+            const w = m.media_details?.width || 800;
+            const h = m.media_details?.height || 600;
+            const ratio = (w / h).toFixed(3);
+            itemStyle += `flex:${ratio} 1 calc(${cfg.rowHeight || 240}px * ${ratio});max-width:calc(${cfg.rowHeight || 240}px * ${ratio} * 2);`;
           }
-        }
-        return `
-              <div class="matcha-gallery__item ${isAi ? "matcha-gallery__item--ai" : ""} ${hasVideo ? "matcha-gallery__item--video" : ""} ${spanClass} ${itemExtraClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" style="${itemStyle} ${itemExtraStyle}">
-                  <div class="matcha-gallery__item-inner">
-                    <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || "")}" style="${imgStyle}" />
-                    ${hasVideo ? `
-                      <div class="matcha-item-video-badge" aria-hidden="true" title="Watch Video">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                          <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                        </svg>
-                      </div>
-                    ` : ""}
-                    ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ""}
-                    ${isPro && cfg.proofingEnabled ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ""}
+          const isShop = !!(link.url && (link.price || link.productId || link.label && /shop/i.test(link.label) || link.url.includes("/product/")));
+          let itemExtraClass = "";
+          let itemExtraStyle = "";
+          let dimLabel = "";
+          let fRatio = "";
+          let fOrient = "";
+          let fMolding = "";
+          if (activeLayout === "art-wall") {
+            if (idx >= maxWallFrames) {
+              itemExtraClass += " matcha-gallery__item--surplus";
+              itemExtraStyle += "display:none;";
+            } else {
+              const savedFrame = cfg.artWallFrames && cfg.artWallFrames[idx] ? cfg.artWallFrames[idx] : null;
+              const presetFrame = preset[idx % preset.length] || preset[0];
+              const fLeft = savedFrame ? savedFrame.left : presetFrame.left;
+              const fTop = savedFrame ? savedFrame.top : presetFrame.top;
+              const fWidth = savedFrame ? savedFrame.width : presetFrame.width;
+              const fHeight = savedFrame ? savedFrame.height : presetFrame.height;
+              fRatio = savedFrame ? savedFrame.ratio || "18x24" : presetFrame.ratio || cfg.wallFrameRatio || "18x24";
+              fOrient = savedFrame ? savedFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait") : presetFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait");
+              fMolding = savedFrame ? savedFrame.molding || "mold-black" : presetFrame.molding || cfg.wallMolding || "mold-black";
+              const fZ = savedFrame ? savedFrame.zIndex || 10 + idx : 10 + idx;
+              itemExtraClass += ` matcha-gallery__item--wall-frame ${fMolding} matcha-wall-mold--${fMolding}`;
+              itemExtraStyle += `position:absolute;left:${fLeft}px;top:${fTop}px;width:${fWidth}px;height:${fHeight}px;z-index:${fZ};`;
+              dimLabel = getRatioLabel(fRatio, fOrient);
+              if (presetKey === "triptych" && idx === 1 && !savedFrame) {
+                dimLabel += " (Centerpiece)";
+              }
+            }
+          }
+          return `
+                <div class="matcha-gallery__item ${isAi ? "matcha-gallery__item--ai" : ""} ${hasVideo ? "matcha-gallery__item--video" : ""} ${spanClass} ${itemExtraClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" data-frame-ratio="${fRatio}" data-frame-orientation="${fOrient}" data-frame-molding="${fMolding}" style="${itemStyle} ${itemExtraStyle}">
+                    <div class="matcha-gallery__item-inner">
+                      <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || "")}" style="${imgStyle}" />
+                      ${hasVideo ? `
+                        <div class="matcha-item-video-badge" aria-hidden="true" title="Watch Video">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                          </svg>
+                        </div>
+                      ` : ""}
+                      ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ""}
+                      ${isPro && cfg.proofingEnabled ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ""}
 
-                    ${isPro && (cfg.layout === "mosaic" || cfg.layout === "pinwheel") ? `
-                      <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
-                        <button type="button" class="matcha-span-btn ${currentSpan === "1x1" ? "is-active" : ""}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
-                        <button type="button" class="matcha-span-btn ${currentSpan === "2x1" ? "is-active" : ""}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 \u2194</button>
-                        <button type="button" class="matcha-span-btn ${currentSpan === "1x2" ? "is-active" : ""}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 \u2195</button>
-                        <button type="button" class="matcha-span-btn ${currentSpan === "2x2" ? "is-active" : ""}" data-id="${m.id}" data-span="2x2" title="Hero Tile (2x2)">2x2 \u2922</button>
-                      </div>
-                    ` : ""}
+                      ${isPro && (cfg.layout === "mosaic" || cfg.layout === "pinwheel") ? `
+                        <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
+                          <button type="button" class="matcha-span-btn ${currentSpan === "1x1" ? "is-active" : ""}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
+                          <button type="button" class="matcha-span-btn ${currentSpan === "2x1" ? "is-active" : ""}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 \u2194</button>
+                          <button type="button" class="matcha-span-btn ${currentSpan === "1x2" ? "is-active" : ""}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 \u2195</button>
+                          <button type="button" class="matcha-span-btn ${currentSpan === "2x2" ? "is-active" : ""}" data-id="${m.id}" data-span="2x2" title="Hero Tile (2x2)">2x2 \u2922</button>
+                        </div>
+                      ` : ""}
 
-                    ${cfg.showTitle && imgTitle || cfg.showCaption && imgCaption || link.url || cfg.lightboxEnabled !== false ? `
-                      <div class="matcha-item-overlay"></div>
-                      <div class="matcha-item-frame" aria-hidden="true"></div>
-                      <div class="matcha-item-content">
-                        ${cfg.showTitle && imgTitle ? `<h4 class="matcha-item-title">${escapeHtml(imgTitle)}</h4>` : ""}
+                      ${cfg.showTitle && imgTitle || cfg.showCaption && imgCaption || link.url || cfg.lightboxEnabled !== false ? `
+                        <div class="matcha-item-overlay"></div>
+                        <div class="matcha-item-frame" aria-hidden="true"></div>
+                        <div class="matcha-item-content">
+                          ${cfg.showTitle && imgTitle ? `<h4 class="matcha-item-title">${escapeHtml(imgTitle)}</h4>` : ""}
 
-                        ${cfg.lightboxEnabled !== false || link.url ? `
-                          <div class="matcha-item-actions">
-                            ${cfg.lightboxEnabled !== false ? `
-                              <button type="button" class="matcha-action-btn matcha-action-btn--media" title="${hasVideo ? "Play Video" : "View Photo"}" aria-label="${hasVideo ? "Play Video" : "View Photo"}">
-                                ${hasVideo ? `
-                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                                    <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                                  </svg>
-                                ` : `
-                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                  </svg>
-                                `}
-                              </button>
-                            ` : ""}
+                          ${cfg.lightboxEnabled !== false || link.url ? `
+                            <div class="matcha-item-actions">
+                              ${cfg.lightboxEnabled !== false ? `
+                                <button type="button" class="matcha-action-btn matcha-action-btn--media" title="${hasVideo ? "Play Video" : "View Photo"}" aria-label="${hasVideo ? "Play Video" : "View Photo"}">
+                                  ${hasVideo ? `
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                                      <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                                    </svg>
+                                  ` : `
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                  `}
+                                </button>
+                              ` : ""}
 
-                            ${link.url ? `
-                              <span class="matcha-action-btn matcha-action-btn--link ${isShop ? "matcha-action-btn--shop" : ""}" title="${escapeHtml(link.label || (link.price ? `Shop (${link.price})` : isShop ? "Shop Product" : "Visit Link"))}">
-                                ${isShop ? `
-                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                                ` : `
-                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                                `}
-                              </span>
-                            ` : ""}
-                          </div>
-                        ` : ""}
+                              ${link.url ? `
+                                <span class="matcha-action-btn matcha-action-btn--link ${isShop ? "matcha-action-btn--shop" : ""}" title="${escapeHtml(link.label || (link.price ? `Shop (${link.price})` : isShop ? "Shop Product" : "Visit Link"))}">
+                                  ${isShop ? `
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                  ` : `
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                                  `}
+                                </span>
+                              ` : ""}
+                            </div>
+                          ` : ""}
 
-                        ${link.price || cfg.showCaption && imgCaption || meta?.tags && meta.tags[0] ? `
-                          <div class="matcha-item-meta">
-                            ${link.price ? `
-                              <span class="matcha-item-price">${escapeHtml(link.price)}</span>
-                            ` : cfg.showCaption && imgCaption ? `
-                              <p class="matcha-item-caption">${escapeHtml(imgCaption)}</p>
-                            ` : meta?.tags && meta.tags[0] ? `
-                              <span class="matcha-item-category">${escapeHtml(meta.tags[0])}</span>
-                            ` : ""}
-                          </div>
-                        ` : ""}
-                      </div>
-                    ` : ""}
-                  </div>
-                  ${dimLabel ? `<div class="matcha-wall-dim-badge" aria-hidden="true">${escapeHtml(dimLabel)}</div>` : ""}
-              </div>
-            `;
-      }).join("")}
+                          ${link.price || cfg.showCaption && imgCaption || meta?.tags && meta.tags[0] ? `
+                            <div class="matcha-item-meta">
+                              ${link.price ? `
+                                <span class="matcha-item-price">${escapeHtml(link.price)}</span>
+                              ` : cfg.showCaption && imgCaption ? `
+                                <p class="matcha-item-caption">${escapeHtml(imgCaption)}</p>
+                              ` : meta?.tags && meta.tags[0] ? `
+                                <span class="matcha-item-category">${escapeHtml(meta.tags[0])}</span>
+                              ` : ""}
+                            </div>
+                          ` : ""}
+                        </div>
+                      ` : ""}
+                    </div>
+                    ${dimLabel ? `<div class="matcha-wall-dim-badge" aria-hidden="true">${escapeHtml(dimLabel)}</div>` : ""}
+                </div>
+              `;
+        }).join("");
+      })()}
           ${cfg.layout === "justified" ? '<div style="flex-grow:99999;min-width:100px;height:0;margin:0;padding:0;"></div>' : ""}
         </div>
-        ${activeLayout === "art-wall" && medias.length > 3 ? `
-          <div class="matcha-wall-surplus-bar">
-            <div class="matcha-wall-surplus-btn" style="cursor:default;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-              <span>+${medias.length - 3} More Exhibition Works in Viewer</span>
+        ${(() => {
+        const presetKey = cfg.wallPreset || "triptych";
+        const preset = wallPresets[presetKey] || wallPresets.triptych;
+        const maxWallFrames = activeLayout === "art-wall" ? Math.max(preset.length, (cfg.artWallFrames || []).length, Math.min(medias.length, 6)) : 3;
+        return activeLayout === "art-wall" && medias.length > maxWallFrames ? `
+            <div class="matcha-wall-surplus-bar">
+              <div class="matcha-wall-surplus-btn" style="cursor:default;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                <span>+${medias.length - maxWallFrames} More Exhibition Works in Viewer</span>
+              </div>
             </div>
-          </div>
-        ` : ""}
+          ` : "";
+      })()}
 
         ${activePagination && activePagination !== "none" ? `
           ${activePagination === "load-more" || isPro && activePagination === "infinite" ? `
@@ -4177,9 +4670,21 @@
       canvas.querySelectorAll(".matcha-gallery__item").forEach((item) => {
         item.addEventListener("click", (e) => {
           if (e.target.classList.contains("matcha-span-btn")) return;
+          if (activeLayout === "art-wall") {
+            selectArtFrame(item);
+            return;
+          }
           selectPhoto(parseInt(item.dataset.id));
         });
+        if (activeLayout === "art-wall") {
+          item.addEventListener("dblclick", () => {
+            selectPhoto(parseInt(item.dataset.id));
+          });
+        }
       });
+      if (activeLayout === "art-wall") {
+        setupArtWallEvents(canvas);
+      }
       if (cfg.layout === "mosaic" || cfg.layout === "pinwheel") {
         canvas.querySelectorAll(".matcha-span-btn").forEach((btn) => {
           btn.addEventListener("click", (e) => {
