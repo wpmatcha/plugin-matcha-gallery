@@ -76,12 +76,12 @@ Dynamic Gallery Wall
 | **AI Enrichment** | Manual Batch in Studio (interactive progress) | Studio Batch + Unattended Server Queue (Roadmap) |
 | **Generated Metadata** | Title, Alt Text, Caption, 4–6 Vision Keywords | Title, Alt, Caption, Keywords, Colors, Focal Zoom |
 | **Smart Focal Point** | Centering only (`1.0x` zoom) | Custom Focal Point + **1.0x – 3.0x Zoom Scale** |
-| **Layouts** | Grid, Masonry, Justified, Mosaic (standard) | Grid, Masonry, Justified, Mosaic + **Pinwheel, Bento, Custom Geometry Spans** |
+| **Layouts** | Grid, Masonry, Justified, Mosaic, **Curated Art Wall (Hero Triptych)** | Grid, Masonry, Justified, Mosaic, **Curated Art Wall (Salon, Staircase, Symmetric, Freeform Drag & 90° Frame Rotation)** + **Pinwheel, Bento, Custom Spans** |
 | **Filtering Modes** | Single-select filter pills (`All`, `Cats`, `Nature`) | Single-select + **Multi-Select Faceted Checkbox Filtering** |
 | **Toolbar & Controls Skins** | **Modern Capsule** (clean rounded pills, light & dark auto-adaptation) | **Modern Capsule** + **Minimalist Hairline**, **Obsidian Dark**, & **Frosted Glass** |
 | **Color Swatches** | Colors extracted and saved in meta | **Interactive Color Swatch Filter Bar** (click color pill to filter) |
 | **Smart Fill** | Triggers Pro Upgrade modal | **AI Smart Fill Geometry Matcher** (auto-arranges tile spans) |
-| **Picture Framing** | Frameless Clean (Modern) | Matte Black Metal, Natural Oak, Brushed Gold Brass, Glassmorphism 3D Float |
+| **Picture Framing** | Frameless Clean (Modern), **Matte Black Exhibition Molding** | Frameless Clean, **Matte Black, Natural Oak, Nordic White, Brushed Gold Brass, Glassmorphism Float** |
 | **Aesthetic Themes** | Clean Minimalist | Clean Minimalist, Glassmorphic Frost, Matcha Glow Lift |
 | **Preloaders** | Classic Matcha Spinner | Spinner, Soft Pulse, Shimmering Skeleton Boxes |
 | **Pagination** | All Photos (No Pagination) | Infinite Smooth Scroll, Numbered Pages Navigation |
@@ -153,6 +153,11 @@ Dynamic Gallery Wall
 * **Chromatic Palette Harmony Engine:** Clickable 6-swatch dominant harmony engine that highlights chromatic matches with hex backlight glow.
 * **Art Wall Frame Orientation & 90° Flip Engine:** Bidirectional Portrait ↔ Landscape orientation flip anchored around frame center points with boundary clamping, live dimension badge syncing (e.g. 18"×24" ↔ 24"×18"), dynamic inspector ratio button re-labeling, and dual control surfaces (floating frame toolbar + inspector panel).
 
+### 8. Curated Art Wall & Gallery Exhibition Architecture (Completed)
+* **Free Tier Core Value:** Built a production-grade 3-frame **Hero Triptych** layout available to all Free users without any artificial lockouts or watermarks (100% compliant with WordPress.org guidelines). Features museum-grade 57″ gallery eye-level alignment, classic Matte Black frame molding, passe-partout matting, subtle ambient wall shadow elevation, dimension badges (`24" × 36"`), and responsive vertical collapse on mobile (`< 768px`).
+* **Surplus Photo & Zero-Loss Lightbox Handling:** Galleries with >3 photos preserve all surplus images in the rendered DOM (`.matcha-gallery__item--surplus` with `display: none;`). An elegant exhibition pill button (`+N More Exhibition Works in Viewer`) allows visitors to immediately launch the Lightbox directly starting at photo index 3, with complete thumbnail strip and arrow navigation across the entire gallery collection.
+* **Pro Studio Tier:** Unlocks Salon, Staircase, and Symmetric layout geometry presets, freeform canvas coordinate drag-and-drop, 90° frame orientation flip, and luxury moldings (Natural Oak, Nordic White, Brushed Gold Brass, and Floating Glassmorphism). Gated via `matcha_gallery_allowed_wall_presets` and `matcha_gallery_allowed_wall_moldings` filters.
+
 ---
 
 ## 6. Git Repositories & Build Instructions
@@ -192,5 +197,5 @@ Dynamic Gallery Wall
 - [x] **Spatial 3D Tilt & Floating Action Dock:** Real-time perspective matrix transform with action dock on hover.
 - [x] **2026 AI-Native Intelligence Suite Prototype:** Floating AI Vibe Bar, Visual Echo semantic similarity re-clustering, and Chromatic Palette engine.
 - [x] **WordPress.org Directory Approval:** Approved & live in directory (`matcha-gallery`).
-- [ ] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
+- [x] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
 - [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org.

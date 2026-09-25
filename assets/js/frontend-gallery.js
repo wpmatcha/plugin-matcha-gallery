@@ -682,6 +682,15 @@
 					}
 				} );
 			} );
+
+			const surplusBtn = this.el.querySelector( '.matcha-wall-surplus-btn' );
+			if ( surplusBtn ) {
+				surplusBtn.addEventListener( 'click', ( e ) => {
+					e.preventDefault();
+					const startIndex = parseInt( surplusBtn.dataset.surplusStart, 10 ) || 3;
+					this.openLightbox( Math.min( startIndex, Math.max( 0, this.items.length - 1 ) ) );
+				} );
+			}
 		}
 
 		createLightbox() {

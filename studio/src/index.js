@@ -820,6 +820,13 @@ if (root) {
             </div>
             <div class="matcha-blueprint-desc">Custom tile spans</div>
           </div>
+          <div class="matcha-blueprint-card ${curLayout === 'art-wall' ? 'is-active' : ''}" data-layout="art-wall">
+            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
+            <div class="matcha-blueprint-title">
+              Curated Art Wall
+            </div>
+            <div class="matcha-blueprint-desc">Hero Triptych gallery</div>
+          </div>
           <div class="matcha-blueprint-card ${curLayout === 'bento' ? 'is-active' : ''}" data-layout="bento">
             <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
@@ -1017,7 +1024,12 @@ if (root) {
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.sliders} Dimensions & Gaps</span>
         </div>
-        ${cfg.layout === 'justified' ? `
+        ${cfg.layout === 'art-wall' ? `
+          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#5ec27f;margin-bottom:4px;">🏛️ Curated Art Wall (Hero Triptych)</div>
+            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">3-frame centerpiece composition with 57″ gallery eye-level alignment and museum passe-partout matting. Surplus photos open in the interactive viewer.</div>
+          </div>
+        ` : cfg.layout === 'justified' ? `
           <div class="range-row">
             <label>Row Height</label>
             <input id="st-row-height" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
@@ -3622,7 +3634,7 @@ if (root) {
     canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
 
     canvas.innerHTML = `
-      <div class="matcha-gallery matcha-gallery--${activeLayout} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
+      <div class="matcha-gallery matcha-gallery--${activeLayout} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
@@ -3724,8 +3736,23 @@ if (root) {
 
             const isShop = !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
 
+            let itemExtraClass = '';
+            let itemExtraStyle = '';
+            let dimLabel = '';
+            const maxWallFrames = 3;
+            if (activeLayout === 'art-wall') {
+              if (idx >= maxWallFrames) {
+                itemExtraClass += ' matcha-gallery__item--surplus';
+                itemExtraStyle += 'display:none;';
+              } else {
+                itemExtraClass += ` matcha-gallery__item--wall-frame matcha-wall-mold--${cfg.wallMolding || 'mold-black'}`;
+                if (idx === 1) itemExtraClass += ' matcha-gallery__item--hero-frame';
+                dimLabel = idx === 1 ? '24" × 36" (Centerpiece)' : '24" × 36"';
+              }
+            }
+
             return `
-              <div class="matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${hasVideo ? 'matcha-gallery__item--video' : ''} ${spanClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" style="${itemStyle}">
+              <div class="matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${hasVideo ? 'matcha-gallery__item--video' : ''} ${spanClass} ${itemExtraClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" style="${itemStyle} ${itemExtraStyle}">
                   <div class="matcha-gallery__item-inner">
                     <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || '')}" style="${imgStyle}" />
                     ${hasVideo ? `
@@ -3758,7 +3785,7 @@ if (root) {
                             ${cfg.lightboxEnabled !== false ? `
                               <button type="button" class="matcha-action-btn matcha-action-btn--media" title="${hasVideo ? 'Play Video' : 'View Photo'}" aria-label="${hasVideo ? 'Play Video' : 'View Photo'}">
                                 ${hasVideo ? `
-                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                                     <polygon points="6 3 20 12 6 21 6 3"></polygon>
                                   </svg>
                                 ` : `
@@ -3796,11 +3823,20 @@ if (root) {
                       </div>
                     ` : ''}
                   </div>
+                  ${dimLabel ? `<div class="matcha-wall-dim-badge" aria-hidden="true">${escapeHtml(dimLabel)}</div>` : ''}
               </div>
             `;
           }).join('')}
           ${cfg.layout === 'justified' ? '<div style="flex-grow:99999;min-width:100px;height:0;margin:0;padding:0;"></div>' : ''}
         </div>
+        ${(activeLayout === 'art-wall' && medias.length > 3) ? `
+          <div class="matcha-wall-surplus-bar">
+            <div class="matcha-wall-surplus-btn" style="cursor:default;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              <span>+${medias.length - 3} More Exhibition Works in Viewer</span>
+            </div>
+          </div>
+        ` : ''}
 
         ${(activePagination && activePagination !== 'none') ? `
           ${(activePagination === 'load-more' || (isPro && activePagination === 'infinite')) ? `

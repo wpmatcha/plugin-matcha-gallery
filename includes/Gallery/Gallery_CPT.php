@@ -159,9 +159,17 @@ final class Gallery_CPT {
 		$tags = array_filter( array_map( 'sanitize_title', (array) ( $cfg['aiTags'] ?? array() ) ) );
 		$out['aiTags'] = array_slice( $tags, 0, 30 );
 
-		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento' ) : array( 'grid', 'masonry', 'justified', 'mosaic' );
+		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento', 'art-wall' ) : array( 'grid', 'masonry', 'justified', 'mosaic', 'art-wall' );
 		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', $default_layouts );
 		$out['layout']   = in_array( $cfg['layout'] ?? 'grid', (array) $allowed_layouts, true ) ? $cfg['layout'] : 'grid';
+
+		$default_wall_presets  = $is_pro ? array( 'triptych', 'salon', 'staircase', 'symmetric' ) : array( 'triptych' );
+		$allowed_wall_presets  = apply_filters( 'matcha_gallery_allowed_wall_presets', $default_wall_presets );
+		$out['wallPreset']     = in_array( $cfg['wallPreset'] ?? 'triptych', (array) $allowed_wall_presets, true ) ? $cfg['wallPreset'] : 'triptych';
+
+		$default_wall_moldings = $is_pro ? array( 'mold-black', 'mold-oak', 'mold-white', 'mold-brass', 'mold-float' ) : array( 'mold-black' );
+		$allowed_wall_moldings = apply_filters( 'matcha_gallery_allowed_wall_moldings', $default_wall_moldings );
+		$out['wallMolding']    = in_array( $cfg['wallMolding'] ?? 'mold-black', (array) $allowed_wall_moldings, true ) ? $cfg['wallMolding'] : 'mold-black';
 
 		$out['columns']       = max( 1, min( 6, (int) ( $cfg['columns'] ?? 3 ) ) );
 		$out['columnsTablet'] = max( 1, min( 4, (int) ( $cfg['columnsTablet'] ?? 2 ) ) );
@@ -271,6 +279,27 @@ final class Gallery_CPT {
 					if ( in_array( $str_span, $allowed_spans, true ) ) {
 						$out['imageSpans'][ (string) $clean_id ] = $str_span;
 					}
+				}
+			}
+		}
+
+		// Sanitize Art Wall custom frame coordinates & rotations (Pro)
+		$out['artWallFrames'] = array();
+		if ( $is_pro && ! empty( $cfg['artWallFrames'] ) && is_array( $cfg['artWallFrames'] ) ) {
+			$allowed_moldings = (array) $allowed_wall_moldings;
+			foreach ( $cfg['artWallFrames'] as $frame ) {
+				if ( is_array( $frame ) ) {
+					$clean_frame = array(
+						'id'          => absint( $frame['id'] ?? 0 ),
+						'left'        => max( 0, min( 2500, (int) ( $frame['left'] ?? 0 ) ) ),
+						'top'         => max( 0, min( 3000, (int) ( $frame['top'] ?? 0 ) ) ),
+						'width'       => max( 80, min( 1200, (int) ( $frame['width'] ?? 300 ) ) ),
+						'height'      => max( 80, min( 1200, (int) ( $frame['height'] ?? 380 ) ) ),
+						'ratio'       => sanitize_text_field( $frame['ratio'] ?? '18x24' ),
+						'orientation' => in_array( $frame['orientation'] ?? 'portrait', array( 'portrait', 'landscape' ), true ) ? $frame['orientation'] : 'portrait',
+						'molding'     => in_array( $frame['molding'] ?? 'mold-black', $allowed_moldings, true ) ? $frame['molding'] : 'mold-black',
+					);
+					$out['artWallFrames'][] = $clean_frame;
 				}
 			}
 		}

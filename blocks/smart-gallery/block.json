@@ -39,7 +39,15 @@
 		"layout": {
 			"type": "string",
 			"default": "grid",
-			"enum": [ "grid", "masonry", "justified", "mosaic", "bento", "pinwheel" ]
+			"enum": [ "grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall" ]
+		},
+		"wallPreset": {
+			"type": "string",
+			"default": "triptych"
+		},
+		"wallMolding": {
+			"type": "string",
+			"default": "mold-black"
 		},
 		"rowHeight": {
 			"type": "number",

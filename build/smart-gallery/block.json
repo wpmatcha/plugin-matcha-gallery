@@ -55,8 +55,17 @@
         "justified",
         "mosaic",
         "bento",
-        "pinwheel"
+        "pinwheel",
+        "art-wall"
       ]
+    },
+    "wallPreset": {
+      "type": "string",
+      "default": "triptych"
+    },
+    "wallMolding": {
+      "type": "string",
+      "default": "mold-black"
     },
     "rowHeight": {
       "type": "number",

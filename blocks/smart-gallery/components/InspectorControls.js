@@ -234,55 +234,105 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						{ label: __( 'Pinterest Masonry', 'matcha-gallery' ), value: 'masonry' },
 						{ label: __( 'Flickr Justified Rows', 'matcha-gallery' ), value: 'justified' },
 						{ label: __( 'PhotoBlocks Mosaic', 'matcha-gallery' ), value: 'mosaic' },
+						{ label: __( 'Curated Art Wall (Hero Triptych)', 'matcha-gallery' ), value: 'art-wall' },
 						{ label: __( 'Bento Showcase (PRO)', 'matcha-gallery' ), value: 'bento' },
 						{ label: __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
 					onChange={ ( value ) => setAttributes( { layout: value } ) }
 				/>
 
-				{ layout === 'justified' ? (
-					<RangeControl
-						label={ __( 'Row Height (px)', 'matcha-gallery' ) }
-						value={ attributes.rowHeight || 240 }
-						onChange={ ( value ) => setAttributes( { rowHeight: value } ) }
-						min={ 120 }
-						max={ 400 }
-						step={ 10 }
-					/>
+				{ layout === 'art-wall' ? (
+					<div style={ { marginTop: '12px', padding: '12px', background: '#0f172a', borderRadius: '8px', border: '1px solid #1e293b' } }>
+						<div style={ { fontSize: '11px', fontWeight: 700, color: '#5ec27f', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' } }>
+							🏛️ Museum Exhibition Preset
+						</div>
+						<p style={ { fontSize: '12px', color: '#cbd5e1', margin: '0 0 10px 0', lineHeight: 1.4 } }>
+							<strong>Hero Triptych</strong> renders 3 museum-matted frames along the 57″ gallery eye-level line with classic Matte Black molding. Surplus photos open seamlessly in the interactive viewer.
+						</p>
+						{ ( window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro ) ? (
+							<>
+								<SelectControl
+									label={ __( 'Wall Layout Preset', 'matcha-gallery' ) }
+									value={ attributes.wallPreset || 'triptych' }
+									options={ [
+										{ label: __( 'Hero Triptych (3 Frames)', 'matcha-gallery' ), value: 'triptych' },
+										{ label: __( 'Salon Exhibition (6 Frames)', 'matcha-gallery' ), value: 'salon' },
+										{ label: __( 'Staircase Ascending (6 Frames)', 'matcha-gallery' ), value: 'staircase' },
+										{ label: __( 'Symmetric Quad (6 Frames)', 'matcha-gallery' ), value: 'symmetric' },
+									] }
+									onChange={ ( val ) => setAttributes( { wallPreset: val } ) }
+								/>
+								<SelectControl
+									label={ __( 'Frame Molding', 'matcha-gallery' ) }
+									value={ attributes.wallMolding || 'mold-black' }
+									options={ [
+										{ label: __( 'Classic Matte Black', 'matcha-gallery' ), value: 'mold-black' },
+										{ label: __( 'Natural Oak', 'matcha-gallery' ), value: 'mold-oak' },
+										{ label: __( 'Nordic White', 'matcha-gallery' ), value: 'mold-white' },
+										{ label: __( 'Gold Brass', 'matcha-gallery' ), value: 'mold-brass' },
+										{ label: __( 'Floating Glass', 'matcha-gallery' ), value: 'mold-float' },
+									] }
+									onChange={ ( val ) => setAttributes( { wallMolding: val } ) }
+								/>
+							</>
+						) : (
+							<div style={ { padding: '8px 10px', background: 'rgba(94, 194, 127, 0.1)', borderRadius: '6px', border: '1px solid rgba(94, 194, 127, 0.25)' } }>
+								<div style={ { fontSize: '11px', color: '#86efac', fontWeight: 600 } }>
+									★ Unlock Art Wall Studio (PRO)
+								</div>
+								<div style={ { fontSize: '10.5px', color: '#94a3b8', marginTop: '3px', lineHeight: 1.35 } }>
+									Drag-and-drop frame positioning, 90° orientation flip, Salon & Staircase presets, and luxury moldings (Oak, White, Brass, Floating Glass).
+								</div>
+							</div>
+						) }
+					</div>
 				) : (
-					<RangeControl
-						label={ __( 'Columns (Desktop)', 'matcha-gallery' ) }
-						value={ columns }
-						onChange={ ( value ) => setAttributes( { columns: value } ) }
-						min={ 1 }
-						max={ 6 }
-					/>
+					<>
+						{ layout === 'justified' ? (
+							<RangeControl
+								label={ __( 'Row Height (px)', 'matcha-gallery' ) }
+								value={ attributes.rowHeight || 240 }
+								onChange={ ( value ) => setAttributes( { rowHeight: value } ) }
+								min={ 120 }
+								max={ 400 }
+								step={ 10 }
+							/>
+						) : (
+							<RangeControl
+								label={ __( 'Columns (Desktop)', 'matcha-gallery' ) }
+								value={ columns }
+								onChange={ ( value ) => setAttributes( { columns: value } ) }
+								min={ 1 }
+								max={ 6 }
+							/>
+						) }
+
+						<RangeControl
+							label={ __( 'Columns (Tablet)', 'matcha-gallery' ) }
+							value={ columnsTablet }
+							onChange={ ( value ) => setAttributes( { columnsTablet: value } ) }
+							min={ 1 }
+							max={ 4 }
+						/>
+
+						<RangeControl
+							label={ __( 'Columns (Mobile)', 'matcha-gallery' ) }
+							value={ columnsMobile }
+							onChange={ ( value ) => setAttributes( { columnsMobile: value } ) }
+							min={ 1 }
+							max={ 3 }
+						/>
+
+						<RangeControl
+							label={ __( 'Gutter Size (px)', 'matcha-gallery' ) }
+							value={ gutterSize }
+							onChange={ ( value ) => setAttributes( { gutterSize: value } ) }
+							min={ 0 }
+							max={ 48 }
+							step={ 4 }
+						/>
+					</>
 				) }
-
-				<RangeControl
-					label={ __( 'Columns (Tablet)', 'matcha-gallery' ) }
-					value={ columnsTablet }
-					onChange={ ( value ) => setAttributes( { columnsTablet: value } ) }
-					min={ 1 }
-					max={ 4 }
-				/>
-
-				<RangeControl
-					label={ __( 'Columns (Mobile)', 'matcha-gallery' ) }
-					value={ columnsMobile }
-					onChange={ ( value ) => setAttributes( { columnsMobile: value } ) }
-					min={ 1 }
-					max={ 3 }
-				/>
-
-				<RangeControl
-					label={ __( 'Gutter Size (px)', 'matcha-gallery' ) }
-					value={ gutterSize }
-					onChange={ ( value ) => setAttributes( { gutterSize: value } ) }
-					min={ 0 }
-					max={ 48 }
-					step={ 4 }
-				/>
 			</PanelBody>
 
 			{ /* Filters & Toolbar Panel */ }

@@ -126,7 +126,15 @@
       layout: {
         type: "string",
         default: "grid",
-        enum: ["grid", "masonry", "justified", "mosaic", "bento", "pinwheel"]
+        enum: ["grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall"]
+      },
+      wallPreset: {
+        type: "string",
+        default: "triptych"
+      },
+      wallMolding: {
+        type: "string",
+        default: "mold-black"
       },
       rowHeight: {
         type: "number",
@@ -596,13 +604,41 @@
             { label: (0, import_i18n3.__)("Pinterest Masonry", "matcha-gallery"), value: "masonry" },
             { label: (0, import_i18n3.__)("Flickr Justified Rows", "matcha-gallery"), value: "justified" },
             { label: (0, import_i18n3.__)("PhotoBlocks Mosaic", "matcha-gallery"), value: "mosaic" },
+            { label: (0, import_i18n3.__)("Curated Art Wall (Hero Triptych)", "matcha-gallery"), value: "art-wall" },
             { label: (0, import_i18n3.__)("Bento Showcase (PRO)", "matcha-gallery"), value: "bento" },
             { label: (0, import_i18n3.__)("Pinwheel Spiral (PRO)", "matcha-gallery"), value: "pinwheel" }
           ],
           onChange: (value) => setAttributes({ layout: value })
         }
       ),
-      layout === "justified" ? /* @__PURE__ */ window.wp.element.createElement(
+      layout === "art-wall" ? /* @__PURE__ */ window.wp.element.createElement("div", { style: { marginTop: "12px", padding: "12px", background: "#0f172a", borderRadius: "8px", border: "1px solid #1e293b" } }, /* @__PURE__ */ window.wp.element.createElement("div", { style: { fontSize: "11px", fontWeight: 700, color: "#5ec27f", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "6px" } }, "\u{1F3DB}\uFE0F Museum Exhibition Preset"), /* @__PURE__ */ window.wp.element.createElement("p", { style: { fontSize: "12px", color: "#cbd5e1", margin: "0 0 10px 0", lineHeight: 1.4 } }, /* @__PURE__ */ window.wp.element.createElement("strong", null, "Hero Triptych"), " renders 3 museum-matted frames along the 57\u2033 gallery eye-level line with classic Matte Black molding. Surplus photos open seamlessly in the interactive viewer."), window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro ? /* @__PURE__ */ window.wp.element.createElement(window.wp.element.Fragment, null, /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Wall Layout Preset", "matcha-gallery"),
+          value: attributes.wallPreset || "triptych",
+          options: [
+            { label: (0, import_i18n3.__)("Hero Triptych (3 Frames)", "matcha-gallery"), value: "triptych" },
+            { label: (0, import_i18n3.__)("Salon Exhibition (6 Frames)", "matcha-gallery"), value: "salon" },
+            { label: (0, import_i18n3.__)("Staircase Ascending (6 Frames)", "matcha-gallery"), value: "staircase" },
+            { label: (0, import_i18n3.__)("Symmetric Quad (6 Frames)", "matcha-gallery"), value: "symmetric" }
+          ],
+          onChange: (val) => setAttributes({ wallPreset: val })
+        }
+      ), /* @__PURE__ */ window.wp.element.createElement(
+        import_components3.SelectControl,
+        {
+          label: (0, import_i18n3.__)("Frame Molding", "matcha-gallery"),
+          value: attributes.wallMolding || "mold-black",
+          options: [
+            { label: (0, import_i18n3.__)("Classic Matte Black", "matcha-gallery"), value: "mold-black" },
+            { label: (0, import_i18n3.__)("Natural Oak", "matcha-gallery"), value: "mold-oak" },
+            { label: (0, import_i18n3.__)("Nordic White", "matcha-gallery"), value: "mold-white" },
+            { label: (0, import_i18n3.__)("Gold Brass", "matcha-gallery"), value: "mold-brass" },
+            { label: (0, import_i18n3.__)("Floating Glass", "matcha-gallery"), value: "mold-float" }
+          ],
+          onChange: (val) => setAttributes({ wallMolding: val })
+        }
+      )) : /* @__PURE__ */ window.wp.element.createElement("div", { style: { padding: "8px 10px", background: "rgba(94, 194, 127, 0.1)", borderRadius: "6px", border: "1px solid rgba(94, 194, 127, 0.25)" } }, /* @__PURE__ */ window.wp.element.createElement("div", { style: { fontSize: "11px", color: "#86efac", fontWeight: 600 } }, "\u2605 Unlock Art Wall Studio (PRO)"), /* @__PURE__ */ window.wp.element.createElement("div", { style: { fontSize: "10.5px", color: "#94a3b8", marginTop: "3px", lineHeight: 1.35 } }, "Drag-and-drop frame positioning, 90\xB0 orientation flip, Salon & Staircase presets, and luxury moldings (Oak, White, Brass, Floating Glass)."))) : /* @__PURE__ */ window.wp.element.createElement(window.wp.element.Fragment, null, layout === "justified" ? /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Row Height (px)", "matcha-gallery"),
@@ -621,8 +657,7 @@
           min: 1,
           max: 6
         }
-      ),
-      /* @__PURE__ */ window.wp.element.createElement(
+      ), /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Columns (Tablet)", "matcha-gallery"),
@@ -631,8 +666,7 @@
           min: 1,
           max: 4
         }
-      ),
-      /* @__PURE__ */ window.wp.element.createElement(
+      ), /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Columns (Mobile)", "matcha-gallery"),
@@ -641,8 +675,7 @@
           min: 1,
           max: 3
         }
-      ),
-      /* @__PURE__ */ window.wp.element.createElement(
+      ), /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Gutter Size (px)", "matcha-gallery"),
@@ -652,7 +685,7 @@
           max: 48,
           step: 4
         }
-      )
+      ))
     ), /* @__PURE__ */ window.wp.element.createElement(
       import_components3.PanelBody,
       {
