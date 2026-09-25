@@ -7,11 +7,11 @@
 ## 1. Project Overview & Commercial Strategy
 
 * **Product Name:** Matcha Gallery (Free) / Matcha Gallery Pro
-* **Current Free Version:** 1.0.1 (WordPress.org Release Candidate)
+* **Current Free Version:** 1.0.1 (Approved & Live on WordPress.org — <10 Active Installs Growth Stage)
 * **Tagline:** AI-Powered Smart Photo Wall, Masonry & Portfolio Studio for WordPress
 * **Target Audience:** Photographers, designers, e-commerce stores, creative agencies, and portfolio owners who want intelligent auto-tagging, zero layout shift (CLS 0), and visual masonry galleries.
 * **Pricing & Monetization Model:**
-  * **Free:** Distributed via WordPress.org plugin directory. 100% free with BYOK (Bring Your Own Key) for Google Gemini and OpenAI.
+  * **Free:** Distributed via WordPress.org plugin directory (`https://wordpress.org/plugins/matcha-gallery/`). 100% free with BYOK (Bring Your Own Key) for Google Gemini and OpenAI.
   * **Pro:** Commercial add-on distributed via `wpmatcha.com`. Annual subscription ($49 single site / $99 5 sites / $199 agency unlimited).
 
 ---
@@ -191,5 +191,6 @@ Dynamic Gallery Wall
 - [x] **Gutenberg & Studio Toolbar Customization:** Integrated skin controls in block inspector and Studio with Pro gating modal and mobile horizontal scroll.
 - [x] **Spatial 3D Tilt & Floating Action Dock:** Real-time perspective matrix transform with action dock on hover.
 - [x] **2026 AI-Native Intelligence Suite Prototype:** Floating AI Vibe Bar, Visual Echo semantic similarity re-clustering, and Chromatic Palette engine.
-- [x] **WooCommerce Shoppable Hotspots:** Native product search combobox in Studio, live prices/stock, and Lightbox "Shop The Look" button.
-- [ ] **WordPress.org Directory Review:** Complete directory review requirements (assets, banner, icon, tags, translations).
+- [x] **WordPress.org Directory Approval:** Approved & live in directory (`matcha-gallery`).
+- [ ] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
+- [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org.
