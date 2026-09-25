@@ -2577,6 +2577,11 @@ span.matcha-action-btn {
 	border-top-color: rgba(0, 0, 0, 0.12);
 }
 
+/* Art Wall Surplus Items (Exhibition Overflow) */
+.matcha-gallery--art-wall .matcha-gallery__item--surplus {
+	display: none !important;
+}
+
 /* Art Wall Frames */
 .matcha-gallery--art-wall .matcha-gallery__item--wall-frame {
 	position: relative;

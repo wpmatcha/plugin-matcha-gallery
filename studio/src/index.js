@@ -2180,7 +2180,7 @@ if (root) {
   }
 
   function selectArtFrame(item) {
-    if (!item) return;
+    if (!item || !item.classList.contains('matcha-gallery__item--wall-frame')) return;
     const canvas = document.getElementById('studio-canvas');
     if (canvas) {
       canvas.querySelectorAll('.matcha-gallery__item--wall-frame').forEach(el => el.classList.remove('selected-frame'));
@@ -5144,6 +5144,12 @@ if (root) {
       const matchingItems = [];
 
       allItems.forEach(item => {
+        // If Art Wall surplus item, enforce display: none and exclude from canvas matches
+        if (activeLayout === 'art-wall' && item.classList.contains('matcha-gallery__item--surplus')) {
+          item.style.display = 'none';
+          return;
+        }
+
         const tags = (item.dataset.tags || '').toLowerCase().split(' ').filter(Boolean);
         const secs = (item.dataset.sections || '').split(' ').filter(Boolean);
         const colors = (item.dataset.colors || '').toLowerCase().split(',').filter(Boolean);
@@ -5174,62 +5180,74 @@ if (root) {
         }
       });
 
-      // Pagination Logic for Canvas
-      const pagType = cfg.paginationType || 'none';
-      const perPage = cfg.itemsPerPage || 12;
-
-      if (pagType === 'none') {
-        matchingItems.forEach(item => { item.style.display = ''; item.style.opacity = '1'; });
+      // Art Wall Layout: frames are arranged in exhibition layout; bypass standard pagination
+      if (activeLayout === 'art-wall') {
+        matchingItems.forEach(item => {
+          item.style.display = '';
+          item.style.opacity = '1';
+        });
         const loadWrap = canvas.querySelector('.matcha-gallery__load-more-wrap');
         if (loadWrap) loadWrap.style.display = 'none';
-      } else if (pagType === 'load-more' || pagType === 'infinite') {
-        const limit = canvasPage * perPage;
-        const hasMore = limit < matchingItems.length;
-
-        matchingItems.forEach((item, idx) => {
-          if (idx < limit) {
-            item.style.display = '';
-            item.style.opacity = '1';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-
-        const loadWrap = canvas.querySelector('.matcha-gallery__load-more-wrap');
-        if (loadWrap) {
-          loadWrap.style.display = hasMore ? 'flex' : 'none';
-        }
-      } else if (pagType === 'pages') {
-        const totalPages = Math.ceil(matchingItems.length / perPage) || 1;
-        if (canvasPage > totalPages) canvasPage = 1;
-        const start = (canvasPage - 1) * perPage;
-        const end = start + perPage;
-
-        matchingItems.forEach((item, idx) => {
-          if (idx >= start && idx < end) {
-            item.style.display = '';
-            item.style.opacity = '1';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-
         const pagContainer = canvas.querySelector('#studio-canvas-pagination');
-        if (pagContainer) {
-          if (totalPages <= 1) {
-            pagContainer.innerHTML = '';
-          } else {
-            let phtml = '';
-            for (let p = 1; p <= totalPages; p++) {
-              phtml += `<button type="button" class="matcha-page-btn ${p === canvasPage ? 'is-active' : ''}" data-page="${p}">${p}</button>`;
+        if (pagContainer) pagContainer.innerHTML = '';
+      } else {
+        // Pagination Logic for Canvas
+        const pagType = cfg.paginationType || 'none';
+        const perPage = cfg.itemsPerPage || 12;
+
+        if (pagType === 'none') {
+          matchingItems.forEach(item => { item.style.display = ''; item.style.opacity = '1'; });
+          const loadWrap = canvas.querySelector('.matcha-gallery__load-more-wrap');
+          if (loadWrap) loadWrap.style.display = 'none';
+        } else if (pagType === 'load-more' || pagType === 'infinite') {
+          const limit = canvasPage * perPage;
+          const hasMore = limit < matchingItems.length;
+
+          matchingItems.forEach((item, idx) => {
+            if (idx < limit) {
+              item.style.display = '';
+              item.style.opacity = '1';
+            } else {
+              item.style.display = 'none';
             }
-            pagContainer.innerHTML = phtml;
-            pagContainer.querySelectorAll('.matcha-page-btn').forEach(btn => {
-              btn.addEventListener('click', () => {
-                canvasPage = parseInt(btn.dataset.page);
-                applyCanvasFilter();
+          });
+
+          const loadWrap = canvas.querySelector('.matcha-gallery__load-more-wrap');
+          if (loadWrap) {
+            loadWrap.style.display = hasMore ? 'flex' : 'none';
+          }
+        } else if (pagType === 'pages') {
+          const totalPages = Math.ceil(matchingItems.length / perPage) || 1;
+          if (canvasPage > totalPages) canvasPage = 1;
+          const start = (canvasPage - 1) * perPage;
+          const end = start + perPage;
+
+          matchingItems.forEach((item, idx) => {
+            if (idx >= start && idx < end) {
+              item.style.display = '';
+              item.style.opacity = '1';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+
+          const pagContainer = canvas.querySelector('#studio-canvas-pagination');
+          if (pagContainer) {
+            if (totalPages <= 1) {
+              pagContainer.innerHTML = '';
+            } else {
+              let phtml = '';
+              for (let p = 1; p <= totalPages; p++) {
+                phtml += `<button type="button" class="matcha-page-btn ${p === canvasPage ? 'is-active' : ''}" data-page="${p}">${p}</button>`;
+              }
+              pagContainer.innerHTML = phtml;
+              pagContainer.querySelectorAll('.matcha-page-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  canvasPage = parseInt(btn.dataset.page);
+                  applyCanvasFilter();
+                });
               });
-            });
+            }
           }
         }
       }

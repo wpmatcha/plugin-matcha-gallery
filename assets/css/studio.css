@@ -2026,6 +2026,12 @@ body.matcha-is-dragging * {
 	margin: 0 2px;
 }
 
+/* Art Wall Surplus Items (Exhibition Overflow) */
+.matcha-canvas .matcha-gallery--art-wall .matcha-gallery__item--surplus,
+.matcha-gallery--art-wall .matcha-gallery__item--surplus {
+	display: none !important;
+}
+
 /* Art Wall Frames Interactive Canvas Styling */
 .matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid {
 	position: relative !important;
