@@ -2791,5 +2791,195 @@ span.matcha-action-btn {
 	}
 }
 
+/* ==========================================================================
+   LOOKBOOK DUET (2026 EDITORIAL MAGAZINE STAGGER - FREE CORE)
+   ========================================================================== */
+.matcha-gallery--lookbook-duet .matcha-gallery__grid {
+	display: grid !important;
+	grid-template-columns: repeat(3, 1fr) !important;
+	column-gap: var(--matcha-gutter, 28px) !important;
+	row-gap: calc(var(--matcha-gutter, 28px) + 36px) !important;
+	align-items: start !important;
+	padding-bottom: 40px;
+}
 
+/* Stagger every 2nd column item in 3-column rows by 48px */
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(3n + 2) {
+	margin-top: 48px !important;
+	transform: translateY(0);
+	transition: margin-top 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Dynamic editorial aspect ratios */
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 1) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 1) .matcha-gallery__media-wrap { aspect-ratio: 3 / 4 !important; }
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 2) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 2) .matcha-gallery__media-wrap { aspect-ratio: 1 / 1 !important; }
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 3) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 3) .matcha-gallery__media-wrap { aspect-ratio: 4 / 5 !important; }
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 4) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 4) .matcha-gallery__media-wrap { aspect-ratio: 1 / 1 !important; }
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 5) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 5) .matcha-gallery__media-wrap { aspect-ratio: 3 / 4 !important; }
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 6) .matcha-gallery__item-inner,
+.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(6n + 6) .matcha-gallery__media-wrap { aspect-ratio: 4 / 5 !important; }
+
+.matcha-gallery--lookbook-duet .matcha-gallery__item-inner img,
+.matcha-gallery--lookbook-duet .matcha-gallery__media-wrap img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	border-radius: var(--matcha-radius, 8px);
+}
+
+/* Responsive Lookbook Duet: Tablet 2 columns (< 880px) */
+@media (max-width: 880px) {
+	.matcha-gallery--lookbook-duet .matcha-gallery__grid {
+		grid-template-columns: repeat(2, 1fr) !important;
+		row-gap: calc(var(--matcha-gutter, 20px) + 24px) !important;
+	}
+	.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(3n + 2) {
+		margin-top: 0 !important;
+	}
+	.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(2n) {
+		margin-top: 32px !important;
+	}
+}
+
+/* Mobile 1 column (< 540px) */
+@media (max-width: 540px) {
+	.matcha-gallery--lookbook-duet .matcha-gallery__grid {
+		grid-template-columns: 1fr !important;
+		row-gap: var(--matcha-gutter, 20px) !important;
+	}
+	.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(2n),
+	.matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(3n + 2) {
+		margin-top: 0 !important;
+	}
+}
+
+/* ==========================================================================
+   CINEMA REEL (HORIZONTAL RUNWAY STRIP - 16:9 WIDESCREEN - PRO ADDON)
+   ========================================================================== */
+.matcha-gallery--cinema-reel .matcha-gallery__grid {
+	display: flex !important;
+	flex-direction: row !important;
+	overflow-x: auto !important;
+	overflow-y: hidden !important;
+	scroll-snap-type: x mandatory !important;
+	gap: var(--matcha-gutter, 24px) !important;
+	padding: 12px 6px 28px !important;
+	-webkit-overflow-scrolling: touch !important;
+	scroll-behavior: smooth;
+}
+
+/* Custom luxury scrollbar for Cinema Reel */
+.matcha-gallery--cinema-reel .matcha-gallery__grid::-webkit-scrollbar {
+	height: 7px;
+}
+.matcha-gallery--cinema-reel .matcha-gallery__grid::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0.06);
+	border-radius: 999px;
+}
+.matcha-gallery--theme-dark.matcha-gallery--cinema-reel .matcha-gallery__grid::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.06);
+}
+.matcha-gallery--cinema-reel .matcha-gallery__grid::-webkit-scrollbar-thumb {
+	background: var(--matcha-accent, #607d66);
+	border-radius: 999px;
+}
+
+.matcha-gallery--cinema-reel .matcha-gallery__item {
+	flex: 0 0 460px !important;
+	max-width: 460px !important;
+	min-width: 460px !important;
+	aspect-ratio: 16 / 9 !important;
+	scroll-snap-align: start !important;
+	scroll-snap-stop: normal;
+	box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+	border-radius: var(--matcha-radius, 10px);
+	overflow: hidden;
+	position: relative;
+	transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.matcha-gallery--cinema-reel .matcha-gallery__item-inner,
+.matcha-gallery--cinema-reel .matcha-gallery__media-wrap {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 16 / 9 !important;
+}
+
+.matcha-gallery--cinema-reel .matcha-gallery__item-inner img,
+.matcha-gallery--cinema-reel .matcha-gallery__media-wrap img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	display: block;
+}
+
+/* Responsive Mobile Cinema Reel (< 640px) */
+@media (max-width: 640px) {
+	.matcha-gallery--cinema-reel .matcha-gallery__item {
+		flex: 0 0 82vw !important;
+		max-width: 82vw !important;
+		min-width: 82vw !important;
+	}
+}
+
+/* ==========================================================================
+   CURATOR SPECIMEN ARCHIVE (SWISS MUSEUM STYLE - 2 COLUMN - PRO ADDON)
+   ========================================================================== */
+.matcha-gallery--curator-specimen .matcha-gallery__grid {
+	display: grid !important;
+	grid-template-columns: repeat(2, 1fr) !important;
+	gap: 40px !important;
+	padding: 10px 0 30px !important;
+}
+
+.matcha-gallery--curator-specimen .matcha-gallery__item {
+	background: #111613;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	padding: 22px;
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+	border-radius: var(--matcha-radius, 8px);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.matcha-gallery--curator-specimen .matcha-gallery__item:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+	border-color: rgba(94, 194, 127, 0.3);
+}
+
+.matcha-gallery--curator-specimen .matcha-gallery__item-inner,
+.matcha-gallery--curator-specimen .matcha-gallery__media-wrap {
+	width: 100%;
+	aspect-ratio: 4 / 3 !important;
+	border-radius: 4px;
+	overflow: hidden;
+	background: #000;
+}
+
+.matcha-gallery--curator-specimen .matcha-gallery__item-inner img,
+.matcha-gallery--curator-specimen .matcha-gallery__media-wrap img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	display: block;
+}
+
+/* Responsive Curator Specimen (< 768px) */
+@media (max-width: 768px) {
+	.matcha-gallery--curator-specimen .matcha-gallery__grid {
+		grid-template-columns: 1fr !important;
+		gap: 24px !important;
+	}
+	.matcha-gallery--curator-specimen .matcha-gallery__item {
+		padding: 16px;
+	}
+}
 

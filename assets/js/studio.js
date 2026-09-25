@@ -507,6 +507,11 @@
             </div>
             <div class="matcha-blueprint-desc">Hero Triptych gallery</div>
           </div>
+          <div class="matcha-blueprint-card ${curLayout === "lookbook-duet" ? "is-active" : ""}" data-layout="lookbook-duet">
+            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
+            <div class="matcha-blueprint-title">Lookbook Duet</div>
+            <div class="matcha-blueprint-desc">Magazine editorial stagger</div>
+          </div>
           <div class="matcha-blueprint-card ${curLayout === "bento" ? "is-active" : ""}" data-layout="bento">
             <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
@@ -522,6 +527,18 @@
               Pinwheel Spiral
             </div>
             <div class="matcha-blueprint-desc">Center hero + spiral</div>
+          </div>
+          <div class="matcha-blueprint-card ${curLayout === "cinema-reel" ? "is-active" : ""}" data-layout="cinema-reel">
+            <span class="matcha-pro-badge">PRO</span>
+            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
+            <div class="matcha-blueprint-title">Cinema Reel</div>
+            <div class="matcha-blueprint-desc">16:9 widescreen runway</div>
+          </div>
+          <div class="matcha-blueprint-card ${curLayout === "curator-specimen" ? "is-active" : ""}" data-layout="curator-specimen">
+            <span class="matcha-pro-badge">PRO</span>
+            <span class="matcha-blueprint-icon">${Icons.sparkles || Icons.layoutGrid}</span>
+            <div class="matcha-blueprint-title">Curator Specimen</div>
+            <div class="matcha-blueprint-desc">Swiss museum 2-column</div>
           </div>
         </div>
       </div>
@@ -699,6 +716,21 @@
           <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
             <div style="font-size:11px;font-weight:700;color:#5ec27f;margin-bottom:4px;">\u{1F3DB}\uFE0F Curated Art Wall (Hero Triptych)</div>
             <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">3-frame centerpiece composition with 57\u2033 gallery eye-level alignment and museum passe-partout matting. Surplus photos open in the interactive viewer.</div>
+          </div>
+        ` : cfg.layout === "lookbook-duet" ? `
+          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#5ec27f;margin-bottom:4px;">\u2728 Lookbook Duet (2026 Editorial)</div>
+            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">Editorial 3-column rhythm with column 2 staggered down by 48px and dynamic alternating aspect ratios.</div>
+          </div>
+        ` : cfg.layout === "cinema-reel" ? `
+          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#eab308;margin-bottom:4px;">\u{1F3AC} Cinema Reel (16:9 Horizontal Runway)</div>
+            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.</div>
+          </div>
+        ` : cfg.layout === "curator-specimen" ? `
+          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#eab308;margin-bottom:4px;">\u{1F3DB}\uFE0F Curator Specimen Archive</div>
+            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">Architectural 2-column museum presentation with generous 40px negative space and deep shadow elevation.</div>
           </div>
         ` : cfg.layout === "justified" ? `
           <div class="range-row">
@@ -2277,12 +2309,18 @@
       document.querySelectorAll(".matcha-blueprint-card").forEach((card) => {
         card.addEventListener("click", () => {
           const layout = card.dataset.layout;
-          if (!isPro && (layout === "pinwheel" || layout === "bento")) {
+          if (!isPro && ["pinwheel", "bento", "cinema-reel", "curator-specimen"].includes(layout)) {
             const names = {
               pinwheel: "Pinwheel Spiral",
-              bento: "Bento Showcase"
+              bento: "Bento Showcase",
+              "cinema-reel": "Cinema Reel (Runway Strip)",
+              "curator-specimen": "Curator Specimen Archive"
             };
-            showProModal(`Unlock ${names[layout] || "Pro Layout"}`, "Dynamic aspect-ratio tile spanning, focal-directed hero spreads, and bespoke gallery layouts are available in Matcha Gallery Pro.");
+            const descs = {
+              "cinema-reel": "16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.",
+              "curator-specimen": "Architectural 2-column museum showcase with generous 40px negative space and deep shadow elevation."
+            };
+            showProModal(`Unlock ${names[layout] || "Pro Layout"}`, descs[layout] || "Dynamic aspect-ratio tile spanning, focal-directed hero spreads, and bespoke gallery layouts are available in Matcha Gallery Pro.");
             return;
           }
           document.querySelectorAll(".matcha-blueprint-card").forEach((c) => c.classList.remove("is-active"));
@@ -3356,7 +3394,7 @@
       const stylePreset = cfg.stylePreset || "custom";
       const activeCardTheme = !isPro && ["glass", "glow"].includes(cfg.cardTheme) ? "clean" : cfg.cardTheme || "clean";
       const activeFrameStyle = !isPro && ["black-metal", "natural-oak", "gold-brass", "glass-float"].includes(cfg.frameStyle) ? "none" : cfg.frameStyle || "none";
-      const activeLayout = !isPro && ["pinwheel", "bento"].includes(cfg.layout) ? "grid" : cfg.layout || "grid";
+      const activeLayout = !isPro && ["pinwheel", "bento", "cinema-reel", "curator-specimen"].includes(cfg.layout) ? "grid" : cfg.layout || "grid";
       const activePagination = !isPro && ["infinite", "pages"].includes(cfg.paginationType) ? "load-more" : cfg.paginationType || "none";
       const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
       canvas.style.background = canvasBackdrop === "cream" ? "#fbf9f4" : canvasBackdrop === "sage" ? "#eef4ed" : canvasBackdrop === "charcoal" ? "#22252a" : canvasBackdrop === "transparent" ? "transparent" : "#ffffff";

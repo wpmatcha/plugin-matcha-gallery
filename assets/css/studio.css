@@ -1042,6 +1042,22 @@ body.matcha-is-dragging * {
 	object-fit: cover !important;
 }
 
+/* Studio Canvas Layout Specific Overrides */
+#matcha-studio-root .matcha-canvas .matcha-gallery--lookbook-duet .matcha-gallery__item:nth-child(3n + 2) {
+	margin-top: 48px !important;
+}
+#matcha-studio-root .matcha-canvas .matcha-gallery--cinema-reel .matcha-gallery__item {
+	flex: 0 0 460px !important;
+	max-width: 460px !important;
+	min-width: 460px !important;
+}
+#matcha-studio-root .matcha-canvas .matcha-gallery--curator-specimen .matcha-gallery__item {
+	background: #111613;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	padding: 22px;
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+}
+
 /* Floating Canvas HUD Bar */
 .matcha-canvas-hud {
 	position: absolute;

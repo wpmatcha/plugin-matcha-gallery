@@ -126,7 +126,7 @@
       layout: {
         type: "string",
         default: "grid",
-        enum: ["grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall"]
+        enum: ["grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall", "lookbook-duet", "cinema-reel", "curator-specimen"]
       },
       wallPreset: {
         type: "string",
@@ -605,10 +605,21 @@
             { label: (0, import_i18n3.__)("Flickr Justified Rows", "matcha-gallery"), value: "justified" },
             { label: (0, import_i18n3.__)("PhotoBlocks Mosaic", "matcha-gallery"), value: "mosaic" },
             { label: (0, import_i18n3.__)("Curated Art Wall (Hero Triptych)", "matcha-gallery"), value: "art-wall" },
+            { label: (0, import_i18n3.__)("Lookbook Duet (2026 Editorial)", "matcha-gallery"), value: "lookbook-duet" },
+            { label: (0, import_i18n3.__)("Cinema Reel (Horizontal Runway - PRO)", "matcha-gallery"), value: "cinema-reel" },
+            { label: (0, import_i18n3.__)("Curator Specimen (Swiss Archive - PRO)", "matcha-gallery"), value: "curator-specimen" },
             { label: (0, import_i18n3.__)("Bento Showcase (PRO)", "matcha-gallery"), value: "bento" },
             { label: (0, import_i18n3.__)("Pinwheel Spiral (PRO)", "matcha-gallery"), value: "pinwheel" }
           ],
-          onChange: (value) => setAttributes({ layout: value })
+          onChange: (value) => {
+            const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
+            if (["cinema-reel", "curator-specimen", "bento", "pinwheel"].includes(value) && !isPro) {
+              setAttributes({ layout: "lookbook-duet" });
+              alert((0, import_i18n3.__)("Cinema Reel & Curator Specimen are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.", "matcha-gallery"));
+              return;
+            }
+            setAttributes({ layout: value });
+          }
         }
       ),
       layout === "art-wall" ? /* @__PURE__ */ window.wp.element.createElement("div", { style: { marginTop: "12px", padding: "12px", background: "#0f172a", borderRadius: "8px", border: "1px solid #1e293b" } }, /* @__PURE__ */ window.wp.element.createElement("div", { style: { fontSize: "11px", fontWeight: 700, color: "#5ec27f", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "6px" } }, "\u{1F3DB}\uFE0F Museum Exhibition Preset"), /* @__PURE__ */ window.wp.element.createElement("p", { style: { fontSize: "12px", color: "#cbd5e1", margin: "0 0 10px 0", lineHeight: 1.4 } }, /* @__PURE__ */ window.wp.element.createElement("strong", null, "Hero Triptych"), " renders 3 museum-matted frames along the 57\u2033 gallery eye-level line with classic Matte Black molding. Surplus photos open seamlessly in the interactive viewer."), window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro ? /* @__PURE__ */ window.wp.element.createElement(window.wp.element.Fragment, null, /* @__PURE__ */ window.wp.element.createElement(
@@ -648,7 +659,7 @@
           max: 400,
           step: 10
         }
-      ) : /* @__PURE__ */ window.wp.element.createElement(
+      ) : ["cinema-reel", "curator-specimen", "lookbook-duet"].includes(layout) ? /* @__PURE__ */ window.wp.element.createElement("div", { style: { marginTop: "8px", padding: "10px", background: "#0f172a", borderRadius: "6px", fontSize: "12px", color: "#94a3b8", lineHeight: 1.4 } }, layout === "lookbook-duet" && (0, import_i18n3.__)("Lookbook Duet auto-arranges photos in an editorial 3-column staggered rhythm with alternating aspect ratios.", "matcha-gallery"), layout === "cinema-reel" && (0, import_i18n3.__)("Cinema Reel displays a 16:9 widescreen horizontal runway with smooth touch & trackpad scroll-snap momentum.", "matcha-gallery"), layout === "curator-specimen" && (0, import_i18n3.__)("Curator Specimen displays an architectural 2-column museum archive with generous 40px negative space.", "matcha-gallery")) : /* @__PURE__ */ window.wp.element.createElement(
         import_components3.RangeControl,
         {
           label: (0, import_i18n3.__)("Columns (Desktop)", "matcha-gallery"),

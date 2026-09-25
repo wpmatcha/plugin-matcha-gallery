@@ -235,10 +235,21 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						{ label: __( 'Flickr Justified Rows', 'matcha-gallery' ), value: 'justified' },
 						{ label: __( 'PhotoBlocks Mosaic', 'matcha-gallery' ), value: 'mosaic' },
 						{ label: __( 'Curated Art Wall (Hero Triptych)', 'matcha-gallery' ), value: 'art-wall' },
+						{ label: __( 'Lookbook Duet (2026 Editorial)', 'matcha-gallery' ), value: 'lookbook-duet' },
+						{ label: __( 'Cinema Reel (Horizontal Runway - PRO)', 'matcha-gallery' ), value: 'cinema-reel' },
+						{ label: __( 'Curator Specimen (Swiss Archive - PRO)', 'matcha-gallery' ), value: 'curator-specimen' },
 						{ label: __( 'Bento Showcase (PRO)', 'matcha-gallery' ), value: 'bento' },
 						{ label: __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
-					onChange={ ( value ) => setAttributes( { layout: value } ) }
+					onChange={ ( value ) => {
+						const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
+						if ( [ 'cinema-reel', 'curator-specimen', 'bento', 'pinwheel' ].includes( value ) && ! isPro ) {
+							setAttributes( { layout: 'lookbook-duet' } );
+							alert( __( 'Cinema Reel & Curator Specimen are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.', 'matcha-gallery' ) );
+							return;
+						}
+						setAttributes( { layout: value } );
+					} }
 				/>
 
 				{ layout === 'art-wall' ? (
@@ -297,6 +308,12 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 								max={ 400 }
 								step={ 10 }
 							/>
+						) : ( [ 'cinema-reel', 'curator-specimen', 'lookbook-duet' ].includes( layout ) ? (
+							<div style={ { marginTop: '8px', padding: '10px', background: '#0f172a', borderRadius: '6px', fontSize: '12px', color: '#94a3b8', lineHeight: 1.4 } }>
+								{ layout === 'lookbook-duet' && __( 'Lookbook Duet auto-arranges photos in an editorial 3-column staggered rhythm with alternating aspect ratios.', 'matcha-gallery' ) }
+								{ layout === 'cinema-reel' && __( 'Cinema Reel displays a 16:9 widescreen horizontal runway with smooth touch & trackpad scroll-snap momentum.', 'matcha-gallery' ) }
+								{ layout === 'curator-specimen' && __( 'Curator Specimen displays an architectural 2-column museum archive with generous 40px negative space.', 'matcha-gallery' ) }
+							</div>
 						) : (
 							<RangeControl
 								label={ __( 'Columns (Desktop)', 'matcha-gallery' ) }
@@ -305,7 +322,7 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 								min={ 1 }
 								max={ 6 }
 							/>
-						) }
+						) ) }
 
 						<RangeControl
 							label={ __( 'Columns (Tablet)', 'matcha-gallery' ) }

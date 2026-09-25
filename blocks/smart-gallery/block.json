@@ -39,7 +39,7 @@
 		"layout": {
 			"type": "string",
 			"default": "grid",
-			"enum": [ "grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall" ]
+			"enum": [ "grid", "masonry", "justified", "mosaic", "bento", "pinwheel", "art-wall", "lookbook-duet", "cinema-reel", "curator-specimen" ]
 		},
 		"wallPreset": {
 			"type": "string",

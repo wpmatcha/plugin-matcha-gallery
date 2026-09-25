@@ -151,12 +151,21 @@ Dynamic Gallery Wall
 * **Floating AI Vibe Bar:** Real-time semantic natural language prompt search filtering against image keywords, vibes, and descriptions, paired with 1-click smart mood chips (`Emerald Flora`, `Sunset Warmth`, `Nordic Canopy`).
 * **AI Visual Echo / Semantic Re-Clustering:** Allows any photo to act as an anchor (`🎯 Echo Anchor`) with real-time confidence badges (`✨ 94% AI Match`) and a frosted twin count toast.
 * **Chromatic Palette Harmony Engine:** Clickable 6-swatch dominant harmony engine that highlights chromatic matches with hex backlight glow.
-* **Art Wall Frame Orientation & 90° Flip Engine:** Bidirectional Portrait ↔ Landscape orientation flip anchored around frame center points with boundary clamping, live dimension badge syncing (e.g. 18"×24" ↔ 24"×18"), dynamic inspector ratio button re-labeling, and dual control surfaces (floating frame toolbar + inspector panel).
-
 ### 8. Curated Art Wall & Gallery Exhibition Architecture (Completed)
 * **Free Tier Core Value:** Built a production-grade 3-frame **Hero Triptych** layout available to all Free users without any artificial lockouts or watermarks (100% compliant with WordPress.org guidelines). Features museum-grade 57″ gallery eye-level alignment, classic Matte Black frame molding, passe-partout matting, subtle ambient wall shadow elevation, dimension badges (`24" × 36"`), and responsive vertical collapse on mobile (`< 768px`).
 * **Surplus Photo & Zero-Loss Lightbox Handling:** Galleries with >3 photos preserve all surplus images in the rendered DOM (`.matcha-gallery__item--surplus` with `display: none;`). An elegant exhibition pill button (`+N More Exhibition Works in Viewer`) allows visitors to immediately launch the Lightbox directly starting at photo index 3, with complete thumbnail strip and arrow navigation across the entire gallery collection.
 * **Pro Studio Tier:** Unlocks Salon, Staircase, and Symmetric layout geometry presets, freeform canvas coordinate drag-and-drop, 90° frame orientation flip, and luxury moldings (Natural Oak, Nordic White, Brushed Gold Brass, and Floating Glassmorphism). Gated via `matcha_gallery_allowed_wall_presets` and `matcha_gallery_allowed_wall_moldings` filters.
+
+### 9. Editorial, Cinema & Museum Exhibition Layout Suite (Completed)
+* **Design Prototype Port (`skin-studio-mockup.html`):** Successfully migrated all 3 modern layout concepts from the high-fidelity prototype into core production code:
+  1. **Lookbook Duet (`lookbook-duet`) [Free Core]:** 2026 Editorial magazine stagger layout. Features 3-column grid with alternating column 2 vertical offset (`margin-top: 48px`), dynamic organic aspect ratios (3:4, 1:1, 4:5), and seamless responsive collapse to 2 columns on tablet and 1 column on mobile. 100% free, unwatermarked, and unrestricted to accelerate viral WordPress.org installs.
+  2. **Cinema Reel (`cinema-reel`) [Pro Addon]:** 16:9 widescreen horizontal runway strip with smooth touch/trackpad momentum, CSS `scroll-snap`, responsive `82vw` mobile peek, and custom luxury matcha scrollbar.
+  3. **Curator Specimen (`curator-specimen`) [Pro Addon]:** Swiss museum dual-column archive presentation with generous 40px negative space, deep shadow elevation (`#111613` specimen matting cards), and 4:3 inner media ratios.
+* **Full Stack Integration:**
+  * **Backend CPT Sanitization:** Added `lookbook-duet`, `cinema-reel`, and `curator-specimen` to allowlists in [Gallery_CPT.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Gallery/Gallery_CPT.php) and [matcha-gallery-pro.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery-pro/matcha-gallery-pro.php).
+  * **PHP Block Renderer:** Fallback harmonization in [Smart_Gallery_Block.php](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/includes/Blocks/Smart_Gallery_Block.php) enforcing Pro layout license gating while cleanly allowing Lookbook Duet for all users.
+  * **Gutenberg Inspector & Studio UI:** Added interactive blueprint cards, responsive dimensions controls, and Pro modal upgrade triggers in [block.json](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/block.json), [InspectorControls.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/components/InspectorControls.js), and [studio/src/index.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/studio/src/index.js).
+  * **Cross-Environment CSS:** Production styles in [frontend-gallery.css](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/assets/css/frontend-gallery.css) and [studio.css](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/assets/css/studio.css) targeting `.matcha-gallery__item-inner` with high-specificity canvas overrides.
 
 ---
 
@@ -198,4 +207,6 @@ Dynamic Gallery Wall
 - [x] **2026 AI-Native Intelligence Suite Prototype:** Floating AI Vibe Bar, Visual Echo semantic similarity re-clustering, and Chromatic Palette engine.
 - [x] **WordPress.org Directory Approval:** Approved & live in directory (`matcha-gallery`).
 - [x] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
+- [x] **2026 Modern Layout Suite Port:** Lookbook Duet (Magazine editorial stagger in Free) + Cinema Reel (16:9 widescreen runway in Pro) + Curator Specimen (Swiss museum 2-column archive in Pro).
 - [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org.
+
