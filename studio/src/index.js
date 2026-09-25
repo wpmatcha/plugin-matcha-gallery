@@ -269,6 +269,17 @@ if (root) {
             <span id="studio-ada-text">SEO Score: 0%</span>
           </div>
 
+          <!-- 3D Spatial Depth Controls (PRO) -->
+          <button type="button" id="btn-spatial-wave-demo" class="matcha-exit-btn" style="color:#e6ede8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Watch all cards execute a sequential 3D spatial wave">
+            <span>▶ 3D Wave Demo</span>
+          </button>
+          <button type="button" id="btn-toggle-spatial-tilt" class="matcha-exit-btn is-active" style="color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Toggle Hardware-Accelerated 3D Holographic Tilt">
+            <span style="color:#5ec27f;">✦</span>
+            <span>Spatial 3D Tilt</span>
+            <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+            <span id="spatial-status-label" style="font-size:9px;font-family:monospace;font-weight:800;color:#5ec27f;">ON</span>
+          </button>
+
           <div class="matcha-viewport">
             <button data-vp="desktop" class="is-active" title="Desktop view">${Icons.desktop} Desktop</button>
             <button data-vp="tablet" title="Tablet preview">${Icons.tablet} Tablet</button>
@@ -332,6 +343,21 @@ if (root) {
 
         <!-- Center Workspace: Infinite Canvas Viewport -->
         <main class="matcha-canvas-wrap">
+          <!-- Live Status Bar -->
+          <div class="matcha-canvas-statusbar">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span class="matcha-status-chip">
+                Layout: <strong id="activeLayoutLabel" style="color:#fff;">Classic Grid</strong>
+              </span>
+              <span class="matcha-status-chip">
+                Active Skin: <strong id="activeSkinLabel" style="color:#5ec27f;">Pure Minimalist</strong>
+              </span>
+            </div>
+            <div id="artWallGuide" class="art-wall-guide-line">
+              <span class="art-wall-guide-label">57" Museum Eye-Level</span>
+            </div>
+          </div>
+
           <div id="studio-canvas-container">
             <div id="studio-canvas" class="matcha-canvas"></div>
           </div>
@@ -358,7 +384,7 @@ if (root) {
             <div id="right-panel-header-title" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--st-text-secondary);">
               Wall & Gallery Properties
             </div>
-            <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:2px 8px;font-size:10px;">✕ Wall</button>
+            <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:3px 9px;font-size:10px;font-weight:700;color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);" title="Close Photo Inspector and return to Gallery Properties">✕ Exit to Gallery</button>
           </div>
           <div id="studio-right-panel" class="matcha-tabpanel"></div>
         </aside>
@@ -462,10 +488,32 @@ if (root) {
     if (ids.length) selectPhoto(ids[0]);
   });
 
-  document.getElementById('btn-deselect-photo').addEventListener('click', () => {
+  document.getElementById('btn-deselect-photo')?.addEventListener('click', () => {
     selectedPhotoId = null;
     renderRightPanel();
     document.querySelectorAll('.matcha-img-card').forEach(c => c.classList.remove('is-selected'));
+    document.querySelectorAll('.matcha-gallery__item').forEach(c => c.classList.remove('is-selected'));
+  });
+
+  // Top Bar 3D Spatial Depth Controls
+  document.getElementById('btn-spatial-wave-demo')?.addEventListener('click', () => {
+    trigger3DWaveDemo();
+  });
+
+  document.getElementById('btn-toggle-spatial-tilt')?.addEventListener('click', () => {
+    toggleSpatial3D();
+  });
+
+  // Click canvas background to exit Photo Inspector and return to Gallery Properties
+  document.getElementById('studio-canvas-container')?.addEventListener('click', (e) => {
+    if (!e.target.closest('.matcha-gallery__item') && !e.target.closest('.matcha-img-card') && !e.target.closest('button, input, select, textarea, a')) {
+      if (selectedPhotoId !== null) {
+        selectedPhotoId = null;
+        renderRightPanel();
+        document.querySelectorAll('.matcha-img-card').forEach(c => c.classList.remove('is-selected'));
+        document.querySelectorAll('.matcha-gallery__item').forEach(c => c.classList.remove('is-selected'));
+      }
+    }
   });
 
   // --- Export Engines ---
@@ -785,8 +833,225 @@ if (root) {
     `;
   }
 
+  // --- Layout & Skin Compatibility Matrix (2026 Engine) ---
+  const layoutSkinCompatibility = {
+    grid: {
+      name: 'Classic Grid',
+      allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: 'Showing skins tuned for <strong>Classic Grid</strong> (Uniform aspect ratio).'
+    },
+    masonry: {
+      name: 'Pinterest Masonry',
+      allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+      defaultSkin: 'skin-editorial',
+      notice: 'Showing skins tuned for <strong>Masonry</strong> (Dynamic organic heights).'
+    },
+    'lookbook-duet': {
+      name: 'Lookbook Duet (2026 Editorial)',
+      allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura'],
+      defaultSkin: 'skin-editorial',
+      notice: '<strong>Lookbook Duet:</strong> Staggered editorial columns with alternating vertical offsets.'
+    },
+    justified: {
+      name: 'Justified Rows',
+      allowedSkins: ['skin-pure-minimalist'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: '<strong>Justified Rows:</strong> Filtered to pure photography overlays (card containers below photo are disabled to keep rows flush).'
+    },
+    mosaic: {
+      name: 'PhotoBlocks Mosaic',
+      allowedSkins: ['skin-pure-minimalist', 'skin-aura'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: '<strong>PhotoBlocks Mosaic:</strong> Custom tile spans with ambient highlights.'
+    },
+    bento: {
+      name: 'Bento Spans (PRO)',
+      allowedSkins: ['skin-pure-minimalist', 'skin-aura'],
+      defaultSkin: 'skin-aura',
+      notice: '<strong>Bento Spans:</strong> Optimized for Atmospheric Aura & Minimalist tiles.'
+    },
+    pinwheel: {
+      name: 'Pinwheel Spiral',
+      allowedSkins: ['skin-pure-minimalist'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: '<strong>Pinwheel Spiral:</strong> Center hero with spiral tiles.'
+    },
+    'cinema-reel': {
+      name: 'Cinema Reel (2026 Runway)',
+      allowedSkins: ['skin-pure-minimalist', 'skin-editorial', 'skin-aura'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: '<strong>Cinema Reel:</strong> 16:9 widescreen horizontal runway strip with smooth touch & scroll-snap momentum.'
+    },
+    'curator-specimen': {
+      name: 'Curator Archive (Swiss Studio)',
+      allowedSkins: ['skin-pure-minimalist', 'skin-exhibition', 'skin-editorial'],
+      defaultSkin: 'skin-exhibition',
+      notice: '<strong>Curator Archive:</strong> Architectural 2-column museum showcase with 40px negative space and specimen matting.'
+    },
+    'art-wall': {
+      name: 'Art Wall Canvas (PRO)',
+      allowedSkins: ['skin-exhibition', 'skin-pure-minimalist', 'skin-aura'],
+      defaultSkin: 'skin-exhibition',
+      notice: '<strong>Art Wall Canvas:</strong> Interactive exhibition wall with 57" museum eye-level reference, realistic picture frames, and wall material presets.'
+    }
+  };
+
+  function getActiveSkinKey(cfg) {
+    if (cfg.skin) return cfg.skin;
+    if (cfg.stylePreset === 'editorial' || cfg.cardTheme === 'card' || cfg.contentPlacement === 'below') return 'skin-editorial';
+    if (cfg.stylePreset === 'exhibition-frame' || cfg.frameStyle === 'black-metal') return 'skin-exhibition';
+    if (cfg.stylePreset === 'aura') return 'skin-aura';
+    return 'skin-pure-minimalist';
+  }
+
+  function isSkinSupported(skinKey, layoutKey) {
+    const allowed = layoutSkinCompatibility[layoutKey]?.allowedSkins || ['skin-pure-minimalist'];
+    return allowed.includes(skinKey);
+  }
+
+  function getSkinName(skinKey) {
+    switch (skinKey) {
+      case 'skin-editorial': return 'Editorial Card';
+      case 'skin-exhibition': return 'Exhibition Hairline';
+      case 'skin-aura': return 'Atmospheric Aura';
+      case 'skin-pure-minimalist':
+      default: return 'Pure Minimalist';
+    }
+  }
+
+  function getLayoutName(layoutKey) {
+    return layoutSkinCompatibility[layoutKey]?.name || 'Classic Grid';
+  }
+
+  let isSpatial3D = true;
+
+  function toggleSpatial3D(enable) {
+    if (!isPro && enable !== false) {
+      showProModal(
+        'Spatial 3D Holographic Tilt',
+        'Hardware-accelerated interactive 3D perspective tilt with specular lighting glare and dynamic shadows is available in Matcha Gallery Pro.'
+      );
+      return;
+    }
+    isSpatial3D = enable !== undefined ? enable : !isSpatial3D;
+    const canvas = document.getElementById('studio-canvas');
+    if (canvas) canvas.classList.toggle('spatial-3d-active', isSpatial3D);
+
+    const toggleBtn = document.getElementById('btn-toggle-spatial-tilt');
+    const label = document.getElementById('spatial-status-label');
+    if (toggleBtn) {
+      toggleBtn.classList.toggle('is-active', isSpatial3D);
+    }
+    if (label) {
+      label.textContent = isSpatial3D ? 'ON' : 'OFF';
+      label.style.color = isSpatial3D ? '#5ec27f' : 'var(--st-text-muted)';
+    }
+
+    const inspectorToggle = document.getElementById('st-spatial-tilt-toggle');
+    if (inspectorToggle) {
+      inspectorToggle.checked = isSpatial3D;
+    }
+
+    if (!isSpatial3D) {
+      document.querySelectorAll('.matcha-gallery__item').forEach(item => {
+        item.style.removeProperty('transform');
+        item.style.removeProperty('box-shadow');
+      });
+    }
+  }
+
+  function trigger3DWaveDemo() {
+    if (!isSpatial3D) toggleSpatial3D(true);
+    const items = document.querySelectorAll('.matcha-gallery__item');
+    items.forEach((item, idx) => {
+      setTimeout(() => {
+        item.style.setProperty('transform', 'perspective(1200px) rotateX(-12deg) rotateY(14deg) scale3d(1.06, 1.06, 1.06)', 'important');
+        item.style.setProperty('box-shadow', '-22px 24px 44px rgba(0,0,0,0.65), -14px 14px 34px var(--ambient-glow, rgba(94, 194, 127, 0.45))', 'important');
+        const glare = item.querySelector('.item-specular-glare');
+        if (glare) {
+          glare.style.setProperty('--glare-x', '120px');
+          glare.style.setProperty('--glare-y', '80px');
+          glare.style.opacity = '1';
+        }
+
+        setTimeout(() => {
+          item.style.setProperty('transform', 'perspective(1200px) rotateX(10deg) rotateY(-10deg) scale3d(1.03, 1.03, 1.03)', 'important');
+          setTimeout(() => {
+            item.style.setProperty('transform', 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 'important');
+            item.style.removeProperty('box-shadow');
+            if (glare) glare.style.opacity = '';
+          }, 350);
+        }, 400);
+      }, idx * 110);
+    });
+  }
+
+  function initSpatial3DPhysics() {
+    const canvas = document.getElementById('studio-canvas');
+    if (!canvas) return;
+    canvas.classList.toggle('spatial-3d-active', isSpatial3D);
+
+    const items = canvas.querySelectorAll('.matcha-gallery__item');
+    items.forEach(item => {
+      if (!item.querySelector('.item-specular-glare')) {
+        const glare = document.createElement('div');
+        glare.className = 'item-specular-glare';
+        const inner = item.querySelector('.matcha-gallery__item-inner') || item;
+        inner.appendChild(glare);
+      }
+
+      if (!item._spatialAttached) {
+        item._spatialAttached = true;
+        item.addEventListener('mousemove', (e) => {
+          if (!isSpatial3D) return;
+          const rect = item.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const normX = (x - centerX) / centerX;
+          const normY = (y - centerY) / centerY;
+
+          const tiltX = -(normY * 16).toFixed(2);
+          const tiltY = (normX * 16).toFixed(2);
+
+          item.style.setProperty('transform', `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.04, 1.04, 1.04)`, 'important');
+          item.style.setProperty('--glare-x', `${x}px`);
+          item.style.setProperty('--glare-y', `${y}px`);
+
+          const shadowX = (-normX * 24).toFixed(1);
+          const shadowY = (-normY * 24 + 20).toFixed(1);
+          item.style.setProperty('box-shadow', `${shadowX}px ${shadowY}px 40px rgba(0,0,0,0.6), ${(-normX * 16).toFixed(1)}px ${(-normY * 16).toFixed(1)}px 36px var(--ambient-glow, rgba(94, 194, 127, 0.4))`, 'important');
+        });
+
+        item.addEventListener('mouseleave', () => {
+          if (!isSpatial3D) return;
+          item.style.setProperty('transform', 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)', 'important');
+          item.style.removeProperty('box-shadow');
+        });
+      }
+    });
+  }
+
+  function updateStatusChips() {
+    const cfg = getState().config || {};
+    const curLayout = cfg.layout || 'grid';
+    const curSkin = getActiveSkinKey(cfg);
+    const layoutLabel = document.getElementById('activeLayoutLabel');
+    if (layoutLabel) layoutLabel.textContent = getLayoutName(curLayout);
+    const skinLabel = document.getElementById('activeSkinLabel');
+    if (skinLabel) skinLabel.textContent = getSkinName(curSkin);
+    const artGuide = document.getElementById('artWallGuide');
+    if (artGuide) {
+      artGuide.style.display = (curLayout === 'art-wall' && cfg.artWallEyeLevel !== false) ? 'block' : 'none';
+    }
+  }
+
   function blueprintsHTML(cfg) {
     const curLayout = cfg.layout || 'grid';
+    const activeSkinKey = getActiveSkinKey(cfg);
     return `
       <div class="matcha-card">
         <div class="matcha-card-title">
@@ -860,6 +1125,79 @@ if (root) {
             <div class="matcha-blueprint-title">Curator Specimen</div>
             <div class="matcha-blueprint-desc">Swiss museum 2-column</div>
           </div>
+        </div>
+
+        <!-- 2. AUTO-FILTERED SKINS -->
+        <div class="matcha-card-title" style="margin-top: 24px; display: flex; align-items: center; justify-content: space-between;">
+          <span class="heading-wrap" style="color: #ffffff;">${Icons.palette || Icons.sparkles} 2. Best-Fitting Skins</span>
+          <span id="st-skin-filter-tag" style="font-size: 9px; padding: 2px 7px; background: rgba(94, 194, 127, 0.15); color: #5ec27f; border: 1px solid rgba(94, 194, 127, 0.3); border-radius: 4px; font-weight: 700; text-transform: uppercase;">Filtered</span>
+        </div>
+
+        <div id="st-skin-filter-notice" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--st-text-secondary); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 8px 10px; margin: 8px 0 12px;">
+          <span style="color: #5ec27f;">${Icons.sparkles}</span>
+          <span id="st-skin-notice-text">${(layoutSkinCompatibility[curLayout] || layoutSkinCompatibility['grid']).notice}</span>
+        </div>
+
+        <div class="matcha-skins-list" id="matcha-skins-list">
+
+          <!-- SKIN 1: PURE MINIMALIST (Universal) -->
+          <div class="matcha-skin-card ${activeSkinKey === 'skin-pure-minimalist' ? 'is-active' : ''} ${isSkinSupported('skin-pure-minimalist', curLayout) ? '' : 'hidden'}" data-skin="skin-pure-minimalist" data-supports="grid,masonry,justified,mosaic,art-wall,lookbook-duet,bento,pinwheel,cinema-reel,curator-specimen">
+            <div class="matcha-skin-thumb thumb-minimalist"></div>
+            <div class="matcha-skin-info">
+              <div class="matcha-skin-header">
+                <span class="matcha-skin-name">Pure Minimalist</span>
+                <span class="matcha-skin-badge">Universal</span>
+              </div>
+              <div class="matcha-skin-desc">Frameless edge-to-edge photo with floating glass action dock.</div>
+            </div>
+          </div>
+
+          <!-- SKIN 2: EDITORIAL CARD (Recommended) -->
+          <div class="matcha-skin-card ${activeSkinKey === 'skin-editorial' ? 'is-active' : ''} ${isSkinSupported('skin-editorial', curLayout) ? '' : 'hidden'}" data-skin="skin-editorial" data-supports="grid,masonry,lookbook-duet,cinema-reel,curator-specimen">
+            <div class="matcha-skin-thumb thumb-editorial">
+              <div class="thumb-card-img"></div>
+              <div class="thumb-card-body">
+                <div class="thumb-card-line"></div>
+                <div class="thumb-card-line sub"></div>
+              </div>
+            </div>
+            <div class="matcha-skin-info">
+              <div class="matcha-skin-header">
+                <span class="matcha-skin-name">Editorial Card</span>
+                <span class="matcha-skin-badge match">Recommended</span>
+              </div>
+              <div class="matcha-skin-desc">Photo on top with category pill, title, price, and shop/view buttons below.</div>
+            </div>
+          </div>
+
+          <!-- SKIN 3: EXHIBITION HAIRLINE (Fine-Art) -->
+          <div class="matcha-skin-card ${activeSkinKey === 'skin-exhibition' ? 'is-active' : ''} ${isSkinSupported('skin-exhibition', curLayout) ? '' : 'hidden'}" data-skin="skin-exhibition" data-supports="grid,masonry,art-wall,lookbook-duet,curator-specimen">
+            <div class="matcha-skin-thumb thumb-exhibition">
+              <div class="thumb-exhibition-inner"></div>
+            </div>
+            <div class="matcha-skin-info">
+              <div class="matcha-skin-header">
+                <span class="matcha-skin-name">Exhibition Hairline</span>
+                <span class="matcha-skin-badge">Fine-Art</span>
+              </div>
+              <div class="matcha-skin-desc">Gallery matting margin with crisp inner hairline frame & specimen actions.</div>
+            </div>
+          </div>
+
+          <!-- SKIN 4: AI ATMOSPHERIC AURA (PRO) -->
+          <div class="matcha-skin-card ${activeSkinKey === 'skin-aura' ? 'is-active' : ''} ${isSkinSupported('skin-aura', curLayout) ? '' : 'hidden'}" data-skin="skin-aura" data-supports="grid,masonry,bento,lookbook-duet,cinema-reel,mosaic">
+            <div class="matcha-skin-thumb thumb-aura">
+              <div class="thumb-aura-photo"></div>
+            </div>
+            <div class="matcha-skin-info">
+              <div class="matcha-skin-header">
+                <span class="matcha-skin-name">Atmospheric Aura</span>
+                <span class="matcha-pro-badge">PRO</span>
+              </div>
+              <div class="matcha-skin-desc">Ambient backlight glow extracted from photo's AI palette with focal pan.</div>
+            </div>
+          </div>
+
         </div>
       </div>
     `;
@@ -942,8 +1280,125 @@ if (root) {
     const curShadow = cfg.shadowElevation || 'soft';
     const curTheme = cfg.cardTheme || 'clean';
     const curPag = cfg.paginationType || 'none';
+    const curWallTex = cfg.wallTexture || cfg.canvasBackdrop || 'charcoal';
+    const curWallPreset = cfg.wallPreset || 'salon';
+    const curWallMolding = cfg.wallMolding || 'mold-black';
+    const curWallOrient = cfg.wallFrameOrientation || 'portrait';
+    const curWallRatio = cfg.wallFrameRatio || '18x24';
+    const isLandscape = curWallOrient === 'landscape';
 
     return `
+      ${cfg.layout === 'art-wall' ? `
+        <!-- Art Wall Controls (PRO) -->
+        <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.35); background: rgba(94, 194, 127, 0.04);">
+          <div class="matcha-card-title" style="display:flex;align-items:center;justify-content:space-between;">
+            <span class="heading-wrap" style="color:#5ec27f;">${Icons.layoutGrid} Art Wall Controls <span class="matcha-pro-badge">PRO</span></span>
+          </div>
+
+          <!-- Wall Texture & Material -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Wall Texture & Material</label>
+            <div style="display:flex;gap:5px;">
+              <button type="button" class="wall-color-btn ${curWallTex === 'charcoal' ? 'active' : ''}" data-tex="charcoal" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#161c18;border:1px solid ${curWallTex === 'charcoal' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Charcoal</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'gallery-white' || curWallTex === 'white' ? 'active' : ''}" data-tex="gallery-white" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#e8e4dc;border:1px solid ${curWallTex === 'gallery-white' || curWallTex === 'white' ? 'var(--st-accent-primary)' : '#ccc'};color:#222;border-radius:4px;cursor:pointer;">Plaster</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'active' : ''}" data-tex="warm-linen" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#261f1b;border:1px solid ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Linen</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'active' : ''}" data-tex="sage-green" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#14221a;border:1px solid ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Sage</button>
+            </div>
+          </div>
+
+          <!-- Curated Wall Presets -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Curated Wall Presets</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <button type="button" class="preset-wall-btn ${curWallPreset === 'salon' ? 'active' : ''}" data-preset="salon" style="padding:7px 8px;font-size:10.5px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;text-align:left;">🏛️ Salon Wall</button>
+              <button type="button" class="preset-wall-btn ${curWallPreset === 'triptych' ? 'active' : ''}" data-preset="triptych" style="padding:7px 8px;font-size:10.5px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;text-align:left;">🖼️ Hero Triptych</button>
+              <button type="button" class="preset-wall-btn ${curWallPreset === 'staircase' ? 'active' : ''}" data-preset="staircase" style="padding:7px 8px;font-size:10.5px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;text-align:left;">📐 Staircase</button>
+              <button type="button" class="preset-wall-btn ${curWallPreset === 'symmetric' ? 'active' : ''}" data-preset="symmetric" style="padding:7px 8px;font-size:10.5px;font-weight:600;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;text-align:left;">⚖️ Symmetric Quad</button>
+            </div>
+          </div>
+
+          <!-- 57" Museum Eye-Level -->
+          <div style="margin-bottom:12px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.06);">
+            <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;cursor:pointer;color:var(--st-text-primary);font-weight:600;">
+              <span>57" Museum Eye-Level Guide</span>
+              <input type="checkbox" id="st-eyelevel-toggle" ${cfg.artWallEyeLevel !== false ? 'checked' : ''} style="accent-color:#5ec27f;cursor:pointer;width:15px;height:15px;">
+            </label>
+            <div style="font-size:10px;color:var(--st-text-muted);line-height:1.4;margin-top:4px;">
+              Standard international gallery hanging reference (57" from floor) with horizon snapping.
+            </div>
+          </div>
+
+          <!-- Selected Frame Molding -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Frame Moldings</label>
+            <div style="display:flex;gap:6px;">
+              <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-black' ? 'active' : ''}" data-mold="mold-black" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#0f1311;border:1px solid ${curWallMolding === 'mold-black' ? 'var(--st-accent-primary)' : 'rgba(255,255,255,0.15)'};color:#fff;border-radius:4px;cursor:pointer;">Matte Black</button>
+              <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-oak' ? 'active' : ''}" data-mold="mold-oak" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#9e744a;border:1px solid ${curWallMolding === 'mold-oak' ? 'var(--st-accent-primary)' : '#7a5834'};color:#fff;border-radius:4px;cursor:pointer;">Natural Oak</button>
+              <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-white' ? 'active' : ''}" data-mold="mold-white" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#f8fafc;border:1px solid ${curWallMolding === 'mold-white' ? 'var(--st-accent-primary)' : '#ccc'};color:#222;border-radius:4px;cursor:pointer;">Nordic White</button>
+            </div>
+          </div>
+
+          <!-- Frame Orientation -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);">Frame Orientation</label>
+              <span id="st-wall-orient-badge" style="font-size:9.5px;color:#5ec27f;font-family:monospace;font-weight:700;">${isLandscape ? 'LANDSCAPE' : 'PORTRAIT'}</span>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button type="button" class="frame-orient-btn ${!isLandscape ? 'active' : ''}" data-orient="portrait" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${!isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${!isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+                <span>↕️</span><span>Portrait</span>
+              </button>
+              <button type="button" class="frame-orient-btn ${isLandscape ? 'active' : ''}" data-orient="landscape" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:${isLandscape ? '#fff' : 'var(--st-text-secondary)'};border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+                <span>↔️</span><span>Landscape</span>
+              </button>
+              <button type="button" id="btn-wall-flip-orient" class="frame-orient-btn" style="padding:6px 10px;font-size:11px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;" title="Quick 90° Flip">
+                <span>🔄</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Frame Ratios -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Curated Frame Ratios</label>
+            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:4px;">
+              <button type="button" class="ratio-opt-btn ${curWallRatio === '24x36' ? 'active' : ''}" data-ratio="24x36" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">${isLandscape ? '36"×24"' : '24"×36"'}</button>
+              <button type="button" class="ratio-opt-btn ${curWallRatio === '18x24' ? 'active' : ''}" data-ratio="18x24" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">${isLandscape ? '24"×18"' : '18"×24"'}</button>
+              <button type="button" class="ratio-opt-btn ${curWallRatio === '12x12' ? 'active' : ''}" data-ratio="12x12" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">12"×12"</button>
+              <button type="button" class="ratio-opt-btn ${curWallRatio === '16x20' ? 'active' : ''}" data-ratio="16x20" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">${isLandscape ? '20"×16"' : '16"×20"'}</button>
+              <button type="button" class="ratio-opt-btn ${curWallRatio === '20x30' ? 'active' : ''}" data-ratio="20x30" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">${isLandscape ? '30"×20"' : '20"×30"'}</button>
+              <button type="button" class="ratio-opt-btn ${curWallRatio === 'panoramic' ? 'active' : ''}" data-ratio="panoramic" style="padding:5px 3px;font-size:10px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:#e6ede8;border-radius:4px;cursor:pointer;">${isLandscape ? '16:9 Wide' : '9:16 Tall'}</button>
+            </div>
+          </div>
+
+          <!-- Responsive Strategy -->
+          <div style="padding:8px 10px;background:rgba(94, 194, 127, 0.08);border-radius:6px;border:1px solid rgba(94, 194, 127, 0.2);">
+            <div style="font-size:10.5px;font-weight:700;color:#fff;margin-bottom:2px;display:flex;align-items:center;gap:5px;">
+              <span>📱 Responsive Strategy</span>
+            </div>
+            <div style="font-size:10px;color:var(--st-text-secondary);line-height:1.35;">
+              On mobile (&lt;768px), frames automatically stack into an elegant vertical exhibition tour with proportions preserved.
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- 3D Spatial Holographic Tilt (PRO) -->
+      <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.25); background: rgba(94, 194, 127, 0.03);">
+        <div class="matcha-card-title">
+          <span class="heading-wrap" style="color:#5ec27f;">✦ Spatial 3D Holographic Tilt <span class="matcha-pro-badge">PRO</span></span>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);margin-bottom:6px;">
+          <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? 'checked' : ''}>
+          <span>Enable Hardware-Accelerated 3D Holographic Tilt</span>
+        </label>
+        <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 10px;line-height:1.4;">
+          Interactive gyro & mouse perspective tilt with specular lighting glare on card hover.
+        </p>
+        <button type="button" id="btn-trigger-wave-inspector" class="matcha-exit-btn" style="width:100%;font-size:11px;font-weight:700;padding:6px;justify-content:center;display:flex;align-items:center;gap:6px;color:#5ec27f;border-color:rgba(94,194,127,0.3);background:rgba(94,194,127,0.08);">
+          <span>▶ Play 3D Wave Demo</span>
+        </button>
+      </div>
+
       <!-- Curated Style Preset (Skins) -->
       <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.35); background: rgba(94, 194, 127, 0.04);">
         <div class="matcha-card-title">
@@ -1626,6 +2081,91 @@ if (root) {
   }
 
   function bindWallProperties() {
+    // --- Art Wall Controls (PRO) Bindings ---
+    document.querySelectorAll('.wall-color-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tex = btn.dataset.tex;
+        const bgMap = {
+          'charcoal': 'charcoal',
+          'gallery-white': 'white',
+          'warm-linen': 'cream',
+          'sage-green': 'sage'
+        };
+        patchConfig({ wallTexture: tex, canvasBackdrop: bgMap[tex] || 'charcoal' });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.querySelectorAll('.preset-wall-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.dataset.preset;
+        patchConfig({ wallPreset: preset });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.getElementById('st-eyelevel-toggle')?.addEventListener('change', e => {
+      patchConfig({ artWallEyeLevel: e.target.checked });
+      updateStatusChips();
+      autosaveSoon();
+    });
+
+    document.querySelectorAll('.frame-mold-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mold = btn.dataset.mold;
+        if (!isPro && mold !== 'mold-black') {
+          showProModal('Luxury Frame Moldings', 'Nordic White and Natural Oak museum-grade picture moldings are available in Matcha Gallery Pro.');
+          return;
+        }
+        patchConfig({ wallMolding: mold });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.querySelectorAll('.frame-orient-btn[data-orient]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const orient = btn.dataset.orient;
+        patchConfig({ wallFrameOrientation: orient });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.getElementById('btn-wall-flip-orient')?.addEventListener('click', () => {
+      const cur = getState().config.wallFrameOrientation || 'portrait';
+      const next = cur === 'portrait' ? 'landscape' : 'portrait';
+      patchConfig({ wallFrameOrientation: next });
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.querySelectorAll('.ratio-opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ratio = btn.dataset.ratio;
+        patchConfig({ wallFrameRatio: ratio });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    // --- 3D Spatial Depth Bindings ---
+    document.getElementById('st-spatial-tilt-toggle')?.addEventListener('change', e => {
+      toggleSpatial3D(e.target.checked);
+    });
+
+    document.getElementById('btn-trigger-wave-inspector')?.addEventListener('click', () => {
+      trigger3DWaveDemo();
+    });
+
     document.getElementById('st-frame-style')?.addEventListener('change', e => {
       const val = e.target.value;
       if (!isPro && ['black-metal', 'natural-oak', 'gold-brass', 'glass-float'].includes(val)) {
@@ -2783,18 +3323,74 @@ if (root) {
         document.querySelectorAll('.matcha-blueprint-card').forEach(c => c.classList.remove('is-active'));
         card.classList.add('is-active');
 
+        const cfg = getState().config || {};
+        const curSkin = getActiveSkinKey(cfg);
+        const comp = layoutSkinCompatibility[layout] || layoutSkinCompatibility.grid;
+        let nextSkin = curSkin;
+        if (!comp.allowedSkins.includes(curSkin)) {
+          nextSkin = comp.defaultSkin;
+        }
+
+        let patch = { layout };
+        if (nextSkin !== curSkin) {
+          patch.skin = nextSkin;
+          if (nextSkin === 'skin-pure-minimalist') {
+            patch = { ...patch, stylePreset: 'minimalist', cardTheme: 'clean', frameStyle: 'none', mattingSize: 0, contentPlacement: 'overlay' };
+          } else if (nextSkin === 'skin-editorial') {
+            patch = { ...patch, stylePreset: 'editorial', cardTheme: 'card', contentPlacement: 'below' };
+          } else if (nextSkin === 'skin-exhibition') {
+            patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: 'black-metal', mattingSize: 18 };
+          } else if (nextSkin === 'skin-aura') {
+            patch = { ...patch, stylePreset: 'aura', cardTheme: 'dark', hoverEffect: 'zoom' };
+          }
+        }
+
         if (layout === 'pinwheel') {
           const ids = getState().config.imageIds || [];
           const spans = {};
           ids.forEach((id, i) => { spans[id] = i === 0 ? '2x2' : '1x1'; });
-          patchConfig({ layout: 'pinwheel', imageSpans: spans, columns: 4 });
-        } else {
-          patchConfig({ layout });
+          patch.imageSpans = spans;
+          patch.columns = 4;
         }
 
+        patchConfig(patch);
         renderLeftTab('blueprints');
         renderCanvas();
         renderRightPanel();
+        updateStatusChips();
+        autosaveSoon();
+      });
+    });
+
+    // 2. Best-Fitting Skin Cards Bindings
+    document.querySelectorAll('.matcha-skin-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const skinKey = card.dataset.skin;
+
+        if (skinKey === 'skin-aura' && !isPro) {
+          showProModal(
+            'Atmospheric Aura (AI Backlight Glow)',
+            'Ambient backlight glow extracted from photo palettes with dynamic focal-point hover panning is available in Matcha Gallery Pro.'
+          );
+          return;
+        }
+
+        let patch = { skin: skinKey };
+        if (skinKey === 'skin-pure-minimalist') {
+          patch = { ...patch, stylePreset: 'minimalist', cardTheme: 'clean', frameStyle: 'none', mattingSize: 0, contentPlacement: 'overlay' };
+        } else if (skinKey === 'skin-editorial') {
+          patch = { ...patch, stylePreset: 'editorial', cardTheme: 'card', contentPlacement: 'below' };
+        } else if (skinKey === 'skin-exhibition') {
+          patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: 'black-metal', mattingSize: 18 };
+        } else if (skinKey === 'skin-aura') {
+          patch = { ...patch, stylePreset: 'aura', cardTheme: 'dark', hoverEffect: 'zoom' };
+        }
+
+        patchConfig(patch);
+        renderLeftTab('blueprints');
+        renderCanvas();
+        renderRightPanel();
+        updateStatusChips();
         autosaveSoon();
       });
     });
@@ -3669,7 +4265,12 @@ if (root) {
     const activePagination = (!isPro && ['infinite', 'pages'].includes(cfg.paginationType)) ? 'load-more' : (cfg.paginationType || 'none');
     const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
 
-    canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
+    if (activeLayout === 'art-wall') {
+      const tex = cfg.wallTexture || 'charcoal';
+      canvas.style.background = tex === 'warm-linen' ? '#261f1b' : tex === 'sage-green' ? '#14221a' : tex === 'gallery-white' ? '#e8e4dc' : '#161c18';
+    } else {
+      canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
+    }
 
     canvas.innerHTML = `
       <div class="matcha-gallery matcha-gallery--${activeLayout} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
@@ -3779,13 +4380,26 @@ if (root) {
             let dimLabel = '';
             const maxWallFrames = 3;
             if (activeLayout === 'art-wall') {
+              const orient = cfg.wallFrameOrientation || 'portrait';
+              const ratio = cfg.wallFrameRatio || '18x24';
+              const isLand = orient === 'landscape';
+              const ratioLabels = {
+                '24x36': isLand ? '36" × 24"' : '24" × 36"',
+                '18x24': isLand ? '24" × 18"' : '18" × 24"',
+                '12x12': '12" × 12"',
+                '16x20': isLand ? '20" × 16"' : '16" × 20"',
+                '20x30': isLand ? '30" × 20"' : '20" × 30"',
+                'panoramic': isLand ? '16:9 Wide' : '9:16 Tall'
+              };
+              const currentLabel = ratioLabels[ratio] || (isLand ? '24" × 18"' : '18" × 24"');
+
               if (idx >= maxWallFrames) {
                 itemExtraClass += ' matcha-gallery__item--surplus';
                 itemExtraStyle += 'display:none;';
               } else {
                 itemExtraClass += ` matcha-gallery__item--wall-frame matcha-wall-mold--${cfg.wallMolding || 'mold-black'}`;
                 if (idx === 1) itemExtraClass += ' matcha-gallery__item--hero-frame';
-                dimLabel = idx === 1 ? '24" × 36" (Centerpiece)' : '24" × 36"';
+                dimLabel = idx === 1 ? `${currentLabel} (Centerpiece)` : currentLabel;
               }
             }
 
@@ -4160,6 +4774,9 @@ if (root) {
         applyCanvasFilter();
       });
     }
+
+    initSpatial3DPhysics();
+    updateStatusChips();
   }
 
   function capitalize(str) {
@@ -4284,4 +4901,5 @@ if (root) {
   renderRightPanel();
   renderCanvas();
   updateScorecard();
+  updateStatusChips();
 }

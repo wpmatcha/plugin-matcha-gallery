@@ -167,6 +167,13 @@ Dynamic Gallery Wall
   * **Gutenberg Inspector & Studio UI:** Added interactive blueprint cards, responsive dimensions controls, and Pro modal upgrade triggers in [block.json](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/block.json), [InspectorControls.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/blocks/smart-gallery/components/InspectorControls.js), and [studio/src/index.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/studio/src/index.js).
   * **Cross-Environment CSS:** Production styles in [frontend-gallery.css](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/assets/css/frontend-gallery.css) and [studio.css](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/assets/css/studio.css) targeting `.matcha-gallery__item-inner` with high-specificity canvas overrides.
 
+### 10. Studio Prototype Port & Visual Architecture Suite (Completed)
+* **Best-Fitting Skins Integration:** Visual cards under Layout Blueprints in Studio left sidebar (`Pure Minimalist`, `Editorial Card`, `Exhibition Hairline`, `Atmospheric Aura PRO`) with dynamic layout compatibility matrix filtering and automatic fallback recommendation.
+* **Live Status Chips & Top Bar Controls:** Top bar now features active layout and skin indicator chips (`Layout: ...`, `Active Skin: ...`), `▶ 3D Wave Demo` sequence runner, and hardware-accelerated `✦ Spatial 3D Tilt (PRO)` toggle.
+* **Contextual Art Wall Controls (PRO):** When Curated Art Wall layout is selected, right sidebar displays dedicated panel for Wall Texture & Material (`Charcoal`, `Plaster`, `Linen`, `Sage`), Curated Presets (`Salon Wall`, `Hero Triptych`, `Staircase`, `Symmetric Quad`), 57″ Museum Eye-Level horizon guide toggle, Frame Moldings (`Matte Black`, `Natural Oak`, `Nordic White`), Frame Orientation (`Portrait`, `Landscape`, 90° quick flip), Curated Frame Ratios (`24"×36"`, `18"×24"`, `12"×12"`, `16"×20"`, `20"×30"`, `16:9 Wide`), and Responsive mobile tour notes.
+* **Spatial 3D Holographic Tilt:** Gyro/mouse perspective transform with specular light sheen overlay on card hover (`.item-specular-glare`), plus in-inspector wave demo trigger.
+* **Seamless Deselection:** Canvas container background click listener and prominent `✕ Exit to Gallery` button allows immediate return to Wall & Gallery Properties without getting trapped in Photo Inspector.
+
 ---
 
 ## 6. Git Repositories & Build Instructions
@@ -208,5 +215,6 @@ Dynamic Gallery Wall
 - [x] **WordPress.org Directory Approval:** Approved & live in directory (`matcha-gallery`).
 - [x] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
 - [x] **2026 Modern Layout Suite Port:** Lookbook Duet (Magazine editorial stagger in Free) + Cinema Reel (16:9 widescreen runway in Pro) + Curator Specimen (Swiss museum 2-column archive in Pro).
+- [x] **Studio Prototype Feature Port:** Best-Fitting Skins filter matrix, Live Status Chips, 3D Spatial Depth suite, and Art Wall Controls panel.
 - [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org.
 

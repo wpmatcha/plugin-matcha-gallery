@@ -1662,3 +1662,293 @@ body.matcha-is-dragging * {
 	border-color: rgba(239, 68, 68, 0.3);
 }
 
+/* ==========================================================================
+   2. BEST-FITTING SKINS (MOCKUP PORT)
+   ========================================================================== */
+.matcha-skins-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.matcha-skin-card {
+	background: var(--st-bg-surface);
+	border: 1px solid var(--st-border-subtle);
+	border-radius: var(--st-radius-md, 8px);
+	padding: 10px;
+	cursor: pointer;
+	transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+	position: relative;
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+}
+
+.matcha-skin-card:hover {
+	background: var(--st-bg-card-hover, #202621);
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.matcha-skin-card.is-active {
+	border-color: var(--st-accent-primary);
+	background: rgba(94, 194, 127, 0.08);
+	box-shadow: 0 0 0 1px var(--st-accent-primary);
+}
+
+.matcha-skin-card.hidden {
+	display: none !important;
+}
+
+.matcha-skin-thumb {
+	width: 42px;
+	height: 42px;
+	border-radius: 6px;
+	background: #000;
+	flex-shrink: 0;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	position: relative;
+}
+
+.thumb-minimalist {
+	background: linear-gradient(135deg, #2b3930, #141c17);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.thumb-minimalist::after {
+	content: '';
+	width: 24px;
+	height: 24px;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 3px;
+}
+
+.thumb-editorial {
+	background: #19201c;
+	display: flex;
+	flex-direction: column;
+}
+.thumb-editorial .thumb-card-img {
+	height: 25px;
+	background: linear-gradient(135deg, #44594c, #26332b);
+}
+.thumb-editorial .thumb-card-body {
+	flex: 1;
+	background: #fff;
+	padding: 3px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.thumb-editorial .thumb-card-line {
+	height: 3px;
+	width: 80%;
+	background: #334155;
+	border-radius: 1px;
+}
+.thumb-editorial .thumb-card-line.sub {
+	width: 50%;
+	background: #94a3b8;
+}
+
+.thumb-exhibition {
+	background: #0b0f0d;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.thumb-exhibition .thumb-exhibition-inner {
+	width: 100%;
+	height: 100%;
+	border: 1px solid var(--st-accent-primary);
+	background: #1e2822;
+	border-radius: 2px;
+}
+
+.thumb-aura {
+	background: radial-gradient(circle at center, rgba(94, 194, 127, 0.8) 0%, rgba(20, 25, 22, 0.9) 70%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.thumb-aura .thumb-aura-photo {
+	width: 26px;
+	height: 26px;
+	border-radius: 3px;
+	background: rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 14px rgba(94, 194, 127, 0.9);
+}
+
+.matcha-skin-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.matcha-skin-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 2px;
+}
+
+.matcha-skin-name {
+	font-size: 11.5px;
+	font-weight: 700;
+	color: #fff;
+}
+
+.matcha-skin-badge {
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	padding: 1px 5px;
+	border-radius: 3px;
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--st-text-secondary);
+}
+
+.matcha-skin-badge.match {
+	background: rgba(94, 194, 127, 0.15);
+	color: #5ec27f;
+}
+
+.matcha-skin-desc {
+	font-size: 10px;
+	color: var(--st-text-muted);
+	line-height: 1.35;
+}
+
+/* ==========================================================================
+   CANVAS STATUSBAR & 3D SPATIAL TILT
+   ========================================================================== */
+.matcha-canvas-statusbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 16px;
+	background: rgba(0, 0, 0, 0.35);
+	border-bottom: 1px solid var(--st-border-subtle);
+	font-size: 11px;
+}
+
+.matcha-status-chip {
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	padding: 3px 8px;
+	border-radius: 4px;
+	color: var(--st-text-secondary);
+	font-size: 11px;
+}
+
+/* Specular Light Sheen Overlay for 3D Spatial Tilt */
+.item-specular-glare {
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	z-index: 15;
+	opacity: 0;
+	mix-blend-mode: screen;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+	transition: opacity 0.3s ease;
+	background: radial-gradient(circle 380px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 35%, transparent 75%);
+}
+
+.spatial-3d-active .matcha-gallery__item:hover .item-specular-glare {
+	opacity: 1;
+}
+
+/* 57" Museum Eye-Level Reference Guide Line */
+.art-wall-guide-line {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 50%;
+	height: 1px;
+	background: repeating-linear-gradient(90deg, rgba(94, 194, 127, 0.5) 0, rgba(94, 194, 127, 0.5) 6px, transparent 6px, transparent 12px);
+	pointer-events: none;
+	z-index: 5;
+	display: none;
+}
+
+.art-wall-guide-label {
+	position: absolute;
+	right: 20px;
+	top: -10px;
+	font-size: 10px;
+	color: #5ec27f;
+	font-weight: 700;
+	background: rgba(0, 0, 0, 0.7);
+	padding: 1px 6px;
+	border-radius: 3px;
+	letter-spacing: 0.5px;
+}
+
+/* Art Wall Controls (PRO) */
+.wall-color-btn {
+	transition: all 0.18s ease;
+}
+.wall-color-btn:hover {
+	opacity: 0.9;
+	transform: translateY(-1px);
+}
+.wall-color-btn.active {
+	border-color: var(--st-accent-primary) !important;
+	box-shadow: 0 0 0 1.5px var(--st-accent-primary), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.preset-wall-btn {
+	transition: all 0.18s ease;
+}
+.preset-wall-btn:hover {
+	background: rgba(255, 255, 255, 0.1) !important;
+	border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.preset-wall-btn.active {
+	background: rgba(94, 194, 127, 0.15) !important;
+	border-color: var(--st-accent-primary) !important;
+	color: #fff !important;
+	box-shadow: 0 0 0 1px var(--st-accent-primary);
+}
+
+.frame-mold-btn {
+	transition: all 0.18s ease;
+}
+.frame-mold-btn:hover {
+	opacity: 0.92;
+	transform: translateY(-1px);
+}
+.frame-mold-btn.active {
+	border-color: var(--st-accent-primary) !important;
+	box-shadow: 0 0 0 1.5px var(--st-accent-primary);
+}
+
+.frame-orient-btn {
+	transition: all 0.18s ease;
+}
+.frame-orient-btn:hover {
+	background: rgba(255, 255, 255, 0.1) !important;
+}
+.frame-orient-btn.active {
+	background: rgba(94, 194, 127, 0.16) !important;
+	border-color: var(--st-accent-primary) !important;
+	color: #ffffff !important;
+}
+
+.ratio-opt-btn {
+	transition: all 0.18s ease;
+}
+.ratio-opt-btn:hover {
+	background: rgba(255, 255, 255, 0.12) !important;
+	border-color: rgba(255, 255, 255, 0.25) !important;
+}
+.ratio-opt-btn.active {
+	background: rgba(94, 194, 127, 0.18) !important;
+	border-color: var(--st-accent-primary) !important;
+	color: #ffffff !important;
+	font-weight: 700;
+}
+
+
