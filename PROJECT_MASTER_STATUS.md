@@ -151,6 +151,7 @@ Dynamic Gallery Wall
 * **Floating AI Vibe Bar:** Real-time semantic natural language prompt search filtering against image keywords, vibes, and descriptions, paired with 1-click smart mood chips (`Emerald Flora`, `Sunset Warmth`, `Nordic Canopy`).
 * **AI Visual Echo / Semantic Re-Clustering:** Allows any photo to act as an anchor (`🎯 Echo Anchor`) with real-time confidence badges (`✨ 94% AI Match`) and a frosted twin count toast.
 * **Chromatic Palette Harmony Engine:** Clickable 6-swatch dominant harmony engine that highlights chromatic matches with hex backlight glow.
+* **Art Wall Frame Orientation & 90° Flip Engine:** Bidirectional Portrait ↔ Landscape orientation flip anchored around frame center points with boundary clamping, live dimension badge syncing (e.g. 18"×24" ↔ 24"×18"), dynamic inspector ratio button re-labeling, and dual control surfaces (floating frame toolbar + inspector panel).
 
 ---
 

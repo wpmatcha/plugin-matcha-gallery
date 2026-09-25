@@ -831,7 +831,7 @@
       border-radius: 2px !important;
       overflow: visible !important; /* CRITICAL: Always visible so controls & badges never get clipped when 3D tilt is OFF */
       box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.85), 0 8px 18px rgba(0, 0, 0, 0.5);
-      transition: box-shadow 0.25s ease, outline 0.15s ease;
+      transition: box-shadow 0.25s ease, outline 0.15s ease, width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), left 0.3s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       touch-action: none;
     }
     .layout-art-wall .gallery-item:active,
@@ -927,8 +927,9 @@
       gap: 4px;
       transition: all 0.15s ease;
     }
-    .frame-bar-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .frame-bar-btn:hover,
+    .frame-bar-btn.active {
+      background: rgba(94, 194, 127, 0.22);
       color: #fff;
     }
     .frame-bar-divider {
@@ -1830,6 +1831,8 @@
               <div class="frame-bar-divider"></div>
               <button class="frame-bar-btn" onclick="cycleActiveFrameRatio(event)" title="Cycle Frame Aspect Ratio"><span>🔲</span><span id="floatingBarRatioLabel">24×36</span></button>
               <div class="frame-bar-divider"></div>
+              <button class="frame-bar-btn" id="floatingBarRotateBtn" onclick="toggleActiveFrameOrientation(event)" title="Rotate Orientation (Portrait ↔ Landscape)"><span>🔄</span><span id="floatingBarOrientLabel">Portrait</span></button>
+              <div class="frame-bar-divider"></div>
               <button class="frame-bar-btn" onclick="bringActiveFrameToFront(event)" title="Bring Frame to Front"><span>⬆️</span></button>
             </div>
 
@@ -2282,14 +2285,32 @@
         </div>
 
         <div class="control-group">
+          <label class="control-label" style="display: flex; align-items: center; justify-content: space-between;">
+            <span>Frame Orientation</span>
+            <span id="inspectorOrientBadge" style="font-size: 10px; color: var(--accent-matcha); font-family: var(--font-mono); font-weight: 700;">PORTRAIT</span>
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <button class="frame-orient-btn orient-opt-portrait active" style="flex:1; padding: 6px; font-size: 10.5px; font-weight: 600; background: rgba(94, 194, 127, 0.15); border: 1px solid var(--accent-matcha); color: #fff; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;" onclick="setActiveFrameOrientation('portrait')">
+              <span>↕️</span><span>Portrait</span>
+            </button>
+            <button class="frame-orient-btn orient-opt-landscape" style="flex:1; padding: 6px; font-size: 10.5px; font-weight: 600; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-secondary); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px;" onclick="setActiveFrameOrientation('landscape')">
+              <span>↔️</span><span>Landscape</span>
+            </button>
+            <button class="frame-orient-btn" style="padding: 6px 10px; font-size: 11px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: var(--text-primary); border-radius: 4px; cursor: pointer;" onclick="toggleActiveFrameOrientation(event)" title="Quick 90° Rotate">
+              <span>🔄</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
           <label class="control-label"><span>Selected Frame Ratio</span></label>
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('24x36')">24"×36"</button>
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('18x24')">18"×24"</button>
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('12x12')">12"×12"</button>
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('16x20')">16"×20"</button>
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('20x30')">20"×30"</button>
-            <button class="ratio-opt-btn" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('panoramic')">16:9 Wide</button>
+            <button class="ratio-opt-btn" id="ratioBtn24x36" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('24x36')">24"×36"</button>
+            <button class="ratio-opt-btn" id="ratioBtn18x24" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('18x24')">18"×24"</button>
+            <button class="ratio-opt-btn" id="ratioBtn12x12" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('12x12')">12"×12"</button>
+            <button class="ratio-opt-btn" id="ratioBtn16x20" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('16x20')">16"×20"</button>
+            <button class="ratio-opt-btn" id="ratioBtn20x30" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('20x30')">20"×30"</button>
+            <button class="ratio-opt-btn" id="ratioBtnPanoramic" style="padding: 5px 3px; font-size: 10px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #e6ede8; border-radius: 4px; cursor: pointer;" onclick="setSelectedFrameRatio('panoramic')">16:9 Wide</button>
           </div>
         </div>
 
@@ -2536,25 +2557,31 @@
         item.classList.remove('mold-black', 'mold-oak', 'mold-white');
         item.classList.add(config.molding);
 
+        const isLandscape = config.width > config.height;
+        const orientation = isLandscape ? 'landscape' : 'portrait';
+        item.dataset.frameRatio = config.ratio;
+        item.dataset.frameOrientation = orientation;
+
         const badge = item.querySelector('.frame-dim-badge');
-        if (badge) badge.textContent = getRatioLabel(config.ratio);
+        if (badge) badge.textContent = getRatioLabel(config.ratio, orientation);
       });
 
       if (selectedFrameItem) {
-        positionFloatingToolbar(selectedFrameItem);
+        selectArtFrame(selectedFrameItem);
       } else if (items[0]) {
         selectArtFrame(items[0]);
       }
     }
 
-    function getRatioLabel(ratioKey) {
+    function getRatioLabel(ratioKey, orientation = 'portrait') {
+      const isLandscape = orientation === 'landscape';
       const map = {
-        '24x36': '24" × 36"',
-        '18x24': '18" × 24"',
+        '24x36': isLandscape ? '36" × 24"' : '24" × 36"',
+        '18x24': isLandscape ? '24" × 18"' : '18" × 24"',
         '12x12': '12" × 12"',
-        '16x20': '16" × 20"',
-        '20x30': '20" × 30"',
-        'panoramic': '16:9 Wide'
+        '16x20': isLandscape ? '20" × 16"' : '16" × 20"',
+        '20x30': isLandscape ? '30" × 20"' : '20" × 30"',
+        'panoramic': isLandscape ? '16:9 Wide' : '9:16 Tall'
       };
       return map[ratioKey] || ratioKey;
     }
@@ -2589,6 +2616,16 @@
       if (ratioLabel && badge) {
         ratioLabel.textContent = badge.textContent.replace(/"/g, '').trim();
       }
+
+      const isLandscape = item.dataset.frameOrientation === 'landscape';
+      const orientLabel = document.getElementById('floatingBarOrientLabel');
+      if (orientLabel) {
+        orientLabel.textContent = isLandscape ? 'Landscape' : 'Portrait';
+      }
+      const rotateBtn = document.getElementById('floatingBarRotateBtn');
+      if (rotateBtn) {
+        rotateBtn.classList.toggle('active', isLandscape);
+      }
     }
 
     function selectArtFrame(item) {
@@ -2605,6 +2642,9 @@
           (b.classList.contains('mold-opt-black') && !item.classList.contains('mold-oak') && !item.classList.contains('mold-white'))
         );
       });
+
+      const orientation = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? 'landscape' : 'portrait');
+      updateOrientationUI(item, orientation);
     }
 
     function setupArtWallDragEvents() {
@@ -2723,15 +2763,145 @@
 
     function cycleActiveFrameRatio(e) {
       if (e) e.stopPropagation();
-      const ratios = ['24x36', '18x24', '12x12', '16x20', 'panoramic'];
+      const ratios = ['24x36', '18x24', '12x12', '16x20', '20x30', 'panoramic'];
       const item = selectedFrameItem || document.querySelector('.gallery-item');
       if (!item) return;
       const currentRatio = item.dataset.frameRatio || '18x24';
       const nextIdx = (ratios.indexOf(currentRatio) + 1) % ratios.length;
       const nextRatio = ratios[nextIdx];
-      item.dataset.frameRatio = nextRatio;
       setSelectedFrameRatio(nextRatio);
+    }
+
+    function toggleActiveFrameOrientation(e) {
+      if (e) e.stopPropagation();
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+      const currentOrient = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? 'landscape' : 'portrait');
+      const nextOrient = currentOrient === 'portrait' ? 'landscape' : 'portrait';
+      setActiveFrameOrientation(nextOrient);
+    }
+
+    function setActiveFrameOrientation(orientation) {
+      const item = selectedFrameItem || document.querySelector('.gallery-item');
+      if (!item) return;
+
+      const currentOrient = item.dataset.frameOrientation || 'portrait';
+      if (currentOrient === orientation && item.dataset.frameOrientation) return;
+
+      item.dataset.frameOrientation = orientation;
+
+      const ratioKey = item.dataset.frameRatio || '18x24';
+      const isLandscape = orientation === 'landscape';
+
+      let newW, newH;
+      if (ratioKey === '24x36') {
+        newW = isLandscape ? 440 : 330;
+        newH = isLandscape ? 330 : 440;
+      } else if (ratioKey === '18x24') {
+        newW = isLandscape ? 380 : 290;
+        newH = isLandscape ? 290 : 380;
+      } else if (ratioKey === '12x12') {
+        newW = 240;
+        newH = 240;
+      } else if (ratioKey === '16x20') {
+        newW = isLandscape ? 300 : 240;
+        newH = isLandscape ? 240 : 300;
+      } else if (ratioKey === '20x30') {
+        newW = isLandscape ? 420 : 330;
+        newH = isLandscape ? 330 : 420;
+      } else if (ratioKey === 'panoramic') {
+        newW = isLandscape ? 400 : 225;
+        newH = isLandscape ? 225 : 400;
+      } else {
+        const curW = parseInt(item.style.width, 10) || item.offsetWidth || 300;
+        const curH = parseInt(item.style.height, 10) || item.offsetHeight || 380;
+        newW = isLandscape ? Math.max(curW, curH) : Math.min(curW, curH);
+        newH = isLandscape ? Math.min(curW, curH) : Math.max(curW, curH);
+      }
+
+      const container = document.getElementById('galleryContainer');
+      const containerRect = container ? container.getBoundingClientRect() : { width: 1200, height: 900 };
+
+      const currentLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const currentTop = parseInt(item.style.top, 10) || item.offsetTop;
+      const curW = parseInt(item.style.width, 10) || item.offsetWidth || 300;
+      const curH = parseInt(item.style.height, 10) || item.offsetHeight || 380;
+
+      const centerX = currentLeft + (curW / 2);
+      const centerY = currentTop + (curH / 2);
+
+      let newLeft = Math.round(centerX - (newW / 2));
+      let newTop = Math.round(centerY - (newH / 2));
+
+      // Clamp within wall boundaries
+      const maxLeft = Math.max(15, containerRect.width - newW - 15);
+      const maxTop = Math.max(15, containerRect.height - newH - 15);
+      newLeft = Math.max(15, Math.min(newLeft, maxLeft));
+      newTop = Math.max(15, Math.min(newTop, maxTop));
+
+      item.style.width = `${newW}px`;
+      item.style.height = `${newH}px`;
+      item.style.left = `${newLeft}px`;
+      item.style.top = `${newTop}px`;
+
+      const badge = item.querySelector('.frame-dim-badge');
+      if (badge) {
+        badge.textContent = getRatioLabel(ratioKey, orientation);
+      }
+
+      updateOrientationUI(item, orientation);
       positionFloatingToolbar(item);
+    }
+
+    function updateOrientationUI(item, orientation) {
+      const isLandscape = orientation === 'landscape';
+
+      // Floating toolbar label & button state
+      const orientLabel = document.getElementById('floatingBarOrientLabel');
+      if (orientLabel) {
+        orientLabel.textContent = isLandscape ? 'Landscape' : 'Portrait';
+      }
+      const rotateBtn = document.getElementById('floatingBarRotateBtn');
+      if (rotateBtn) {
+        rotateBtn.classList.toggle('active', isLandscape);
+      }
+
+      // Inspector panel buttons
+      const portraitBtn = document.querySelector('.orient-opt-portrait');
+      const landscapeBtn = document.querySelector('.orient-opt-landscape');
+      if (portraitBtn && landscapeBtn) {
+        portraitBtn.classList.toggle('active', !isLandscape);
+        landscapeBtn.classList.toggle('active', isLandscape);
+        portraitBtn.style.background = !isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)';
+        portraitBtn.style.borderColor = !isLandscape ? 'var(--accent-matcha)' : 'var(--border-subtle)';
+        portraitBtn.style.color = !isLandscape ? '#fff' : 'var(--text-secondary)';
+
+        landscapeBtn.style.background = isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)';
+        landscapeBtn.style.borderColor = isLandscape ? 'var(--accent-matcha)' : 'var(--border-subtle)';
+        landscapeBtn.style.color = isLandscape ? '#fff' : 'var(--text-secondary)';
+      }
+
+      const badge = document.getElementById('inspectorOrientBadge');
+      if (badge) {
+        badge.textContent = isLandscape ? 'LANDSCAPE' : 'PORTRAIT';
+        badge.style.color = isLandscape ? '#60a5fa' : 'var(--accent-matcha)';
+      }
+
+      syncRatioButtonsText(isLandscape);
+    }
+
+    function syncRatioButtonsText(isLandscape) {
+      const b24 = document.getElementById('ratioBtn24x36');
+      const b18 = document.getElementById('ratioBtn18x24');
+      const b16 = document.getElementById('ratioBtn16x20');
+      const b20 = document.getElementById('ratioBtn20x30');
+      const bPan = document.getElementById('ratioBtnPanoramic');
+
+      if (b24) b24.textContent = isLandscape ? '36"×24"' : '24"×36"';
+      if (b18) b18.textContent = isLandscape ? '24"×18"' : '18"×24"';
+      if (b16) b16.textContent = isLandscape ? '20"×16"' : '16"×20"';
+      if (b20) b20.textContent = isLandscape ? '30"×20"' : '20"×30"';
+      if (bPan) bPan.textContent = isLandscape ? '16:9 Wide' : '9:16 Tall';
     }
 
     function bringActiveFrameToFront(e) {
@@ -2763,18 +2933,55 @@
       const item = selectedFrameItem || document.querySelector('.gallery-item');
       if (!item) return;
 
+      item.dataset.frameRatio = ratioKey;
+      const orientation = item.dataset.frameOrientation || (item.offsetWidth > item.offsetHeight ? 'landscape' : 'portrait');
+      const isLandscape = orientation === 'landscape';
+
+      let targetW, targetH;
+      if (ratioKey === '24x36' || ratioKey === '20x30') {
+        targetW = isLandscape ? 440 : 330;
+        targetH = isLandscape ? 330 : 440;
+      } else if (ratioKey === '18x24') {
+        targetW = isLandscape ? 380 : 290;
+        targetH = isLandscape ? 290 : 380;
+      } else if (ratioKey === '12x12') {
+        targetW = 260;
+        targetH = 260;
+      } else if (ratioKey === '16x20') {
+        targetW = isLandscape ? 300 : 240;
+        targetH = isLandscape ? 240 : 300;
+      } else if (ratioKey === 'panoramic') {
+        targetW = isLandscape ? 400 : 230;
+        targetH = isLandscape ? 230 : 400;
+      } else {
+        targetW = isLandscape ? 380 : 300;
+        targetH = isLandscape ? 300 : 380;
+      }
+
+      const currentLeft = parseInt(item.style.left, 10) || item.offsetLeft;
+      const currentTop = parseInt(item.style.top, 10) || item.offsetTop;
       const currentW = item.offsetWidth || 300;
-      let newH = currentW * 1.33;
+      const currentH = item.offsetHeight || 380;
+      const centerX = currentLeft + (currentW / 2);
+      const centerY = currentTop + (currentH / 2);
 
-      if (ratioKey === '24x36' || ratioKey === '20x30') newH = currentW * 1.4;
-      else if (ratioKey === '18x24') newH = currentW * 1.33;
-      else if (ratioKey === '12x12') newH = currentW;
-      else if (ratioKey === '16x20') newH = currentW * 1.25;
-      else if (ratioKey === 'panoramic') newH = currentW * 0.5625;
+      const container = document.getElementById('galleryContainer');
+      const containerRect = container ? container.getBoundingClientRect() : { width: 1200, height: 900 };
 
-      item.style.height = `${Math.round(newH)}px`;
+      let newLeft = Math.round(centerX - (targetW / 2));
+      let newTop = Math.round(centerY - (targetH / 2));
+      const maxLeft = Math.max(15, containerRect.width - targetW - 15);
+      const maxTop = Math.max(15, containerRect.height - targetH - 15);
+      newLeft = Math.max(15, Math.min(newLeft, maxLeft));
+      newTop = Math.max(15, Math.min(newTop, maxTop));
+
+      item.style.width = `${targetW}px`;
+      item.style.height = `${targetH}px`;
+      item.style.left = `${newLeft}px`;
+      item.style.top = `${newTop}px`;
+
       const badge = item.querySelector('.frame-dim-badge');
-      if (badge) badge.textContent = getRatioLabel(ratioKey);
+      if (badge) badge.textContent = getRatioLabel(ratioKey, orientation);
       positionFloatingToolbar(item);
     }
 
