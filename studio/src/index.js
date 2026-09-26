@@ -2129,6 +2129,7 @@ if (root) {
   }
 
   let selectedArtFrameEl = null;
+  let selectedArtFrameId = null;
   let isDraggingArtFrame = false;
   let artDragTarget = null;
   let artDragStartX = 0;
@@ -2187,6 +2188,7 @@ if (root) {
     }
     item.classList.add('selected-frame');
     selectedArtFrameEl = item;
+    selectedArtFrameId = parseInt(item.dataset.id, 10);
     positionFloatingToolbar(item);
 
     const moldClass = item.dataset.frameMolding || (item.classList.contains('mold-oak') ? 'mold-oak' : (item.classList.contains('mold-white') ? 'mold-white' : 'mold-black'));
@@ -2594,25 +2596,30 @@ if (root) {
     const endDrag = (e) => {
       if (!isDraggingArtFrame) return;
       isDraggingArtFrame = false;
-      if (artDragTarget) {
-        artDragTarget.classList.remove('is-dragging');
-        try { artDragTarget.releasePointerCapture(e.pointerId); } catch (err) {}
-        positionFloatingToolbar(artDragTarget);
+      const target = artDragTarget;
+      if (target) {
+        target.classList.remove('is-dragging');
+        try { target.releasePointerCapture(e.pointerId); } catch (err) {}
+        positionFloatingToolbar(target);
         artDragTarget = null;
       }
       const guide = document.getElementById('artWallGuide');
       if (guide) guide.classList.remove('snapped');
 
-      saveArtWallFramesFromDOM();
+      const didMove = Math.hypot(e.clientX - artDragStartX, e.clientY - artDragStartY) > 3;
+      if (didMove) {
+        saveArtWallFramesFromDOM();
+      }
     };
 
     grid.addEventListener('pointerup', endDrag);
     grid.addEventListener('pointercancel', endDrag);
 
-    // Initial frame selection
-    const firstFrame = grid.querySelector('.matcha-gallery__item--wall-frame');
-    if (firstFrame) {
-      selectArtFrame(firstFrame);
+    // Initial / retained frame selection
+    const targetFrame = (selectedArtFrameId ? grid.querySelector(`.matcha-gallery__item--wall-frame[data-id="${selectedArtFrameId}"]`) : null)
+      || grid.querySelector('.matcha-gallery__item--wall-frame');
+    if (targetFrame) {
+      selectArtFrame(targetFrame);
     }
   }
 
@@ -3644,6 +3651,12 @@ if (root) {
     document.querySelectorAll('.matcha-img-card').forEach(c => {
       c.classList.toggle('is-selected', parseInt(c.dataset.id) === id);
     });
+    if (getState().config.layout === 'art-wall') {
+      const wallFrame = document.querySelector(`.matcha-gallery__item--wall-frame[data-id="${id}"]`);
+      if (wallFrame) {
+        selectArtFrame(wallFrame);
+      }
+    }
   }
 
   // --- Left Panel Bindings ---
