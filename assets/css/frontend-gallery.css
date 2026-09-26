@@ -3243,6 +3243,16 @@ span.matcha-action-btn {
 	transform: translateY(-4px);
 	box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
 }
+.skin-editorial .matcha-gallery__item-inner {
+	display: flex !important;
+	flex-direction: column !important;
+	width: 100% !important;
+	height: 100% !important;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+}
 .skin-editorial .item-media-wrap {
 	height: 210px;
 	flex-shrink: 0;
@@ -3502,6 +3512,14 @@ span.matcha-action-btn {
 .skin-aura .matcha-gallery__item:hover {
 	transform: translateY(-5px) scale(1.01);
 	box-shadow: 0 18px 48px var(--ambient-glow, rgba(94, 194, 127, 0.45));
+}
+.skin-aura .matcha-gallery__item-inner {
+	width: 100% !important;
+	height: 100% !important;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
 }
 .skin-aura .item-img,
 .skin-aura .matcha-gallery__item img {

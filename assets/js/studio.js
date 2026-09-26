@@ -468,7 +468,7 @@
     }, getActiveSkinKey = function(cfg) {
       if (cfg.skin) return cfg.skin;
       if (cfg.stylePreset === "editorial" || cfg.cardTheme === "card" || cfg.contentPlacement === "below") return "skin-editorial";
-      if (cfg.stylePreset === "exhibition-frame" || cfg.frameStyle === "black-metal") return "skin-exhibition";
+      if (cfg.stylePreset === "exhibition-frame") return "skin-exhibition";
       if (cfg.stylePreset === "aura") return "skin-aura";
       return "skin-pure-minimalist";
     }, isSkinSupported = function(skinKey, layoutKey) {
@@ -1057,7 +1057,7 @@
       </div>
 
       <!-- Picture Frame Styles -->
-      <div class="matcha-card">
+      <div class="matcha-card ${activeSkinKey === "skin-editorial" || activeSkinKey === "skin-aura" ? "hidden" : ""}">
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.frame} Picture Framing</span>
         </div>
@@ -2224,19 +2224,21 @@
       });
       document.getElementById("st-style-preset")?.addEventListener("change", (e) => {
         const val = e.target.value;
-        const patch = { stylePreset: val, contentPlacement: "overlay" };
-        if (val === "exhibition-frame") {
-          patch.hoverEffect = "frame";
-          patch.layout = "grid";
+        let patch = { stylePreset: val };
+        if (val === "editorial") {
+          patch = { ...patch, skin: "skin-editorial", cardTheme: "card", frameStyle: "none", mattingSize: 0, contentPlacement: "below", hoverEffect: "zoom" };
+        } else if (val === "exhibition-frame") {
+          patch = { ...patch, skin: "skin-exhibition", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18, contentPlacement: "overlay", hoverEffect: "frame" };
+        } else if (val === "aura") {
+          patch = { ...patch, skin: "skin-aura", cardTheme: "dark", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
+        } else if (val === "minimalist") {
+          patch = { ...patch, skin: "skin-pure-minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
         } else if (val === "architectural-curtain") {
-          patch.hoverEffect = "curtain";
-          patch.layout = "justified";
+          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "curtain", frameStyle: "none", mattingSize: 0, layout: "justified", contentPlacement: "overlay" };
         } else if (val === "cinematic-pullback") {
-          patch.hoverEffect = "pullback";
-          patch.layout = "masonry";
+          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "pullback", frameStyle: "none", mattingSize: 0, layout: "masonry", contentPlacement: "overlay" };
         } else if (val === "minimalist-drawer") {
-          patch.hoverEffect = "drawer";
-          patch.layout = "grid";
+          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "drawer", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", layout: "grid" };
         }
         patchConfig(patch);
         renderRightPanel();
@@ -3259,13 +3261,13 @@
           if (nextSkin !== curSkin) {
             patch.skin = nextSkin;
             if (nextSkin === "skin-pure-minimalist") {
-              patch = { ...patch, stylePreset: "minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay" };
+              patch = { ...patch, stylePreset: "minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
             } else if (nextSkin === "skin-editorial") {
-              patch = { ...patch, stylePreset: "editorial", cardTheme: "card", contentPlacement: "below" };
+              patch = { ...patch, stylePreset: "editorial", cardTheme: "card", frameStyle: "none", mattingSize: 0, contentPlacement: "below", hoverEffect: "zoom" };
             } else if (nextSkin === "skin-exhibition") {
-              patch = { ...patch, stylePreset: "exhibition-frame", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18 };
+              patch = { ...patch, stylePreset: "exhibition-frame", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18, contentPlacement: "overlay", hoverEffect: "frame" };
             } else if (nextSkin === "skin-aura") {
-              patch = { ...patch, stylePreset: "aura", cardTheme: "dark", hoverEffect: "zoom" };
+              patch = { ...patch, stylePreset: "aura", cardTheme: "dark", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
             }
           }
           if (layout === "pinwheel") {
@@ -3297,13 +3299,13 @@
           }
           let patch = { skin: skinKey };
           if (skinKey === "skin-pure-minimalist") {
-            patch = { ...patch, stylePreset: "minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay" };
+            patch = { ...patch, stylePreset: "minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
           } else if (skinKey === "skin-editorial") {
-            patch = { ...patch, stylePreset: "editorial", cardTheme: "card", contentPlacement: "below" };
+            patch = { ...patch, stylePreset: "editorial", cardTheme: "card", frameStyle: "none", mattingSize: 0, contentPlacement: "below", hoverEffect: "zoom" };
           } else if (skinKey === "skin-exhibition") {
-            patch = { ...patch, stylePreset: "exhibition-frame", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18 };
+            patch = { ...patch, stylePreset: "exhibition-frame", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18, contentPlacement: "overlay", hoverEffect: "frame" };
           } else if (skinKey === "skin-aura") {
-            patch = { ...patch, stylePreset: "aura", cardTheme: "dark", hoverEffect: "zoom" };
+            patch = { ...patch, stylePreset: "aura", cardTheme: "dark", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
           }
           patchConfig(patch);
           renderLeftTab("blueprints");
@@ -4510,12 +4512,13 @@
       const cardBgCss = cfg.cardBackground ? `--matcha-card-bg:${cfg.cardBackground};` : "";
       const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 22}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 10}px;--matcha-accent:${cfg.accentColor || "#607d66"};${hoverFrameCss}${cardBgCss}`;
       const stylePreset = cfg.stylePreset || "custom";
+      const activeSkinKey = getActiveSkinKey(cfg);
       const activeCardTheme = !isPro && ["glass", "glow"].includes(cfg.cardTheme) ? "clean" : cfg.cardTheme || "clean";
-      const activeFrameStyle = !isPro && ["black-metal", "natural-oak", "gold-brass", "glass-float"].includes(cfg.frameStyle) ? "none" : cfg.frameStyle || "none";
+      const rawFrameStyle = !isPro && ["black-metal", "natural-oak", "gold-brass", "glass-float"].includes(cfg.frameStyle) ? "none" : cfg.frameStyle || "none";
+      const activeFrameStyle = activeSkinKey === "skin-editorial" || activeSkinKey === "skin-aura" ? "none" : rawFrameStyle;
       const activeLayout = !isPro && ["pinwheel", "bento", "cinema-reel", "curator-specimen"].includes(cfg.layout) ? "grid" : cfg.layout || "grid";
       const activePagination = !isPro && ["infinite", "pages"].includes(cfg.paginationType) ? "load-more" : cfg.paginationType || "none";
       const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
-      const activeSkinKey = getActiveSkinKey(cfg);
       const layoutSlugMap = {
         grid: "classic-grid",
         masonry: "pinterest-masonry",

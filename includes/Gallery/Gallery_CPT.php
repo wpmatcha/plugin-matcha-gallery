@@ -203,10 +203,15 @@ final class Gallery_CPT {
 		$allowed_card_themes       = apply_filters( 'matcha_gallery_allowed_card_themes', $default_card_themes );
 		$out['cardTheme']          = in_array( $cfg['cardTheme'] ?? 'clean', (array) $allowed_card_themes, true ) ? $cfg['cardTheme'] : 'clean';
 		$out['canvasBackdrop']     = in_array( $cfg['canvasBackdrop'] ?? 'transparent', array( 'transparent', 'white', 'cream', 'sage', 'charcoal', 'dark-slate' ), true ) ? $cfg['canvasBackdrop'] : 'transparent';
-		$allowed_style_presets     = apply_filters( 'matcha_gallery_allowed_style_presets', array( 'custom', 'exhibition-frame', 'architectural-curtain', 'cinematic-pullback', 'minimalist-drawer' ) );
+		$allowed_style_presets     = apply_filters( 'matcha_gallery_allowed_style_presets', array( 'custom', 'minimalist', 'editorial', 'exhibition-frame', 'aura', 'architectural-curtain', 'cinematic-pullback', 'minimalist-drawer' ) );
 		$out['stylePreset']        = in_array( $cfg['stylePreset'] ?? 'custom', (array) $allowed_style_presets, true ) ? $cfg['stylePreset'] : 'custom';
-		$out['contentPlacement']   = 'overlay';
+		$out['contentPlacement']   = in_array( $cfg['contentPlacement'] ?? 'overlay', array( 'overlay', 'below' ), true ) ? $cfg['contentPlacement'] : 'overlay';
 		$out['cardBackground']     = sanitize_hex_color( $cfg['cardBackground'] ?? '' ) ?: '';
+		$out['showCategoryPill']   = ! isset( $cfg['showCategoryPill'] ) || ! empty( $cfg['showCategoryPill'] );
+		$allowed_skins             = apply_filters( 'matcha_gallery_allowed_skins', array( 'skin-pure-minimalist', 'skin-editorial', 'skin-exhibition', 'skin-aura' ) );
+		$out['skin']               = in_array( $cfg['skin'] ?? '', (array) $allowed_skins, true ) ? $cfg['skin'] : '';
+		$out['auraBloom']          = max( 12, min( 64, (int) ( $cfg['auraBloom'] ?? 32 ) ) );
+		$out['focalPanEnabled']    = ! isset( $cfg['focalPanEnabled'] ) || ! empty( $cfg['focalPanEnabled'] );
 		$allowed_hover_effects = apply_filters( 'matcha_gallery_allowed_hover_effects', array( 'none', 'zoom', 'pullback', 'frame', 'curtain', 'drawer', 'grayscale', 'lift', 'glow' ) );
 		$out['hoverEffect']    = in_array( $cfg['hoverEffect'] ?? 'zoom', (array) $allowed_hover_effects, true ) ? $cfg['hoverEffect'] : 'zoom';
 		$out['hoverFrameColor'] = sanitize_hex_color( $cfg['hoverFrameColor'] ?? '' ) ?: '';

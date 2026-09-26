@@ -167,15 +167,30 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						if ( val === 'exhibition-frame' ) {
 							patch.hoverEffect = 'frame';
 							patch.layout = 'grid';
+							patch.frameStyle = 'black-metal';
+							patch.mattingSize = 18;
+							patch.skin = 'skin-exhibition';
 						} else if ( val === 'architectural-curtain' ) {
 							patch.hoverEffect = 'curtain';
 							patch.layout = 'justified';
+							patch.frameStyle = 'none';
+							patch.mattingSize = 0;
+							patch.skin = 'skin-pure-minimalist';
 						} else if ( val === 'cinematic-pullback' ) {
 							patch.hoverEffect = 'pullback';
 							patch.layout = 'masonry';
+							patch.frameStyle = 'none';
+							patch.mattingSize = 0;
+							patch.skin = 'skin-pure-minimalist';
 						} else if ( val === 'minimalist-drawer' ) {
 							patch.hoverEffect = 'drawer';
 							patch.layout = 'grid';
+							patch.frameStyle = 'none';
+							patch.mattingSize = 0;
+							patch.skin = 'skin-pure-minimalist';
+						} else if ( val === 'custom' ) {
+							patch.frameStyle = 'none';
+							patch.mattingSize = 0;
 						}
 						setAttributes( patch );
 					} }

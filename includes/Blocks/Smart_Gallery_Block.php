@@ -390,13 +390,18 @@ class Smart_Gallery_Block {
 		if ( empty( $skin ) ) {
 			if ( ( $attrs['stylePreset'] ?? '' ) === 'editorial' || ( $attrs['cardTheme'] ?? '' ) === 'card' || ( $attrs['contentPlacement'] ?? '' ) === 'below' ) {
 				$skin = 'skin-editorial';
-			} elseif ( ( $attrs['stylePreset'] ?? '' ) === 'exhibition-frame' || ( $attrs['frameStyle'] ?? '' ) === 'black-metal' ) {
+			} elseif ( ( $attrs['stylePreset'] ?? '' ) === 'exhibition-frame' ) {
 				$skin = 'skin-exhibition';
 			} elseif ( ( $attrs['stylePreset'] ?? '' ) === 'aura' ) {
 				$skin = 'skin-aura';
 			} else {
 				$skin = 'skin-pure-minimalist';
 			}
+		}
+
+		$frame_style = $attrs['frameStyle'] ?? 'none';
+		if ( 'skin-editorial' === $skin || 'skin-aura' === $skin ) {
+			$frame_style = 'none';
 		}
 
 		$wrapper_classes = array(
@@ -406,7 +411,7 @@ class Smart_Gallery_Block {
 			sanitize_html_class( $skin ),
 			'matcha-gallery--' . sanitize_html_class( $attrs['layout'] ),
 			'matcha-gallery--theme-' . sanitize_html_class( $attrs['cardTheme'] ),
-			'matcha-gallery--frame-' . sanitize_html_class( $attrs['frameStyle'] ?? 'none' ),
+			'matcha-gallery--frame-' . sanitize_html_class( $frame_style ),
 			'matcha-gallery--shadow-' . sanitize_html_class( $attrs['shadowElevation'] ?? 'soft' ),
 			'matcha-gallery--hover-' . sanitize_html_class( $attrs['hoverEffect'] ?? 'zoom' ),
 		);
