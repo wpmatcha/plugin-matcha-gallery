@@ -418,9 +418,7 @@ class Smart_Gallery_Block {
 		if ( 'art-wall' === $attrs['layout'] ) {
 			$wrapper_classes[] = 'matcha-wall-preset--' . sanitize_html_class( $attrs['wallPreset'] );
 			$wrapper_classes[] = 'matcha-wall-molding--' . sanitize_html_class( $attrs['wallMolding'] );
-			if ( $is_pro && ( ! empty( $attrs['artWallFrames'] ) || 'triptych' !== $attrs['wallPreset'] ) ) {
-				$wrapper_classes[] = 'matcha-wall-custom-stage';
-			}
+			$wrapper_classes[] = 'matcha-wall-custom-stage';
 		}
 
 		if ( ! empty( $attrs['stylePreset'] ) && 'custom' !== $attrs['stylePreset'] ) {
@@ -628,50 +626,53 @@ class Smart_Gallery_Block {
 				</div>
 			<?php endif; ?>
 
-			<div class="matcha-gallery__grid <?php echo $attrs['instantFramesEnabled'] ? 'matcha-gallery__grid--instant-frames' : ''; ?>">
+			<?php
+			$is_art_wall = ( 'art-wall' === $attrs['layout'] );
+			$wall_presets_data = array(
+				'triptych' => array(
+					array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '24" × 36"', 'left' => 40,  'top' => 180, 'width' => 320, 'height' => 440 ),
+					array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '24" × 36" (Centerpiece)', 'left' => 395, 'top' => 140, 'width' => 370, 'height' => 510, 'hero' => true ),
+					array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '24" × 36"', 'left' => 795, 'top' => 180, 'width' => 320, 'height' => 440 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-white', 'label' => '18" × 24"', 'left' => 100, 'top' => 660, 'width' => 270, 'height' => 340 ),
+					array( 'ratio' => '12x12', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '12" × 12"', 'left' => 440, 'top' => 690, 'width' => 270, 'height' => 270 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 780, 'top' => 660, 'width' => 270, 'height' => 340 ),
+				),
+				'salon' => array(
+					array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '24" × 36"', 'left' => 40,  'top' => 60,  'width' => 330, 'height' => 440 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 410, 'top' => 80,  'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '12x12', 'orient' => 'portrait',  'molding' => 'mold-white', 'label' => '12" × 12"', 'left' => 740, 'top' => 60,  'width' => 240, 'height' => 240 ),
+					array( 'ratio' => '16x20', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '16" × 20"', 'left' => 740, 'top' => 340, 'width' => 240, 'height' => 300 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 410, 'top' => 500, 'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '20x30', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '20" × 30"', 'left' => 40,  'top' => 540, 'width' => 330, 'height' => 420 ),
+				),
+				'staircase' => array(
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 50,  'top' => 70,  'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 240, 'top' => 180, 'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-white', 'label' => '18" × 24"', 'left' => 430, 'top' => 290, 'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 620, 'top' => 400, 'width' => 290, 'height' => 380 ),
+					array( 'ratio' => '12x12', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '12" × 12"', 'left' => 810, 'top' => 160, 'width' => 280, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 840, 'top' => 490, 'width' => 280, 'height' => 370 ),
+				),
+				'symmetric' => array(
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-black', 'label' => '24" × 18"', 'left' => 120, 'top' => 70,  'width' => 400, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-black', 'label' => '24" × 18"', 'left' => 600, 'top' => 70,  'width' => 400, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-oak',   'label' => '24" × 18"', 'left' => 120, 'top' => 380, 'width' => 400, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-oak',   'label' => '24" × 18"', 'left' => 600, 'top' => 380, 'width' => 400, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-white', 'label' => '24" × 18"', 'left' => 120, 'top' => 690, 'width' => 400, 'height' => 280 ),
+					array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-white', 'label' => '24" × 18"', 'left' => 600, 'top' => 690, 'width' => 400, 'height' => 280 ),
+				),
+			);
+
+			$preset_key         = isset( $wall_presets_data[ $attrs['wallPreset'] ] ) ? $attrs['wallPreset'] : 'triptych';
+			$wall_active_preset = $wall_presets_data[ $preset_key ];
+			$preset_count       = max( 1, count( $wall_active_preset ) );
+			$art_wall_height    = $is_art_wall ? max( 860, (int) ceil( count( $items ) / $preset_count ) * 880 + 100 ) : 0;
+			?>
+
+			<div class="matcha-gallery__grid <?php echo $attrs['instantFramesEnabled'] ? 'matcha-gallery__grid--instant-frames' : ''; ?>" <?php echo $is_art_wall ? 'style="min-height: ' . (int) $art_wall_height . 'px;"' : ''; ?>>
 				<?php
 				$item_idx = 0;
 				$mosaic_rhythm = array( '2x2', '1x1', '1x1', '2x1', '1x1', '1x2', '1x1', '2x1' );
-
-				$is_art_wall = ( 'art-wall' === $attrs['layout'] );
-				$wall_presets_data = array(
-					'triptych' => array(
-						array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => $attrs['wallMolding'], 'label' => '24" × 36"', 'hero' => false ),
-						array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => $attrs['wallMolding'], 'label' => '24" × 36" (Centerpiece)', 'hero' => true ),
-						array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => $attrs['wallMolding'], 'label' => '24" × 36"', 'hero' => false ),
-					),
-					'salon' => array(
-						array( 'ratio' => '24x36', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '24" × 36"', 'left' => 40, 'top' => 60, 'width' => 330, 'height' => 440 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 410, 'top' => 80, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '12x12', 'orient' => 'portrait',  'molding' => 'mold-white', 'label' => '12" × 12"', 'left' => 740, 'top' => 60, 'width' => 240, 'height' => 240 ),
-						array( 'ratio' => '16x20', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '16" × 20"', 'left' => 740, 'top' => 340, 'width' => 240, 'height' => 300 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 410, 'top' => 500, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '20x30', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '20" × 30"', 'left' => 40, 'top' => 540, 'width' => 330, 'height' => 420 ),
-					),
-					'staircase' => array(
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 50, 'top' => 70, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '18" × 24"', 'left' => 240, 'top' => 180, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-white', 'label' => '18" × 24"', 'left' => 430, 'top' => 290, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 620, 'top' => 400, 'width' => 290, 'height' => 380 ),
-						array( 'ratio' => '12x12', 'orient' => 'portrait',  'molding' => 'mold-oak',   'label' => '12" × 12"', 'left' => 810, 'top' => 160, 'width' => 280, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'portrait',  'molding' => 'mold-black', 'label' => '18" × 24"', 'left' => 840, 'top' => 490, 'width' => 280, 'height' => 370 ),
-					),
-					'symmetric' => array(
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-black', 'label' => '24" × 18"', 'left' => 120, 'top' => 70, 'width' => 400, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-black', 'label' => '24" × 18"', 'left' => 600, 'top' => 70, 'width' => 400, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-oak',   'label' => '24" × 18"', 'left' => 120, 'top' => 380, 'width' => 400, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-oak',   'label' => '24" × 18"', 'left' => 600, 'top' => 380, 'width' => 400, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-white', 'label' => '24" × 18"', 'left' => 120, 'top' => 690, 'width' => 400, 'height' => 280 ),
-						array( 'ratio' => '18x24', 'orient' => 'landscape', 'molding' => 'mold-white', 'label' => '24" × 18"', 'left' => 600, 'top' => 690, 'width' => 400, 'height' => 280 ),
-					),
-				);
-
-				$preset_key = ( $is_pro && isset( $wall_presets_data[ $attrs['wallPreset'] ] ) ) ? $attrs['wallPreset'] : 'triptych';
-				$wall_active_preset = $wall_presets_data[ $preset_key ];
-				$max_wall_frames = count( $wall_active_preset );
-				if ( $is_pro && ! empty( $attrs['artWallFrames'] ) ) {
-					$max_wall_frames = count( $attrs['artWallFrames'] );
-				}
 
 				foreach ( $items as $item ) :
 					$item_tags   = array_map( 'sanitize_title', $item['keywords'] );
@@ -732,34 +733,40 @@ class Smart_Gallery_Block {
 
 					$dim_label = '';
 					if ( $is_art_wall ) {
-						if ( $item_idx >= $max_wall_frames ) {
-							$item_classes[] = 'matcha-gallery__item--surplus';
-							$item_extra_style = 'display:none;';
+						$cycle        = (int) floor( $item_idx / $preset_count );
+						$p_idx        = $item_idx % $preset_count;
+						$cycle_offset = $cycle * 880;
+
+						if ( $is_pro && ! empty( $attrs['artWallFrames'][ $item_idx ] ) ) {
+							$fcfg      = $attrs['artWallFrames'][ $item_idx ];
+							$molding   = $fcfg['molding'] ?? $attrs['wallMolding'];
+							$orient    = $fcfg['orientation'] ?? 'portrait';
+							$ratio     = $fcfg['ratio'] ?? '18x24';
+							$dim_label = $ratio;
+							$f_left    = (int) $fcfg['left'];
+							$f_top     = (int) $fcfg['top'];
+							$f_width   = (int) $fcfg['width'];
+							$f_height  = (int) $fcfg['height'];
 						} else {
-							$item_classes[] = 'matcha-gallery__item--wall-frame';
-							if ( $is_pro && ! empty( $attrs['artWallFrames'][ $item_idx ] ) ) {
-								$fcfg = $attrs['artWallFrames'][ $item_idx ];
-								$molding = $fcfg['molding'] ?? $attrs['wallMolding'];
-								$orient = $fcfg['orientation'] ?? 'portrait';
-								$ratio = $fcfg['ratio'] ?? '18x24';
-								$item_extra_style = sprintf( 'left:%dpx; top:%dpx; width:%dpx; height:%dpx;', (int) $fcfg['left'], (int) $fcfg['top'], (int) $fcfg['width'], (int) $fcfg['height'] );
-								$dim_label = $ratio;
-							} else {
-								$pcfg = $wall_active_preset[ $item_idx ] ?? $wall_active_preset[0];
-								$molding = $pcfg['molding'] ?? $attrs['wallMolding'];
-								$orient = $pcfg['orient'] ?? 'portrait';
-								$ratio = $pcfg['ratio'] ?? '24x36';
-								$dim_label = $pcfg['label'] ?? '24" × 36"';
-								if ( 'triptych' !== $preset_key && isset( $pcfg['left'] ) ) {
-									$item_extra_style = sprintf( 'left:%dpx; top:%dpx; width:%dpx; height:%dpx;', (int) $pcfg['left'], (int) $pcfg['top'], (int) $pcfg['width'], (int) $pcfg['height'] );
-								} elseif ( ! empty( $pcfg['hero'] ) ) {
-									$item_classes[] = 'matcha-gallery__item--hero-frame';
-								}
+							$pcfg      = $wall_active_preset[ $p_idx ] ?? $wall_active_preset[0];
+							$molding   = $pcfg['molding'] ?? $attrs['wallMolding'];
+							$orient    = $pcfg['orient'] ?? 'portrait';
+							$ratio     = $pcfg['ratio'] ?? '24x36';
+							$dim_label = $pcfg['label'] ?? '24" × 36"';
+							$f_left    = (int) ( $pcfg['left'] ?? 40 );
+							$f_top     = (int) ( $pcfg['top'] ?? 180 ) + $cycle_offset;
+							$f_width   = (int) ( $pcfg['width'] ?? 300 );
+							$f_height  = (int) ( $pcfg['height'] ?? 400 );
+							if ( ! empty( $pcfg['hero'] ) && 0 === $cycle ) {
+								$item_classes[] = 'matcha-gallery__item--hero-frame';
 							}
-							$item_classes[] = 'matcha-wall-mold--' . sanitize_html_class( $molding );
-							$item_classes[] = 'matcha-wall-orient--' . sanitize_html_class( $orient );
-							$item_classes[] = 'matcha-wall-ratio--' . sanitize_html_class( $ratio );
 						}
+
+						$item_classes[]   = 'matcha-gallery__item--wall-frame';
+						$item_classes[]   = 'matcha-wall-mold--' . sanitize_html_class( $molding );
+						$item_classes[]   = 'matcha-wall-orient--' . sanitize_html_class( $orient );
+						$item_classes[]   = 'matcha-wall-ratio--' . sanitize_html_class( $ratio );
+						$item_extra_style = sprintf( 'left:%dpx; top:%dpx; width:%dpx; height:%dpx;', $f_left, $f_top, $f_width, $f_height );
 					}
 					
 					$style_attr = ! empty( $item_extra_style ) ? 'style="' . esc_attr( trim( $item_extra_style ) ) . '"' : '';
@@ -929,19 +936,6 @@ class Smart_Gallery_Block {
 				<?php $item_idx++; endforeach; ?>
 			</div>
 
-			<?php if ( $is_art_wall && count( $items ) > $max_wall_frames ) : ?>
-				<div class="matcha-wall-surplus-bar">
-					<button type="button" class="matcha-wall-surplus-btn" data-surplus-start="<?php echo (int) $max_wall_frames; ?>" aria-label="<?php esc_attr_e( 'View remaining exhibition photos in lightbox', 'matcha-gallery' ); ?>">
-						<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-						<span>
-							<?php
-							/* translators: %d: number of additional photos */
-							printf( esc_html__( '+%d More Exhibition Works in Viewer', 'matcha-gallery' ), (int) ( count( $items ) - $max_wall_frames ) );
-							?>
-						</span>
-					</button>
-				</div>
-			<?php endif; ?>
 
 			<?php if ( ! empty( $attrs['paginationType'] ) && 'none' !== $attrs['paginationType'] ) : ?>
 				<?php if ( in_array( $attrs['paginationType'], array( 'load-more', 'infinite' ), true ) ) : ?>

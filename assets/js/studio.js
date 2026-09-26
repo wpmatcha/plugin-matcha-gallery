@@ -1940,15 +1940,20 @@
       if (!canvas) return;
       const items = Array.from(canvas.querySelectorAll(".matcha-gallery__item--wall-frame"));
       const newFrames = [];
+      const presetCount = Math.max(1, preset.length);
       items.forEach((item, index) => {
-        const config = preset[index % preset.length];
+        const pIdx = index % presetCount;
+        const cycle = Math.floor(index / presetCount);
+        const cycleOffsetY = cycle * 880;
+        const config = preset[pIdx] || preset[0];
         if (!config) return;
         const isLandscape = config.orientation === "landscape" || config.width > config.height;
         const orient = isLandscape ? "landscape" : "portrait";
         const mold = config.molding || "mold-black";
         const ratio = config.ratio || "18x24";
+        const calculatedTop = config.top + cycleOffsetY;
         item.style.left = `${config.left}px`;
-        item.style.top = `${config.top}px`;
+        item.style.top = `${calculatedTop}px`;
         item.style.width = `${config.width}px`;
         item.style.height = `${config.height}px`;
         item.dataset.frameRatio = ratio;
@@ -1961,7 +1966,7 @@
         newFrames.push({
           id: parseInt(item.dataset.id, 10),
           left: config.left,
-          top: config.top,
+          top: calculatedTop,
           width: config.width,
           height: config.height,
           ratio,
@@ -1970,6 +1975,10 @@
           zIndex: 10 + index
         });
       });
+      const grid = canvas.querySelector(".matcha-gallery__grid");
+      if (grid) {
+        grid.style.minHeight = `${Math.max(860, Math.ceil(items.length / presetCount) * 880 + 100)}px`;
+      }
       patchConfig({ wallPreset: presetName, artWallFrames: newFrames });
       renderRightPanel();
       if (items[0]) selectArtFrame(items[0]);
@@ -4596,7 +4605,16 @@
             ` : ""}
           </div>
         ` : ""}
-        <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === "art-wall" ? "matcha-wall-stage" : ""}">
+        ${(() => {
+        const presetKey = cfg.wallPreset || "triptych";
+        const preset = wallPresets[presetKey] || wallPresets.triptych;
+        const presetCount = Math.max(1, preset.length);
+        const artWallMinHeight = activeLayout === "art-wall" ? Math.max(860, Math.ceil(medias.length / presetCount) * 880 + 100) : 0;
+        const gridStyle = artWallMinHeight ? `min-height:${artWallMinHeight}px;` : "";
+        return `
+            <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === "art-wall" ? "matcha-wall-stage" : ""}" style="${gridStyle}">
+          `;
+      })()}
           ${activeLayout === "art-wall" ? `
             <div class="art-wall-hint" id="artWallHint" style="display:flex;">
               <span>\u{1F4A1}</span>
@@ -4620,7 +4638,7 @@
           ${(() => {
         const presetKey = cfg.wallPreset || "triptych";
         const preset = wallPresets[presetKey] || wallPresets.triptych;
-        const maxWallFrames = activeLayout === "art-wall" ? Math.max(preset.length, (cfg.artWallFrames || []).length, Math.min(medias.length, 6)) : 3;
+        const presetCount = Math.max(1, preset.length);
         return medias.map((m, idx) => {
           const meta = metaCache.get(m.id);
           const keywords = (meta?.keywords || []).map((k) => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-"));
@@ -4660,26 +4678,24 @@
           let fOrient = "";
           let fMolding = "";
           if (activeLayout === "art-wall") {
-            if (idx >= maxWallFrames) {
-              itemExtraClass += " matcha-gallery__item--surplus";
-              itemExtraStyle += "display:none;";
-            } else {
-              const savedFrame = cfg.artWallFrames && cfg.artWallFrames[idx] ? cfg.artWallFrames[idx] : null;
-              const presetFrame = preset[idx % preset.length] || preset[0];
-              const fLeft = savedFrame ? savedFrame.left : presetFrame.left;
-              const fTop = savedFrame ? savedFrame.top : presetFrame.top;
-              const fWidth = savedFrame ? savedFrame.width : presetFrame.width;
-              const fHeight = savedFrame ? savedFrame.height : presetFrame.height;
-              fRatio = savedFrame ? savedFrame.ratio || "18x24" : presetFrame.ratio || cfg.wallFrameRatio || "18x24";
-              fOrient = savedFrame ? savedFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait") : presetFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait");
-              fMolding = savedFrame ? savedFrame.molding || "mold-black" : presetFrame.molding || cfg.wallMolding || "mold-black";
-              const fZ = savedFrame ? savedFrame.zIndex || 10 + idx : 10 + idx;
-              itemExtraClass += ` matcha-gallery__item--wall-frame ${fMolding} matcha-wall-mold--${fMolding}`;
-              itemExtraStyle += `position:absolute;left:${fLeft}px;top:${fTop}px;width:${fWidth}px;height:${fHeight}px;z-index:${fZ};`;
-              dimLabel = getRatioLabel(fRatio, fOrient);
-              if (presetKey === "triptych" && idx === 1 && !savedFrame) {
-                dimLabel += " (Centerpiece)";
-              }
+            const savedFrame = cfg.artWallFrames && cfg.artWallFrames[idx] ? cfg.artWallFrames[idx] : null;
+            const cycle = Math.floor(idx / presetCount);
+            const pIdx = idx % presetCount;
+            const presetFrame = preset[pIdx] || preset[0];
+            const cycleOffsetY = cycle * 880;
+            const fLeft = savedFrame ? savedFrame.left : presetFrame.left;
+            const fTop = savedFrame ? savedFrame.top : presetFrame.top + cycleOffsetY;
+            const fWidth = savedFrame ? savedFrame.width : presetFrame.width;
+            const fHeight = savedFrame ? savedFrame.height : presetFrame.height;
+            fRatio = savedFrame ? savedFrame.ratio || "18x24" : presetFrame.ratio || cfg.wallFrameRatio || "18x24";
+            fOrient = savedFrame ? savedFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait") : presetFrame.orientation || (fWidth > fHeight ? "landscape" : "portrait");
+            fMolding = savedFrame ? savedFrame.molding || "mold-black" : presetFrame.molding || cfg.wallMolding || "mold-black";
+            const fZ = savedFrame ? savedFrame.zIndex || 10 + idx : 10 + idx;
+            itemExtraClass += ` matcha-gallery__item--wall-frame ${fMolding} matcha-wall-mold--${fMolding}`;
+            itemExtraStyle += `position:absolute;left:${fLeft}px;top:${fTop}px;width:${fWidth}px;height:${fHeight}px;z-index:${fZ};`;
+            dimLabel = getRatioLabel(fRatio, fOrient);
+            if (presetKey === "triptych" && pIdx === 1 && !savedFrame && cycle === 0) {
+              dimLabel += " (Centerpiece)";
             }
           }
           return `
@@ -4761,19 +4777,7 @@
       })()}
           ${cfg.layout === "justified" ? '<div style="flex-grow:99999;min-width:100px;height:0;margin:0;padding:0;"></div>' : ""}
         </div>
-        ${(() => {
-        const presetKey = cfg.wallPreset || "triptych";
-        const preset = wallPresets[presetKey] || wallPresets.triptych;
-        const maxWallFrames = activeLayout === "art-wall" ? Math.max(preset.length, (cfg.artWallFrames || []).length, Math.min(medias.length, 6)) : 3;
-        return activeLayout === "art-wall" && medias.length > maxWallFrames ? `
-            <div class="matcha-wall-surplus-bar">
-              <div class="matcha-wall-surplus-btn" style="cursor:default;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                <span>+${medias.length - maxWallFrames} More Exhibition Works in Viewer</span>
-              </div>
-            </div>
-          ` : "";
-      })()}
+
 
         ${activePagination && activePagination !== "none" ? `
           ${activePagination === "load-more" || isPro && activePagination === "infinite" ? `
