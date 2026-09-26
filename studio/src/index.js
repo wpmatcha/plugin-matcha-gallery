@@ -1283,13 +1283,122 @@ if (root) {
     const curWallOrient = cfg.wallFrameOrientation || 'portrait';
     const curWallRatio = cfg.wallFrameRatio || '18x24';
     const isLandscape = curWallOrient === 'landscape';
+    const activeSkinKey = getActiveSkinKey(cfg);
+    const isArtWall = cfg.layout === 'art-wall';
 
     return `
-      ${cfg.layout === 'art-wall' ? `
-        <!-- Art Wall Controls (PRO) -->
-        <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.35); background: rgba(94, 194, 127, 0.04);">
-          <div class="matcha-card-title" style="display:flex;align-items:center;justify-content:space-between;">
-            <span class="heading-wrap" style="color:#5ec27f;">${Icons.layoutGrid} Art Wall Controls <span class="matcha-pro-badge">PRO</span></span>
+      <!-- TOP SECTION: FINE-TUNING INSPECTOR -->
+      <div class="matcha-card" style="border: 1px solid rgba(255, 255, 255, 0.08); background: var(--st-bg-card, #1c231f);">
+        <div class="matcha-card-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Fine-Tuning
+          </span>
+          <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:var(--st-text-secondary);font-family:var(--st-font-mono, monospace);">Inspector</span>
+        </div>
+
+        <!-- Geometry Sliders (Always Visible) -->
+        ${cfg.layout === 'justified' ? `
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Row Height</label>
+            <input id="st-row-height" class="range-input" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.rowHeight || 240}px</span>
+          </div>
+        ` : `
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Desktop Columns</label>
+            <input id="st-col" class="range-input" type="range" min="1" max="6" value="${cfg.columns || 3}">
+            <span class="val" id="columnsVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.columns || 3}</span>
+          </div>
+        `}
+
+        <div class="range-row" style="margin-bottom:10px;">
+          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Gutter Gap</label>
+          <input id="st-gut" class="range-input" type="range" min="0" max="48" step="2" value="${cfg.gutterSize ?? 22}">
+          <span class="val" id="gapVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.gutterSize ?? 22}px</span>
+        </div>
+
+        <div class="range-row" style="margin-bottom:12px;">
+          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Corner Radius</label>
+          <input id="st-rad" class="range-input" type="range" min="0" max="24" step="1" value="${cfg.borderRadius ?? 10}">
+          <span class="val" id="radiusVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.borderRadius ?? 10}px</span>
+        </div>
+
+        <!-- Spatial 3D Physics Toggle (Inspector) -->
+        <div style="padding: 12px; background: rgba(94, 194, 127, 0.06); border: 1px solid rgba(94, 194, 127, 0.2); border-radius: var(--radius-md, 10px); margin-bottom: 12px;">
+          <label style="display:flex;align-items:center;justify-content:space-between;color:#fff;cursor:pointer;margin-bottom:4px;">
+            <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;">
+              <span>✦ 3D Spatial Tilt</span>
+              <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+            </span>
+            <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? 'checked' : ''} style="accent-color: #5ec27f; cursor: pointer; width: 16px; height: 16px;">
+          </label>
+          <div style="font-size: 10px; color: var(--st-text-muted, #5e6f64); line-height: 1.4;">
+            Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
+          </div>
+          <button type="button" id="btn-trigger-wave-inspector" style="margin-top:8px;width:100%;font-size:10.5px;font-weight:700;padding:5px;border-radius:4px;cursor:pointer;border:1px solid rgba(94,194,127,0.3);background:rgba(94,194,127,0.1);color:#5ec27f;display:flex;align-items:center;justify-content:center;gap:5px;">
+            <span>▶ Play 3D Wave Demo</span>
+          </button>
+        </div>
+
+        <!-- Contextual Panel 1: Card Skin Inspector (Editorial Card) -->
+        <div class="contextual-panel ${activeSkinKey === 'skin-editorial' ? '' : 'hidden'}" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">CARD PROPERTIES</div>
+          <div style="margin-bottom:10px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
+            <div style="display:flex;gap:8px;">
+              <button type="button" id="btnCardThemeLight" class="${curTheme !== 'dark' ? 'is-active' : ''}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#ffffff;color:#000000;border:1px solid ${curTheme !== 'dark' ? '#5ec27f' : '#ccc'};border-radius:4px;cursor:pointer;">White Card</button>
+              <button type="button" id="btnCardThemeDark" class="${curTheme === 'dark' ? 'is-active' : ''}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#1c231f;color:#ffffff;border:1px solid ${curTheme === 'dark' ? '#5ec27f' : 'rgba(255,255,255,0.2)'};border-radius:4px;cursor:pointer;">Dark Card</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Category / Tag Pill</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+              <input type="checkbox" id="stCategoryPillsToggle" ${cfg.showCategoryPill !== false ? 'checked' : ''} style="accent-color:#5ec27f;cursor:pointer;">
+              <span>Show AI Category Pill</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
+        <div class="contextual-panel ${activeSkinKey === 'skin-exhibition' ? '' : 'hidden'}" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">FINE-ART MATTING</div>
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
+            <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
+            <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 10}px</span>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Accent Color</label>
+            <div style="display:flex;gap:8px;">
+              <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || '#5ec27f') === '#5ec27f' ? '2px solid #fff' : '1px solid transparent'};"></span>
+              <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === '#f59e0b' ? '2px solid #fff' : '1px solid transparent'};"></span>
+              <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === '#38bdf8' ? '2px solid #fff' : '1px solid transparent'};"></span>
+              <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === '#ffffff' ? '2px solid #5ec27f' : '1px solid transparent'};"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
+        <div class="contextual-panel ${activeSkinKey === 'skin-aura' ? '' : 'hidden'}" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
+            <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.auraBloom ?? 32}px</span>
+          </div>
+          <div>
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+              <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? 'checked' : ''} style="accent-color:#5ec27f;cursor:pointer;">
+              <span>Smart Focal-Point Pan on Hover</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Contextual Panel 4: Art Wall Canvas Inspector (PRO) -->
+        <div class="contextual-panel ${isArtWall ? '' : 'hidden'}" id="panelArtWall" style="background:rgba(94, 194, 127, 0.04);border:1px solid rgba(94, 194, 127, 0.25);border-radius:8px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+            <span>ART WALL CONTROLS <span class="matcha-pro-badge">PRO</span></span>
           </div>
 
           <!-- Wall Texture & Material -->
@@ -1377,23 +1486,19 @@ if (root) {
             </div>
           </div>
         </div>
-      ` : ''}
 
-      <!-- 3D Spatial Holographic Tilt (PRO) -->
-      <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.25); background: rgba(94, 194, 127, 0.03);">
-        <div class="matcha-card-title">
-          <span class="heading-wrap" style="color:#5ec27f;">✦ Spatial 3D Holographic Tilt <span class="matcha-pro-badge">PRO</span></span>
+        <div style="margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">
+          <div class="range-row" style="margin-bottom:8px;">
+            <label style="font-size:10.5px;color:var(--st-text-secondary);">Tablet Columns</label>
+            <input id="st-colt" type="range" min="1" max="4" value="${cfg.columnsTablet || 2}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:10.5px;color:var(--st-text-secondary);">${cfg.columnsTablet || 2}</span>
+          </div>
+          <div class="range-row">
+            <label style="font-size:10.5px;color:var(--st-text-secondary);">Mobile Columns</label>
+            <input id="st-colm" type="range" min="1" max="2" value="${cfg.columnsMobile || 1}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:10.5px;color:var(--st-text-secondary);">${cfg.columnsMobile || 1}</span>
+          </div>
         </div>
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);margin-bottom:6px;">
-          <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? 'checked' : ''}>
-          <span>Enable Hardware-Accelerated 3D Holographic Tilt</span>
-        </label>
-        <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 10px;line-height:1.4;">
-          Interactive gyro & mouse perspective tilt with specular lighting glare on card hover.
-        </p>
-        <button type="button" id="btn-trigger-wave-inspector" class="matcha-exit-btn" style="width:100%;font-size:11px;font-weight:700;padding:6px;justify-content:center;display:flex;align-items:center;gap:6px;color:#5ec27f;border-color:rgba(94,194,127,0.3);background:rgba(94,194,127,0.08);">
-          <span>▶ Play 3D Wave Demo</span>
-        </button>
       </div>
 
       <!-- Curated Style Preset (Skins) -->
@@ -1403,6 +1508,7 @@ if (root) {
         </div>
         <select id="st-style-preset" class="matcha-dark-select" style="margin-bottom:6px;font-weight:600;">
           <option value="custom" ${(cfg.stylePreset || 'custom') === 'custom' ? 'selected' : ''}>Custom (Manual Adjustments)</option>
+          <option value="editorial" ${cfg.stylePreset === 'editorial' ? 'selected' : ''}>Editorial Card (Card Body Below Photo)</option>
           <option value="exhibition-frame" ${cfg.stylePreset === 'exhibition-frame' ? 'selected' : ''}>Exhibition Hairline Frame (The Grid: Brasilia)</option>
           <option value="architectural-curtain" ${cfg.stylePreset === 'architectural-curtain' ? 'selected' : ''}>Architectural Curtain (The Grid: Sofia)</option>
           <option value="cinematic-pullback" ${cfg.stylePreset === 'cinematic-pullback' ? 'selected' : ''}>Cinematic Pullback (The Grid: Bogota)</option>
@@ -1485,66 +1591,6 @@ if (root) {
           <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:4px;line-height:1.3;">
             On touch screens, choose whether tapping immediately opens the lightbox or reveals titles and buttons first.
           </div>
-        </div>
-      </div>
-
-      <!-- Grid Dimensions & Spacing -->
-      <div class="matcha-card">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.sliders} Dimensions & Gaps</span>
-        </div>
-        ${cfg.layout === 'art-wall' ? `
-          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:700;color:#5ec27f;margin-bottom:4px;">🏛️ Curated Art Wall (Hero Triptych)</div>
-            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">3-frame centerpiece composition with 57″ gallery eye-level alignment and museum passe-partout matting. Surplus photos open in the interactive viewer.</div>
-          </div>
-        ` : cfg.layout === 'lookbook-duet' ? `
-          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:700;color:#5ec27f;margin-bottom:4px;">✨ Lookbook Duet (2026 Editorial)</div>
-            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">Editorial 3-column rhythm with column 2 staggered down by 48px and dynamic alternating aspect ratios.</div>
-          </div>
-        ` : cfg.layout === 'cinema-reel' ? `
-          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:700;color:#eab308;margin-bottom:4px;">🎬 Cinema Reel (16:9 Horizontal Runway)</div>
-            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.</div>
-          </div>
-        ` : cfg.layout === 'curator-specimen' ? `
-          <div style="padding:10px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
-            <div style="font-size:11px;font-weight:700;color:#eab308;margin-bottom:4px;">🏛️ Curator Specimen Archive</div>
-            <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.4;">Architectural 2-column museum presentation with generous 40px negative space and deep shadow elevation.</div>
-          </div>
-        ` : cfg.layout === 'justified' ? `
-          <div class="range-row">
-            <label>Row Height</label>
-            <input id="st-row-height" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
-            <span class="val">${cfg.rowHeight || 240}px</span>
-          </div>
-        ` : `
-          <div class="range-row">
-            <label>Desktop Columns</label>
-            <input id="st-col" type="range" min="1" max="6" value="${cfg.columns || 3}">
-            <span class="val">${cfg.columns || 3}</span>
-          </div>
-        `}
-        <div class="range-row">
-          <label>Tablet Columns</label>
-          <input id="st-colt" type="range" min="1" max="4" value="${cfg.columnsTablet || 2}">
-          <span class="val">${cfg.columnsTablet || 2}</span>
-        </div>
-        <div class="range-row">
-          <label>Mobile Columns</label>
-          <input id="st-colm" type="range" min="1" max="2" value="${cfg.columnsMobile || 1}">
-          <span class="val">${cfg.columnsMobile || 1}</span>
-        </div>
-        <div class="range-row">
-          <label>Gutter Gap</label>
-          <input id="st-gut" type="range" min="0" max="48" step="4" value="${cfg.gutterSize ?? 16}">
-          <span class="val">${cfg.gutterSize ?? 16}px</span>
-        </div>
-        <div class="range-row">
-          <label>Corner Radius</label>
-          <input id="st-rad" type="range" min="0" max="32" step="2" value="${cfg.borderRadius ?? 10}">
-          <span class="val">${cfg.borderRadius ?? 10}px</span>
         </div>
       </div>
 
@@ -2727,6 +2773,58 @@ if (root) {
 
     document.getElementById('btn-trigger-wave-inspector')?.addEventListener('click', () => {
       trigger3DWaveDemo();
+    });
+
+    // --- Contextual Skin Controls Bindings ---
+    document.getElementById('btnCardThemeLight')?.addEventListener('click', () => {
+      patchConfig({ cardTheme: 'clean', cardBackground: '#ffffff' });
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.getElementById('btnCardThemeDark')?.addEventListener('click', () => {
+      patchConfig({ cardTheme: 'dark', cardBackground: '#1c231f' });
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.getElementById('stCategoryPillsToggle')?.addEventListener('change', e => {
+      patchConfig({ showCategoryPill: e.target.checked });
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.getElementById('st-matting-skin')?.addEventListener('input', e => {
+      const valEl = document.getElementById('mattingVal');
+      if (valEl) valEl.textContent = e.target.value + 'px';
+      patchConfig({ mattingSize: parseInt(e.target.value) });
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.querySelectorAll('.hairline-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        const color = swatch.dataset.color;
+        patchConfig({ hoverFrameColor: color });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.getElementById('st-aura-bloom')?.addEventListener('input', e => {
+      e.target.nextElementSibling.textContent = e.target.value + 'px';
+      patchConfig({ auraBloom: parseInt(e.target.value) });
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.getElementById('st-aura-focal-pan')?.addEventListener('change', e => {
+      patchConfig({ focalPanEnabled: e.target.checked });
+      renderCanvas();
+      autosaveSoon();
     });
 
     document.getElementById('st-frame-style')?.addEventListener('change', e => {
@@ -4825,7 +4923,7 @@ if (root) {
 
     const hoverFrameCss = cfg.hoverFrameColor ? `--matcha-hover-frame-color:${cfg.hoverFrameColor};` : '';
     const cardBgCss = cfg.cardBackground ? `--matcha-card-bg:${cfg.cardBackground};` : '';
-    const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 16}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 0}px;--matcha-accent:${cfg.accentColor || '#607d66'};${hoverFrameCss}${cardBgCss}`;
+    const style = `--matcha-columns:${cfg.columns || 3};--matcha-columns-tablet:${cfg.columnsTablet || 2};--matcha-columns-mobile:${cfg.columnsMobile || 1};--matcha-gutter:${cfg.gutterSize ?? 22}px;--matcha-radius:${cfg.borderRadius ?? 10}px;--matcha-row-height:${cfg.rowHeight || 240}px;--matcha-matting:${cfg.mattingSize ?? 10}px;--matcha-accent:${cfg.accentColor || '#607d66'};${hoverFrameCss}${cardBgCss}`;
 
     const stylePreset = cfg.stylePreset || 'custom';
     const activeCardTheme = (!isPro && ['glass', 'glow'].includes(cfg.cardTheme)) ? 'clean' : (cfg.cardTheme || 'clean');
@@ -4833,6 +4931,21 @@ if (root) {
     const activeLayout = (!isPro && ['pinwheel', 'bento', 'cinema-reel', 'curator-specimen'].includes(cfg.layout)) ? 'grid' : (cfg.layout || 'grid');
     const activePagination = (!isPro && ['infinite', 'pages'].includes(cfg.paginationType)) ? 'load-more' : (cfg.paginationType || 'none');
     const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
+    const activeSkinKey = getActiveSkinKey(cfg);
+
+    const layoutSlugMap = {
+      grid: 'classic-grid',
+      masonry: 'pinterest-masonry',
+      'lookbook-duet': 'lookbook-duet',
+      justified: 'justified-rows',
+      'cinema-reel': 'cinema-reel',
+      'curator-specimen': 'curator-specimen',
+      'art-wall': 'art-wall',
+      mosaic: 'mosaic-spans',
+      bento: 'bento-showcase',
+      pinwheel: 'pinwheel-spiral'
+    };
+    const layoutSlug = layoutSlugMap[activeLayout] || `layout-${activeLayout}`;
 
     if (activeLayout === 'art-wall') {
       const tex = cfg.wallTexture || 'charcoal';
@@ -4842,7 +4955,7 @@ if (root) {
     }
 
     canvas.innerHTML = `
-      <div class="matcha-gallery matcha-gallery--${activeLayout} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
+      <div class="matcha-gallery-container matcha-gallery layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === 'skin-editorial' && activeCardTheme === 'dark' ? 'matcha-card-theme--dark' : ''} matcha-gallery--${activeLayout} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
@@ -4911,7 +5024,7 @@ if (root) {
             ` : ''}
           </div>
         ` : ''}
-        <div class="matcha-gallery__grid ${activeLayout === 'art-wall' ? 'matcha-wall-stage' : ''}">
+        <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === 'art-wall' ? 'matcha-wall-stage' : ''}">
           ${activeLayout === 'art-wall' ? `
             <div class="art-wall-hint" id="artWallHint" style="display:flex;">
               <span>💡</span>
@@ -4954,6 +5067,8 @@ if (root) {
               const link = imageLinks[m.id] || {};
               const videoUrl = (cfg.imageVideos || {})[m.id] || '';
               const hasVideo = !!videoUrl;
+              const videoDuration = hasVideo ? (meta?.duration || '1:12') : '';
+              const isFavorited = (cfg.proofingFavorites || []).includes(m.id);
               const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1.0 };
               const zoom = isPro ? (fp.zoom || 1.0) : 1.0;
               const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
@@ -4968,6 +5083,11 @@ if (root) {
               }
 
               const isShop = !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
+              const primaryTag = keywords[0] || (meta?.tags && meta.tags[0]) || '';
+              const ambientGlow = (meta?.colors && meta.colors[0]) ? meta.colors[0] : 'rgba(94, 194, 127, 0.4)';
+              const paletteDotsHtml = (meta?.colors && meta.colors.length > 0)
+                ? meta.colors.slice(0, 3).map(c => `<span class="aura-palette-dot" style="background:${c};"></span>`).join('')
+                : `<span class="aura-palette-dot" style="background:var(--st-accent-primary, #5ec27f);"></span>`;
 
               let itemExtraClass = '';
               let itemExtraStyle = '';
@@ -5004,78 +5124,78 @@ if (root) {
               }
 
               return `
-                <div class="matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${hasVideo ? 'matcha-gallery__item--video' : ''} ${spanClass} ${itemExtraClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" data-frame-ratio="${fRatio}" data-frame-orientation="${fOrient}" data-frame-molding="${fMolding}" style="${itemStyle} ${itemExtraStyle}">
+                <div class="gallery-item matcha-gallery__item ${isAi ? 'matcha-gallery__item--ai' : ''} ${hasVideo ? 'matcha-gallery__item--video' : ''} ${spanClass} ${itemExtraClass}" data-tags="${escapeHtml(tagStr)}" data-sections="${escapeHtml(secStr)}" data-colors="${escapeHtml(colorStr)}" data-title="${escapeHtml(imgTitle)}" data-caption="${escapeHtml(imgCaption)}" data-id="${m.id}" data-video-url="${escapeHtml(videoUrl)}" data-frame-ratio="${fRatio}" data-frame-orientation="${fOrient}" data-frame-molding="${fMolding}" style="${itemStyle} ${itemExtraStyle} --ambient-glow: ${ambientGlow}; --focal-x: ${fp.x}%; --focal-y: ${fp.y}%;">
                     <div class="matcha-gallery__item-inner">
-                      <img src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || '')}" style="${imgStyle}" />
-                      ${hasVideo ? `
-                        <div class="matcha-item-video-badge" aria-hidden="true" title="Watch Video">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                          </svg>
-                        </div>
-                      ` : ''}
-                      ${isAi ? '<span class="matcha-gallery__ai-badge">AI</span>' : ''}
-                      ${(isPro && cfg.proofingEnabled) ? `<button type="button" class="matcha-gallery__proof-btn" title="Client Favorite"><span class="matcha-heart-icon">${Icons.heart}</span></button>` : ''}
+                      <div class="item-media-wrap">
+                        ${hasVideo ? `
+                          <div class="item-badge-video" title="Video Reel (${videoDuration})">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span>${videoDuration}</span>
+                          </div>
+                        ` : ''}
 
-                      ${(isPro && (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel')) ? `
-                        <div class="matcha-mosaic-spans" style="position:absolute;top:8px;right:8px;display:flex;gap:3px;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);padding:3px 5px;border-radius:6px;z-index:4;">
-                          <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
-                          <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
-                          <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 ↕</button>
-                          <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" title="Hero Tile (2x2)">2x2 ⤢</button>
-                        </div>
-                      ` : ''}
+                        ${(cfg.proofingEnabled !== false) ? `
+                          <button type="button" class="item-badge-heart matcha-gallery__proof-btn ${isFavorited ? 'active' : ''}" data-id="${m.id}" title="Favorite for Proofing">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorited ? '#ef4444' : 'none'}" stroke="${isFavorited ? '#ef4444' : 'currentColor'}" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                          </button>
+                        ` : ''}
 
-                      ${((cfg.showTitle && imgTitle) || (cfg.showCaption && imgCaption) || link.url || cfg.lightboxEnabled !== false) ? `
-                        <div class="matcha-item-overlay"></div>
-                        <div class="matcha-item-frame" aria-hidden="true"></div>
-                        <div class="matcha-item-content">
-                          ${(cfg.showTitle && imgTitle) ? `<h4 class="matcha-item-title">${escapeHtml(imgTitle)}</h4>` : ''}
+                        <img class="item-img" src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || '')}" style="${imgStyle}" />
+                        <div class="ai-focal-dot"></div>
 
-                          ${(cfg.lightboxEnabled !== false || link.url) ? `
-                            <div class="matcha-item-actions">
-                              ${cfg.lightboxEnabled !== false ? `
-                                <button type="button" class="matcha-action-btn matcha-action-btn--media" title="${hasVideo ? 'Play Video' : 'View Photo'}" aria-label="${hasVideo ? 'Play Video' : 'View Photo'}">
-                                  ${hasVideo ? `
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                                      <polygon points="6 3 20 12 6 21 6 3"></polygon>
-                                    </svg>
-                                  ` : `
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    </svg>
-                                  `}
-                                </button>
-                              ` : ''}
-
-                              ${link.url ? `
-                                <span class="matcha-action-btn matcha-action-btn--link ${isShop ? 'matcha-action-btn--shop' : ''}" title="${escapeHtml(link.label || (link.price ? `Shop (${link.price})` : (isShop ? 'Shop Product' : 'Visit Link')))}">
-                                  ${isShop ? `
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                                  ` : `
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
-                                  `}
-                                </span>
-                              ` : ''}
-                            </div>
+                        <!-- Floating Glassmorphic Action Dock (Hover for Minimalist / Exhibition / Aura) -->
+                        <div class="item-action-dock">
+                          <button type="button" class="dock-btn matcha-action-btn--media" title="Open Lightbox Zoom">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                          </button>
+                          ${link.url ? `
+                            <button type="button" class="dock-btn matcha-action-btn--link" title="${escapeHtml(link.label || 'Visit Link')}">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                            </button>
                           ` : ''}
-
-                          ${(link.price || (cfg.showCaption && imgCaption) || (meta?.tags && meta.tags[0])) ? `
-                            <div class="matcha-item-meta">
-                              ${link.price ? `
-                                <span class="matcha-item-price">${escapeHtml(link.price)}</span>
-                              ` : (cfg.showCaption && imgCaption) ? `
-                                <p class="matcha-item-caption">${escapeHtml(imgCaption)}</p>
-                              ` : meta?.tags && meta.tags[0] ? `
-                                <span class="matcha-item-category">${escapeHtml(meta.tags[0])}</span>
-                              ` : ''}
-                            </div>
+                          ${(link.price || isShop) ? `
+                            <button type="button" class="dock-btn btn-shop matcha-action-btn--shop" title="Shop Item">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                              <span>${escapeHtml(link.price || '$48')}</span>
+                            </button>
                           ` : ''}
                         </div>
-                      ` : ''}
+
+                        <!-- Item Overlay (Titles & Meta for Minimalist, Exhibition, Aura) -->
+                        <div class="item-overlay">
+                          <div class="aura-palette-bar">
+                            ${paletteDotsHtml}
+                          </div>
+                          <div class="overlay-title exhibition-title">${escapeHtml(imgTitle)}</div>
+                          <div class="overlay-meta exhibition-specimen">#${String(idx+1).padStart(2, '0')} / ${escapeHtml((primaryTag || 'photo').toUpperCase())} / ${isAi ? 'AI' : '24MM'}</div>
+                        </div>
+                      </div>
+
+                      <!-- Editorial Card Body (Shown when skin is Editorial Card) -->
+                      <div class="item-card-body">
+                        ${(cfg.showCategoryPill !== false && primaryTag) ? `<span class="card-category-pill">${escapeHtml(capitalize(primaryTag))}</span>` : ''}
+                        <h4 class="card-title">${escapeHtml(imgTitle)}</h4>
+                        ${imgCaption ? `<p class="card-caption">${escapeHtml(imgCaption)}</p>` : ''}
+                        <div class="card-footer">
+                          <span class="card-price">${escapeHtml(link.price || '$48.00')}</span>
+                          <div class="card-actions-group">
+                            <button type="button" class="card-icon-btn matcha-action-btn--media" title="Quick View">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                            </button>
+                            ${link.url ? `
+                              <button type="button" class="card-icon-btn matcha-action-btn--link" title="Open Link">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                              </button>
+                            ` : ''}
+                            <button type="button" class="card-shop-btn matcha-action-btn--shop" title="Buy Item">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                              ${hasVideo ? 'Buy License' : 'Buy'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    ${dimLabel ? `<div class="matcha-wall-dim-badge" aria-hidden="true">${escapeHtml(dimLabel)}</div>` : ''}
+                    ${dimLabel ? `<div class="frame-dim-badge matcha-wall-dim-badge" aria-hidden="true">${escapeHtml(dimLabel)}</div>` : ''}
                 </div>
               `;
             }).join('');
@@ -5112,7 +5232,7 @@ if (root) {
 
     canvas.querySelectorAll('.matcha-gallery__item').forEach(item => {
       item.addEventListener('click', e => {
-        if (e.target.classList.contains('matcha-span-btn')) return;
+        if (e.target.closest('.matcha-span-btn, .item-badge-heart, .item-action-dock, .card-actions-group')) return;
         if (activeLayout === 'art-wall') {
           selectArtFrame(item);
           return;
@@ -5125,6 +5245,24 @@ if (root) {
         });
       }
     });
+
+    canvas.querySelectorAll('.item-badge-heart').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        btn.classList.toggle('active');
+        const id = parseInt(btn.dataset.id);
+        const curFavs = new Set(getState().config.proofingFavorites || []);
+        if (btn.classList.contains('active')) {
+          curFavs.add(id);
+        } else {
+          curFavs.delete(id);
+        }
+        patchConfig({ proofingFavorites: Array.from(curFavs) });
+        autosaveSoon();
+      });
+    });
+
+    initSpatial3DPhysics();
 
     if (activeLayout === 'art-wall') {
       setupArtWallEvents(canvas);
