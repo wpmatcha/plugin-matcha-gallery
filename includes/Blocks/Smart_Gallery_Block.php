@@ -684,10 +684,11 @@ class Smart_Gallery_Block {
 					$tag_string  = implode( ' ', $item_tags );
 					$att_id      = (string) $item['id'];
 					$sec_string  = implode( ' ', $img_sections[ $att_id ] ?? array() );
+					$is_span_layout = in_array( $attrs['layout'], array( 'bento', 'mosaic', 'pinwheel' ), true );
 					$span        = ( $is_pro && ! empty( $image_spans[ $att_id ] ) && is_string( $image_spans[ $att_id ] ) )
 						? $image_spans[ $att_id ]
-						: ( 'mosaic' === $attrs['layout'] ? $mosaic_rhythm[ $item_idx % count( $mosaic_rhythm ) ] : ( is_string( $image_spans[ $att_id ] ?? null ) ? $image_spans[ $att_id ] : '1x1' ) );
-					$span_class  = in_array( $attrs['layout'], array( 'mosaic', 'pinwheel' ), true ) ? ' matcha-gallery__item--span-' . sanitize_html_class( $span ) : '';
+						: ( $is_span_layout ? ( ! empty( $image_spans[ $att_id ] ) ? $image_spans[ $att_id ] : ( 0 === $item_idx ? '2x2' : ( ( 3 === $item_idx || 5 === $item_idx ) ? '2x1' : '1x1' ) ) ) : '1x1' );
+					$span_class  = $is_span_layout ? ' matcha-gallery__item--span-' . sanitize_html_class( $span ) : '';
 					$item_colors = implode( ',', (array) ( $item['colors'] ?? array() ) );
 					$fp          = $focal_points[ $att_id ] ?? ( $item['focal_point'] ?? array( 'x' => 50, 'y' => 50 ) );
 					$zoom        = $is_pro ? (float) ( $fp['zoom'] ?? 1.0 ) : 1.0;

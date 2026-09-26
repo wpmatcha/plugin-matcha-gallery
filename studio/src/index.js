@@ -22,6 +22,10 @@ const Icons = {
   masonry: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="11" x="3" y="3" rx="1"/><rect width="7" height="6" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
   mosaic: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="11" x="3" y="3" rx="1"/><rect width="6" height="5" x="15" y="3" rx="1"/><rect width="6" height="5" x="15" y="9" rx="1"/><rect width="18" height="6" x="3" y="15" rx="1"/></svg>`,
   bento: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="18" x="3" y="3" rx="1"/><rect width="7" height="8" x="15" y="3" rx="1"/><rect width="7" height="8" x="15" y="13" rx="1"/></svg>`,
+  lookbook: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="10" rx="1"/><rect x="14" y="7" width="7" height="12" rx="1"/><circle cx="6.5" cy="18" r="2"/></svg>`,
+  cinemaReel: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="7" y1="5" x2="7" y2="10"/><line x1="12" y1="5" x2="12" y2="10"/><line x1="17" y1="5" x2="17" y2="10"/></svg>`,
+  curator: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><rect width="10" height="10" x="7" y="7" rx="1"/></svg>`,
+  artWall: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="11" rx="1"/><rect x="13" y="3" width="8" height="6" rx="1"/><rect x="13" y="11" width="8" height="10" rx="1"/><line x1="1" y1="14" x2="23" y2="14" stroke-dasharray="2 2" opacity="0.6"/></svg>`,
   pinwheel: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12V3a9 9 0 0 1 9 9h-9Z"/><path d="M12 12h9a9 9 0 0 1-9 9v-9Z"/><path d="M12 12v9a9 9 0 0 1-9-9h9Z"/><path d="M12 12H3a9 9 0 0 1 9-9v9Z"/></svg>`,
   justified: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>`,
   sparkles: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
@@ -864,9 +868,9 @@ if (root) {
     },
     bento: {
       name: 'Bento Spans (PRO)',
-      allowedSkins: ['skin-pure-minimalist', 'skin-aura'],
-      defaultSkin: 'skin-aura',
-      notice: '<strong>Bento Spans:</strong> Optimized for Atmospheric Aura & Minimalist tiles.'
+      allowedSkins: ['skin-pure-minimalist', 'skin-aura', 'skin-editorial'],
+      defaultSkin: 'skin-pure-minimalist',
+      notice: '<strong>Bento Spans:</strong> Asymmetric grid tiles with PhotoBlocks geometry (Standard, Wide, Tall, Hero).'
     },
     pinwheel: {
       name: 'Pinwheel Spiral',
@@ -1060,67 +1064,74 @@ if (root) {
         <p style="font-size:11px;color:var(--st-text-muted);margin:0 0 12px;">Select an algorithmic layout style or let AI auto-arrange.</p>
 
         <div class="matcha-blueprint-grid">
+          <!-- 1. Classic Grid -->
           <div class="matcha-blueprint-card ${curLayout === 'grid' ? 'is-active' : ''}" data-layout="grid">
             <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
             <div class="matcha-blueprint-title">Classic Grid</div>
             <div class="matcha-blueprint-desc">Uniform aspect ratio</div>
           </div>
+
+          <!-- 2. Pinterest Masonry -->
           <div class="matcha-blueprint-card ${curLayout === 'masonry' ? 'is-active' : ''}" data-layout="masonry">
             <span class="matcha-blueprint-icon">${Icons.masonry}</span>
-            <div class="matcha-blueprint-title">Pinterest Masonry</div>
-            <div class="matcha-blueprint-desc">Dynamic heights</div>
+            <div class="matcha-blueprint-title">Masonry</div>
+            <div class="matcha-blueprint-desc">Dynamic natural heights</div>
           </div>
+
+          <!-- 3. Lookbook Duet (2026) -->
+          <div class="matcha-blueprint-card ${curLayout === 'lookbook-duet' ? 'is-active' : ''}" data-layout="lookbook-duet">
+            <span class="matcha-blueprint-icon">${Icons.lookbook}</span>
+            <div class="matcha-blueprint-title">
+              Lookbook Duet
+              <span class="matcha-pro-badge" style="background:rgba(94,194,127,0.2);color:#5ec27f;border-color:rgba(94,194,127,0.4);font-size:8px;padding:1px 4px;">2026</span>
+            </div>
+            <div class="matcha-blueprint-desc">Staggered editorial rhythm</div>
+          </div>
+
+          <!-- 4. Cinema Reel (2026) -->
+          <div class="matcha-blueprint-card ${curLayout === 'cinema-reel' ? 'is-active' : ''}" data-layout="cinema-reel">
+            <span class="matcha-pro-badge">PRO</span>
+            <span class="matcha-blueprint-icon">${Icons.cinemaReel}</span>
+            <div class="matcha-blueprint-title">
+              Cinema Reel
+              <span class="matcha-pro-badge" style="background:rgba(94,194,127,0.2);color:#5ec27f;border-color:rgba(94,194,127,0.4);font-size:8px;padding:1px 4px;">2026</span>
+            </div>
+            <div class="matcha-blueprint-desc">Horizontal widescreen runway</div>
+          </div>
+
+          <!-- 5. Curator Specimen Archive -->
+          <div class="matcha-blueprint-card ${curLayout === 'curator-specimen' ? 'is-active' : ''}" data-layout="curator-specimen">
+            <span class="matcha-pro-badge">PRO</span>
+            <span class="matcha-blueprint-icon">${Icons.curator}</span>
+            <div class="matcha-blueprint-title">Curator Archive</div>
+            <div class="matcha-blueprint-desc">Swiss negative space matting</div>
+          </div>
+
+          <!-- 6. Justified Rows -->
           <div class="matcha-blueprint-card ${curLayout === 'justified' ? 'is-active' : ''}" data-layout="justified">
             <span class="matcha-blueprint-icon">${Icons.justified}</span>
             <div class="matcha-blueprint-title">Justified Rows</div>
             <div class="matcha-blueprint-desc">Flickr edge-to-edge</div>
           </div>
-          <div class="matcha-blueprint-card ${curLayout === 'mosaic' ? 'is-active' : ''}" data-layout="mosaic">
-            <span class="matcha-blueprint-icon">${Icons.mosaic}</span>
-            <div class="matcha-blueprint-title">
-              PhotoBlocks Mosaic
-            </div>
-            <div class="matcha-blueprint-desc">Custom tile spans</div>
-          </div>
-          <div class="matcha-blueprint-card ${curLayout === 'art-wall' ? 'is-active' : ''}" data-layout="art-wall">
-            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
-            <div class="matcha-blueprint-title">
-              Curated Art Wall
-            </div>
-            <div class="matcha-blueprint-desc">Hero Triptych gallery</div>
-          </div>
-          <div class="matcha-blueprint-card ${curLayout === 'lookbook-duet' ? 'is-active' : ''}" data-layout="lookbook-duet">
-            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
-            <div class="matcha-blueprint-title">Lookbook Duet</div>
-            <div class="matcha-blueprint-desc">Magazine editorial stagger</div>
-          </div>
-          <div class="matcha-blueprint-card ${curLayout === 'bento' ? 'is-active' : ''}" data-layout="bento">
+
+          <!-- 7. Bento Spans (PhotoBlocks Mosaic) -->
+          <div class="matcha-blueprint-card ${(curLayout === 'bento' || curLayout === 'mosaic' || curLayout === 'pinwheel') ? 'is-active' : ''}" data-layout="bento">
             <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
             <div class="matcha-blueprint-title">
-              Bento Showcase
+              Bento Spans
             </div>
-            <div class="matcha-blueprint-desc">Modern hero spread</div>
+            <div class="matcha-blueprint-desc">Modern hero anchors & spans</div>
           </div>
-          <div class="matcha-blueprint-card ${curLayout === 'pinwheel' ? 'is-active' : ''}" data-layout="pinwheel">
+
+          <!-- 8. Art Wall Canvas -->
+          <div class="matcha-blueprint-card ${curLayout === 'art-wall' ? 'is-active' : ''}" data-layout="art-wall">
             <span class="matcha-pro-badge">PRO</span>
-            <span class="matcha-blueprint-icon">${Icons.pinwheel}</span>
+            <span class="matcha-blueprint-icon">${Icons.artWall}</span>
             <div class="matcha-blueprint-title">
-              Pinwheel Spiral
+              Art Wall
             </div>
-            <div class="matcha-blueprint-desc">Center hero + spiral</div>
-          </div>
-          <div class="matcha-blueprint-card ${curLayout === 'cinema-reel' ? 'is-active' : ''}" data-layout="cinema-reel">
-            <span class="matcha-pro-badge">PRO</span>
-            <span class="matcha-blueprint-icon">${Icons.layoutGrid}</span>
-            <div class="matcha-blueprint-title">Cinema Reel</div>
-            <div class="matcha-blueprint-desc">16:9 widescreen runway</div>
-          </div>
-          <div class="matcha-blueprint-card ${curLayout === 'curator-specimen' ? 'is-active' : ''}" data-layout="curator-specimen">
-            <span class="matcha-pro-badge">PRO</span>
-            <span class="matcha-blueprint-icon">${Icons.sparkles || Icons.layoutGrid}</span>
-            <div class="matcha-blueprint-title">Curator Specimen</div>
-            <div class="matcha-blueprint-desc">Swiss museum 2-column</div>
+            <div class="matcha-blueprint-desc">Freeform draggable frames</div>
           </div>
         </div>
 
@@ -1872,8 +1883,9 @@ if (root) {
       <!-- Tile Geometry Spans -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.mosaic} Mosaic Tile Geometry ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ''}</span>
+          <span class="heading-wrap">${Icons.bento} PhotoBlocks Tile Geometry ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ''}</span>
         </div>
+        <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 8px;">Assign custom geometric tile spans (Standard, Wide, Tall, Hero) in Bento & Mosaic layouts.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
           <button type="button" class="matcha-exit-btn prop-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-span="1x1">1x1 Standard</button>
           <button type="button" class="matcha-exit-btn prop-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-span="2x1">2x1 Wide ↔</button>
@@ -3530,13 +3542,15 @@ if (root) {
     document.querySelectorAll('.prop-span-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         if (!isPro) {
-          showProModal('PhotoBlocks Mosaic Geometry', 'Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.');
+          showProModal('PhotoBlocks Tile Geometry', 'Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.');
           return;
         }
         const span = btn.dataset.span;
         const currentSpans = { ...(getState().config.imageSpans || {}) };
         currentSpans[id] = span;
-        patchConfig({ imageSpans: currentSpans, layout: 'mosaic' });
+        const curLayout = getState().config.layout;
+        const targetLayout = ['bento', 'mosaic', 'pinwheel'].includes(curLayout) ? curLayout : 'bento';
+        patchConfig({ imageSpans: currentSpans, layout: targetLayout });
         renderRightPanel();
         renderCanvas();
         autosaveSoon();
@@ -3987,11 +4001,12 @@ if (root) {
         if (!isPro && ['pinwheel', 'bento', 'cinema-reel', 'curator-specimen'].includes(layout)) {
           const names = {
             pinwheel: 'Pinwheel Spiral',
-            bento: 'Bento Showcase',
+            bento: 'Bento Spans (PhotoBlocks)',
             'cinema-reel': 'Cinema Reel (Runway Strip)',
             'curator-specimen': 'Curator Specimen Archive'
           };
           const descs = {
+            bento: 'Asymmetric PhotoBlocks geometric tile spanning (1x1, 2x1 wide, 1x2 tall, 2x2 hero) and modern hero spreads.',
             'cinema-reel': '16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.',
             'curator-specimen': 'Architectural 2-column museum showcase with generous 40px negative space and deep shadow elevation.'
           };
@@ -4022,6 +4037,10 @@ if (root) {
           } else if (nextSkin === 'skin-aura') {
             patch = { ...patch, stylePreset: 'aura', cardTheme: 'dark', frameStyle: 'none', mattingSize: 0, contentPlacement: 'overlay', hoverEffect: 'zoom' };
           }
+        }
+
+        if (layout === 'bento') {
+          patch.columns = Math.max(3, getState().config.columns || 4);
         }
 
         if (layout === 'pinwheel') {
@@ -5081,11 +5100,12 @@ if (root) {
               const imgTitle = meta?.title || stripHtml(m.title?.rendered || '');
               const imgCaption = meta?.caption || '';
               const isAi = meta?.ai_generated && keywords.length > 0;
+              const isSpanLayout = ['bento', 'mosaic', 'pinwheel'].includes(cfg.layout);
               const mosaicRhythm = ['2x2', '1x1', '1x1', '2x1', '1x1', '1x2', '1x1', '2x1'];
               const currentSpan = (isPro && imageSpans[m.id])
                 ? imageSpans[m.id]
-                : (cfg.layout === 'mosaic' ? mosaicRhythm[idx % mosaicRhythm.length] : (imageSpans[m.id] || '1x1'));
-              const spanClass = (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') ? `matcha-gallery__item--span-${currentSpan}` : '';
+                : (isSpanLayout && imageSpans[m.id] ? imageSpans[m.id] : (isSpanLayout && idx === 0 ? '2x2' : (isSpanLayout && (idx === 3 || idx === 5) ? '2x1' : (imageSpans[m.id] || '1x1'))));
+              const spanClass = isSpanLayout ? `matcha-gallery__item--span-${currentSpan}` : '';
               const link = imageLinks[m.id] || {};
               const videoUrl = (cfg.imageVideos || {})[m.id] || '';
               const hasVideo = !!videoUrl;
@@ -5151,6 +5171,15 @@ if (root) {
                           <div class="item-badge-video" title="Video Reel (${videoDuration})">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                             <span>${videoDuration}</span>
+                          </div>
+                        ` : ''}
+
+                        ${isSpanLayout ? `
+                          <div class="matcha-mosaic-spans" style="${hasVideo ? 'top:42px;' : ''}">
+                            <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 ↕</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" title="Hero (2x2)">2x2 ⤢</button>
                           </div>
                         ` : ''}
 
@@ -5276,10 +5305,14 @@ if (root) {
       setupArtWallEvents(canvas);
     }
 
-    if (cfg.layout === 'mosaic' || cfg.layout === 'pinwheel') {
+    if (['bento', 'mosaic', 'pinwheel'].includes(cfg.layout)) {
       canvas.querySelectorAll('.matcha-span-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
+          if (!isPro) {
+            showProModal('PhotoBlocks Tile Geometry', 'Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.');
+            return;
+          }
           const id = btn.dataset.id;
           const span = btn.dataset.span;
           const currentSpans = { ...(getState().config.imageSpans || {}) };
