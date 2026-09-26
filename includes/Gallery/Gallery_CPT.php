@@ -170,6 +170,7 @@ final class Gallery_CPT {
 		$default_wall_moldings = $is_pro ? array( 'mold-black', 'mold-oak', 'mold-white', 'mold-brass', 'mold-float' ) : array( 'mold-black' );
 		$allowed_wall_moldings = apply_filters( 'matcha_gallery_allowed_wall_moldings', $default_wall_moldings );
 		$out['wallMolding']    = in_array( $cfg['wallMolding'] ?? 'mold-black', (array) $allowed_wall_moldings, true ) ? $cfg['wallMolding'] : 'mold-black';
+		$out['wallTexture']    = in_array( $cfg['wallTexture'] ?? 'charcoal', array( 'charcoal', 'gallery-white', 'warm-linen', 'sage-green' ), true ) ? $cfg['wallTexture'] : 'charcoal';
 
 		$out['columns']       = max( 1, min( 6, (int) ( $cfg['columns'] ?? 3 ) ) );
 		$out['columnsTablet'] = max( 1, min( 4, (int) ( $cfg['columnsTablet'] ?? 2 ) ) );

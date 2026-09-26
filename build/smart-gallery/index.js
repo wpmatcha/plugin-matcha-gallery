@@ -136,6 +136,14 @@
         type: "string",
         default: "mold-black"
       },
+      wallTexture: {
+        type: "string",
+        default: "charcoal"
+      },
+      canvasBackdrop: {
+        type: "string",
+        default: "charcoal"
+      },
       rowHeight: {
         type: "number",
         default: 240

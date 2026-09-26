@@ -424,6 +424,10 @@ class Smart_Gallery_Block {
 			$wrapper_classes[] = 'matcha-wall-preset--' . sanitize_html_class( $attrs['wallPreset'] );
 			$wrapper_classes[] = 'matcha-wall-molding--' . sanitize_html_class( $attrs['wallMolding'] );
 			$wrapper_classes[] = 'matcha-wall-custom-stage';
+			if ( ! empty( $attrs['wallTexture'] ) ) {
+				$wrapper_classes[] = 'wall-' . sanitize_html_class( $attrs['wallTexture'] );
+				$wrapper_classes[] = 'matcha-wall-texture--' . sanitize_html_class( $attrs['wallTexture'] );
+			}
 		}
 
 		if ( ! empty( $attrs['stylePreset'] ) && 'custom' !== $attrs['stylePreset'] ) {

@@ -2551,31 +2551,47 @@ span.matcha-action-btn {
 	overflow: visible;
 }
 
-/* Wall Backdrops */
-.matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-gallery__grid {
-	background: radial-gradient(circle at 50% 35%, #ffffff 0%, #f8fafc 70%, #f1f5f9 100%);
-	border-color: rgba(0, 0, 0, 0.08);
-	box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.06);
+/* Wall Backdrops & Museum Textures (Free & Pro 2026) */
+.matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-gallery__grid,
+.matcha-gallery--art-wall.wall-gallery-white .matcha-gallery__grid,
+.matcha-gallery--art-wall.matcha-wall-texture--gallery-white .matcha-gallery__grid,
+.matcha-gallery__grid.wall-gallery-white {
+	background: radial-gradient(circle at 50% 35%, #f4f1ea 0%, #ded9ce 70%, #d5cec2 100%) !important;
+	border-color: #c9c2b4 !important;
+	box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.08), 0 20px 40px rgba(0, 0, 0, 0.12) !important;
 }
-.matcha-gallery--art-wall.matcha-gallery--backdrop-cream .matcha-gallery__grid {
-	background: radial-gradient(circle at 50% 35%, #fffdf9 0%, #fbf9f4 70%, #f4eee2 100%);
-	border-color: rgba(0, 0, 0, 0.08);
-	box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.06);
+
+.matcha-gallery--art-wall.matcha-gallery--backdrop-cream .matcha-gallery__grid,
+.matcha-gallery--art-wall.wall-warm-linen .matcha-gallery__grid,
+.matcha-gallery--art-wall.matcha-wall-texture--warm-linen .matcha-gallery__grid,
+.matcha-gallery__grid.wall-warm-linen {
+	background: radial-gradient(circle at 50% 35%, #2d241f 0%, #1c1613 70%, #140f0c 100%) !important;
+	border-color: rgba(255, 255, 255, 0.1) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.7) !important;
 }
-.matcha-gallery--art-wall.matcha-gallery--backdrop-sage .matcha-gallery__grid {
-	background: radial-gradient(circle at 50% 35%, #f4f8f3 0%, #eef4ed 70%, #e0ebe0 100%);
-	border-color: rgba(0, 0, 0, 0.08);
-	box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.06);
+
+.matcha-gallery--art-wall.matcha-gallery--backdrop-sage .matcha-gallery__grid,
+.matcha-gallery--art-wall.wall-sage-green .matcha-gallery__grid,
+.matcha-gallery--art-wall.matcha-wall-texture--sage-green .matcha-gallery__grid,
+.matcha-gallery__grid.wall-sage-green {
+	background: radial-gradient(circle at 50% 35%, #1d2c22 0%, #111b15 70%, #0a110d 100%) !important;
+	border-color: rgba(255, 255, 255, 0.08) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.65) !important;
 }
-.matcha-gallery--art-wall.matcha-gallery--backdrop-charcoal .matcha-gallery__grid {
-	background: radial-gradient(circle at 50% 35%, #2a2f37 0%, #1e2228 70%, #14171b 100%);
-	border-color: rgba(255, 255, 255, 0.08);
-	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.7);
+
+.matcha-gallery--art-wall.matcha-gallery--backdrop-charcoal .matcha-gallery__grid,
+.matcha-gallery--art-wall.wall-charcoal .matcha-gallery__grid,
+.matcha-gallery--art-wall.matcha-wall-texture--charcoal .matcha-gallery__grid,
+.matcha-gallery__grid.wall-charcoal {
+	background: radial-gradient(circle at 50% 35%, #232c26 0%, #141916 65%, #0d110f 100%) !important;
+	border-color: rgba(255, 255, 255, 0.08) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.75) !important;
 }
+
 .matcha-gallery--art-wall.matcha-gallery--backdrop-transparent .matcha-gallery__grid {
-	background: transparent;
-	border: none;
-	box-shadow: none;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
 }
 
 /* 57" Museum Eye-Level Line */
@@ -2591,9 +2607,14 @@ span.matcha-action-btn {
 	z-index: 1;
 }
 .matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-gallery__grid::before,
+.matcha-gallery--art-wall.wall-gallery-white .matcha-gallery__grid::before,
+.matcha-gallery--art-wall.wall-gallery-white .art-wall-guide-line,
+.matcha-gallery--art-wall.matcha-gallery--backdrop-white .art-wall-guide-line {
+	border-top-color: rgba(0, 0, 0, 0.22) !important;
+}
 .matcha-gallery--art-wall.matcha-gallery--backdrop-cream .matcha-gallery__grid::before,
 .matcha-gallery--art-wall.matcha-gallery--backdrop-sage .matcha-gallery__grid::before {
-	border-top-color: rgba(0, 0, 0, 0.12);
+	border-top-color: rgba(255, 255, 255, 0.16);
 }
 
 /* Art Wall Surplus Items (Exhibition Overflow) */
@@ -2717,12 +2738,16 @@ span.matcha-action-btn {
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 .matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-wall-dim-badge,
+.matcha-gallery--art-wall.wall-gallery-white .matcha-wall-dim-badge,
+.matcha-gallery--art-wall.matcha-wall-texture--gallery-white .matcha-wall-dim-badge,
+.matcha-gallery--art-wall.wall-gallery-white .frame-dim-badge,
+.matcha-gallery--art-wall.matcha-gallery--backdrop-white .frame-dim-badge,
 .matcha-gallery--art-wall.matcha-gallery--backdrop-cream .matcha-wall-dim-badge,
 .matcha-gallery--art-wall.matcha-gallery--backdrop-sage .matcha-wall-dim-badge {
-	background: rgba(255, 255, 255, 0.94);
-	border-color: rgba(0, 0, 0, 0.12);
-	color: #475569;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	background: rgba(245, 242, 235, 0.96) !important;
+	border-color: rgba(0, 0, 0, 0.15) !important;
+	color: #374151 !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Surplus Exhibition Works Bar */

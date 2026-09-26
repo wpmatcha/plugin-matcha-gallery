@@ -2035,9 +2035,72 @@ body.matcha-is-dragging * {
 /* Art Wall Frames Interactive Canvas Styling */
 .matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid {
 	position: relative !important;
-	min-height: 860px !important;
+	min-height: 860px;
 	display: block !important;
 	width: 100% !important;
+	transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Studio Art Wall Textures & Backdrops */
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid.wall-gallery-white {
+	background: radial-gradient(circle at 50% 35%, #f4f1ea 0%, #ded9ce 70%, #d5cec2 100%) !important;
+	border-color: #c9c2b4 !important;
+	box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.08), 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-cream .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall.wall-warm-linen .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid.wall-warm-linen {
+	background: radial-gradient(circle at 50% 35%, #2d241f 0%, #1c1613 70%, #140f0c 100%) !important;
+	border-color: rgba(255, 255, 255, 0.1) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.7) !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-sage .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall.wall-sage-green .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid.wall-sage-green {
+	background: radial-gradient(circle at 50% 35%, #1d2c22 0%, #111b15 70%, #0a110d 100%) !important;
+	border-color: rgba(255, 255, 255, 0.08) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.65) !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-charcoal .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall.wall-charcoal .matcha-gallery__grid,
+.matcha-canvas .matcha-gallery--art-wall .matcha-gallery__grid.wall-charcoal {
+	background: radial-gradient(circle at 50% 35%, #232c26 0%, #141916 65%, #0d110f 100%) !important;
+	border-color: rgba(255, 255, 255, 0.08) !important;
+	box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.75) !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .art-wall-guide-line,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .art-wall-guide-line {
+	border-top-color: rgba(0, 0, 0, 0.22) !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .art-wall-guide-label,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .art-wall-guide-label {
+	background: #ded9ce !important;
+	color: #374151 !important;
+	border-color: #c9c2b4 !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .art-wall-hint,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .art-wall-hint {
+	background: rgba(244, 241, 234, 0.95) !important;
+	color: #1f2937 !important;
+	border-color: #c9c2b4 !important;
+}
+
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .matcha-wall-dim-badge,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .matcha-wall-dim-badge,
+.matcha-canvas .matcha-gallery--art-wall.matcha-gallery--backdrop-white .frame-dim-badge,
+.matcha-canvas .matcha-gallery--art-wall.wall-gallery-white .frame-dim-badge {
+	background: rgba(245, 242, 235, 0.96) !important;
+	border-color: rgba(0, 0, 0, 0.15) !important;
+	color: #374151 !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
 .matcha-canvas .matcha-gallery--art-wall .matcha-gallery__item--wall-frame {

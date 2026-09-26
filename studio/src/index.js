@@ -477,8 +477,17 @@ if (root) {
       document.querySelectorAll('.matcha-hud-dot').forEach(d => d.classList.remove('is-active'));
       dot.classList.add('is-active');
       const bg = dot.dataset.bg;
-      patchConfig({ canvasBackdrop: bg });
+      const texMap = {
+        white: 'gallery-white',
+        cream: 'warm-linen',
+        sage: 'sage-green',
+        charcoal: 'charcoal',
+        transparent: 'charcoal'
+      };
+      const tex = texMap[bg] || 'charcoal';
+      patchConfig({ canvasBackdrop: bg, wallTexture: tex });
       renderCanvas();
+      renderRightPanel();
       autosaveSoon();
     });
   });
@@ -1288,7 +1297,13 @@ if (root) {
     const curShadow = cfg.shadowElevation || 'soft';
     const curTheme = cfg.cardTheme || 'clean';
     const curPag = cfg.paginationType || 'none';
-    const curWallTex = cfg.wallTexture || cfg.canvasBackdrop || 'charcoal';
+    const wallTexFromBg = {
+      white: 'gallery-white',
+      cream: 'warm-linen',
+      sage: 'sage-green',
+      charcoal: 'charcoal'
+    };
+    const curWallTex = cfg.wallTexture || wallTexFromBg[cfg.canvasBackdrop] || cfg.canvasBackdrop || 'charcoal';
     const curWallPreset = cfg.wallPreset || 'salon';
     const curWallMolding = cfg.wallMolding || 'mold-black';
     const curWallOrient = cfg.wallFrameOrientation || 'portrait';
@@ -2702,7 +2717,11 @@ if (root) {
           'warm-linen': 'cream',
           'sage-green': 'sage'
         };
-        patchConfig({ wallTexture: tex, canvasBackdrop: bgMap[tex] || 'charcoal' });
+        const bg = bgMap[tex] || 'charcoal';
+        patchConfig({ wallTexture: tex, canvasBackdrop: bg });
+        document.querySelectorAll('.matcha-hud-dot').forEach(d => {
+          d.classList.toggle('is-active', d.dataset.bg === bg);
+        });
         renderRightPanel();
         renderCanvas();
         autosaveSoon();
@@ -4979,15 +4998,32 @@ if (root) {
     };
     const layoutSlug = layoutSlugMap[activeLayout] || `layout-${activeLayout}`;
 
+    const activeBackdrop = cfg.canvasBackdrop || (activeLayout === 'art-wall' ? 'charcoal' : 'white');
+    const texMap = {
+      white: 'gallery-white',
+      cream: 'warm-linen',
+      sage: 'sage-green',
+      charcoal: 'charcoal',
+      transparent: 'charcoal'
+    };
+    const activeWallTex = cfg.wallTexture || texMap[activeBackdrop] || 'charcoal';
+
     if (activeLayout === 'art-wall') {
-      const tex = cfg.wallTexture || 'charcoal';
-      canvas.style.background = tex === 'warm-linen' ? '#261f1b' : tex === 'sage-green' ? '#14221a' : tex === 'gallery-white' ? '#e8e4dc' : '#161c18';
+      canvas.style.background = (activeWallTex === 'gallery-white' || activeBackdrop === 'white') ? '#ded9ce'
+        : (activeWallTex === 'warm-linen' || activeBackdrop === 'cream') ? '#201915'
+        : (activeWallTex === 'sage-green' || activeBackdrop === 'sage') ? '#111b15'
+        : '#121714';
     } else {
-      canvas.style.background = canvasBackdrop === 'cream' ? '#fbf9f4' : canvasBackdrop === 'sage' ? '#eef4ed' : canvasBackdrop === 'charcoal' ? '#22252a' : canvasBackdrop === 'transparent' ? 'transparent' : '#ffffff';
+      canvas.style.background = activeBackdrop === 'cream' ? '#fbf9f4' : activeBackdrop === 'sage' ? '#eef4ed' : activeBackdrop === 'charcoal' ? '#22252a' : activeBackdrop === 'transparent' ? 'transparent' : '#ffffff';
     }
 
+    // Keep bottom HUD dot active state in sync
+    document.querySelectorAll('.matcha-hud-dot').forEach(d => {
+      d.classList.toggle('is-active', d.dataset.bg === activeBackdrop);
+    });
+
     canvas.innerHTML = `
-      <div class="matcha-gallery-container matcha-gallery layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === 'skin-editorial' && activeCardTheme === 'dark' ? 'matcha-card-theme--dark' : ''} matcha-gallery--${activeLayout} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
+      <div class="matcha-gallery-container matcha-gallery layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === 'skin-editorial' && activeCardTheme === 'dark' ? 'matcha-card-theme--dark' : ''} matcha-gallery--${activeLayout} matcha-gallery--backdrop-${activeBackdrop} wall-${activeWallTex} matcha-wall-texture--${activeWallTex} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
         ${hasSections ? `
           <div class="matcha-gallery__section-tabs" role="tablist">
             <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
@@ -5061,9 +5097,9 @@ if (root) {
           const preset = wallPresets[presetKey] || wallPresets.triptych;
           const presetCount = Math.max(1, preset.length);
           const artWallMinHeight = (activeLayout === 'art-wall') ? Math.max(860, Math.ceil(medias.length / presetCount) * 880 + 100) : 0;
-          const gridStyle = artWallMinHeight ? `min-height:${artWallMinHeight}px;` : '';
+          const gridStyle = artWallMinHeight ? `min-height:${artWallMinHeight}px !important;` : '';
           return `
-            <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === 'art-wall' ? 'matcha-wall-stage' : ''}" style="${gridStyle}">
+            <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === 'art-wall' ? `matcha-wall-stage wall-${activeWallTex} matcha-gallery--backdrop-${activeBackdrop}` : ''}" style="${gridStyle}">
           `;
         })()}
           ${activeLayout === 'art-wall' ? `
