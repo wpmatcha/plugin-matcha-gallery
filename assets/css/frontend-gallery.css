@@ -2620,6 +2620,7 @@ span.matcha-action-btn {
 	padding: 14px !important;
 	background: #faf8f5 !important;
 	border-radius: 0 !important;
+	border: none !important;
 	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25) !important;
 	display: flex;
 	flex-direction: column;
@@ -2967,6 +2968,8 @@ span.matcha-action-btn {
 	border-radius: 4px;
 	overflow: hidden;
 	background: #000;
+	border: none !important;
+	box-shadow: none !important;
 }
 
 .matcha-gallery--curator-specimen .matcha-gallery__item-inner img,
@@ -3399,10 +3402,19 @@ span.matcha-action-btn {
    ========================================================================== */
 .skin-exhibition .gallery-item,
 .skin-exhibition .matcha-gallery__item {
+	background: transparent !important;
+	padding: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.matcha-gallery--frame-none.skin-exhibition .matcha-gallery__item-inner,
+.matcha-gallery--frame-none .skin-exhibition .matcha-gallery__item-inner {
 	background: #111613;
-	padding: var(--matcha-matting, 10px);
+	padding: var(--matcha-matting, 12px);
 	border-radius: 4px;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+	border: none !important;
 }
 .skin-exhibition .item-card-body {
 	display: none !important;
@@ -3428,7 +3440,7 @@ span.matcha-action-btn {
 .skin-exhibition .matcha-gallery__item:hover .item-media-wrap::after {
 	opacity: 1;
 	transform: scale(1);
-	border-color: #5ec27f;
+	border-color: var(--matcha-hover-frame-color, #5ec27f);
 }
 .skin-exhibition .gallery-item:hover .item-img,
 .skin-exhibition .matcha-gallery__item:hover img {

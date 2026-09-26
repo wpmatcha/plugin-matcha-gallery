@@ -2082,6 +2082,7 @@ body.matcha-is-dragging * {
 	padding: 12px !important;
 	background: #faf8f5 !important;
 	border-radius: 0 !important;
+	border: none !important;
 	box-sizing: border-box !important;
 	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.22) !important;
 	height: 100% !important;
@@ -2525,10 +2526,19 @@ body.matcha-is-dragging * {
    ========================================================================== */
 .skin-exhibition .gallery-item,
 .skin-exhibition .matcha-gallery__item {
+	background: transparent !important;
+	padding: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.matcha-gallery--frame-none.skin-exhibition .matcha-gallery__item-inner,
+.matcha-gallery--frame-none .skin-exhibition .matcha-gallery__item-inner {
 	background: #111613;
-	padding: var(--matcha-matting, 10px);
+	padding: var(--matcha-matting, 12px);
 	border-radius: 4px;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+	border: none !important;
 }
 .skin-exhibition .item-card-body {
 	display: none !important;
@@ -2852,6 +2862,10 @@ body.matcha-is-dragging * {
 .matcha-gallery--curator-specimen.skin-editorial .matcha-gallery__item {
 	aspect-ratio: auto !important;
 	padding: 0 !important;
+}
+.layout-curator-specimen .matcha-gallery__item-inner,
+.matcha-gallery--curator-specimen .matcha-gallery__item-inner {
+	border: none !important;
 }
 
 
