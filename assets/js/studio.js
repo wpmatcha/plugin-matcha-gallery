@@ -516,6 +516,10 @@
       if (inspectorToggle) {
         inspectorToggle.checked = isSpatial3D;
       }
+      const spatialBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="spatial-3d"] .matcha-accordion-badge');
+      if (spatialBadge) {
+        spatialBadge.textContent = isSpatial3D ? "\u2726 60fps Active" : "Off";
+      }
       if (!isSpatial3D) {
         document.querySelectorAll(".matcha-gallery__item").forEach((item) => {
           item.style.removeProperty("transform");
@@ -805,19 +809,51 @@
         
       </div>
     `;
+    }, updateToggleAllButton = function() {
+      const toggleAllBtn = document.getElementById("btn-toggle-all-accordions");
+      if (!toggleAllBtn) return;
+      const allOpen = ALL_ACCORDION_KEYS.every((k) => openAccordions.has(k));
+      toggleAllBtn.textContent = allOpen ? "Collapse All" : "Expand All";
+      toggleAllBtn.title = allOpen ? "Collapse all property sections" : "Expand all property sections";
+    }, renderAccordionCard = function(key, titleHtml, badgeHtml, bodyHtml, extraCardClass = "") {
+      const isOpen = openAccordions.has(key);
+      return `
+      <div class="matcha-card matcha-card--collapsible ${isOpen ? "" : "matcha-card--collapsed"} ${extraCardClass}" data-accordion-key="${key}">
+        <div class="matcha-accordion-header" data-accordion-toggle="${key}">
+          <div class="matcha-accordion-title">
+            ${titleHtml}
+          </div>
+          <div class="matcha-accordion-meta">
+            <span class="matcha-accordion-badge">${badgeHtml}</span>
+            <span class="matcha-accordion-arrow">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="matcha-accordion-body">
+          ${bodyHtml}
+        </div>
+      </div>
+    `;
     }, renderRightPanel = function() {
       const panel = document.getElementById("studio-right-panel");
       const headerTitle = document.getElementById("right-panel-header-title");
       const deselectBtn = document.getElementById("btn-deselect-photo");
+      const toggleAllBtn = document.getElementById("btn-toggle-all-accordions");
       const cfg = getState().config;
       if (selectedPhotoId) {
         headerTitle.textContent = `Photo #${selectedPhotoId} Inspector`;
         deselectBtn.style.display = "block";
+        if (toggleAllBtn) toggleAllBtn.style.display = "none";
         panel.innerHTML = photoInspectorHTML(selectedPhotoId, cfg);
         bindPhotoInspector(selectedPhotoId);
       } else {
         headerTitle.textContent = "Wall & Gallery Properties";
         deselectBtn.style.display = "none";
+        if (toggleAllBtn) {
+          toggleAllBtn.style.display = "inline-block";
+          updateToggleAllButton();
+        }
         panel.innerHTML = wallPropertiesHTML(cfg);
         bindWallProperties();
       }
@@ -840,119 +876,34 @@
       const isLandscape = curWallOrient === "landscape";
       const activeSkinKey = getActiveSkinKey(cfg);
       const isArtWall = cfg.layout === "art-wall";
-      return `
-      <!-- TOP SECTION: FINE-TUNING INSPECTOR -->
-      <div class="matcha-card" style="border: 1px solid rgba(255, 255, 255, 0.08); background: var(--st-bg-card, #1c231f);">
-        <div class="matcha-card-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            Fine-Tuning
-          </span>
-          <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:var(--st-text-secondary);font-family:var(--st-font-mono, monospace);">Inspector</span>
-        </div>
-
-        <!-- Geometry Sliders (Always Visible) -->
-        ${cfg.layout === "justified" ? `
-          <div class="range-row" style="margin-bottom:10px;">
-            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Row Height</label>
-            <input id="st-row-height" class="range-input" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
-            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.rowHeight || 240}px</span>
-          </div>
-        ` : `
-          <div class="range-row" style="margin-bottom:10px;">
-            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Desktop Columns</label>
-            <input id="st-col" class="range-input" type="range" min="1" max="6" value="${cfg.columns || 3}">
-            <span class="val" id="columnsVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.columns || 3}</span>
-          </div>
-        `}
-
-        <div class="range-row" style="margin-bottom:10px;">
-          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Gutter Gap</label>
-          <input id="st-gut" class="range-input" type="range" min="0" max="48" step="2" value="${cfg.gutterSize ?? 22}">
-          <span class="val" id="gapVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.gutterSize ?? 22}px</span>
-        </div>
-
-        <div class="range-row" style="margin-bottom:12px;">
-          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Corner Radius</label>
-          <input id="st-rad" class="range-input" type="range" min="0" max="24" step="1" value="${cfg.borderRadius ?? 10}">
-          <span class="val" id="radiusVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.borderRadius ?? 10}px</span>
-        </div>
-
-        <!-- Spatial 3D Physics Toggle (Inspector) -->
-        <div style="padding: 12px; background: rgba(94, 194, 127, 0.06); border: 1px solid rgba(94, 194, 127, 0.2); border-radius: var(--radius-md, 10px); margin-bottom: 12px;">
-          <label style="display:flex;align-items:center;justify-content:space-between;color:#fff;cursor:pointer;margin-bottom:4px;">
-            <span style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;">
-              <span>\u2726 3D Spatial Tilt</span>
-              <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
-            </span>
-            <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? "checked" : ""} style="accent-color: #5ec27f; cursor: pointer; width: 16px; height: 16px;">
-          </label>
-          <div style="font-size: 10px; color: var(--st-text-muted, #5e6f64); line-height: 1.4;">
-            Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
-          </div>
-          <button type="button" id="btn-trigger-wave-inspector" style="margin-top:8px;width:100%;font-size:10.5px;font-weight:700;padding:5px;border-radius:4px;cursor:pointer;border:1px solid rgba(94,194,127,0.3);background:rgba(94,194,127,0.1);color:#5ec27f;display:flex;align-items:center;justify-content:center;gap:5px;">
-            <span>\u25B6 Play 3D Wave Demo</span>
-          </button>
-        </div>
-
-        <!-- Contextual Panel 1: Card Skin Inspector (Editorial Card) -->
-        <div class="contextual-panel ${activeSkinKey === "skin-editorial" ? "" : "hidden"}" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">CARD PROPERTIES</div>
-          <div style="margin-bottom:10px;">
-            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
-            <div style="display:flex;gap:8px;">
-              <button type="button" id="btnCardThemeLight" class="${curTheme !== "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#ffffff;color:#000000;border:1px solid ${curTheme !== "dark" ? "#5ec27f" : "#ccc"};border-radius:4px;cursor:pointer;">White Card</button>
-              <button type="button" id="btnCardThemeDark" class="${curTheme === "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#1c231f;color:#ffffff;border:1px solid ${curTheme === "dark" ? "#5ec27f" : "rgba(255,255,255,0.2)"};border-radius:4px;cursor:pointer;">Dark Card</button>
-            </div>
-          </div>
-          <div>
-            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Category / Tag Pill</label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
-              <input type="checkbox" id="stCategoryPillsToggle" ${cfg.showCategoryPill !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
-              <span>Show AI Category Pill</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
-        <div class="contextual-panel ${activeSkinKey === "skin-exhibition" ? "" : "hidden"}" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">FINE-ART MATTING</div>
-          <div class="range-row" style="margin-bottom:10px;">
-            <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
-            <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
-            <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 10}px</span>
-          </div>
-          <div>
-            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Accent Color</label>
-            <div style="display:flex;gap:8px;">
-              <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || "#5ec27f") === "#5ec27f" ? "2px solid #fff" : "1px solid transparent"};"></span>
-              <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === "#f59e0b" ? "2px solid #fff" : "1px solid transparent"};"></span>
-              <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === "#38bdf8" ? "2px solid #fff" : "1px solid transparent"};"></span>
-              <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === "#ffffff" ? "2px solid #5ec27f" : "1px solid transparent"};"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
-        <div class="contextual-panel ${activeSkinKey === "skin-aura" ? "" : "hidden"}" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:12px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
-          <div class="range-row" style="margin-bottom:10px;">
-            <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
-            <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
-            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.auraBloom ?? 32}px</span>
-          </div>
-          <div>
-            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
-              <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
-              <span>Smart Focal-Point Pan on Hover</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Contextual Panel 4: Art Wall Canvas Inspector (PRO) -->
-        <div class="contextual-panel ${isArtWall ? "" : "hidden"}" id="panelArtWall" style="background:rgba(94, 194, 127, 0.04);border:1px solid rgba(94, 194, 127, 0.25);border-radius:8px;padding:12px;margin-bottom:12px;">
+      const presetLabels = {
+        salon: "Salon Wall",
+        triptych: "Hero Triptych",
+        staircase: "Staircase",
+        symmetric: "Symmetric Quad"
+      };
+      const texLabels = {
+        charcoal: "Charcoal",
+        "gallery-white": "Plaster",
+        white: "Plaster",
+        "warm-linen": "Linen",
+        cream: "Linen",
+        "sage-green": "Sage",
+        sage: "Sage"
+      };
+      let stageTitle, stageBadge, stageBody;
+      if (isArtWall) {
+        stageTitle = `
+        <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          Wall Canvas & Blueprint
+        </span>
+      `;
+        stageBadge = `${presetLabels[curWallPreset] || "Salon"} \u2022 ${texLabels[curWallTex] || "Charcoal"}`;
+        stageBody = `
+        <div style="background:rgba(94, 194, 127, 0.04);border:1px solid rgba(94, 194, 127, 0.2);border-radius:8px;padding:12px;margin-bottom:4px;">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
-            <span>ART WALL CONTROLS <span class="matcha-pro-badge">PRO</span></span>
+            <span>ART WALL CANVAS <span class="matcha-pro-badge">PRO</span></span>
           </div>
 
           <!-- Wall Texture & Material -->
@@ -1040,6 +991,41 @@
             </div>
           </div>
         </div>
+      `;
+      } else {
+        stageTitle = `
+        <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Layout & Blueprint
+        </span>
+      `;
+        stageBadge = cfg.layout === "justified" ? `${cfg.rowHeight || 240}px Row` : `${cfg.columns || 3} Cols \u2022 ${cfg.gutterSize ?? 22}px`;
+        stageBody = `
+        ${cfg.layout === "justified" ? `
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Row Height</label>
+            <input id="st-row-height" class="range-input" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.rowHeight || 240}px</span>
+          </div>
+        ` : `
+          <div class="range-row" style="margin-bottom:10px;">
+            <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Desktop Columns</label>
+            <input id="st-col" class="range-input" type="range" min="1" max="6" value="${cfg.columns || 3}">
+            <span class="val" id="columnsVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.columns || 3}</span>
+          </div>
+        `}
+
+        <div class="range-row" style="margin-bottom:10px;">
+          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Gutter Gap</label>
+          <input id="st-gut" class="range-input" type="range" min="0" max="48" step="2" value="${cfg.gutterSize ?? 22}">
+          <span class="val" id="gapVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.gutterSize ?? 22}px</span>
+        </div>
+
+        <div class="range-row" style="margin-bottom:12px;">
+          <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Corner Radius</label>
+          <input id="st-rad" class="range-input" type="range" min="0" max="24" step="1" value="${cfg.borderRadius ?? 10}">
+          <span class="val" id="radiusVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.borderRadius ?? 10}px</span>
+        </div>
 
         <div style="margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">
           <div class="range-row" style="margin-bottom:8px;">
@@ -1053,69 +1039,191 @@
             <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:10.5px;color:var(--st-text-secondary);">${cfg.columnsMobile || 1}</span>
           </div>
         </div>
+      `;
+      }
+      const card1 = renderAccordionCard("stage-layout", stageTitle, stageBadge, stageBody);
+      const spatialTitle = `
+      <span class="heading-wrap" style="color:#5ec27f;display:flex;align-items:center;gap:6px;">
+        <span>\u2726 3D Spatial Tilt</span>
+        <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+      </span>
+    `;
+      const spatialBadge = isSpatial3D ? "\u2726 60fps Active" : "Off";
+      const spatialBody = `
+      <div style="padding: 10px; background: rgba(94, 194, 127, 0.05); border: 1px solid rgba(94, 194, 127, 0.15); border-radius: var(--radius-md, 8px);">
+        <label style="display:flex;align-items:center;justify-content:space-between;color:#fff;cursor:pointer;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:700;color:var(--st-text-primary);">Enable Spatial Tilt</span>
+          <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? "checked" : ""} style="accent-color: #5ec27f; cursor: pointer; width: 16px; height: 16px;">
+        </label>
+        <div style="font-size: 10px; color: var(--st-text-muted, #5e6f64); line-height: 1.4; margin-bottom: 8px;">
+          Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
+        </div>
+        <button type="button" id="btn-trigger-wave-inspector" style="width:100%;font-size:10.5px;font-weight:700;padding:6px;border-radius:4px;cursor:pointer;border:1px solid rgba(94,194,127,0.3);background:rgba(94,194,127,0.1);color:#5ec27f;display:flex;align-items:center;justify-content:center;gap:5px;">
+          <span>\u25B6 Play 3D Wave Demo</span>
+        </button>
+      </div>
+    `;
+      const card2 = renderAccordionCard("spatial-3d", spatialTitle, spatialBadge, spatialBody);
+      const skinBadgeMap = {
+        custom: "Custom",
+        editorial: "Editorial Card",
+        "exhibition-frame": "Exhibition Hairline",
+        "architectural-curtain": "Curtain",
+        "cinematic-pullback": "Pullback",
+        "minimalist-drawer": "Drawer"
+      };
+      const skinTitle = `
+      <span class="heading-wrap" style="color:#5ec27f;display:flex;align-items:center;gap:6px;">
+        ${Icons.palette} Aesthetic Skins
+      </span>
+    `;
+      const skinBadge = skinBadgeMap[cfg.stylePreset || "custom"] || "Custom";
+      const skinBody = `
+      <select id="st-style-preset" class="matcha-dark-select" style="margin-bottom:6px;font-weight:600;">
+        <option value="custom" ${(cfg.stylePreset || "custom") === "custom" ? "selected" : ""}>Custom (Manual Adjustments)</option>
+        <option value="editorial" ${cfg.stylePreset === "editorial" ? "selected" : ""}>Editorial Card (Card Body Below Photo)</option>
+        <option value="exhibition-frame" ${cfg.stylePreset === "exhibition-frame" ? "selected" : ""}>Exhibition Hairline Frame (The Grid: Brasilia)</option>
+        <option value="architectural-curtain" ${cfg.stylePreset === "architectural-curtain" ? "selected" : ""}>Architectural Curtain (The Grid: Sofia)</option>
+        <option value="cinematic-pullback" ${cfg.stylePreset === "cinematic-pullback" ? "selected" : ""}>Cinematic Pullback (The Grid: Bogota)</option>
+        <option value="minimalist-drawer" ${cfg.stylePreset === "minimalist-drawer" ? "selected" : ""}>Minimalist Bottom Drawer (The Grid: Lome)</option>
+      </select>
+      <p style="font-size:9.5px;color:var(--st-text-muted);margin:0 0 10px;line-height:1.35;">
+        Harmonizes layout, hover effects, frames, and elevation into 1-click cohesive aesthetics.
+      </p>
+
+      <!-- Contextual Panel 1: Card Skin Inspector (Editorial Card) -->
+      <div class="contextual-panel ${activeSkinKey === "skin-editorial" ? "" : "hidden"}" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">CARD PROPERTIES</div>
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
+          <div style="display:flex;gap:8px;">
+            <button type="button" id="btnCardThemeLight" class="${curTheme !== "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#ffffff;color:#000000;border:1px solid ${curTheme !== "dark" ? "#5ec27f" : "#ccc"};border-radius:4px;cursor:pointer;">White Card</button>
+            <button type="button" id="btnCardThemeDark" class="${curTheme === "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#1c231f;color:#ffffff;border:1px solid ${curTheme === "dark" ? "#5ec27f" : "rgba(255,255,255,0.2)"};border-radius:4px;cursor:pointer;">Dark Card</button>
+          </div>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Category / Tag Pill</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+            <input type="checkbox" id="stCategoryPillsToggle" ${cfg.showCategoryPill !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
+            <span>Show AI Category Pill</span>
+          </label>
+        </div>
       </div>
 
-      <!-- Curated Style Preset (Skins) -->
-      <div class="matcha-card" style="border: 1px solid rgba(94, 194, 127, 0.35); background: rgba(94, 194, 127, 0.04);">
-        <div class="matcha-card-title">
-          <span class="heading-wrap" style="color:#5ec27f;">${Icons.palette} Curated Style Preset (Skin)</span>
+      <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
+      <div class="contextual-panel ${activeSkinKey === "skin-exhibition" ? "" : "hidden"}" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">FINE-ART MATTING</div>
+        <div class="range-row" style="margin-bottom:10px;">
+          <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
+          <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
+          <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 10}px</span>
         </div>
-        <select id="st-style-preset" class="matcha-dark-select" style="margin-bottom:6px;font-weight:600;">
-          <option value="custom" ${(cfg.stylePreset || "custom") === "custom" ? "selected" : ""}>Custom (Manual Adjustments)</option>
-          <option value="editorial" ${cfg.stylePreset === "editorial" ? "selected" : ""}>Editorial Card (Card Body Below Photo)</option>
-          <option value="exhibition-frame" ${cfg.stylePreset === "exhibition-frame" ? "selected" : ""}>Exhibition Hairline Frame (The Grid: Brasilia)</option>
-          <option value="architectural-curtain" ${cfg.stylePreset === "architectural-curtain" ? "selected" : ""}>Architectural Curtain (The Grid: Sofia)</option>
-          <option value="cinematic-pullback" ${cfg.stylePreset === "cinematic-pullback" ? "selected" : ""}>Cinematic Pullback (The Grid: Bogota)</option>
-          <option value="minimalist-drawer" ${cfg.stylePreset === "minimalist-drawer" ? "selected" : ""}>Minimalist Bottom Drawer (The Grid: Lome)</option>
-        </select>
-        <p style="font-size:9.5px;color:var(--st-text-muted);margin:0;line-height:1.35;">
-          Harmonizes layout, hover effects, frames, and elevation into 1-click cohesive aesthetics.
-        </p>
-      </div>
-
-      <!-- Picture Frame Styles -->
-      <div class="matcha-card ${activeSkinKey === "skin-editorial" || activeSkinKey === "skin-aura" ? "hidden" : ""}">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.frame} Picture Framing</span>
-        </div>
-        <select id="st-frame-style" class="matcha-dark-select" style="margin-bottom:12px;">
-          <option value="none" ${curFrame === "none" ? "selected" : ""}>Frameless Clean (Modern)</option>
-          <option value="white-mat" ${curFrame === "white-mat" ? "selected" : ""}>Gallery White Matting</option>
-          <option value="black-metal" ${curFrame === "black-metal" ? "selected" : ""}>Slim Matte Black Metal (PRO)</option>
-          <option value="natural-oak" ${curFrame === "natural-oak" ? "selected" : ""}>Natural Oak Wood (PRO)</option>
-          <option value="gold-brass" ${curFrame === "gold-brass" ? "selected" : ""}>Brushed Gold Brass (PRO)</option>
-          <option value="glass-float" ${curFrame === "glass-float" ? "selected" : ""}>Glassmorphism 3D Float (PRO)</option>
-        </select>
-
-        <div class="range-row">
-          <label>Matting Margin</label>
-          <input id="st-matting" type="range" min="0" max="32" step="2" value="${cfg.mattingSize ?? 0}">
-          <span class="val">${cfg.mattingSize ?? 0}px</span>
+        <div>
+          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Accent Color</label>
+          <div style="display:flex;gap:8px;">
+            <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || "#5ec27f") === "#5ec27f" ? "2px solid #fff" : "1px solid transparent"};"></span>
+            <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === "#f59e0b" ? "2px solid #fff" : "1px solid transparent"};"></span>
+            <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === "#38bdf8" ? "2px solid #fff" : "1px solid transparent"};"></span>
+            <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === "#ffffff" ? "2px solid #5ec27f" : "1px solid transparent"};"></span>
+          </div>
         </div>
       </div>
 
-      <!-- Shadow & Elevation -->
-      <div class="matcha-card">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.sparkles} Shadow & Depth</span>
+      <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
+      <div class="contextual-panel ${activeSkinKey === "skin-aura" ? "" : "hidden"}" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
+        <div class="range-row" style="margin-bottom:10px;">
+          <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
+          <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
+          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.auraBloom ?? 32}px</span>
         </div>
-        <select id="st-shadow" class="matcha-dark-select" style="margin-bottom:12px;">
+        <div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+            <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
+            <span>Smart Focal-Point Pan on Hover</span>
+          </label>
+        </div>
+      </div>
+    `;
+      const card3 = renderAccordionCard("skins", skinTitle, skinBadge, skinBody);
+      const frameLabels = {
+        none: "Frameless",
+        "white-mat": "White Mat",
+        "black-metal": "Black Metal",
+        "natural-oak": "Oak Wood",
+        "gold-brass": "Gold Brass",
+        "glass-float": "Glass Float"
+      };
+      const framingTitle = `
+      <span class="heading-wrap" style="display:flex;align-items:center;gap:6px;">
+        ${Icons.frame} Picture Framing
+      </span>
+    `;
+      const framingBadge = curFrame !== "none" ? `${frameLabels[curFrame] || curFrame}${cfg.mattingSize ? " \u2022 " + cfg.mattingSize + "px" : ""}` : "Frameless";
+      const framingClass = activeSkinKey === "skin-editorial" || activeSkinKey === "skin-aura" ? "hidden" : "";
+      const framingBody = `
+      <select id="st-frame-style" class="matcha-dark-select" style="margin-bottom:12px;">
+        <option value="none" ${curFrame === "none" ? "selected" : ""}>Frameless Clean (Modern)</option>
+        <option value="white-mat" ${curFrame === "white-mat" ? "selected" : ""}>Gallery White Matting</option>
+        <option value="black-metal" ${curFrame === "black-metal" ? "selected" : ""}>Slim Matte Black Metal (PRO)</option>
+        <option value="natural-oak" ${curFrame === "natural-oak" ? "selected" : ""}>Natural Oak Wood (PRO)</option>
+        <option value="gold-brass" ${curFrame === "gold-brass" ? "selected" : ""}>Brushed Gold Brass (PRO)</option>
+        <option value="glass-float" ${curFrame === "glass-float" ? "selected" : ""}>Glassmorphism 3D Float (PRO)</option>
+      </select>
+
+      <div class="range-row">
+        <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
+        <input id="st-matting" type="range" min="0" max="32" step="2" value="${cfg.mattingSize ?? 0}">
+        <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 0}px</span>
+      </div>
+    `;
+      const card4 = renderAccordionCard("framing", framingTitle, framingBadge, framingBody, framingClass);
+      const shadowShort = {
+        none: "Flat",
+        soft: "Soft Float",
+        medium: "Medium",
+        "gallery-spotlight": "Spotlight",
+        "deep-lift": "Deep 3D"
+      };
+      const hoverShort = {
+        zoom: "Zoom",
+        pullback: "Pullback",
+        frame: "Hairline",
+        curtain: "Curtain",
+        drawer: "Drawer",
+        grayscale: "B&W",
+        none: "Static"
+      };
+      const depthTitle = `
+      <span class="heading-wrap" style="display:flex;align-items:center;gap:6px;">
+        ${Icons.sparkles} Shadows & Hover FX
+      </span>
+    `;
+      const depthBadge = `${shadowShort[curShadow] || "Soft"} \u2022 ${hoverShort[cfg.hoverEffect || "zoom"] || "Zoom"}`;
+      const depthBody = `
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Shadow & Depth Elevation</label>
+        <select id="st-shadow" class="matcha-dark-select">
           <option value="none" ${curShadow === "none" ? "selected" : ""}>Flat (No Shadow)</option>
           <option value="soft" ${curShadow === "soft" ? "selected" : ""}>Subtle Soft Float</option>
           <option value="medium" ${curShadow === "medium" ? "selected" : ""}>Medium Drop Shadow</option>
           <option value="gallery-spotlight" ${curShadow === "gallery-spotlight" ? "selected" : ""}>Gallery Spotlight Depth</option>
           <option value="deep-lift" ${curShadow === "deep-lift" ? "selected" : ""}>Deep 3D Hover Lift</option>
         </select>
+      </div>
 
-        <div class="matcha-card-title" style="margin-top:14px;">Card Aesthetic Theme</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Card Aesthetic Theme</label>
         <select id="st-theme" class="matcha-dark-select">
           <option value="clean" ${curTheme === "clean" ? "selected" : ""}>Clean Minimalist</option>
           <option value="dark" ${curTheme === "dark" ? "selected" : ""}>Dark Mode Aesthetic</option>
           <option value="glass" ${curTheme === "glass" ? "selected" : ""}>Glassmorphic Frost (PRO)</option>
           <option value="glow" ${curTheme === "glow" ? "selected" : ""}>Matcha Glow Lift (PRO)</option>
         </select>
+      </div>
 
-        <div class="matcha-card-title" style="margin-top:14px;">Photo Hover Animation</div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Photo Hover Animation</label>
         <select id="st-hover-effect" class="matcha-dark-select">
           <option value="zoom" ${(cfg.hoverEffect || "zoom") === "zoom" ? "selected" : ""}>Smooth Zoom (The Grid Malabo)</option>
           <option value="pullback" ${(cfg.hoverEffect || "zoom") === "pullback" ? "selected" : ""}>Cinematic Pullback (The Grid Bogota)</option>
@@ -1125,208 +1233,218 @@
           <option value="grayscale" ${(cfg.hoverEffect || "zoom") === "grayscale" ? "selected" : ""}>Monochrome to Vibrant Color</option>
           <option value="none" ${(cfg.hoverEffect || "zoom") === "none" ? "selected" : ""}>Clean Static (No Effect)</option>
         </select>
+      </div>
 
-        <div id="wrap-hover-frame-color" style="margin-top:10px;display:${(cfg.hoverEffect || "zoom") === "frame" ? "block" : "none"};">
-          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">
-            Brasilia Hairline Frame Color
-          </label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input type="color" id="st-hover-frame-color-picker" value="${cfg.hoverFrameColor || "#ffffff"}" style="width:28px;height:28px;padding:0;border:none;border-radius:4px;cursor:pointer;background:none;" />
-            <input type="text" id="st-hover-frame-color" class="matcha-dark-input" value="${escapeHtml(cfg.hoverFrameColor || "")}" placeholder="rgba(255,255,255,0.45) or #ffffff" style="font-size:11px;flex:1;" />
-          </div>
-        </div>
-
-        <div style="margin-top:12px;">
-          <div class="matcha-card-title" style="margin-bottom:4px;">Mobile Touch Behavior</div>
-          <select id="st-hover-mobile-tap" class="matcha-dark-select">
-            <option value="lightbox" ${(cfg.hoverMobileTap || "lightbox") === "lightbox" ? "selected" : ""}>Direct Lightbox Open (Fast & Standard)</option>
-            <option value="reveal" ${cfg.hoverMobileTap === "reveal" ? "selected" : ""}>Tap to Reveal Overlay (Captions & Actions First)</option>
-          </select>
-          <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:4px;line-height:1.3;">
-            On touch screens, choose whether tapping immediately opens the lightbox or reveals titles and buttons first.
-          </div>
+      <div id="wrap-hover-frame-color" style="margin-bottom:12px;display:${(cfg.hoverEffect || "zoom") === "frame" ? "block" : "none"};">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">
+          Brasilia Hairline Frame Color
+        </label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="color" id="st-hover-frame-color-picker" value="${cfg.hoverFrameColor || "#ffffff"}" style="width:28px;height:28px;padding:0;border:none;border-radius:4px;cursor:pointer;background:none;" />
+          <input type="text" id="st-hover-frame-color" class="matcha-dark-input" value="${escapeHtml(cfg.hoverFrameColor || "")}" placeholder="rgba(255,255,255,0.45) or #ffffff" style="font-size:11px;flex:1;" />
         </div>
       </div>
 
-      <!-- Progressive Loading & Pagination -->
-      <div class="matcha-card">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.fileText} Loading & Pagination</span>
+      <div>
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Mobile Touch Behavior</label>
+        <select id="st-hover-mobile-tap" class="matcha-dark-select">
+          <option value="lightbox" ${(cfg.hoverMobileTap || "lightbox") === "lightbox" ? "selected" : ""}>Direct Lightbox Open (Fast & Standard)</option>
+          <option value="reveal" ${cfg.hoverMobileTap === "reveal" ? "selected" : ""}>Tap to Reveal Overlay (Captions & Actions First)</option>
+        </select>
+        <div style="font-size:9.5px;color:var(--st-text-muted);margin-top:4px;line-height:1.3;">
+          On touch screens, choose whether tapping immediately opens the lightbox or reveals titles and buttons first.
         </div>
-        
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-instant-frames" ${cfg.instantFramesEnabled !== false ? "checked" : ""}>
-          Enable Instant Zero-CLS Frames
-        </label>
-        
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-preloader" ${cfg.preloaderEnabled !== false ? "checked" : ""}>
-          Enable Gallery Pre-Loader
-        </label>
+      </div>
+    `;
+      const card5 = renderAccordionCard("depth-hover", depthTitle, depthBadge, depthBody);
+      const pagBadge = curPag === "none" ? "All Photos" : curPag === "load-more" ? `Load More (${cfg.itemsPerPage || 12})` : curPag === "infinite" ? "Infinite Scroll" : `Pages (${cfg.itemsPerPage || 12})`;
+      const pagTitle = `
+      <span class="heading-wrap" style="display:flex;align-items:center;gap:6px;">
+        ${Icons.fileText} Loading & Pagination
+      </span>
+    `;
+      const pagBody = `
+      <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <input type="checkbox" id="st-instant-frames" ${cfg.instantFramesEnabled !== false ? "checked" : ""}>
+        Enable Instant Zero-CLS Frames
+      </label>
+      
+      <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <input type="checkbox" id="st-preloader" ${cfg.preloaderEnabled !== false ? "checked" : ""}>
+        Enable Gallery Pre-Loader
+      </label>
 
-        <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
-          <span style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="st-randomize-load" ${isPro && cfg.randomizeOrder ? "checked" : ""}>
-            Randomize on Page Load
-          </span>
-          <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
-        </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
+        <span style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="st-randomize-load" ${isPro && cfg.randomizeOrder ? "checked" : ""}>
+          Randomize on Page Load
+        </span>
+        <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+      </label>
 
-        ${cfg.preloaderEnabled !== false ? `
-          <div style="padding-top:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
-            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Preloader Visual Style</label>
-            <select id="st-preloader-style" class="matcha-dark-select">
-              <option value="spinner" ${(cfg.preloaderStyle || "spinner") === "spinner" ? "selected" : ""}>Matcha Spinner (Classic)</option>
-              <option value="pulse" ${(cfg.preloaderStyle || "spinner") === "pulse" ? "selected" : ""}>Soft Pulse Overlay (PRO)</option>
-              <option value="skeleton" ${(cfg.preloaderStyle || "spinner") === "skeleton" ? "selected" : ""}>Shimmering Skeleton Boxes (PRO)</option>
-            </select>
-          </div>
-        ` : ""}
+      ${cfg.preloaderEnabled !== false ? `
+        <div style="padding-top:8px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Preloader Visual Style</label>
+          <select id="st-preloader-style" class="matcha-dark-select">
+            <option value="spinner" ${(cfg.preloaderStyle || "spinner") === "spinner" ? "selected" : ""}>Matcha Spinner (Classic)</option>
+            <option value="pulse" ${(cfg.preloaderStyle || "spinner") === "pulse" ? "selected" : ""}>Soft Pulse Overlay (PRO)</option>
+            <option value="skeleton" ${(cfg.preloaderStyle || "spinner") === "skeleton" ? "selected" : ""}>Shimmering Skeleton Boxes (PRO)</option>
+          </select>
+        </div>
+      ` : ""}
 
-        <div class="matcha-card-title" style="margin-top:14px;">Pagination Type</div>
-        <select id="st-pagination" class="matcha-dark-select" style="margin-bottom:12px;">
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Pagination Type</label>
+        <select id="st-pagination" class="matcha-dark-select">
           <option value="none" ${curPag === "none" ? "selected" : ""}>All Photos (No Pagination)</option>
           <option value="load-more" ${curPag === "load-more" ? "selected" : ""}>Load More Button</option>
           <option value="infinite" ${curPag === "infinite" ? "selected" : ""}>Infinite Smooth Scroll (PRO)</option>
           <option value="pages" ${curPag === "pages" ? "selected" : ""}>Numbered Pages Navigation (PRO)</option>
         </select>
-
-        ${curPag !== "none" ? `
-          <div class="range-row">
-            <label>Items Per Batch</label>
-            <input id="st-items-per-page" type="range" min="4" max="48" step="4" value="${cfg.itemsPerPage || 12}">
-            <span class="val">${cfg.itemsPerPage || 12}</span>
-          </div>
-        ` : ""}
-
-        ${curPag === "load-more" ? `
-          <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;display:flex;flex-direction:column;gap:10px;">
-            <div>
-              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Visual Style</label>
-              <select id="st-loadmore-style" class="matcha-dark-select">
-                <option value="pill" ${(cfg.loadMoreStyle || "pill") === "pill" ? "selected" : ""}>Solid Accent Pill</option>
-                <option value="outline" ${(cfg.loadMoreStyle || "pill") === "outline" ? "selected" : ""}>Accent Outline / Border</option>
-                <option value="minimal" ${(cfg.loadMoreStyle || "pill") === "minimal" ? "selected" : ""} >Minimalist Text Link </option>
-                <option value="glass" ${(cfg.loadMoreStyle || "pill") === "glass" ? "selected" : ""} >Frosted Glass Pill </option>
-                <option value="dark" ${(cfg.loadMoreStyle || "pill") === "dark" ? "selected" : ""} >Solid Obsidian Dark </option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Label Text</label>
-              <input type="text" id="st-loadmore-label" class="matcha-dark-input" value="${escapeHtml(cfg.loadMoreLabel || "Load More Photos")}" placeholder="Load More Photos" />
-            </div>
-          </div>
-        ` : ""}
       </div>
 
-      <!-- Search & Filters -->
-      <div class="matcha-card">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.search} Search & Filter Toolbar</span>
+      ${curPag !== "none" ? `
+        <div class="range-row" style="margin-bottom:10px;">
+          <label style="font-size:11px;color:var(--st-text-secondary);">Items Per Batch</label>
+          <input id="st-items-per-page" type="range" min="4" max="48" step="4" value="${cfg.itemsPerPage || 12}">
+          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.itemsPerPage || 12}</span>
         </div>
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-search" ${cfg.searchEnabled !== false ? "checked" : ""}>
-          Enable Live Search Bar
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-filters" ${cfg.filtersEnabled ? "checked" : ""}>
-          Enable Category Pill Filters
-        </label>
-        <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
-          <span style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="st-frontend-sort" ${isPro && cfg.frontendSortEnabled ? "checked" : ""}>
-            Enable Visitor Sort Dropdown
-          </span>
-          <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-lightbox" ${cfg.lightboxEnabled ? "checked" : ""}>
-          Enable Fullscreen Lightbox
-        </label>
+      ` : ""}
 
-        <div style="margin-bottom:12px;">
-          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Toolbar & Controls Aesthetic Skin</label>
-          <select id="st-toolbar-skin" class="matcha-dark-select">
-            <option value="capsule" ${(cfg.toolbarSkin || "capsule") === "capsule" ? "selected" : ""}>Modern Capsule (Clean Rounded Pill)</option>
-            <option value="underline" ${(cfg.toolbarSkin || "capsule") === "underline" ? "selected" : ""}>Minimalist Hairline (Fine-Art & Editorial) ${!isPro ? "(PRO)" : ""}</option>
-            <option value="obsidian" ${(cfg.toolbarSkin || "capsule") === "obsidian" ? "selected" : ""}>Obsidian Dark (Deep Charcoal Glow) ${!isPro ? "(PRO)" : ""}</option>
-            <option value="glass" ${(cfg.toolbarSkin || "capsule") === "glass" ? "selected" : ""}>Frosted Glass (Specular Blur) ${!isPro ? "(PRO)" : ""}</option>
-          </select>
-        </div>
-
-        ${cfg.filtersEnabled ? `
-          <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;">
-            <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
-              <input type="checkbox" id="st-filter-multi" ${isPro && cfg.filterMultiSelect ? "checked" : ""}>
-              <span>Enable Multi-Select Filtering</span> <span class="matcha-pro-badge">PRO</span>
-            </label>
-            
-            ${isPro && cfg.filterMultiSelect ? `
-              <div>
-                <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Multi-Select Intersection Logic</label>
-                <select id="st-filter-logic" class="matcha-dark-select">
-                  <option value="or" ${(cfg.filterLogic || "or") === "or" ? "selected" : ""}>Match ANY Tag (Expand Results - OR)</option>
-                  <option value="and" ${(cfg.filterLogic || "or") === "and" ? "selected" : ""}>Match ALL Tags (Strict Intersection - AND)</option>
-                </select>
-              </div>
-            ` : ""}
-
-            <div>
-              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Visual Style</label>
-              <select id="st-filter-style" class="matcha-dark-select">
-                <option value="pills" ${(cfg.filterStyle || "pills") === "pills" ? "selected" : ""}>Modern Rounded Pills</option>
-                <option value="underline" ${(cfg.filterStyle || "pills") === "underline" ? "selected" : ""}>Minimalist Underline Tabs</option>
-                <option value="dark" ${(cfg.filterStyle || "pills") === "dark" ? "selected" : ""} >Solid Obsidian Dark </option>
-                <option value="minimal" ${(cfg.filterStyle || "pills") === "minimal" ? "selected" : ""} >Clean Ghost Text </option>
-                <option value="glass" ${(cfg.filterStyle || "pills") === "glass" ? "selected" : ""} >Frosted Glassmorphic </option>
-              </select>
-            </div>
-
-            <div>
-              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Alignment</label>
-              <select id="st-filter-align" class="matcha-dark-select">
-                <option value="left" ${(cfg.filterAlign || "left") === "left" ? "selected" : ""}>Left Aligned</option>
-                <option value="center" ${(cfg.filterAlign || "left") === "center" ? "selected" : ""}>Centered</option>
-                <option value="right" ${(cfg.filterAlign || "left") === "right" ? "selected" : ""}>Right Aligned</option>
-                <option value="between" ${(cfg.filterAlign || "left") === "between" ? "selected" : ""}>Space-Between (Justified)</option>
-              </select>
-            </div>
-
-            <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
-              <input type="checkbox" id="st-filter-count" ${cfg.showFilterCount !== false ? "checked" : ""}>
-              Show Photo Count Badges
-            </label>
-
-            <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
-              <input type="checkbox" id="st-show-all-filter" ${cfg.showAllFilter !== false ? "checked" : ""}>
-              Show "All" Filter Button
-            </label>
-
-            ${cfg.showAllFilter !== false ? `
-              <div>
-                <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">"All" Button Label</label>
-                <input type="text" id="st-all-filter-label" class="matcha-dark-input" value="${escapeHtml(cfg.allFilterLabel || "All")}" placeholder="All" />
-              </div>
-            ` : ""}
+      ${curPag === "load-more" ? `
+        <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);margin-top:10px;display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Visual Style</label>
+            <select id="st-loadmore-style" class="matcha-dark-select">
+              <option value="pill" ${(cfg.loadMoreStyle || "pill") === "pill" ? "selected" : ""}>Solid Accent Pill</option>
+              <option value="outline" ${(cfg.loadMoreStyle || "pill") === "outline" ? "selected" : ""}>Accent Outline / Border</option>
+              <option value="minimal" ${(cfg.loadMoreStyle || "pill") === "minimal" ? "selected" : ""} >Minimalist Text Link </option>
+              <option value="glass" ${(cfg.loadMoreStyle || "pill") === "glass" ? "selected" : ""} >Frosted Glass Pill </option>
+              <option value="dark" ${(cfg.loadMoreStyle || "pill") === "dark" ? "selected" : ""} >Solid Obsidian Dark </option>
+            </select>
           </div>
-        ` : ""}
-
-        <div style="margin-top:14px;">
-          <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#ffffff;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer;">
-            <span style="color:#5ec27f;">${Icons.filter}</span> Manage All Gallery Filters
-          </button>
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Button Label Text</label>
+            <input type="text" id="st-loadmore-label" class="matcha-dark-input" value="${escapeHtml(cfg.loadMoreLabel || "Load More Photos")}" placeholder="Load More Photos" />
+          </div>
         </div>
+      ` : ""}
+    `;
+      const card6 = renderAccordionCard("loading-pagination", pagTitle, pagBadge, pagBody);
+      const fActive = !!cfg.filtersEnabled;
+      const sActive = cfg.searchEnabled !== false;
+      const navBadge = fActive && sActive ? "Search + Filters" : fActive ? "Filters Only" : sActive ? "Search Bar" : cfg.lightboxEnabled ? "Lightbox Only" : "Minimal";
+      const navTitle = `
+      <span class="heading-wrap" style="display:flex;align-items:center;gap:6px;">
+        ${Icons.search} Toolbar & Navigation
+      </span>
+    `;
+      const navBody = `
+      <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <input type="checkbox" id="st-search" ${cfg.searchEnabled !== false ? "checked" : ""}>
+        Enable Live Search Bar
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <input type="checkbox" id="st-filters" ${cfg.filtersEnabled ? "checked" : ""}>
+        Enable Category Pill Filters
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <span style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="st-frontend-sort" ${isPro && cfg.frontendSortEnabled ? "checked" : ""}>
+          Enable Visitor Sort Dropdown
+        </span>
+        <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:12px;cursor:pointer;color:var(--st-text-primary);">
+        <input type="checkbox" id="st-lightbox" ${cfg.lightboxEnabled ? "checked" : ""}>
+        Enable Fullscreen Lightbox
+      </label>
+
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Toolbar & Controls Aesthetic Skin</label>
+        <select id="st-toolbar-skin" class="matcha-dark-select">
+          <option value="capsule" ${(cfg.toolbarSkin || "capsule") === "capsule" ? "selected" : ""}>Modern Capsule (Clean Rounded Pill)</option>
+          <option value="underline" ${(cfg.toolbarSkin || "capsule") === "underline" ? "selected" : ""}>Minimalist Hairline (Fine-Art & Editorial) ${!isPro ? "(PRO)" : ""}</option>
+          <option value="obsidian" ${(cfg.toolbarSkin || "capsule") === "obsidian" ? "selected" : ""}>Obsidian Dark (Deep Charcoal Glow) ${!isPro ? "(PRO)" : ""}</option>
+          <option value="glass" ${(cfg.toolbarSkin || "capsule") === "glass" ? "selected" : ""}>Frosted Glass (Specular Blur) ${!isPro ? "(PRO)" : ""}</option>
+        </select>
       </div>
 
-      <!-- Brand & Accent Color -->
-      <div class="matcha-card">
-        <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.palette} Brand & Accent Color</span>
+      ${cfg.filtersEnabled ? `
+        <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:10px;">
+          <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
+            <input type="checkbox" id="st-filter-multi" ${isPro && cfg.filterMultiSelect ? "checked" : ""}>
+            <span>Enable Multi-Select Filtering</span> <span class="matcha-pro-badge">PRO</span>
+          </label>
+          
+          ${isPro && cfg.filterMultiSelect ? `
+            <div>
+              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Multi-Select Intersection Logic</label>
+              <select id="st-filter-logic" class="matcha-dark-select">
+                <option value="or" ${(cfg.filterLogic || "or") === "or" ? "selected" : ""}>Match ANY Tag (Expand Results - OR)</option>
+                <option value="and" ${(cfg.filterLogic || "or") === "and" ? "selected" : ""}>Match ALL Tags (Strict Intersection - AND)</option>
+              </select>
+            </div>
+          ` : ""}
+
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Visual Style</label>
+            <select id="st-filter-style" class="matcha-dark-select">
+              <option value="pills" ${(cfg.filterStyle || "pills") === "pills" ? "selected" : ""}>Modern Rounded Pills</option>
+              <option value="underline" ${(cfg.filterStyle || "pills") === "underline" ? "selected" : ""}>Minimalist Underline Tabs</option>
+              <option value="dark" ${(cfg.filterStyle || "pills") === "dark" ? "selected" : ""} >Solid Obsidian Dark </option>
+              <option value="minimal" ${(cfg.filterStyle || "pills") === "minimal" ? "selected" : ""} >Clean Ghost Text </option>
+              <option value="glass" ${(cfg.filterStyle || "pills") === "glass" ? "selected" : ""} >Frosted Glassmorphic </option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Filter Alignment</label>
+            <select id="st-filter-align" class="matcha-dark-select">
+              <option value="left" ${(cfg.filterAlign || "left") === "left" ? "selected" : ""}>Left Aligned</option>
+              <option value="center" ${(cfg.filterAlign || "left") === "center" ? "selected" : ""}>Centered</option>
+              <option value="right" ${(cfg.filterAlign || "left") === "right" ? "selected" : ""}>Right Aligned</option>
+              <option value="between" ${(cfg.filterAlign || "left") === "between" ? "selected" : ""}>Space-Between (Justified)</option>
+            </select>
+          </div>
+
+          <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
+            <input type="checkbox" id="st-filter-count" ${cfg.showFilterCount !== false ? "checked" : ""}>
+            Show Photo Count Badges
+          </label>
+
+          <label style="display:flex;align-items:center;gap:8px;font-size:11px;cursor:pointer;color:var(--st-text-primary);">
+            <input type="checkbox" id="st-show-all-filter" ${cfg.showAllFilter !== false ? "checked" : ""}>
+            Show "All" Filter Button
+          </label>
+
+          ${cfg.showAllFilter !== false ? `
+            <div>
+              <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">"All" Button Label</label>
+              <input type="text" id="st-all-filter-label" class="matcha-dark-input" value="${escapeHtml(cfg.allFilterLabel || "All")}" placeholder="All" />
+            </div>
+          ` : ""}
         </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Curated Brand Palettes</label>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            ${[
+      ` : ""}
+
+      <div style="margin-top:14px;">
+        <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#ffffff;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer;">
+          <span style="color:#5ec27f;">${Icons.filter}</span> Manage All Gallery Filters
+        </button>
+      </div>
+    `;
+      const card7 = renderAccordionCard("filters-search", navTitle, navBadge, navBody);
+      const brandTitle = `
+      <span class="heading-wrap" style="display:flex;align-items:center;gap:6px;">
+        ${Icons.palette} Brand & Accent Color
+      </span>
+    `;
+      const brandBadge = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${cfg.accentColor || "#607d66"};margin-right:4px;"></span>${cfg.accentColor || "#607d66"}`;
+      const brandBody = `
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Curated Brand Palettes</label>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          ${[
         { hex: "#607d66", name: "Matcha Green" },
         { hex: "#3e5242", name: "Dark Moss" },
         { hex: "#0284c7", name: "Ocean Blue" },
@@ -1336,25 +1454,24 @@
       ].map((p) => {
         const isSelected = (cfg.accentColor || "#607d66").toLowerCase() === p.hex.toLowerCase();
         return `
-                <button type="button" class="btn-accent-preset" data-hex="${p.hex}" style="width:28px;height:28px;border-radius:50%;background:${p.hex};border:2px solid ${isSelected ? "#ffffff" : "rgba(255,255,255,0.2)"};box-shadow:${isSelected ? `0 0 0 2px ${p.hex}, 0 2px 8px rgba(0,0,0,0.4)` : "none"};cursor:pointer;transition:all 0.15s ease;" title="${p.name}"></button>
-              `;
+              <button type="button" class="btn-accent-preset" data-hex="${p.hex}" style="width:28px;height:28px;border-radius:50%;background:${p.hex};border:2px solid ${isSelected ? "#ffffff" : "rgba(255,255,255,0.2)"};box-shadow:${isSelected ? `0 0 0 2px ${p.hex}, 0 2px 8px rgba(0,0,0,0.4)` : "none"};cursor:pointer;transition:all 0.15s ease;" title="${p.name}"></button>
+            `;
       }).join("")}
-          </div>
         </div>
+      </div>
 
-        <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
-            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);">Custom Brand Hex Color</label>
-            
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <input type="color" id="st-accent-picker" value="${cfg.accentColor || "#607d66"}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:pointer;padding:0;" />
-            <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || "#607d66")}" placeholder="#607d66" style="font-family:monospace;font-size:12px;cursor:text;" />
-          </div>
-          
+      <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);">Custom Brand Hex Color</label>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="color" id="st-accent-picker" value="${cfg.accentColor || "#607d66"}" style="width:36px;height:32px;border:none;border-radius:6px;background:none;cursor:pointer;padding:0;" />
+          <input type="text" id="st-accent-hex" class="matcha-dark-input" value="${escapeHtml(cfg.accentColor || "#607d66")}" placeholder="#607d66" style="font-family:monospace;font-size:12px;cursor:text;" />
         </div>
       </div>
     `;
+      const card8 = renderAccordionCard("brand-color", brandTitle, brandBadge, brandBody);
+      return [card1, card2, card3, card4, card5, card6, card7, card8].join("");
     }, photoInspectorHTML = function(id, cfg) {
       const m = metaCache.get(id) || {};
       const link = (cfg.imageLinks || {})[id] || {};
@@ -2085,6 +2202,21 @@
         selectArtFrame(targetFrame);
       }
     }, bindWallProperties = function() {
+      document.querySelectorAll(".matcha-accordion-header[data-accordion-toggle]").forEach((header) => {
+        header.addEventListener("click", () => {
+          const key = header.dataset.accordionToggle;
+          const card = header.closest(".matcha-card--collapsible");
+          if (!card) return;
+          if (openAccordions.has(key)) {
+            openAccordions.delete(key);
+            card.classList.add("matcha-card--collapsed");
+          } else {
+            openAccordions.add(key);
+            card.classList.remove("matcha-card--collapsed");
+          }
+          updateToggleAllButton();
+        });
+      });
       document.querySelectorAll(".wall-color-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const tex = btn.dataset.tex;
@@ -2337,12 +2469,21 @@
       });
       document.getElementById("st-row-height")?.addEventListener("input", (e) => {
         e.target.nextElementSibling.textContent = e.target.value + "px";
+        const stageBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="stage-layout"] .matcha-accordion-badge');
+        if (stageBadge && getState().config.layout === "justified") {
+          stageBadge.textContent = `${e.target.value}px Row`;
+        }
         patchConfig({ rowHeight: parseInt(e.target.value) });
         renderCanvas();
         autosaveSoon();
       });
       document.getElementById("st-col")?.addEventListener("input", (e) => {
         e.target.nextElementSibling.textContent = e.target.value;
+        const gut = getState().config.gutterSize ?? 22;
+        const stageBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="stage-layout"] .matcha-accordion-badge');
+        if (stageBadge && getState().config.layout !== "art-wall" && getState().config.layout !== "justified") {
+          stageBadge.textContent = `${e.target.value} Cols \u2022 ${gut}px`;
+        }
         patchConfig({ columns: parseInt(e.target.value) });
         renderCanvas();
         autosaveSoon();
@@ -2361,6 +2502,11 @@
       });
       document.getElementById("st-gut")?.addEventListener("input", (e) => {
         e.target.nextElementSibling.textContent = e.target.value + "px";
+        const col = getState().config.columns || 3;
+        const stageBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="stage-layout"] .matcha-accordion-badge');
+        if (stageBadge && getState().config.layout !== "art-wall" && getState().config.layout !== "justified") {
+          stageBadge.textContent = `${col} Cols \u2022 ${e.target.value}px`;
+        }
         patchConfig({ gutterSize: parseInt(e.target.value) });
         renderCanvas();
         autosaveSoon();
@@ -2506,6 +2652,10 @@
       const accentHex = document.getElementById("st-accent-hex");
       accentPicker?.addEventListener("input", (e) => {
         if (accentHex) accentHex.value = e.target.value;
+        const brandBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="brand-color"] .matcha-accordion-badge');
+        if (brandBadge) {
+          brandBadge.innerHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${e.target.value};margin-right:4px;"></span>${e.target.value}`;
+        }
         patchConfig({ accentColor: e.target.value });
         renderCanvas();
         autosaveSoon();
@@ -3928,11 +4078,14 @@
 
         <!-- Right Sidebar: Live Wall & Photo Properties Inspector -->
         <aside class="matcha-studio__sidebar-right">
-          <div style="padding:14px 16px;border-bottom:1px solid var(--st-border-subtle);display:flex;align-items:center;justify-content:space-between;">
+          <div style="padding:13px 16px;border-bottom:1px solid var(--st-border-subtle);display:flex;align-items:center;justify-content:space-between;">
             <div id="right-panel-header-title" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--st-text-secondary);">
               Wall & Gallery Properties
             </div>
-            <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:3px 9px;font-size:10px;font-weight:700;color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);" title="Close Photo Inspector and return to Gallery Properties">\u2715 Exit to Gallery</button>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" id="btn-toggle-all-accordions" style="font-size:10px;font-weight:700;color:#5ec27f;background:none;border:none;cursor:pointer;padding:2px 4px;letter-spacing:0.02em;" title="Toggle Expand or Collapse for All Sections">Expand All</button>
+              <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:3px 9px;font-size:10px;font-weight:700;color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);" title="Close Photo Inspector and return to Gallery Properties">\u2715 Exit to Gallery</button>
+            </div>
           </div>
           <div id="studio-right-panel" class="matcha-tabpanel"></div>
         </aside>
@@ -4031,6 +4184,20 @@
       renderRightPanel();
       document.querySelectorAll(".matcha-img-card").forEach((c) => c.classList.remove("is-selected"));
       document.querySelectorAll(".matcha-gallery__item").forEach((c) => c.classList.remove("is-selected"));
+    });
+    document.getElementById("btn-toggle-all-accordions")?.addEventListener("click", () => {
+      const allOpen = ALL_ACCORDION_KEYS.every((k) => openAccordions.has(k));
+      if (allOpen) {
+        openAccordions.clear();
+        openAccordions.add("stage-layout");
+      } else {
+        ALL_ACCORDION_KEYS.forEach((k) => openAccordions.add(k));
+      }
+      document.querySelectorAll(".matcha-card--collapsible[data-accordion-key]").forEach((card) => {
+        const k = card.dataset.accordionKey;
+        card.classList.toggle("matcha-card--collapsed", !openAccordions.has(k));
+      });
+      updateToggleAllButton();
     });
     document.getElementById("btn-spatial-wave-demo")?.addEventListener("click", () => {
       trigger3DWaveDemo();
@@ -4148,6 +4315,17 @@
       }
     };
     let isSpatial3D = true;
+    const ALL_ACCORDION_KEYS = [
+      "stage-layout",
+      "spatial-3d",
+      "skins",
+      "framing",
+      "depth-hover",
+      "loading-pagination",
+      "filters-search",
+      "brand-color"
+    ];
+    const openAccordions = /* @__PURE__ */ new Set(["stage-layout"]);
     const wallPresets = {
       triptych: [
         { left: 40, top: 180, width: 320, height: 440, ratio: "24x36", molding: "mold-black" },
