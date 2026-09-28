@@ -298,11 +298,11 @@ if (root) {
           <button type="button" id="btn-spatial-wave-demo" class="matcha-exit-btn" style="color:#e6ede8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Watch all cards execute a sequential 3D spatial wave">
             <span>▶ 3D Wave Demo</span>
           </button>
-          <button type="button" id="btn-toggle-spatial-tilt" class="matcha-exit-btn is-active" style="color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Toggle Hardware-Accelerated 3D Holographic Tilt">
-            <span style="color:#5ec27f;">✦</span>
+          <button type="button" id="btn-toggle-spatial-tilt" class="matcha-exit-btn is-active" style="color:#ffffff;border-color:rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Toggle Hardware-Accelerated 3D Holographic Tilt">
+            <span style="color:#ffffff;">✦</span>
             <span>Spatial 3D Tilt</span>
             <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
-            <span id="spatial-status-label" style="font-size:9px;font-family:monospace;font-weight:800;color:#5ec27f;">ON</span>
+            <span id="spatial-status-label" style="font-size:9px;font-family:monospace;font-weight:800;color:#ffffff;">ON</span>
           </button>
 
           <div class="matcha-viewport">
@@ -999,17 +999,7 @@ if (root) {
     }
     if (label) {
       label.textContent = isSpatial3D ? 'ON' : 'OFF';
-      label.style.color = isSpatial3D ? '#5ec27f' : 'var(--st-text-muted)';
-    }
-
-    const inspectorToggle = document.getElementById('st-spatial-tilt-toggle');
-    if (inspectorToggle) {
-      inspectorToggle.checked = isSpatial3D;
-    }
-
-    const spatialBadge = document.querySelector('.matcha-card--collapsible[data-accordion-key="spatial-3d"] .matcha-accordion-badge');
-    if (spatialBadge) {
-      spatialBadge.textContent = isSpatial3D ? '✦ 60fps Active' : 'Off';
+      label.style.color = isSpatial3D ? '#ffffff' : 'var(--st-text-muted)';
     }
 
     if (!isSpatial3D) {
@@ -1324,7 +1314,6 @@ if (root) {
   // --- Right Sidebar: Accordion Hierarchy & Live Properties ---
   const ALL_ACCORDION_KEYS = [
     'stage-layout',
-    'spatial-3d',
     'skins',
     'framing',
     'depth-hover',
@@ -1581,31 +1570,7 @@ if (root) {
 
     const card1 = renderAccordionCard('stage-layout', stageTitle, stageBadge, stageBody);
 
-    // --- 2. 3D Spatial Physics Card ---
-    const spatialTitle = `
-      <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
-        <span>✦ 3D Spatial Tilt</span>
-        <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
-      </span>
-    `;
-    const spatialBadge = isSpatial3D ? '✦ 60fps Active' : 'Off';
-    const spatialBody = `
-      <div style="padding: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md, 8px);">
-        <label style="display:flex;align-items:center;justify-content:space-between;color:#fff;cursor:pointer;margin-bottom:6px;">
-          <span style="font-size:11px;font-weight:700;color:var(--st-text-primary);">Enable Spatial Tilt</span>
-          <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? 'checked' : ''} style="accent-color: #5ec27f; cursor: pointer; width: 16px; height: 16px;">
-        </label>
-        <div style="font-size: 10px; color: var(--st-text-muted, #5e6f64); line-height: 1.4; margin-bottom: 8px;">
-          Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
-        </div>
-        <button type="button" id="btn-trigger-wave-inspector" style="width:100%;font-size:10.5px;font-weight:700;padding:6px;border-radius:4px;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;">
-          <span>▶ Play 3D Wave Demo</span>
-        </button>
-      </div>
-    `;
-    const card2 = renderAccordionCard('spatial-3d', spatialTitle, spatialBadge, spatialBody);
-
-    // --- 3. Skin Properties Card ---
+    // --- 2. Skin Properties Card ---
     const skinTitle = `
       <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
         ${Icons.palette} Skin Properties
@@ -1656,11 +1621,12 @@ if (root) {
           </div>
           <div>
             <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Frame Accent Color</label>
-            <div style="display:flex;gap:8px;">
+            <div style="display:flex;gap:8px;align-items:center;">
               <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || '#5ec27f') === '#5ec27f' ? '2px solid #fff' : '1px solid transparent'};"></span>
               <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === '#f59e0b' ? '2px solid #fff' : '1px solid transparent'};"></span>
               <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === '#38bdf8' ? '2px solid #fff' : '1px solid transparent'};"></span>
               <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === '#ffffff' ? '2px solid #fff' : '1px solid transparent'};"></span>
+              <input type="color" id="st-hairline-custom-picker" value="${cfg.hoverFrameColor || '#ffffff'}" style="width:24px;height:24px;padding:0;border:1px solid rgba(255,255,255,0.2);border-radius:4px;cursor:pointer;background:none;" title="Custom Hairline Color" />
             </div>
           </div>
         </div>
@@ -1719,11 +1685,13 @@ if (root) {
         <option value="glass-float" ${curFrame === 'glass-float' ? 'selected' : ''}>Glassmorphism 3D Float (PRO)</option>
       </select>
 
-      <div class="range-row">
-        <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
-        <input id="st-matting" type="range" min="0" max="32" step="2" value="${cfg.mattingSize ?? 0}">
-        <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 0}px</span>
-      </div>
+      ${activeSkinKey !== 'skin-exhibition' ? `
+        <div class="range-row">
+          <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
+          <input id="st-matting" type="range" min="0" max="32" step="2" value="${cfg.mattingSize ?? 0}">
+          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 0}px</span>
+        </div>
+      ` : ''}
     `;
     const card4 = renderAccordionCard('framing', framingTitle, framingBadge, framingBody, framingClass);
 
@@ -1762,15 +1730,17 @@ if (root) {
         </select>
       </div>
 
-      <div style="margin-bottom:12px;">
-        <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Card Aesthetic Theme</label>
-        <select id="st-theme" class="matcha-dark-select">
-          <option value="clean" ${curTheme === 'clean' ? 'selected' : ''}>Clean Minimalist</option>
-          <option value="dark" ${curTheme === 'dark' ? 'selected' : ''}>Dark Mode Aesthetic</option>
-          <option value="glass" ${curTheme === 'glass' ? 'selected' : ''}>Glassmorphic Frost (PRO)</option>
-          <option value="glow" ${curTheme === 'glow' ? 'selected' : ''}>Matcha Glow Lift (PRO)</option>
-        </select>
-      </div>
+      ${activeSkinKey !== 'skin-editorial' ? `
+        <div style="margin-bottom:12px;">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Card Aesthetic Theme</label>
+          <select id="st-theme" class="matcha-dark-select">
+            <option value="clean" ${curTheme === 'clean' ? 'selected' : ''}>Clean Minimalist</option>
+            <option value="dark" ${curTheme === 'dark' ? 'selected' : ''}>Dark Mode Aesthetic</option>
+            <option value="glass" ${curTheme === 'glass' ? 'selected' : ''}>Glassmorphic Frost (PRO)</option>
+            <option value="glow" ${curTheme === 'glow' ? 'selected' : ''}>Matcha Glow Lift (PRO)</option>
+          </select>
+        </div>
+      ` : ''}
 
       <div style="margin-bottom:12px;">
         <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">Photo Hover Animation</label>
@@ -1785,9 +1755,9 @@ if (root) {
         </select>
       </div>
 
-      <div id="wrap-hover-frame-color" style="margin-bottom:12px;display:${((cfg.hoverEffect || 'zoom') === 'frame') ? 'block' : 'none'};">
+      <div id="wrap-hover-frame-color" style="margin-bottom:12px;display:${(activeSkinKey !== 'skin-exhibition' && (cfg.hoverEffect || 'zoom') === 'frame') ? 'block' : 'none'};">
         <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:4px;">
-          Brasilia Hairline Frame Color
+          Hairline Frame Color
         </label>
         <div style="display:flex;align-items:center;gap:8px;">
           <input type="color" id="st-hover-frame-color-picker" value="${cfg.hoverFrameColor || '#ffffff'}" style="width:28px;height:28px;padding:0;border:none;border-radius:4px;cursor:pointer;background:none;" />
@@ -2040,7 +2010,7 @@ if (root) {
     `;
     const card8 = renderAccordionCard('brand-color', brandTitle, brandBadge, brandBody);
 
-    return [card1, card2, card3, card4, card5, card6, card7, card8].join('');
+    return [card1, card3, card4, card5, card6, card7, card8].join('');
   }
 
   function photoInspectorHTML(id, cfg) {
@@ -3038,16 +3008,12 @@ if (root) {
       });
     });
 
-    // --- 3D Spatial Depth Bindings ---
-    document.getElementById('st-spatial-tilt-toggle')?.addEventListener('change', e => {
-      toggleSpatial3D(e.target.checked);
-    });
-
-    document.getElementById('btn-trigger-wave-inspector')?.addEventListener('click', () => {
-      trigger3DWaveDemo();
-    });
-
     // --- Contextual Skin Controls Bindings ---
+    document.getElementById('st-hairline-custom-picker')?.addEventListener('input', e => {
+      patchConfig({ hoverFrameColor: e.target.value });
+      renderCanvas();
+      autosaveSoon();
+    });
     document.getElementById('btnCardThemeLight')?.addEventListener('click', () => {
       patchConfig({ cardTheme: 'clean', cardBackground: '#ffffff' });
       renderRightPanel();
