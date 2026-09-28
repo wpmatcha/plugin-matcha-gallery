@@ -316,6 +316,11 @@
       navigator.clipboard.writeText(text);
       alert("\u2713 Proposal Markdown copied to clipboard!");
       exportDropdown?.classList.remove("is-open");
+    }, switchLeftTab = function(name) {
+      document.querySelectorAll(".matcha-tabs button").forEach((x) => {
+        x.classList.toggle("is-active", x.dataset.tab === name);
+      });
+      renderLeftTab(name);
     }, renderLeftTab = function(name) {
       const cfg = getState().config;
       if (name === "images") {
@@ -688,11 +693,11 @@
         <!-- 2. AUTO-FILTERED SKINS -->
         <div class="matcha-card-title" style="margin-top: 24px; display: flex; align-items: center; justify-content: space-between;">
           <span class="heading-wrap" style="color: #ffffff;">${Icons.palette || Icons.sparkles} 2. Best-Fitting Skins</span>
-          <span id="st-skin-filter-tag" style="font-size: 9px; padding: 2px 7px; background: rgba(94, 194, 127, 0.15); color: #5ec27f; border: 1px solid rgba(94, 194, 127, 0.3); border-radius: 4px; font-weight: 700; text-transform: uppercase;">Filtered</span>
+          <span id="st-skin-filter-tag" style="font-size: 9px; padding: 2px 7px; background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 4px; font-weight: 700; text-transform: uppercase;">Filtered</span>
         </div>
 
         <div id="st-skin-filter-notice" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--st-text-secondary); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 8px 10px; margin: 8px 0 12px;">
-          <span style="color: #5ec27f;">${Icons.sparkles}</span>
+          <span style="color: #ffffff;">${Icons.sparkles}</span>
           <span id="st-skin-notice-text">${(layoutSkinCompatibility[curLayout] || layoutSkinCompatibility["grid"]).notice}</span>
         </div>
 
@@ -1064,87 +1069,88 @@
       </div>
     `;
       const card2 = renderAccordionCard("spatial-3d", spatialTitle, spatialBadge, spatialBody);
-      const skinBadgeMap = {
-        custom: "Custom",
-        editorial: "Editorial Card",
-        "exhibition-frame": "Exhibition Hairline",
-        "architectural-curtain": "Curtain",
-        "cinematic-pullback": "Pullback",
-        "minimalist-drawer": "Drawer"
-      };
       const skinTitle = `
       <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
-        ${Icons.palette} Aesthetic Skins
+        ${Icons.palette} Skin Properties
       </span>
     `;
-      const skinBadge = skinBadgeMap[cfg.stylePreset || "custom"] || "Custom";
-      const skinBody = `
-      <select id="st-style-preset" class="matcha-dark-select" style="margin-bottom:6px;font-weight:600;">
-        <option value="custom" ${(cfg.stylePreset || "custom") === "custom" ? "selected" : ""}>Custom (Manual Adjustments)</option>
-        <option value="editorial" ${cfg.stylePreset === "editorial" ? "selected" : ""}>Editorial Card (Card Body Below Photo)</option>
-        <option value="exhibition-frame" ${cfg.stylePreset === "exhibition-frame" ? "selected" : ""}>Exhibition Hairline Frame (The Grid: Brasilia)</option>
-        <option value="architectural-curtain" ${cfg.stylePreset === "architectural-curtain" ? "selected" : ""}>Architectural Curtain (The Grid: Sofia)</option>
-        <option value="cinematic-pullback" ${cfg.stylePreset === "cinematic-pullback" ? "selected" : ""}>Cinematic Pullback (The Grid: Bogota)</option>
-        <option value="minimalist-drawer" ${cfg.stylePreset === "minimalist-drawer" ? "selected" : ""}>Minimalist Bottom Drawer (The Grid: Lome)</option>
-      </select>
-      <p style="font-size:9.5px;color:var(--st-text-muted);margin:0 0 10px;line-height:1.35;">
-        Harmonizes layout, hover effects, frames, and elevation into 1-click cohesive aesthetics.
-      </p>
-
-      <!-- Contextual Panel 1: Card Skin Inspector (Editorial Card) -->
-      <div class="contextual-panel ${activeSkinKey === "skin-editorial" ? "" : "hidden"}" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">CARD PROPERTIES</div>
-        <div style="margin-bottom:10px;">
-          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
-          <div style="display:flex;gap:8px;">
-            <button type="button" id="btnCardThemeLight" class="${curTheme !== "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#ffffff;color:#000000;border:1px solid ${curTheme !== "dark" ? "#5ec27f" : "#ccc"};border-radius:4px;cursor:pointer;">White Card</button>
-            <button type="button" id="btnCardThemeDark" class="${curTheme === "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#1c231f;color:#ffffff;border:1px solid ${curTheme === "dark" ? "#5ec27f" : "rgba(255,255,255,0.2)"};border-radius:4px;cursor:pointer;">Dark Card</button>
-          </div>
+      const skinBadge = getSkinName(activeSkinKey);
+      let skinBody = `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:10px;color:var(--st-text-muted);text-transform:uppercase;letter-spacing:0.04em;">Active Skin:</span>
+          <span style="font-size:11px;font-weight:700;color:#ffffff;">${getSkinName(activeSkinKey)}</span>
         </div>
-        <div>
-          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Category / Tag Pill</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
-            <input type="checkbox" id="stCategoryPillsToggle" ${cfg.showCategoryPill !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
-            <span>Show AI Category Pill</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
-      <div class="contextual-panel ${activeSkinKey === "skin-exhibition" ? "" : "hidden"}" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">FINE-ART MATTING</div>
-        <div class="range-row" style="margin-bottom:10px;">
-          <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
-          <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
-          <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 10}px</span>
-        </div>
-        <div>
-          <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Accent Color</label>
-          <div style="display:flex;gap:8px;">
-            <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || "#5ec27f") === "#5ec27f" ? "2px solid #fff" : "1px solid transparent"};"></span>
-            <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === "#f59e0b" ? "2px solid #fff" : "1px solid transparent"};"></span>
-            <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === "#38bdf8" ? "2px solid #fff" : "1px solid transparent"};"></span>
-            <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === "#ffffff" ? "2px solid #5ec27f" : "1px solid transparent"};"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
-      <div class="contextual-panel ${activeSkinKey === "skin-aura" ? "" : "hidden"}" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
-        <div class="range-row" style="margin-bottom:10px;">
-          <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
-          <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
-          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.auraBloom ?? 32}px</span>
-        </div>
-        <div>
-          <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
-            <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
-            <span>Smart Focal-Point Pan on Hover</span>
-          </label>
-        </div>
+        <button type="button" id="btn-goto-skins-tab" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#ffffff;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;cursor:pointer;display:flex;align-items:center;gap:4px;" title="Switch skin under Layouts tab">
+          <span>Switch Skin</span>
+          <span style="font-size:9px;">\u2794</span>
+        </button>
       </div>
     `;
+      if (activeSkinKey === "skin-editorial") {
+        skinBody += `
+        <div class="contextual-panel" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">CARD PROPERTIES</div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
+            <div style="display:flex;gap:8px;">
+              <button type="button" id="btnCardThemeLight" class="${curTheme !== "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#ffffff;color:#000000;border:1px solid ${curTheme !== "dark" ? "#ffffff" : "#444"};border-radius:4px;cursor:pointer;">White Card</button>
+              <button type="button" id="btnCardThemeDark" class="${curTheme === "dark" ? "is-active" : ""}" style="flex:1;padding:6px;font-size:11px;font-weight:600;background:#1c231f;color:#ffffff;border:1px solid ${curTheme === "dark" ? "#ffffff" : "rgba(255,255,255,0.2)"};border-radius:4px;cursor:pointer;">Dark Card</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Category / Tag Pill</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+              <input type="checkbox" id="stCategoryPillsToggle" ${cfg.showCategoryPill !== false ? "checked" : ""} style="accent-color:#ffffff;cursor:pointer;">
+              <span>Show AI Category Pill</span>
+            </label>
+          </div>
+        </div>
+      `;
+      } else if (activeSkinKey === "skin-exhibition") {
+        skinBody += `
+        <div class="contextual-panel" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">FINE-ART MATTING & ACCENT</div>
+          <div class="range-row" style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
+            <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
+            <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 10}px</span>
+          </div>
+          <div>
+            <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Frame Accent Color</label>
+            <div style="display:flex;gap:8px;">
+              <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || "#5ec27f") === "#5ec27f" ? "2px solid #fff" : "1px solid transparent"};"></span>
+              <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === "#f59e0b" ? "2px solid #fff" : "1px solid transparent"};"></span>
+              <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === "#38bdf8" ? "2px solid #fff" : "1px solid transparent"};"></span>
+              <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === "#ffffff" ? "2px solid #fff" : "1px solid transparent"};"></span>
+            </div>
+          </div>
+        </div>
+      `;
+      } else if (activeSkinKey === "skin-aura") {
+        skinBody += `
+        <div class="contextual-panel" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
+          <div class="range-row" style="margin-bottom:12px;">
+            <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
+            <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.auraBloom ?? 32}px</span>
+          </div>
+          <div>
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
+              <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? "checked" : ""} style="accent-color:#5ec27f;cursor:pointer;">
+              <span>Smart Focal-Point Pan on Hover</span>
+            </label>
+          </div>
+        </div>
+      `;
+      } else {
+        skinBody += `
+        <div style="font-size:10.5px;color:var(--st-text-muted);line-height:1.45;padding:4px 2px;">
+          Pure Minimalist features clean, frameless edge-to-edge images with floating hover actions. Customize picture frames, elevation shadows, and hover dynamics in the sections below.
+        </div>
+      `;
+      }
       const card3 = renderAccordionCard("skins", skinTitle, skinBadge, skinBody);
       const frameLabels = {
         none: "Frameless",
@@ -2376,28 +2382,12 @@
         renderCanvas();
         autosaveSoon();
       });
-      document.getElementById("st-style-preset")?.addEventListener("change", (e) => {
-        const val = e.target.value;
-        let patch = { stylePreset: val };
-        if (val === "editorial") {
-          patch = { ...patch, skin: "skin-editorial", cardTheme: "card", frameStyle: "none", mattingSize: 0, contentPlacement: "below", hoverEffect: "zoom" };
-        } else if (val === "exhibition-frame") {
-          patch = { ...patch, skin: "skin-exhibition", cardTheme: "clean", frameStyle: "black-metal", mattingSize: 18, contentPlacement: "overlay", hoverEffect: "frame" };
-        } else if (val === "aura") {
-          patch = { ...patch, skin: "skin-aura", cardTheme: "dark", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
-        } else if (val === "minimalist") {
-          patch = { ...patch, skin: "skin-pure-minimalist", cardTheme: "clean", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
-        } else if (val === "architectural-curtain") {
-          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "curtain", frameStyle: "none", mattingSize: 0, layout: "justified", contentPlacement: "overlay" };
-        } else if (val === "cinematic-pullback") {
-          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "pullback", frameStyle: "none", mattingSize: 0, layout: "masonry", contentPlacement: "overlay" };
-        } else if (val === "minimalist-drawer") {
-          patch = { ...patch, skin: "skin-pure-minimalist", hoverEffect: "drawer", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", layout: "grid" };
+      document.getElementById("btn-goto-skins-tab")?.addEventListener("click", () => {
+        switchLeftTab("blueprints");
+        const skinsEl = document.getElementById("matcha-skins-list") || document.querySelector(".matcha-skins-list");
+        if (skinsEl) {
+          skinsEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
-        patchConfig(patch);
-        renderRightPanel();
-        renderCanvas();
-        autosaveSoon();
       });
       document.getElementById("st-shadow")?.addEventListener("change", (e) => {
         patchConfig({ shadowElevation: e.target.value });
@@ -3485,6 +3475,9 @@
           } else if (skinKey === "skin-aura") {
             patch = { ...patch, stylePreset: "aura", cardTheme: "dark", frameStyle: "none", mattingSize: 0, contentPlacement: "overlay", hoverEffect: "zoom" };
           }
+          if (["skin-editorial", "skin-exhibition", "skin-aura"].includes(skinKey)) {
+            openAccordions.add("skins");
+          }
           patchConfig(patch);
           renderLeftTab("blueprints");
           renderCanvas();
@@ -4264,9 +4257,7 @@
     const leftPanel = document.getElementById("studio-left-tabpanel");
     document.querySelectorAll(".matcha-tabs button").forEach((b) => {
       b.addEventListener("click", () => {
-        document.querySelectorAll(".matcha-tabs button").forEach((x) => x.classList.remove("is-active"));
-        b.classList.add("is-active");
-        renderLeftTab(b.dataset.tab);
+        switchLeftTab(b.dataset.tab);
       });
     });
     const layoutSkinCompatibility = {

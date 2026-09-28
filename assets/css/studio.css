@@ -1803,9 +1803,9 @@ body.matcha-is-dragging * {
 }
 
 .matcha-skin-card.is-active {
-	border-color: var(--st-accent-primary);
-	background: rgba(94, 194, 127, 0.08);
-	box-shadow: 0 0 0 1px var(--st-accent-primary);
+	border-color: rgba(255, 255, 255, 0.5);
+	background: rgba(255, 255, 255, 0.06);
+	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .matcha-skin-card.hidden {
@@ -1923,8 +1923,9 @@ body.matcha-is-dragging * {
 }
 
 .matcha-skin-badge.match {
-	background: rgba(94, 194, 127, 0.15);
-	color: #5ec27f;
+	background: rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+	border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .matcha-skin-desc {
