@@ -1287,19 +1287,85 @@ final class Studio_Page {
 		wp_enqueue_script( 'html2canvas', MATCHA_GALLERY_URL . 'assets/js/vendor/html2canvas.min.js', array(), '1.4.1', true );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Gallery ID reading for script localization.
-		$id = isset( $_GET['id'] ) ? absint( wp_unslash( $_GET['id'] ) ) : 0;
+		$id = isset( $_GET['id'] ) ? absint( wp_unslash( $_GET['id'] ) ) : ( isset( $_GET['gallery_id'] ) ? absint( wp_unslash( $_GET['gallery_id'] ) ) : 0 );
+		$config = $id ? Gallery_CPT::get_config( $id ) : Gallery_CPT::default_config();
+
+		// Preload attachment media & metadata directly to eliminate broken thumbnail placeholders on page load
+		$preload_media = array();
+		$preload_meta  = array();
+		if ( ! empty( $config['imageIds'] ) && is_array( $config['imageIds'] ) ) {
+			foreach ( $config['imageIds'] as $img_id ) {
+				$img_id = absint( $img_id );
+				if ( ! $img_id ) {
+					continue;
+				}
+				$thumb_src = wp_get_attachment_image_src( $img_id, 'thumbnail' );
+				$med_src   = wp_get_attachment_image_src( $img_id, 'medium' );
+				$large_src = wp_get_attachment_image_src( $img_id, 'large' );
+				$full_src  = wp_get_attachment_image_src( $img_id, 'full' );
+				$post_att  = get_post( $img_id );
+				$alt       = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
+
+				$preload_media[ $img_id ] = array(
+					'id'            => $img_id,
+					'source_url'    => $full_src ? $full_src[0] : ( $thumb_src ? $thumb_src[0] : '' ),
+					'slug'          => $post_att ? $post_att->post_name : '',
+					'title'         => array( 'rendered' => $post_att ? $post_att->post_title : ( '#' . $img_id ) ),
+					'alt_text'      => (string) $alt,
+					'media_details' => array(
+						'width'  => $full_src ? (int) $full_src[1] : 0,
+						'height' => $full_src ? (int) $full_src[2] : 0,
+						'sizes'  => array(
+							'thumbnail'    => array(
+								'source_url' => $thumb_src ? $thumb_src[0] : ( $full_src ? $full_src[0] : '' ),
+								'width'      => $thumb_src ? (int) $thumb_src[1] : 0,
+								'height'     => $thumb_src ? (int) $thumb_src[2] : 0,
+							),
+							'medium'       => array(
+								'source_url' => $med_src ? $med_src[0] : ( $full_src ? $full_src[0] : '' ),
+								'width'      => $med_src ? (int) $med_src[1] : 0,
+								'height'     => $med_src ? (int) $med_src[2] : 0,
+							),
+							'large'        => array(
+								'source_url' => $large_src ? $large_src[0] : ( $full_src ? $full_src[0] : '' ),
+								'width'      => $large_src ? (int) $large_src[1] : 0,
+								'height'     => $large_src ? (int) $large_src[2] : 0,
+							),
+							'medium_large' => array(
+								'source_url' => $large_src ? $large_src[0] : ( $med_src ? $med_src[0] : ( $full_src ? $full_src[0] : '' ) ),
+								'width'      => $large_src ? (int) $large_src[1] : 0,
+								'height'     => $large_src ? (int) $large_src[2] : 0,
+							),
+							'full'         => array(
+								'source_url' => $full_src ? $full_src[0] : '',
+								'width'      => $full_src ? (int) $full_src[1] : 0,
+								'height'     => $full_src ? (int) $full_src[2] : 0,
+							),
+						),
+					),
+				);
+
+				$ai_meta = get_post_meta( $img_id, '_matcha_ai_metadata', true );
+				if ( ! empty( $ai_meta ) && is_array( $ai_meta ) ) {
+					$preload_meta[ $img_id ] = $ai_meta;
+				}
+			}
+		}
+
 		$studio_data = array(
-			'root'       => esc_url_raw( rest_url() ),
-			'nonce'      => wp_create_nonce( 'wp_rest' ),
-			'galleryId'  => $id,
-			'config'     => $id ? Gallery_CPT::get_config( $id ) : Gallery_CPT::default_config(),
-			'title'      => $id ? get_the_title( $id ) : '',
-			'iconUrl'    => MATCHA_GALLERY_URL . 'assets/images/icon-128x128.png',
-			'isPro'      => Gallery_CPT::is_pro_active(),
-			'upgradeUrl' => apply_filters( 'matcha_gallery_upgrade_url', 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/' ),
-			'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-			'mediaNonce' => wp_create_nonce( 'matcha_ai_generate' ),
-			'i18n'       => array(
+			'root'         => esc_url_raw( rest_url() ),
+			'nonce'        => wp_create_nonce( 'wp_rest' ),
+			'galleryId'    => $id,
+			'config'       => $config,
+			'title'        => $id ? get_the_title( $id ) : '',
+			'iconUrl'      => MATCHA_GALLERY_URL . 'assets/images/icon-128x128.png',
+			'isPro'        => Gallery_CPT::is_pro_active(),
+			'upgradeUrl'   => apply_filters( 'matcha_gallery_upgrade_url', 'https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/' ),
+			'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+			'mediaNonce'   => wp_create_nonce( 'matcha_ai_generate' ),
+			'preloadMedia' => $preload_media,
+			'preloadMeta'  => $preload_meta,
+			'i18n'         => array(
 				'untitled' => __( 'Untitled Gallery', 'matcha-gallery' ),
 			),
 		);

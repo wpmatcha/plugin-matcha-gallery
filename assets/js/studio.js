@@ -894,15 +894,15 @@
       let stageTitle, stageBadge, stageBody;
       if (isArtWall) {
         stageTitle = `
-        <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
+        <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
           Wall Canvas & Blueprint
         </span>
       `;
         stageBadge = `${presetLabels[curWallPreset] || "Salon"} \u2022 ${texLabels[curWallTex] || "Charcoal"}`;
         stageBody = `
-        <div style="background:rgba(94, 194, 127, 0.04);border:1px solid rgba(94, 194, 127, 0.2);border-radius:8px;padding:12px;margin-bottom:4px;">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:rgba(255, 255, 255, 0.03);border:1px solid rgba(255, 255, 255, 0.1);border-radius:8px;padding:12px;margin-bottom:4px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
             <span>ART WALL CANVAS <span class="matcha-pro-badge">PRO</span></span>
           </div>
 
@@ -994,7 +994,7 @@
       `;
       } else {
         stageTitle = `
-        <span class="heading-wrap" style="color:var(--st-text-primary, #e6ede8);display:flex;align-items:center;gap:6px;">
+        <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           Layout & Blueprint
         </span>
@@ -1005,26 +1005,26 @@
           <div class="range-row" style="margin-bottom:10px;">
             <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Row Height</label>
             <input id="st-row-height" class="range-input" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
-            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.rowHeight || 240}px</span>
+            <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.rowHeight || 240}px</span>
           </div>
         ` : `
           <div class="range-row" style="margin-bottom:10px;">
             <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Desktop Columns</label>
             <input id="st-col" class="range-input" type="range" min="1" max="6" value="${cfg.columns || 3}">
-            <span class="val" id="columnsVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.columns || 3}</span>
+            <span class="val" id="columnsVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.columns || 3}</span>
           </div>
         `}
 
         <div class="range-row" style="margin-bottom:10px;">
           <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Gutter Gap</label>
           <input id="st-gut" class="range-input" type="range" min="0" max="48" step="2" value="${cfg.gutterSize ?? 22}">
-          <span class="val" id="gapVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.gutterSize ?? 22}px</span>
+          <span class="val" id="gapVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.gutterSize ?? 22}px</span>
         </div>
 
         <div class="range-row" style="margin-bottom:12px;">
           <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Corner Radius</label>
           <input id="st-rad" class="range-input" type="range" min="0" max="24" step="1" value="${cfg.borderRadius ?? 10}">
-          <span class="val" id="radiusVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.borderRadius ?? 10}px</span>
+          <span class="val" id="radiusVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.borderRadius ?? 10}px</span>
         </div>
 
         <div style="margin-top:6px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);">
@@ -1043,14 +1043,14 @@
       }
       const card1 = renderAccordionCard("stage-layout", stageTitle, stageBadge, stageBody);
       const spatialTitle = `
-      <span class="heading-wrap" style="color:#5ec27f;display:flex;align-items:center;gap:6px;">
+      <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
         <span>\u2726 3D Spatial Tilt</span>
         <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
       </span>
     `;
       const spatialBadge = isSpatial3D ? "\u2726 60fps Active" : "Off";
       const spatialBody = `
-      <div style="padding: 10px; background: rgba(94, 194, 127, 0.05); border: 1px solid rgba(94, 194, 127, 0.15); border-radius: var(--radius-md, 8px);">
+      <div style="padding: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md, 8px);">
         <label style="display:flex;align-items:center;justify-content:space-between;color:#fff;cursor:pointer;margin-bottom:6px;">
           <span style="font-size:11px;font-weight:700;color:var(--st-text-primary);">Enable Spatial Tilt</span>
           <input type="checkbox" id="st-spatial-tilt-toggle" ${isSpatial3D ? "checked" : ""} style="accent-color: #5ec27f; cursor: pointer; width: 16px; height: 16px;">
@@ -1058,7 +1058,7 @@
         <div style="font-size: 10px; color: var(--st-text-muted, #5e6f64); line-height: 1.4; margin-bottom: 8px;">
           Hardware-accelerated 60fps holographic tilt, specular light tracking, and physical Z-axis depth pop.
         </div>
-        <button type="button" id="btn-trigger-wave-inspector" style="width:100%;font-size:10.5px;font-weight:700;padding:6px;border-radius:4px;cursor:pointer;border:1px solid rgba(94,194,127,0.3);background:rgba(94,194,127,0.1);color:#5ec27f;display:flex;align-items:center;justify-content:center;gap:5px;">
+        <button type="button" id="btn-trigger-wave-inspector" style="width:100%;font-size:10.5px;font-weight:700;padding:6px;border-radius:4px;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;">
           <span>\u25B6 Play 3D Wave Demo</span>
         </button>
       </div>
@@ -1073,7 +1073,7 @@
         "minimalist-drawer": "Drawer"
       };
       const skinTitle = `
-      <span class="heading-wrap" style="color:#5ec27f;display:flex;align-items:center;gap:6px;">
+      <span class="heading-wrap" style="color:#ffffff;display:flex;align-items:center;gap:6px;">
         ${Icons.palette} Aesthetic Skins
       </span>
     `;
@@ -1093,7 +1093,7 @@
 
       <!-- Contextual Panel 1: Card Skin Inspector (Editorial Card) -->
       <div class="contextual-panel ${activeSkinKey === "skin-editorial" ? "" : "hidden"}" id="panelEditorialCard" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">CARD PROPERTIES</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">CARD PROPERTIES</div>
         <div style="margin-bottom:10px;">
           <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Card Background</label>
           <div style="display:flex;gap:8px;">
@@ -1112,11 +1112,11 @@
 
       <!-- Contextual Panel 2: Exhibition Hairline Inspector -->
       <div class="contextual-panel ${activeSkinKey === "skin-exhibition" ? "" : "hidden"}" id="panelExhibition" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">FINE-ART MATTING</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">FINE-ART MATTING</div>
         <div class="range-row" style="margin-bottom:10px;">
           <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
           <input id="st-matting-skin" type="range" min="4" max="28" step="2" value="${cfg.mattingSize ?? 10}">
-          <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 10}px</span>
+          <span class="val" id="mattingVal" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 10}px</span>
         </div>
         <div>
           <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Accent Color</label>
@@ -1131,11 +1131,11 @@
 
       <!-- Contextual Panel 3: AI Aura Inspector (PRO) -->
       <div class="contextual-panel ${activeSkinKey === "skin-aura" ? "" : "hidden"}" id="panelAura" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:12px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#5ec27f;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;">AI ATMOSPHERE (PRO)</div>
         <div class="range-row" style="margin-bottom:10px;">
           <label style="font-size:11px;color:var(--st-text-secondary);">Backlight Bloom Blur</label>
           <input id="st-aura-bloom" type="range" min="12" max="64" value="${cfg.auraBloom ?? 32}">
-          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.auraBloom ?? 32}px</span>
+          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.auraBloom ?? 32}px</span>
         </div>
         <div>
           <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
@@ -1174,7 +1174,7 @@
       <div class="range-row">
         <label style="font-size:11px;color:var(--st-text-secondary);">Matting Margin</label>
         <input id="st-matting" type="range" min="0" max="32" step="2" value="${cfg.mattingSize ?? 0}">
-        <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.mattingSize ?? 0}px</span>
+        <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.mattingSize ?? 0}px</span>
       </div>
     `;
       const card4 = renderAccordionCard("framing", framingTitle, framingBadge, framingBody, framingClass);
@@ -1307,7 +1307,7 @@
         <div class="range-row" style="margin-bottom:10px;">
           <label style="font-size:11px;color:var(--st-text-secondary);">Items Per Batch</label>
           <input id="st-items-per-page" type="range" min="4" max="48" step="4" value="${cfg.itemsPerPage || 12}">
-          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#5ec27f;">${cfg.itemsPerPage || 12}</span>
+          <span class="val" style="font-family:var(--st-font-mono, monospace);font-size:11px;color:#ffffff;">${cfg.itemsPerPage || 12}</span>
         </div>
       ` : ""}
 
@@ -1428,8 +1428,8 @@
       ` : ""}
 
       <div style="margin-top:14px;">
-        <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#ffffff;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer;">
-          <span style="color:#5ec27f;">${Icons.filter}</span> Manage All Gallery Filters
+        <button type="button" id="btn-open-filter-manager" class="matcha-cta-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#ffffff;font-weight:700;font-size:12px;border-radius:8px;cursor:pointer;">
+          <span style="color:#ffffff;">${Icons.filter}</span> Manage All Gallery Filters
         </button>
       </div>
     `;
@@ -3927,6 +3927,23 @@
     const upgradeUrl = window.MatchaStudio && window.MatchaStudio.upgradeUrl || "https://wpmatcha.com/wordpress-plugins/matcha-gallery-pro/";
     const metaCache = /* @__PURE__ */ new Map();
     const mediaCache = /* @__PURE__ */ new Map();
+    if (window.MatchaStudio?.preloadMedia && typeof window.MatchaStudio.preloadMedia === "object") {
+      Object.entries(window.MatchaStudio.preloadMedia).forEach(([idStr, m]) => {
+        const numId = parseInt(idStr, 10);
+        if (numId && m) {
+          mediaCache.set(numId, m);
+        }
+      });
+    }
+    if (window.MatchaStudio?.preloadMeta && typeof window.MatchaStudio.preloadMeta === "object") {
+      Object.entries(window.MatchaStudio.preloadMeta).forEach(([idStr, m]) => {
+        const numId = parseInt(idStr, 10);
+        if (numId && m) {
+          metaCache.set(numId, m);
+        }
+      });
+    }
+    const fallbackThumbSvg = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzE5MjAxYiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjE0IiBmaWxsPSIjMmMzNzMwIi8+PHBhdGggZD0iTTQyIDQ1bDgtOCA4IDgiIHN0cm9rZT0iIzU1NmI1ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PC9zdmc+";
     const dirtyMetaIds = /* @__PURE__ */ new Set();
     let selectedPhotoId = null;
     let activeSectionId = "*";
@@ -4051,7 +4068,7 @@
                 Layout: <strong id="activeLayoutLabel" style="color:#fff;">Classic Grid</strong>
               </span>
               <span class="matcha-status-chip">
-                Active Skin: <strong id="activeSkinLabel" style="color:#5ec27f;">Pure Minimalist</strong>
+                Active Skin: <strong id="activeSkinLabel" style="color:#ffffff;">Pure Minimalist</strong>
               </span>
             </div>
           </div>
@@ -4079,12 +4096,12 @@
         <!-- Right Sidebar: Live Wall & Photo Properties Inspector -->
         <aside class="matcha-studio__sidebar-right">
           <div style="padding:13px 16px;border-bottom:1px solid var(--st-border-subtle);display:flex;align-items:center;justify-content:space-between;">
-            <div id="right-panel-header-title" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--st-text-secondary);">
+            <div id="right-panel-header-title" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:#ffffff;">
               Wall & Gallery Properties
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <button type="button" id="btn-toggle-all-accordions" style="font-size:10px;font-weight:700;color:#5ec27f;background:none;border:none;cursor:pointer;padding:2px 4px;letter-spacing:0.02em;" title="Toggle Expand or Collapse for All Sections">Expand All</button>
-              <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:3px 9px;font-size:10px;font-weight:700;color:#5ec27f;border-color:rgba(94,194,127,0.4);background:rgba(94,194,127,0.12);" title="Close Photo Inspector and return to Gallery Properties">\u2715 Exit to Gallery</button>
+              <button type="button" id="btn-toggle-all-accordions" style="font-size:10px;font-weight:700;color:#ffffff;opacity:0.85;background:none;border:none;cursor:pointer;padding:2px 4px;letter-spacing:0.02em;" title="Toggle Expand or Collapse for All Sections">Expand All</button>
+              <button type="button" id="btn-deselect-photo" class="matcha-exit-btn" style="display:none;padding:3px 9px;font-size:10px;font-weight:700;color:#ffffff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);" title="Close Photo Inspector and return to Gallery Properties">\u2715 Exit to Gallery</button>
             </div>
           </div>
           <div id="studio-right-panel" class="matcha-tabpanel"></div>
@@ -4518,11 +4535,12 @@
         const cached = metaCache.get(id);
         const media = mediaCache.get(id);
         const thumbUrl = media?.media_details?.sizes?.thumbnail?.source_url || media?.source_url || "";
+        const safeThumbSrc = thumbUrl || fallbackThumbSvg;
         const isAi = cached?.ai_generated && cached.keywords?.length > 0;
         const isSelected = selectedPhotoId === id;
         return `
         <div class="matcha-img-card ${isSelected ? "is-selected" : ""}" data-id="${id}" title="${escapeHtml(cached?.title || media?.title?.rendered || "#" + id)}">
-          <img src="${escapeHtml(thumbUrl)}" data-id="${id}" loading="lazy" />
+          <img src="${escapeHtml(safeThumbSrc)}" data-id="${id}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackThumbSvg}';" />
           <div class="matcha-img-card__meta">
             <div class="matcha-img-card__title">${escapeHtml(cached?.title || media?.title?.rendered || "#" + id)}</div>
             ${!is3Col ? `
@@ -4889,7 +4907,7 @@
           const fp = focalPoints[m.id] || meta?.focal_point || { x: 50, y: 50, zoom: 1 };
           const zoom = isPro ? fp.zoom || 1 : 1;
           const imgStyle = `object-position: ${fp.x}% ${fp.y}%; transform: scale(${zoom}); transform-origin: ${fp.x}% ${fp.y}%;`;
-          const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || "";
+          const imgSrc = m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.medium?.source_url || m.media_details?.sizes?.full?.source_url || m.source_url || "" || fallbackThumbSvg;
           let itemStyle = "cursor:pointer;";
           if (cfg.layout === "justified") {
             const w = m.media_details?.width || 800;
@@ -4954,7 +4972,7 @@
                           </button>
                         ` : ""}
 
-                        <img class="item-img" src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || "")}" style="${imgStyle}" />
+                        <img class="item-img" src="${imgSrc}" alt="${escapeHtml(meta?.alt || m.alt_text || "")}" style="${imgStyle}" onerror="this.onerror=null;this.src='${fallbackThumbSvg}';" />
                         <div class="ai-focal-dot"></div>
 
                         <!-- Floating Glassmorphic Action Dock (Hover for Minimalist / Exhibition / Aura) -->
