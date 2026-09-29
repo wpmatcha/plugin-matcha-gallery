@@ -247,6 +247,12 @@ Dynamic Gallery Wall
 - [x] **2026 Modern Layout Suite Port:** Lookbook Duet (Magazine editorial stagger in Free) + Cinema Reel (16:9 widescreen runway in Pro) + Curator Specimen (Swiss museum 2-column archive in Pro).
 - [x] **Studio Prototype Feature Port:** Best-Fitting Skins filter matrix, Live Status Chips, 3D Spatial Depth suite, and Art Wall Controls panel.
 - [x] **v1.0.2 Release Milestone:** True continuous CSS masonry, cold-load thumbnail preloader, Lookbook Duet, Obsidian Studio UI, and High-CTR Pure Symbol WP.org icon suite.
+- [x] **Visual Polish & Brand Accent Unification:** 
+  - Dynamic `--matcha-accent` variable fully integrated into micro-actions, video badges, center viewfinder docks, editorial category pills, buy buttons, hairline frame accents, and atmospheric aura glowing fallbacks.
+  - Eliminated native browser white tooltip rectangles by switching action dock, badges, and quick-action icons to accessible `aria-label` markup.
+  - Zero-jitter card hover: Prevented sub-pixel anti-aliasing white edge flashes with `#111613` hardware-accelerated isolated containers (`isolation: isolate; transform: translateZ(0)`).
+  - Justified Rows baseline stabilization: Locked cards flush with row baselines on hover (`transform: none !important`) so canvas background is never exposed underneath.
 - [ ] **WordPress.org SVN Release Sync:** Deploy `v1.0.2` tag and updated directory banner/icon assets to `plugins.svn.wordpress.org/matcha-gallery`.
 - [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org through targeted community launch and portfolio user outreach.
+
 

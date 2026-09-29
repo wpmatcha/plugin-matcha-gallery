@@ -1016,7 +1016,7 @@ if (root) {
     items.forEach((item, idx) => {
       setTimeout(() => {
         item.style.setProperty('transform', 'perspective(1200px) rotateX(-12deg) rotateY(14deg) scale3d(1.06, 1.06, 1.06)', 'important');
-        item.style.setProperty('box-shadow', '-22px 24px 44px rgba(0,0,0,0.65), -14px 14px 34px var(--ambient-glow, rgba(94, 194, 127, 0.45))', 'important');
+        item.style.setProperty('box-shadow', '-22px 24px 44px rgba(0,0,0,0.65), -14px 14px 34px var(--ambient-glow, var(--matcha-accent, #607d66))', 'important');
         const glare = item.querySelector('.item-specular-glare');
         if (glare) {
           glare.style.setProperty('--glare-x', '120px');
@@ -1072,7 +1072,7 @@ if (root) {
 
           const shadowX = (-normX * 24).toFixed(1);
           const shadowY = (-normY * 24 + 20).toFixed(1);
-          item.style.setProperty('box-shadow', `${shadowX}px ${shadowY}px 40px rgba(0,0,0,0.6), ${(-normX * 16).toFixed(1)}px ${(-normY * 16).toFixed(1)}px 36px var(--ambient-glow, rgba(94, 194, 127, 0.4))`, 'important');
+          item.style.setProperty('box-shadow', `${shadowX}px ${shadowY}px 40px rgba(0,0,0,0.6), ${(-normX * 16).toFixed(1)}px ${(-normY * 16).toFixed(1)}px 36px var(--ambient-glow, var(--matcha-accent, #607d66))`, 'important');
         });
 
         item.addEventListener('mouseleave', () => {
@@ -1622,7 +1622,7 @@ if (root) {
           <div>
             <label style="font-size:11px;color:var(--st-text-secondary);display:block;margin-bottom:6px;">Hairline Frame Accent Color</label>
             <div style="display:flex;gap:8px;align-items:center;">
-              <span class="hairline-swatch" data-color="#5ec27f" style="width:22px;height:22px;border-radius:4px;background:#5ec27f;cursor:pointer;border:${(cfg.hoverFrameColor || '#5ec27f') === '#5ec27f' ? '2px solid #fff' : '1px solid transparent'};"></span>
+              <span class="hairline-swatch" data-color="${cfg.accentColor || '#607d66'}" style="width:22px;height:22px;border-radius:4px;background:${cfg.accentColor || '#607d66'};cursor:pointer;border:${(cfg.hoverFrameColor || (cfg.accentColor || '#607d66')) === (cfg.accentColor || '#607d66') ? '2px solid #fff' : '1px solid transparent'};" title="Brand Accent"></span>
               <span class="hairline-swatch" data-color="#f59e0b" style="width:22px;height:22px;border-radius:4px;background:#f59e0b;cursor:pointer;border:${cfg.hoverFrameColor === '#f59e0b' ? '2px solid #fff' : '1px solid transparent'};"></span>
               <span class="hairline-swatch" data-color="#38bdf8" style="width:22px;height:22px;border-radius:4px;background:#38bdf8;cursor:pointer;border:${cfg.hoverFrameColor === '#38bdf8' ? '2px solid #fff' : '1px solid transparent'};"></span>
               <span class="hairline-swatch" data-color="#ffffff" style="width:22px;height:22px;border-radius:4px;background:#ffffff;cursor:pointer;border:${cfg.hoverFrameColor === '#ffffff' ? '2px solid #fff' : '1px solid transparent'};"></span>
@@ -5365,10 +5365,10 @@ if (root) {
 
               const isShop = !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
               const primaryTag = keywords[0] || (meta?.tags && meta.tags[0]) || '';
-              const ambientGlow = (meta?.colors && meta.colors[0]) ? meta.colors[0] : 'rgba(94, 194, 127, 0.4)';
+              const ambientGlow = (meta?.colors && meta.colors[0]) ? meta.colors[0] : (cfg.accentColor || '#607d66');
               const paletteDotsHtml = (meta?.colors && meta.colors.length > 0)
                 ? meta.colors.slice(0, 3).map(c => `<span class="aura-palette-dot" style="background:${c};"></span>`).join('')
-                : `<span class="aura-palette-dot" style="background:var(--st-accent-primary, #5ec27f);"></span>`;
+                : `<span class="aura-palette-dot" style="background:var(--matcha-accent, ${cfg.accentColor || '#607d66'});"></span>`;
 
               let itemExtraClass = '';
               let itemExtraStyle = '';
@@ -5407,7 +5407,7 @@ if (root) {
                     <div class="matcha-gallery__item-inner">
                       <div class="item-media-wrap">
                         ${hasVideo ? `
-                          <div class="item-badge-video" title="Video Reel (${videoDuration})">
+                          <div class="item-badge-video" aria-label="Video Reel (${videoDuration})">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                             <span>${videoDuration}</span>
                           </div>
@@ -5415,15 +5415,15 @@ if (root) {
 
                         ${isSpanLayout ? `
                           <div class="matcha-mosaic-spans" style="${hasVideo ? 'top:42px;' : ''}">
-                            <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" title="Standard (1x1)">1x1</button>
-                            <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" title="Wide (2x1)">2x1 ↔</button>
-                            <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" title="Tall (1x2)">1x2 ↕</button>
-                            <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" title="Hero (2x2)">2x2 ⤢</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '1x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x1" aria-label="Standard (1x1)">1x1</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '2x1' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x1" aria-label="Wide (2x1)">2x1 ↔</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '1x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="1x2" aria-label="Tall (1x2)">1x2 ↕</button>
+                            <button type="button" class="matcha-span-btn ${currentSpan === '2x2' ? 'is-active' : ''}" data-id="${m.id}" data-span="2x2" aria-label="Hero (2x2)">2x2 ⤢</button>
                           </div>
                         ` : ''}
 
                         ${(cfg.proofingEnabled !== false) ? `
-                          <button type="button" class="item-badge-heart matcha-gallery__proof-btn ${isFavorited ? 'active' : ''}" data-id="${m.id}" title="Favorite for Proofing">
+                          <button type="button" class="item-badge-heart matcha-gallery__proof-btn ${isFavorited ? 'active' : ''}" data-id="${m.id}" aria-label="Favorite for Proofing">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorited ? '#ef4444' : 'none'}" stroke="${isFavorited ? '#ef4444' : 'currentColor'}" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                           </button>
                         ` : ''}
@@ -5433,16 +5433,16 @@ if (root) {
 
                         <!-- Floating Glassmorphic Action Dock (Hover for Minimalist / Exhibition / Aura) -->
                         <div class="item-action-dock">
-                          <button type="button" class="dock-btn matcha-action-btn--media" title="Open Lightbox Zoom">
+                          <button type="button" class="dock-btn matcha-action-btn--media" aria-label="Open Lightbox Zoom">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                           </button>
                           ${link.url ? `
-                            <button type="button" class="dock-btn matcha-action-btn--link" title="${escapeHtml(link.label || 'Visit Link')}">
+                            <button type="button" class="dock-btn matcha-action-btn--link" aria-label="${escapeHtml(link.label || 'Visit Link')}">
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                             </button>
                           ` : ''}
                           ${(link.price || isShop) ? `
-                            <button type="button" class="dock-btn btn-shop matcha-action-btn--shop" title="Shop Item">
+                            <button type="button" class="dock-btn btn-shop matcha-action-btn--shop" aria-label="Shop Item">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
                               <span>${escapeHtml(link.price || '$48')}</span>
                             </button>
@@ -5467,15 +5467,15 @@ if (root) {
                         <div class="card-footer">
                           <span class="card-price">${escapeHtml(link.price || '$48.00')}</span>
                           <div class="card-actions-group">
-                            <button type="button" class="card-icon-btn matcha-action-btn--media" title="Quick View">
+                            <button type="button" class="card-icon-btn matcha-action-btn--media" aria-label="Quick View">
                               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                             </button>
                             ${link.url ? `
-                              <button type="button" class="card-icon-btn matcha-action-btn--link" title="Open Link">
+                              <button type="button" class="card-icon-btn matcha-action-btn--link" aria-label="Open Link">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                               </button>
                             ` : ''}
-                            <button type="button" class="card-shop-btn matcha-action-btn--shop" title="Buy Item">
+                            <button type="button" class="card-shop-btn matcha-action-btn--shop" aria-label="Buy Item">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
                               ${hasVideo ? 'Buy License' : 'Buy'}
                             </button>

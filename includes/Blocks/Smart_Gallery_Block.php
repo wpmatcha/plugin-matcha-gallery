@@ -815,7 +815,7 @@ class Smart_Gallery_Block {
 						<div class="matcha-gallery__item-inner">
 							<div class="item-media-wrap">
 								<?php if ( $has_video ) : ?>
-									<div class="item-badge-video" title="<?php esc_attr_e( 'Video Reel', 'matcha-gallery' ); ?>">
+									<div class="item-badge-video" aria-label="<?php esc_attr_e( 'Video Reel', 'matcha-gallery' ); ?>">
 										<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
 											<polygon points="5 3 19 12 5 21 5 3"></polygon>
 										</svg>
@@ -824,7 +824,7 @@ class Smart_Gallery_Block {
 								<?php endif; ?>
 
 								<?php if ( $attrs['proofingEnabled'] ) : ?>
-									<button type="button" class="item-badge-heart matcha-gallery__proof-btn" data-id="<?php echo esc_attr( $att_id ); ?>" title="<?php esc_attr_e( 'Add to favorites', 'matcha-gallery' ); ?>" aria-label="<?php esc_attr_e( 'Add to favorites', 'matcha-gallery' ); ?>">
+									<button type="button" class="item-badge-heart matcha-gallery__proof-btn" data-id="<?php echo esc_attr( $att_id ); ?>" aria-label="<?php esc_attr_e( 'Add to favorites', 'matcha-gallery' ); ?>">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 									</button>
 								<?php endif; ?>
@@ -847,7 +847,6 @@ class Smart_Gallery_Block {
 										<button
 											type="button"
 											class="dock-btn matcha-action-btn--media"
-											title="<?php echo esc_attr( $has_video ? __( 'Play Video', 'matcha-gallery' ) : __( 'View Photo', 'matcha-gallery' ) ); ?>"
 											aria-label="<?php echo esc_attr( $has_video ? __( 'Play Video', 'matcha-gallery' ) : __( 'View Photo', 'matcha-gallery' ) ); ?>"
 										>
 											<?php if ( $has_video ) : ?>
@@ -863,7 +862,6 @@ class Smart_Gallery_Block {
 											href="<?php echo esc_url( $link['url'] ); ?>"
 											target="<?php echo esc_attr( $link['target'] ?? '_self' ); ?>"
 											class="dock-btn matcha-action-btn--link"
-											title="<?php echo esc_attr( ! empty( $link['label'] ) ? $link['label'] : __( 'Visit Link', 'matcha-gallery' ) ); ?>"
 											aria-label="<?php echo esc_attr( ! empty( $link['label'] ) ? $link['label'] : __( 'Visit Link', 'matcha-gallery' ) ); ?>"
 											onclick="event.stopPropagation();"
 										>
@@ -876,7 +874,7 @@ class Smart_Gallery_Block {
 											href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>"
 											target="<?php echo esc_attr( $link['target'] ?? '_self' ); ?>"
 											class="dock-btn btn-shop matcha-action-btn--shop"
-											title="<?php echo esc_attr( ! empty( $link['price'] ) ? sprintf( __( 'Shop (%s)', 'matcha-gallery' ), $link['price'] ) : __( 'Shop Product', 'matcha-gallery' ) ); ?>"
+											aria-label="<?php echo esc_attr( ! empty( $link['price'] ) ? sprintf( __( 'Shop (%s)', 'matcha-gallery' ), $link['price'] ) : __( 'Shop Product', 'matcha-gallery' ) ); ?>"
 											onclick="event.stopPropagation();"
 										>
 											<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
@@ -922,16 +920,16 @@ class Smart_Gallery_Block {
 									<span class="card-price"><?php echo esc_html( ! empty( $link['price'] ) ? $link['price'] : '$48.00' ); ?></span>
 									<div class="card-actions-group">
 										<?php if ( $has_media_btn ) : ?>
-											<button type="button" class="card-icon-btn matcha-action-btn--media" title="<?php esc_attr_e( 'Quick View', 'matcha-gallery' ); ?>">
+											<button type="button" class="card-icon-btn matcha-action-btn--media" aria-label="<?php esc_attr_e( 'Quick View', 'matcha-gallery' ); ?>">
 												<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
 											</button>
 										<?php endif; ?>
 										<?php if ( $has_link ) : ?>
-											<a href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ?? '_self' ); ?>" class="card-icon-btn matcha-action-btn--link" title="<?php esc_attr_e( 'Open Link', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
+											<a href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ?? '_self' ); ?>" class="card-icon-btn matcha-action-btn--link" aria-label="<?php esc_attr_e( 'Open Link', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
 												<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
 											</a>
 										<?php endif; ?>
-										<a href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>" class="card-shop-btn matcha-action-btn--shop" title="<?php esc_attr_e( 'Buy', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
+										<a href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>" class="card-shop-btn matcha-action-btn--shop" aria-label="<?php esc_attr_e( 'Buy', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
 											<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
 											<?php echo esc_html( $has_video ? __( 'Buy License', 'matcha-gallery' ) : __( 'Buy', 'matcha-gallery' ) ); ?>
 										</a>

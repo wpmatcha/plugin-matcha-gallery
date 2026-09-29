@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29 22:45:56+00:00\n"
+"POT-Creation-Date: 2026-09-29 23:24:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
@@ -341,11 +341,11 @@ msgstr ""
 msgid "Build your gallery shortcode visually to use in Elementor, Divi, Classic Editor, or theme templates."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:934 includes/Blocks/Smart_Gallery_Block.php:936
+#: includes/Blocks/Smart_Gallery_Block.php:932 includes/Blocks/Smart_Gallery_Block.php:934
 msgid "Buy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:936
+#: includes/Blocks/Smart_Gallery_Block.php:934
 msgid "Buy License"
 msgstr ""
 
@@ -515,7 +515,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:969
+#: includes/Blocks/Smart_Gallery_Block.php:967
 msgid "Copy ID List"
 msgstr ""
 
@@ -731,7 +731,7 @@ msgstr ""
 msgid "Favorite Tray + ID Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:966
+#: includes/Blocks/Smart_Gallery_Block.php:964
 msgid "Favorites Selected"
 msgstr ""
 
@@ -864,7 +864,7 @@ msgstr ""
 msgid "Gallery not found."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:959
+#: includes/Blocks/Smart_Gallery_Block.php:957
 msgid "Gallery Pages"
 msgstr ""
 
@@ -1116,7 +1116,7 @@ msgstr ""
 msgid "Load More Button"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:954
+#: includes/Blocks/Smart_Gallery_Block.php:952
 msgid "Load More Photos"
 msgstr ""
 
@@ -1420,7 +1420,7 @@ msgstr ""
 msgid "Open any post or page, click + to insert a new block, and search for \"Matcha Gallery\" or type /matcha. Select your saved gallery from the inspector dropdown on the right."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:930
+#: includes/Blocks/Smart_Gallery_Block.php:928
 msgid "Open Link"
 msgstr ""
 
@@ -1512,7 +1512,7 @@ msgstr ""
 msgid "Pinwheel Spiral (PRO)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:850 includes/Blocks/Smart_Gallery_Block.php:851
+#: includes/Blocks/Smart_Gallery_Block.php:850
 msgid "Play Video"
 msgstr ""
 
@@ -1604,7 +1604,7 @@ msgstr ""
 msgid "Quick Start Video & Docs"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:925
+#: includes/Blocks/Smart_Gallery_Block.php:923
 msgid "Quick View"
 msgstr ""
 
@@ -1744,7 +1744,7 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:879
+#: includes/Blocks/Smart_Gallery_Block.php:877
 msgid "Shop (%s)"
 msgstr ""
 
@@ -1752,7 +1752,7 @@ msgstr ""
 msgid "Shop Now"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:879
+#: includes/Blocks/Smart_Gallery_Block.php:877
 msgid "Shop Product"
 msgstr ""
 
@@ -1969,7 +1969,7 @@ msgstr ""
 msgid "View Gallery"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:850 includes/Blocks/Smart_Gallery_Block.php:851
+#: includes/Blocks/Smart_Gallery_Block.php:850
 msgid "View Photo"
 msgstr ""
 
@@ -1989,7 +1989,7 @@ msgstr ""
 msgid "Vision Model"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:807 includes/Blocks/Smart_Gallery_Block.php:866 includes/Blocks/Smart_Gallery_Block.php:867
+#: includes/Blocks/Smart_Gallery_Block.php:807 includes/Blocks/Smart_Gallery_Block.php:865
 msgid "Visit Link"
 msgstr ""
 
