@@ -7,7 +7,7 @@
 ## 1. Project Overview & Commercial Strategy
 
 * **Product Name:** Matcha Gallery (Free) / Matcha Gallery Pro
-* **Current Free Version:** 1.0.1 (Approved & Live on WordPress.org — <10 Active Installs Growth Stage)
+* **Current Free Version:** 1.0.2 (Approved & Live on WordPress.org — <10 Active Installs Growth Stage)
 * **Tagline:** AI-Powered Smart Photo Wall, Masonry & Portfolio Studio for WordPress
 * **Target Audience:** Photographers, designers, e-commerce stores, creative agencies, and portfolio owners who want intelligent auto-tagging, zero layout shift (CLS 0), and visual masonry galleries.
 * **Pricing & Monetization Model:**

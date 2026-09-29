@@ -11,87 +11,65 @@ function GenerateIcon($size, $radius, $outFileName) {
     $g = [System.Drawing.Graphics]::FromImage($bmp)
     $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
     $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
-    $g.TextRenderingHint = [System.Drawing.Text.TextRenderingHint]::AntiAliasGridFit
+    $g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
     
-    # Matte Sage Background (#73907F) - Full square as defined in user's SVG
+    # Matte Sage Background (#73907F)
     $sageColor = [System.Drawing.Color]::FromArgb(255, 115, 144, 127)
     $g.Clear($sageColor)
     
     $s = $size / 256.0
     
-    # Style 1: The Canva Botanical Leaf Contour
+    # Pure Symbol Mode: Centered Leaf Contour:
+    # M 47,45 L 147,45 A 62,62 0 0,1 209,107 L 209,211 L 109,211 A 62,62 0 0,1 47,149 Z
     $leafBox = New-Object System.Drawing.Drawing2D.GraphicsPath
-    $lx = 68.0 * $s
-    $ly = 24.0 * $s
-    $lw = 120.0 * $s
-    $lh = 122.0 * $s
-    $larc = 46.0 * $s
-    $larcD = $larc * 2.0
     
-    # Top edge to top-right arc
-    $leafBox.AddLine([float]$lx, [float]$ly, [float]($lx + $lw - $larc), [float]$ly)
-    $leafBox.AddArc([float]($lx + $lw - $larcD), [float]$ly, [float]$larcD, [float]$larcD, 270, 90)
-    # Right edge to bottom-right sharp corner
-    $leafBox.AddLine([float]($lx + $lw), [float]($ly + $larc), [float]($lx + $lw), [float]($ly + $lh))
-    # Bottom edge to bottom-left arc
-    $leafBox.AddLine([float]($lx + $lw), [float]($ly + $lh), [float]($lx + $larc), [float]($ly + $lh))
-    $leafBox.AddArc([float]$lx, [float]($ly + $lh - $larcD), [float]$larcD, [float]$larcD, 90, 90)
+    # Top edge: (47, 45) to (147, 45)
+    $leafBox.AddLine([float](47 * $s), [float](45 * $s), [float](147 * $s), [float](45 * $s))
+    # Top-right arc: from (147, 45) sweeping 90 deg to (209, 107)
+    $leafBox.AddArc([float](85 * $s), [float](45 * $s), [float](124 * $s), [float](124 * $s), 270, 90)
+    # Right edge: from (209, 107) down to (209, 211)
+    $leafBox.AddLine([float](209 * $s), [float](107 * $s), [float](209 * $s), [float](211 * $s))
+    # Bottom edge: from (209, 211) left to (109, 211)
+    $leafBox.AddLine([float](209 * $s), [float](211 * $s), [float](109 * $s), [float](211 * $s))
+    # Bottom-left arc: from (109, 211) sweeping 90 deg to (47, 149)
+    $leafBox.AddArc([float](47 * $s), [float](87 * $s), [float](124 * $s), [float](124 * $s), 90, 90)
+    # Left edge: from (47, 149) up to (47, 45)
+    $leafBox.AddLine([float](47 * $s), [float](149 * $s), [float](47 * $s), [float](45 * $s))
     $leafBox.CloseFigure()
     
-    # Double-Exposure Photo: Clip and draw full mosaic gallery wall inside leaf
+    # Double-Exposure Photo: Clip and draw full mosaic gallery wall inside centered leaf
     $g.SetClip($leafBox)
-    $g.DrawImage($photo, [System.Drawing.RectangleF]::new([float](58 * $s), [float](14 * $s), [float](140 * $s), [float](140 * $s)))
+    $g.DrawImage($photo, [System.Drawing.RectangleF]::new([float](34 * $s), [float](32 * $s), [float](188 * $s), [float](188 * $s)))
     
-    # Subtle matte sage grading over the photo
-    $tintBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(45, 115, 144, 127))
+    # Subtle matte sage grading over the photo (14% opacity)
+    $tintBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(36, 115, 144, 127))
     $g.FillPath($tintBrush, $leafBox)
     $tintBrush.Dispose()
     
     # Reset clip back to full canvas
     $g.ResetClip()
     
-    # White Hairline Leaf-Box Border (1.8px)
-    $whitePen1 = New-Object System.Drawing.Pen -ArgumentList ([System.Drawing.Color]::FromArgb(255, 255, 255, 255)), ([float](1.8 * $s))
+    # White Leaf-Box Border (2.2px)
+    $whitePen1 = New-Object System.Drawing.Pen -ArgumentList ([System.Drawing.Color]::FromArgb(255, 255, 255, 255)), ([float](2.2 * $s))
     $g.DrawPath($whitePen1, $leafBox)
     $whitePen1.Dispose()
     
-    # 4 White Tilted Gyre Loops (Canva Signature)
-    $whitePenLoop = New-Object System.Drawing.Pen -ArgumentList ([System.Drawing.Color]::FromArgb(230, 255, 255, 255)), ([float](1.6 * $s))
-    
-    function DrawTiltedEllipse($cx, $cy, $rx, $ry, $angle) {
+    # 4 White Concentric Gyre Loops centered at (128, 128)
+    function DrawTiltedEllipse($cx, $cy, $rx, $ry, $angle, $alpha, $width) {
         $state = $g.Save()
         $g.TranslateTransform([float]($cx * $s), [float]($cy * $s))
         $g.RotateTransform([float]$angle)
-        $g.DrawEllipse($whitePenLoop, [float](-$rx * $s), [float](-$ry * $s), [float]($rx * 2 * $s), [float]($ry * 2 * $s))
+        $pen = New-Object System.Drawing.Pen -ArgumentList ([System.Drawing.Color]::FromArgb($alpha, 255, 255, 255)), ([float]($width * $s))
+        $g.DrawEllipse($pen, [float](-$rx * $s), [float](-$ry * $s), [float]($rx * 2 * $s), [float]($ry * 2 * $s))
+        $pen.Dispose()
         $g.Restore($state)
     }
     
-    DrawTiltedEllipse 128 85 46 36 -22
-    DrawTiltedEllipse 128 85 42 34 24
-    DrawTiltedEllipse 128 85 36 30 -8
-    DrawTiltedEllipse 128 85 27 22 12
-    $whitePenLoop.Dispose()
+    DrawTiltedEllipse 128 128 62 48 -22 230 2.0
+    DrawTiltedEllipse 128 128 56 45  24 217 2.0
+    DrawTiltedEllipse 128 128 48 40  -8 204 2.0
+    DrawTiltedEllipse 128 128 36 29  12 242 2.0
     
-    # Banner Typography:
-    # "Matcha Gallery" - clean, bold Outfit style
-    $fontTitle = New-Object System.Drawing.Font ("Segoe UI", [float](15.5 * $s), [System.Drawing.FontStyle]::Bold)
-    $fontSub = New-Object System.Drawing.Font ("Segoe UI", [float](6.5 * $s), [System.Drawing.FontStyle]::Bold)
-    $whiteBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::White)
-    
-    $sf = New-Object System.Drawing.StringFormat
-    $sf.Alignment = [System.Drawing.StringAlignment]::Center
-    
-    $g.DrawString("Matcha Gallery", $fontTitle, $whiteBrush, [float](128 * $s), [float](168 * $s), $sf)
-    $g.DrawString("A I   S M A R T   G A L L E R Y", $fontSub, $whiteBrush, [float](128 * $s), [float](195 * $s), $sf)
-    
-    # Small twin leaf / accent mark at bottom
-    $dotBrush = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(200, 255, 255, 255))
-    $g.FillEllipse($dotBrush, [float](126.5 * $s), [float](218 * $s), [float](3.2 * $s), [float](3.2 * $s))
-    $dotBrush.Dispose()
-    
-    $fontTitle.Dispose()
-    $fontSub.Dispose()
-    $whiteBrush.Dispose()
     $leafBox.Dispose()
     
     # Save PNG to both .wordpress-org and assets/images
@@ -99,11 +77,12 @@ function GenerateIcon($size, $radius, $outFileName) {
     $bmp.Save($pluginOutPath, [System.Drawing.Imaging.ImageFormat]::Png)
     $g.Dispose()
     $bmp.Dispose()
-    Write-Host "Generated $outFileName ($size x $size) with exact user SVG to both folders!"
+    Write-Host "Generated $outFileName ($size x $size) with pure symbol design to both folders!"
 }
 
 GenerateIcon 256 0 "icon-256x256.png"
 GenerateIcon 128 0 "icon-128x128.png"
 $photo.Dispose()
-Write-Host "Style 1 exact icons successfully generated!"
+Write-Host "Pure Symbol icons successfully generated!"
+
 

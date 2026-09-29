@@ -10,51 +10,43 @@ const pluginImgPath = path.join(baseDir, '..', 'assets', 'images', 'gallery-mosa
 const b64 = fs.readFileSync(photoPath).toString('base64');
 fs.copyFileSync(photoPath, pluginImgPath);
 
+// Pure Symbol Mode (High-CTR / No Text):
+// Centered at (128, 128), 162x166px leaf contour, pin-sharp at 64px, 128px, 256px
+const leafPathCentered = "M 47,45 L 147,45 A 62,62 0 0,1 209,107 L 209,211 L 109,211 A 62,62 0 0,1 47,149 Z";
+
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
   <defs>
-    <clipPath id="leafClip_1_standalone">
-      <path d="M 68,24 L 142,24 A 46,46 0 0,1 188,70 L 188,146 L 114,146 A 46,46 0 0,1 68,100 Z" />
+    <clipPath id="leafClip_pure_symbol">
+      <path d="${leafPathCentered}" />
     </clipPath>
   </defs>
   <g>
-    <!-- Matte Sage Background -->
+    <!-- Matte Sage Background (#73907F) -->
     <rect width="256" height="256" fill="#73907F" />
 
-    <!-- Mosaic Gallery inside Leaf Contour -->
-    <g clip-path="url(#leafClip_1_standalone)">
-      <image href="data:image/jpeg;base64,${b64}" x="58" y="14" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
-      <rect x="58" y="14" width="140" height="140" fill="#73907F" opacity="0.18" />
+    <!-- Mosaic Gallery inside Centered Leaf Contour -->
+    <g clip-path="url(#leafClip_pure_symbol)">
+      <image href="data:image/jpeg;base64,${b64}" x="34" y="32" width="188" height="188" preserveAspectRatio="xMidYMid slice" />
+      <rect x="34" y="32" width="188" height="188" fill="#73907F" opacity="0.14" />
     </g>
 
-    <!-- White Leaf-Box Border -->
-    <path d="M 68,24 L 142,24 A 46,46 0 0,1 188,70 L 188,146 L 114,146 A 46,46 0 0,1 68,100 Z" 
-          fill="none" stroke="#FFFFFF" stroke-width="1.8" />
+    <!-- White Leaf-Box Border (2.2px) -->
+    <path d="${leafPathCentered}" fill="none" stroke="#FFFFFF" stroke-width="2.2" />
 
-    <!-- 4 Tilted Gyre Loops over the mosaic -->
-    <ellipse cx="128" cy="85" rx="46" ry="36" transform="rotate(-22 128 85)" 
-             fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.9" />
-    <ellipse cx="128" cy="85" rx="42" ry="34" transform="rotate(24 128 85)" 
-             fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.85" />
-    <ellipse cx="128" cy="85" rx="36" ry="30" transform="rotate(-8 128 85)" 
-             fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.8" />
-    <ellipse cx="128" cy="85" rx="27" ry="22" transform="rotate(12 128 85)" 
-             fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.95" />
-
-    <!-- Brand Title: Matcha Gallery -->
-    <text x="128" y="184" font-family="'Outfit', sans-serif" font-weight="800" font-size="22" letter-spacing="-0.4" fill="#FFFFFF" text-anchor="middle">Matcha Gallery</text>
-
-    <!-- Subtitle: AI Smart Gallery -->
-    <text x="128" y="206" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="8.5" letter-spacing="2.4" fill="#FFFFFF" text-anchor="middle" opacity="0.92">AI SMART GALLERY</text>
-
-    <!-- Centered Accent Twin Leaf -->
-    <g transform="translate(122, 218) scale(0.12)">
-      <path d="M 45 88 C 30 78 13 58 15 28 C 16 16 18 10 19 9 C 23 15 35 32 43 55 C 47 67 47 78 45 88 Z" fill="#FFFFFF" opacity="0.8" />
-      <path d="M 53 142 C 50 128 54 112 62 98 C 76 83 106 66 128 42 C 131 32 132 24 132 23 C 128 26 102 38 72 58 C 54 75 48 98 52 118 C 54 126 53 135 53 142 Z" fill="#FFFFFF" opacity="0.8" />
-    </g>
+    <!-- 4 Concentric Gyre Loops centered at (128, 128) -->
+    <ellipse cx="128" cy="128" rx="62" ry="48" transform="rotate(-22 128 128)" 
+             fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.90" />
+    <ellipse cx="128" cy="128" rx="56" ry="45" transform="rotate(24 128 128)" 
+             fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.85" />
+    <ellipse cx="128" cy="128" rx="48" ry="40" transform="rotate(-8 128 128)" 
+             fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.80" />
+    <ellipse cx="128" cy="128" rx="36" ry="29" transform="rotate(12 128 128)" 
+             fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.95" />
   </g>
 </svg>`;
 
 fs.writeFileSync(svgPath, svg, 'utf8');
 fs.writeFileSync(pluginSvgPath, svg, 'utf8');
-console.log('icon.svg compiled with exact user SVG to both .wordpress-org and assets/images!');
+console.log('icon.svg compiled with pure symbol SVG to both .wordpress-org and assets/images!');
+
 

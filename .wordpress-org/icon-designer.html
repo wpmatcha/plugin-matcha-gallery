@@ -10,7 +10,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #0d1410;
+      background: #090d0b;
       color: #e2e8f0;
       font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
       padding: 36px 24px;
@@ -27,15 +27,15 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px 28px;
-      background: #141f18;
-      border: 1px solid #233428;
+      background: #111613;
+      border: 1px solid #1f2822;
       border-radius: 16px;
     }
     .header-title h1 {
       font-family: 'Outfit', sans-serif;
       font-size: 22px;
       font-weight: 800;
-      color: #f8fafc;
+      color: #ffffff;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -43,9 +43,9 @@
     .header-title span.badge {
       font-size: 11px;
       font-weight: 700;
-      color: #8bb79e;
-      background: rgba(110, 139, 121, 0.22);
-      border: 1px solid rgba(139, 183, 158, 0.35);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       padding: 3px 10px;
       border-radius: 20px;
       letter-spacing: 0.05em;
@@ -61,8 +61,8 @@
     }
 
     .preview-card {
-      background: #141f18;
-      border: 1px solid #233428;
+      background: #111613;
+      border: 1px solid #1f2822;
       border-radius: 18px;
       padding: 28px;
       display: flex;
@@ -76,8 +76,48 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #8bb79e;
+      color: #ffffff;
       margin-bottom: 8px;
+    }
+
+    /* Mode Selector Row */
+    .mode-selector-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0a0e0c;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid #1c251e;
+    }
+    .mode-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .mode-btn {
+      background: #141b16;
+      border: 1px solid #233026;
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .mode-btn:hover {
+      background: #1c2620;
+      color: #ffffff;
+      border-color: #3b4f41;
+    }
+    .mode-btn.active {
+      background: #ffffff;
+      color: #090d0b;
+      border-color: #ffffff;
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
     }
 
     /* 3 Variants Selector */
@@ -87,8 +127,8 @@
       gap: 12px;
     }
     .variant-btn {
-      background: #1a271f;
-      border: 1.5px solid #283a2e;
+      background: #141b16;
+      border: 1.5px solid #233026;
       border-radius: 14px;
       padding: 14px 12px;
       color: #cbd5e1;
@@ -102,15 +142,15 @@
       transition: all 0.2s;
     }
     .variant-btn:hover {
-      background: #213227;
-      border-color: #43624f;
+      background: #1c2620;
+      border-color: #3b4f41;
       color: #fff;
     }
     .variant-btn.active {
-      background: rgba(110, 139, 121, 0.25);
-      border-color: #8bb79e;
-      color: #bce1cc;
-      box-shadow: 0 0 20px rgba(110, 139, 121, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.15);
     }
     .variant-thumb {
       width: 54px;
@@ -135,17 +175,17 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #0f1812;
+      background: #0a0e0c;
       padding: 10px 14px;
       border-radius: 12px;
-      border: 1px solid #202e24;
+      border: 1px solid #1c251e;
     }
     .photo-btn {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: #17241c;
-      border: 1px solid #2b3d30;
+      background: #141b16;
+      border: 1px solid #233026;
       border-radius: 8px;
       padding: 6px 12px;
       color: #cbd5e1;
@@ -155,13 +195,13 @@
       transition: all 0.2s;
     }
     .photo-btn:hover {
-      background: #203126;
+      background: #1c2620;
       color: #fff;
     }
     .photo-btn.active {
-      background: rgba(110, 139, 121, 0.35);
-      border-color: #8bb79e;
-      color: #e2f4ea;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #ffffff;
+      color: #ffffff;
     }
     .photo-btn img {
       width: 22px;
@@ -174,14 +214,14 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: #0f1812;
+      background: #0a0e0c;
       padding: 10px 14px;
       border-radius: 12px;
-      border: 1px solid #202e24;
+      border: 1px solid #1c251e;
     }
     .font-btn {
-      background: #17241c;
-      border: 1px solid #2b3d30;
+      background: #141b16;
+      border: 1px solid #233026;
       border-radius: 6px;
       padding: 6px 10px;
       color: #cbd5e1;
@@ -191,9 +231,9 @@
       transition: all 0.2s;
     }
     .font-btn.active {
-      background: #73907f;
-      color: #ffffff;
-      border-color: #8bb79e;
+      background: #ffffff;
+      color: #090d0b;
+      border-color: #ffffff;
     }
 
     .stage-wrapper {
@@ -250,8 +290,8 @@
     }
 
     .action-box {
-      background: #141f18;
-      border: 1px solid #233428;
+      background: #111613;
+      border: 1px solid #1f2822;
       border-radius: 18px;
       padding: 24px;
       display: flex;
@@ -261,7 +301,7 @@
     .action-box h3 {
       font-size: 16px;
       font-weight: 700;
-      color: #f1f5f9;
+      color: #ffffff;
     }
     .action-box p {
       font-size: 13px;
@@ -284,23 +324,24 @@
       transition: all 0.2s;
     }
     .btn-export-primary {
-      background: #73907f;
-      color: #ffffff;
-      box-shadow: 0 6px 18px rgba(115, 144, 127, 0.35);
-      border: 1px solid rgba(255,255,255,0.25);
+      background: #ffffff;
+      color: #090d0b;
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
+      border: 1px solid #ffffff;
     }
     .btn-export-primary:hover {
-      background: #84a290;
+      background: #e2e8f0;
       transform: translateY(-1px);
     }
     .btn-export-secondary {
-      background: #1a2820;
-      color: #e2e8f0;
-      border: 1px solid #2a3d31;
+      background: #141b16;
+      color: #cbd5e1;
+      border: 1px solid #233026;
     }
     .btn-export-secondary:hover {
-      background: #23352a;
+      background: #1c2620;
       color: #fff;
+      border-color: #3b4f41;
     }
 
     /* Simulated WordPress.org Card */
@@ -378,27 +419,27 @@
     .tips-box {
       width: 100%;
       max-width: 1140px;
-      background: #141f18;
-      border: 1px solid #233428;
+      background: #111613;
+      border: 1px solid #1f2822;
       border-radius: 16px;
       padding: 22px 28px;
       font-size: 13.5px;
       color: #94a3b8;
       line-height: 1.65;
     }
-    .tips-box strong { color: #f1f5f9; }
-    .tips-box code { color: #8bb79e; background: #0b130e; padding: 2px 6px; border-radius: 4px; }
+    .tips-box strong { color: #ffffff; }
+    .tips-box code { color: #ffffff; background: #0a0e0c; padding: 2px 6px; border-radius: 4px; border: 1px solid #1c251e; }
   </style>
 </head>
 <body>
 
   <div class="header-bar">
     <div class="header-title">
-      <h1>Matcha Gallery <span style="color:#8bb79e;">•</span> Official Plugin Icon</h1>
-      <span class="badge">Full Mosaic Gallery + Banner Typography</span>
+      <h1>Matcha Gallery <span style="color:#ffffff;">•</span> Official Plugin Icon</h1>
+      <span class="badge">WordPress.org 2026 Icon Suite</span>
     </div>
-    <div style="font-size:13px; color:#8bb79e;">
-      Matte Sage (#73907F) • Multi-Photo Bento Wall • Outfit &amp; Plus Jakarta Sans
+    <div style="font-size:13px; color:#94a3b8;">
+      Matte Sage (#73907F) • Multi-Photo Bento Wall • High-CTR Optimization
     </div>
   </div>
 
@@ -408,9 +449,25 @@
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div class="section-label">Select Presentation Style</div>
-          <h2 style="font-size: 18px; font-weight: 700; color:#f8fafc;">Canva Pro Mark + Real Bento Gallery</h2>
+          <h2 style="font-size: 18px; font-weight: 700; color:#ffffff;">Canva Pro Mark + Real Bento Gallery</h2>
         </div>
-        <span style="font-size: 12px; color: #8bb79e; font-weight: 600;">Full Gallery Identity • Pin-Sharp at 64px</span>
+        <span style="font-size: 12px; color: #94a3b8; font-weight: 600;">Full Gallery Identity • Pin-Sharp at 64px</span>
+      </div>
+
+      <!-- Mode Selector: Pure Symbol vs Typography Badge -->
+      <div class="mode-selector-row">
+        <div>
+          <div class="section-label" style="margin-bottom:2px;">Layout Mode</div>
+          <div style="font-size:12px; color:#94a3b8;">Choose between full-bleed pure icon or typography banner badge</div>
+        </div>
+        <div class="mode-btn-group">
+          <button type="button" class="mode-btn active" id="mbtn-symbol" onclick="switchMode('symbol', this)">
+            <span>✨ Pure Symbol (High-CTR / No Text)</span>
+          </button>
+          <button type="button" class="mode-btn" id="mbtn-badge" onclick="switchMode('badge', this)">
+            <span>🏷️ Typography Badge</span>
+          </button>
+        </div>
       </div>
 
       <!-- 3 Variants Selector -->
@@ -435,7 +492,7 @@
       <div class="controls-row">
         <!-- Photo Selector -->
         <div class="photo-selector-row">
-          <span style="font-size: 12px; font-weight: 700; color: #8bb79e; text-transform: uppercase;">Image:</span>
+          <span style="font-size: 12px; font-weight: 700; color: #ffffff; text-transform: uppercase;">Image:</span>
           <button type="button" class="photo-btn active" id="pbtn-mosaic" onclick="switchPhoto('gallery-mosaic-square.jpg', this)">
             <img src="gallery-mosaic-square.jpg" alt="Full Gallery Mosaic">
             <span>Full Mosaic Gallery (Recommended)</span>
@@ -447,8 +504,8 @@
         </div>
 
         <!-- Typography Selector (Banner Match) -->
-        <div class="font-selector-box">
-          <span style="font-size: 11.5px; font-weight: 700; color: #8bb79e; text-transform: uppercase;">Font:</span>
+        <div class="font-selector-box" id="font-selector-box" style="display:none;">
+          <span style="font-size: 11.5px; font-weight: 700; color: #ffffff; text-transform: uppercase;">Font:</span>
           <button type="button" class="font-btn active" id="fbtn-outfit" onclick="switchFont('outfit', this)">
             Outfit (Banner Match)
           </button>
@@ -550,9 +607,21 @@
       'photo-snowdrops.jpg': PHOTO_SNOWDROPS_B64
     };
 
-    let activeVariant = 1; // Finalized by user: Style 1 Double-Exposure Leaf!
+    let activeVariant = 1; // Default: Style 1 Double-Exposure Leaf!
     let activePhoto = 'gallery-mosaic-square.jpg'; // Full gallery mosaic by default!
     let activeFont = 'outfit'; // Matches the banner brand title!
+    let activeMode = 'symbol'; // 'symbol' (High-CTR Pure Mark) vs 'badge' (With Text)
+
+    function switchMode(mode, btn) {
+      activeMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const fontBox = document.getElementById('font-selector-box');
+      if (fontBox) {
+        fontBox.style.display = (mode === 'symbol') ? 'none' : 'flex';
+      }
+      renderActive();
+    }
 
     function getSVG(variant, rawPhoto, fontChoice = activeFont, pfx = 'main') {
       const photo = (typeof PHOTO_MAP !== 'undefined' && PHOTO_MAP[rawPhoto]) ? PHOTO_MAP[rawPhoto] : rawPhoto;
@@ -560,7 +629,124 @@
       const lensId = `lensClip_${variant}_${pfx}`;
       const bentoId = `bentoClip_${variant}_${pfx}`;
 
-      // Typography definitions matching the banner
+      if (activeMode === 'symbol') {
+        // ========================================================
+        // PURE SYMBOL MODE (HIGH-CTR / NO TEXT)
+        // Centered at (128, 128), scaled up by ~1.35x (162x166)
+        // Pin-sharp at 64px, 128px, and 256px
+        // ========================================================
+        const leafPathCentered = "M 47,45 L 147,45 A 62,62 0 0,1 209,107 L 209,211 L 109,211 A 62,62 0 0,1 47,149 Z";
+
+        if (variant === 1) {
+          // Style 1 Pure Symbol: Double-Exposure Full-Bleed Leaf
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+            <defs>
+              <clipPath id="${clipId}">
+                <path d="${leafPathCentered}" />
+              </clipPath>
+            </defs>
+            <g>
+              <!-- Matte Sage Background -->
+              <rect width="256" height="256" fill="#73907F" />
+
+              <!-- Mosaic Gallery inside Centered Leaf Contour -->
+              <g clip-path="url(#${clipId})">
+                <image href="${photo}" x="34" y="32" width="188" height="188" preserveAspectRatio="xMidYMid slice" />
+                <rect x="34" y="32" width="188" height="188" fill="#73907F" opacity="0.14" />
+              </g>
+
+              <!-- White Leaf-Box Border (2.2px) -->
+              <path d="${leafPathCentered}" fill="none" stroke="#FFFFFF" stroke-width="2.2" />
+
+              <!-- 4 Concentric Gyre Loops centered at 128, 128 -->
+              <ellipse cx="128" cy="128" rx="62" ry="48" transform="rotate(-22 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.9" />
+              <ellipse cx="128" cy="128" rx="56" ry="45" transform="rotate(24 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.85" />
+              <ellipse cx="128" cy="128" rx="48" ry="40" transform="rotate(-8 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.8" />
+              <ellipse cx="128" cy="128" rx="36" ry="29" transform="rotate(12 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.95" />
+            </g>
+          </svg>`;
+        }
+        else if (variant === 2) {
+          // Style 2 Pure Symbol: Spiral Aperture Chamber
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+            <defs>
+              <clipPath id="${lensId}">
+                <ellipse cx="128" cy="128" rx="48" ry="39" transform="rotate(12 128 128)" />
+              </clipPath>
+            </defs>
+            <g>
+              <!-- Matte Sage Background -->
+              <rect width="256" height="256" fill="#73907F" />
+
+              <!-- White Leaf-Box Border -->
+              <path d="${leafPathCentered}" fill="none" stroke="#FFFFFF" stroke-width="2.2" />
+
+              <!-- Outer Gyre Loops -->
+              <ellipse cx="128" cy="128" rx="62" ry="48" transform="rotate(-22 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.88" />
+              <ellipse cx="128" cy="128" rx="56" ry="45" transform="rotate(24 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.82" />
+              <ellipse cx="128" cy="128" rx="48" ry="40" transform="rotate(-8 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.9" />
+
+              <!-- Mosaic Gallery inside Lens Aperture -->
+              <g clip-path="url(#${lensId})">
+                <image href="${photo}" x="60" y="70" width="136" height="116" preserveAspectRatio="xMidYMid slice" />
+                <ellipse cx="128" cy="128" rx="48" ry="39" transform="rotate(12 128 128)" fill="none" stroke="rgba(0,0,0,0.2)" stroke-width="2.5" />
+              </g>
+
+              <!-- Lens Reticles -->
+              <ellipse cx="128" cy="128" rx="48" ry="39" transform="rotate(12 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.6" />
+              <ellipse cx="128" cy="128" rx="30" ry="23" transform="rotate(-15 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.8" />
+            </g>
+          </svg>`;
+        }
+        else {
+          // Style 3 Pure Symbol: Bento Exhibition Split
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+            <defs>
+              <clipPath id="${bentoId}">
+                <path d="M 128,45 L 147,45 A 62,62 0 0,1 209,107 L 209,211 L 128,211 Z" />
+              </clipPath>
+            </defs>
+            <g>
+              <!-- Matte Sage Background -->
+              <rect width="256" height="256" fill="#73907F" />
+
+              <!-- Mosaic Gallery on Right Half -->
+              <g clip-path="url(#${bentoId})">
+                <image href="${photo}" x="76" y="36" width="145" height="184" preserveAspectRatio="xMidYMid slice" />
+                <rect x="128" y="45" width="81" height="166" fill="#73907F" opacity="0.08" />
+              </g>
+
+              <line x1="128" y1="45" x2="128" y2="211" stroke="#FFFFFF" stroke-width="2.2" opacity="0.8" />
+
+              <!-- White Leaf-Box Border -->
+              <path d="${leafPathCentered}" fill="none" stroke="#FFFFFF" stroke-width="2.2" />
+
+              <!-- Concentric Gyre Rings -->
+              <ellipse cx="128" cy="128" rx="62" ry="48" transform="rotate(-22 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.9" />
+              <ellipse cx="128" cy="128" rx="56" ry="45" transform="rotate(24 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.85" />
+              <ellipse cx="128" cy="128" rx="48" ry="40" transform="rotate(-8 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.8" />
+              <ellipse cx="128" cy="128" rx="36" ry="29" transform="rotate(12 128 128)" 
+                       fill="none" stroke="#FFFFFF" stroke-width="2.0" opacity="0.95" />
+            </g>
+          </svg>`;
+        }
+      }
+
+      // ========================================================
+      // BADGE MODE (WITH TYPOGRAPHY BANNER)
+      // ========================================================
       const titleFont = fontChoice === 'outfit' 
         ? "font-family=\"'Outfit', sans-serif\" font-weight=\"800\" font-size=\"22\" letter-spacing=\"-0.4\"" 
         : "font-family=\"'Playfair Display', serif\" font-weight=\"700\" font-size=\"23\" letter-spacing=\"-0.2\"";
@@ -568,51 +754,33 @@
       const subtitleFont = "font-family=\"'Plus Jakarta Sans', sans-serif\" font-weight=\"700\" font-size=\"8.5\" letter-spacing=\"2.4\"";
 
       if (variant === 2) {
-        // Style 2: Spiral Aperture Portal (User's Picked Style)
-        // Solid Sage Field + Leaf Box + Gyre loops, with the central intersecting aperture chamber revealing the full mosaic gallery wall!
+        // Style 2 Badge
         return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
           <defs>
             <clipPath id="${lensId}">
-              <!-- Center Tilted Aperture Chamber -->
               <ellipse cx="128" cy="85" rx="35" ry="29" transform="rotate(12 128 85)" />
             </clipPath>
           </defs>
           <g>
-            <!-- Matte Sage Background (#73907F) -->
             <rect width="256" height="256" fill="#73907F" />
-
-            <!-- Pure White Canva Hairline Leaf-Box Border (1.8px) -->
             <path d="M 68,24 L 142,24 A 46,46 0 0,1 188,70 L 188,146 L 114,146 A 46,46 0 0,1 68,100 Z" 
                   fill="none" stroke="#FFFFFF" stroke-width="1.8" />
-
-            <!-- Outer Tilted Gyre Loops (Canva Signature) -->
             <ellipse cx="128" cy="85" rx="46" ry="36" transform="rotate(-22 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.88" />
             <ellipse cx="128" cy="85" rx="42" ry="34" transform="rotate(24 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.82" />
             <ellipse cx="128" cy="85" rx="36" ry="30" transform="rotate(-8 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.9" />
-
-            <!-- The Full Mosaic Gallery Revealed Inside Focal Aperture -->
             <g clip-path="url(#${lensId})">
               <image href="${photo}" x="78" y="42" width="100" height="86" preserveAspectRatio="xMidYMid slice" />
-              <!-- Subtle Inner Vignette for Depth -->
               <ellipse cx="128" cy="85" rx="35" ry="29" transform="rotate(12 128 85)" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="2.5" />
             </g>
-
-            <!-- Crisp White Lens Reticle Over the Aperture Boundary -->
             <ellipse cx="128" cy="85" rx="35" ry="29" transform="rotate(12 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="2.2" />
             <ellipse cx="128" cy="85" rx="22" ry="17" transform="rotate(-15 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.4" opacity="0.75" />
-
-            <!-- Brand Title: Matcha Gallery (Matches Banner Typography) -->
             <text x="128" y="184" ${titleFont} fill="#FFFFFF" text-anchor="middle">Matcha Gallery</text>
-
-            <!-- Subtitle: AI Smart Gallery (Matches Banner Tagline) -->
             <text x="128" y="206" ${subtitleFont} fill="#FFFFFF" text-anchor="middle" opacity="0.92">AI SMART GALLERY</text>
-
-            <!-- Centered Accent Twin Leaf Icon / Dot -->
             <g transform="translate(122, 218) scale(0.12)">
               <path d="M 45 88 C 30 78 13 58 15 28 C 16 16 18 10 19 9 C 23 15 35 32 43 55 C 47 67 47 78 45 88 Z" fill="#FFFFFF" opacity="0.8" />
               <path d="M 53 142 C 50 128 54 112 62 98 C 76 83 106 66 128 42 C 131 32 132 24 132 23 C 128 26 102 38 72 58 C 54 75 48 98 52 118 C 54 126 53 135 53 142 Z" fill="#FFFFFF" opacity="0.8" />
@@ -621,8 +789,7 @@
         </svg>`;
       }
       else if (variant === 1) {
-        // Style 1: Double-Exposure Leaf
-        // The entire Canva leaf contour is filled with the multi-photo mosaic gallery wall!
+        // Style 1 Badge
         return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
           <defs>
             <clipPath id="${clipId}">
@@ -630,20 +797,13 @@
             </clipPath>
           </defs>
           <g>
-            <!-- Matte Sage Background -->
             <rect width="256" height="256" fill="#73907F" />
-
-            <!-- Mosaic Gallery inside Leaf Contour -->
             <g clip-path="url(#${clipId})">
               <image href="${photo}" x="58" y="14" width="140" height="140" preserveAspectRatio="xMidYMid slice" />
               <rect x="58" y="14" width="140" height="140" fill="#73907F" opacity="0.18" />
             </g>
-
-            <!-- White Leaf-Box Border -->
             <path d="M 68,24 L 142,24 A 46,46 0 0,1 188,70 L 188,146 L 114,146 A 46,46 0 0,1 68,100 Z" 
                   fill="none" stroke="#FFFFFF" stroke-width="1.8" />
-
-            <!-- 4 Tilted Gyre Loops over the mosaic -->
             <ellipse cx="128" cy="85" rx="46" ry="36" transform="rotate(-22 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.9" />
             <ellipse cx="128" cy="85" rx="42" ry="34" transform="rotate(24 128 85)" 
@@ -652,14 +812,8 @@
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.8" />
             <ellipse cx="128" cy="85" rx="27" ry="22" transform="rotate(12 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.95" />
-
-            <!-- Brand Title: Matcha Gallery -->
             <text x="128" y="184" ${titleFont} fill="#FFFFFF" text-anchor="middle">Matcha Gallery</text>
-
-            <!-- Subtitle: AI Smart Gallery -->
             <text x="128" y="206" ${subtitleFont} fill="#FFFFFF" text-anchor="middle" opacity="0.92">AI SMART GALLERY</text>
-
-            <!-- Centered Accent Twin Leaf -->
             <g transform="translate(122, 218) scale(0.12)">
               <path d="M 45 88 C 30 78 13 58 15 28 C 16 16 18 10 19 9 C 23 15 35 32 43 55 C 47 67 47 78 45 88 Z" fill="#FFFFFF" opacity="0.8" />
               <path d="M 53 142 C 50 128 54 112 62 98 C 76 83 106 66 128 42 C 131 32 132 24 132 23 C 128 26 102 38 72 58 C 54 75 48 98 52 118 C 54 126 53 135 53 142 Z" fill="#FFFFFF" opacity="0.8" />
@@ -668,7 +822,7 @@
         </svg>`;
       }
       else {
-        // Style 3: Bento Exhibition Split
+        // Style 3 Badge
         return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
           <defs>
             <clipPath id="${bentoId}">
@@ -676,22 +830,14 @@
             </clipPath>
           </defs>
           <g>
-            <!-- Matte Sage Background -->
             <rect width="256" height="256" fill="#73907F" />
-
-            <!-- Mosaic Gallery on Right Half -->
             <g clip-path="url(#${bentoId})">
               <image href="${photo}" x="90" y="18" width="110" height="135" preserveAspectRatio="xMidYMid slice" />
               <rect x="128" y="24" width="60" height="122" fill="#73907F" opacity="0.08" />
             </g>
-
             <line x1="128" y1="24" x2="128" y2="146" stroke="#FFFFFF" stroke-width="1.8" opacity="0.7" />
-
-            <!-- White Leaf-Box Border -->
             <path d="M 68,24 L 142,24 A 46,46 0 0,1 188,70 L 188,146 L 114,146 A 46,46 0 0,1 68,100 Z" 
                   fill="none" stroke="#FFFFFF" stroke-width="1.8" />
-
-            <!-- Concentric Gyre Rings -->
             <ellipse cx="128" cy="85" rx="46" ry="36" transform="rotate(-22 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.9" />
             <ellipse cx="128" cy="85" rx="42" ry="34" transform="rotate(24 128 85)" 
@@ -700,14 +846,8 @@
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.8" />
             <ellipse cx="128" cy="85" rx="27" ry="22" transform="rotate(12 128 85)" 
                      fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity="0.95" />
-
-            <!-- Brand Title: Matcha Gallery -->
             <text x="128" y="184" ${titleFont} fill="#FFFFFF" text-anchor="middle">Matcha Gallery</text>
-
-            <!-- Subtitle: AI Smart Gallery -->
             <text x="128" y="206" ${subtitleFont} fill="#FFFFFF" text-anchor="middle" opacity="0.92">AI SMART GALLERY</text>
-
-            <!-- Centered Accent Twin Leaf -->
             <g transform="translate(122, 218) scale(0.12)">
               <path d="M 45 88 C 30 78 13 58 15 28 C 16 16 18 10 19 9 C 23 15 35 32 43 55 C 47 67 47 78 45 88 Z" fill="#FFFFFF" opacity="0.8" />
               <path d="M 53 142 C 50 128 54 112 62 98 C 76 83 106 66 128 42 C 131 32 132 24 132 23 C 128 26 102 38 72 58 C 54 75 48 98 52 118 C 54 126 53 135 53 142 Z" fill="#FFFFFF" opacity="0.8" />

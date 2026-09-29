@@ -5,7 +5,7 @@ Tags: gallery, photo gallery, masonry, portfolio, lightbox
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,14 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 
 == Changelog ==
 
+= 1.0.2 =
+* Feature: Lookbook Duet layout blueprint — editorial 2-column spread with alternating cadence and caption margins.
+* Feature: True Continuous CSS Multi-Column Masonry — seamless vertical column masonry with fluid responsive breakpoints.
+* Feature: Cold-load thumbnail preloading and instant frame aspect-ratio reservation for zero layout shifts (CLS < 0.01).
+* Feature: Obsidian Studio UI refresh — refined high-contrast monochrome studio workspace with streamlined layout tabs and synchronized skins.
+* Asset: High-CTR WordPress.org Pure Symbol Icon Suite (256x256, 128x128, and scalable SVG) optimized for plugin directory and wp-admin search visibility.
+* Enhancement: Translation catalogue synchronization and optimized production bundle packaging.
+
 = 1.0.1 =
 * Fix: Admin sidebar menu icon sizing on the WordPress dashboard constrained to 20x20px with inline SVG data URI and global head style guard.
 * Feature: Curated Style Presets (Exhibition Hairline Frame, Architectural Curtain, Cinematic Pullback, Minimalist Drawer).
@@ -120,6 +128,9 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 * Local vendored JS dependencies (zero CDN reliance).
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Adds Lookbook Duet layout, continuous CSS masonry, cold-load thumbnail preloading, streamlined skin controls, and retina WP.org asset suite.
 
 = 1.0.1 =
 Fixes dashboard menu icon sizing and adds curated style presets.

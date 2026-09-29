@@ -214,7 +214,7 @@ console.log(`Found ${entries.size} unique translatable strings.`);
 // Generate POT output
 const now = new Date().toISOString().replace('T', ' ').substring(0, 19) + '+00:00';
 
-let potVersion = '1.0.1';
+let potVersion = '1.0.2';
 try {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'package.json'), 'utf8'));
   if (pkg.version) potVersion = pkg.version;
