@@ -172,7 +172,37 @@ Dynamic Gallery Wall
 * **Live Status Chips & Top Bar Controls:** Top bar now features active layout and skin indicator chips (`Layout: ...`, `Active Skin: ...`), `▶ 3D Wave Demo` sequence runner, and hardware-accelerated `✦ Spatial 3D Tilt (PRO)` toggle.
 * **Contextual Art Wall Controls (PRO):** When Curated Art Wall layout is selected, right sidebar displays dedicated panel for Wall Texture & Material (`Charcoal`, `Plaster`, `Linen`, `Sage`), Curated Presets (`Salon Wall`, `Hero Triptych`, `Staircase`, `Symmetric Quad`), 57″ Museum Eye-Level horizon guide toggle, Frame Moldings (`Matte Black`, `Natural Oak`, `Nordic White`), Frame Orientation (`Portrait`, `Landscape`, 90° quick flip), Curated Frame Ratios (`24"×36"`, `18"×24"`, `12"×12"`, `16"×20"`, `20"×30"`, `16:9 Wide`), and Responsive mobile tour notes.
 * **Spatial 3D Holographic Tilt:** Gyro/mouse perspective transform with specular light sheen overlay on card hover (`.item-specular-glare`), plus in-inspector wave demo trigger.
-* **Seamless Deselection:** Canvas container background click listener and prominent `✕ Exit to Gallery` button allows immediate return to Wall & Gallery Properties without getting trapped in Photo Inspector.
+### 11. True Continuous CSS Multi-Column Masonry (Completed in v1.0.2)
+* **Problem:** Earlier masonry iterations relied on CSS Grid or Flexbox with uniform row tracking, which produced awkward vertical white gaps or required heavy JavaScript masonry calculations that caused visible page jumps on mobile and delayed load times.
+* **Solution:**
+  * Implemented pure, zero-dependency CSS multi-column masonry: `columns: var(--matcha-columns, 3)` with `column-gap: var(--matcha-gap, 16px)`.
+  * Enforced `break-inside: avoid; display: inline-block; width: 100%; margin-bottom: var(--matcha-gap, 16px);` on all gallery items.
+  * Added responsive breakpoint rules: 3 columns on desktop, 2 on tablet (`@media (max-width: 900px)`), and 1 column on mobile (`@media (max-width: 600px)`), producing seamless cascading heights while preserving native photo aspect ratios with 0ms calculation delay.
+
+### 12. Cold-Load Thumbnail Preloading & Zero-CLS Guard (Completed in v1.0.2)
+* **Zero Cumulative Layout Shift (CLS < 0.01):**
+  * Computed native aspect ratios from WordPress attachment metadata during PHP block/shortcode render.
+  * Injected `style="aspect-ratio: {$width} / {$height};"` directly onto `.matcha-gallery__item-frame` before images start downloading, eliminating page jumps when images resolve over slow mobile networks.
+* **Cold-Load Thumbnail Staggering:**
+  * Embedded lightweight progressive preloader logic with smooth opacity transitions (`transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1)`) and fallback shimmer skeleton placeholders.
+
+### 13. Obsidian Studio Streamlining & Duplicate Control Removal (Completed in v1.0.2)
+* **UI Redundancy Cleanup:** Addressed layout confusion where skin options were duplicated in both the left layout blueprints and the right sidebar properties panel.
+* **Refined Information Architecture:**
+  * Consolidated Blueprint selection into the left tabbed drawer as the single source of truth for gallery structural presets.
+  * Dedicated the right sidebar inspector strictly to contextual styling, frame options, hover effects, and theme skin harmonization.
+  * Refined entire dark workspace to the Obsidian Studio standard (`#090d0b` stage background, `#111613` cards, `#1f2822` borders, and crisp `#ffffff` primary typography with zero muddy green tinting).
+
+### 14. WordPress.org High-CTR Pure Symbol Icon Suite (Completed in v1.0.2)
+* **The 64px Search Card Illegibility Trap:**
+  * In the WordPress.org plugin directory and WP Admin search results (`/wp-admin/plugin-install.php`), plugin cards already display the plugin title in bold 14–16px typography immediately beside the icon.
+  * Embedding tiny text inside the 256×256 icon wasted 40% of the canvas height, shrinking the actual logo symbol to an unreadable 120px smudge at 64px and 128px screen scales.
+* **Pure Symbol Architecture:**
+  * Centered the signature botanical leaf contour at `(128, 128)` and enlarged it to `162 × 166px` (68% canvas coverage).
+  * Multi-photo bento mosaic gallery wall fills the leaf shape, overlaid with 4 concentric tilted gyre loops focusing like a camera aperture.
+  * Retained the matte sage brand background (`#73907F`) and razor-sharp white hairline borders (`2.2px`).
+  * Automated dual-export via [compile-svg.js](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/.wordpress-org/compile-svg.js) (scalable SVG) and [build-icons.ps1](file:///c:/Users/Brosoft/Local%20Sites/matcha-ai-smart-gallery/app/public/wp-content/plugins/matcha-gallery/.wordpress-org/build-icons.ps1) (GDI+ bicubic rendering for 256×256 and 128×128 PNGs).
+  * Synchronized generated assets directly to `.wordpress-org/` SVN assets and `assets/images/`.
 
 ---
 
@@ -183,8 +213,8 @@ Dynamic Gallery Wall
 * **Remote:** `https://github.com/wpmatcha/plugin-matcha-gallery.git` (branch: `main`)
 * **Build Commands:**
   ```bash
-  npm run build          # Builds Gutenberg block & Studio UI bundle (assets/js/studio.js)
-  npm run pack           # Generates matcha-gallery.zip ready for WordPress.org
+  node build.js          # Builds Gutenberg block & Studio UI bundle (assets/js/studio.js)
+  node pack.js           # Rebuilds, updates POT (513 strings), and generates matcha-gallery.zip
   ```
 
 ### Pro Plugin Addon
@@ -216,5 +246,7 @@ Dynamic Gallery Wall
 - [x] **Curated Art Wall (Hero Triptych in Free + Canvas Studio in Pro):** Ship entry-level framed triptych to Free to drive viral installs, with freeform canvas in Pro.
 - [x] **2026 Modern Layout Suite Port:** Lookbook Duet (Magazine editorial stagger in Free) + Cinema Reel (16:9 widescreen runway in Pro) + Curator Specimen (Swiss museum 2-column archive in Pro).
 - [x] **Studio Prototype Feature Port:** Best-Fitting Skins filter matrix, Live Status Chips, 3D Spatial Depth suite, and Art Wall Controls panel.
-- [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org.
+- [x] **v1.0.2 Release Milestone:** True continuous CSS masonry, cold-load thumbnail preloader, Lookbook Duet, Obsidian Studio UI, and High-CTR Pure Symbol WP.org icon suite.
+- [ ] **WordPress.org SVN Release Sync:** Deploy `v1.0.2` tag and updated directory banner/icon assets to `plugins.svn.wordpress.org/matcha-gallery`.
+- [ ] **Growth Milestone:** Drive first 100+ active installs on WordPress.org through targeted community launch and portfolio user outreach.
 
