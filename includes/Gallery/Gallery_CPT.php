@@ -159,7 +159,7 @@ final class Gallery_CPT {
 		$tags = array_filter( array_map( 'sanitize_title', (array) ( $cfg['aiTags'] ?? array() ) ) );
 		$out['aiTags'] = array_slice( $tags, 0, 30 );
 
-		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento', 'art-wall', 'lookbook-duet', 'cinema-reel', 'curator-specimen' ) : array( 'grid', 'masonry', 'justified', 'mosaic', 'art-wall', 'lookbook-duet' );
+		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento', 'art-wall', 'lookbook-duet', 'cinema-reel', 'curator-specimen' ) : array( 'grid', 'masonry', 'justified', 'mosaic', 'bento', 'art-wall', 'lookbook-duet' );
 		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', $default_layouts );
 		$out['layout']   = in_array( $cfg['layout'] ?? 'grid', (array) $allowed_layouts, true ) ? $cfg['layout'] : 'grid';
 
@@ -267,9 +267,9 @@ final class Gallery_CPT {
 			}
 		}
 
-		// Sanitize image geometric spans (Pro)
+		// Sanitize image geometric spans
 		$out['imageSpans'] = array();
-		if ( $is_pro && ! empty( $cfg['imageSpans'] ) && is_array( $cfg['imageSpans'] ) ) {
+		if ( ! empty( $cfg['imageSpans'] ) && is_array( $cfg['imageSpans'] ) ) {
 			$allowed_spans = array( '1x1', '2x1', '1x2', '2x2' );
 			foreach ( $cfg['imageSpans'] as $img_id => $span ) {
 				$clean_id = absint( $img_id );

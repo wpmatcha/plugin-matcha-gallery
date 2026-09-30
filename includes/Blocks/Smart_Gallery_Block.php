@@ -264,7 +264,7 @@ class Smart_Gallery_Block {
 		// Fallback Pro features to free equivalents if Pro add-on is not active.
 		$is_pro = \Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT::is_pro_active();
 		if ( ! $is_pro ) {
-			if ( in_array( $attrs['layout'], array( 'pinwheel', 'bento', 'cinema-reel', 'curator-specimen' ), true ) ) {
+			if ( in_array( $attrs['layout'], array( 'pinwheel', 'cinema-reel', 'curator-specimen' ), true ) ) {
 				$attrs['layout'] = 'grid';
 			}
 			if ( in_array( $attrs['cardTheme'], array( 'glass', 'glow' ), true ) ) {
@@ -282,7 +282,6 @@ class Smart_Gallery_Block {
 			$attrs['colorFilterEnabled'] = false;
 			$attrs['proofingEnabled']    = false;
 			$attrs['shoppableEnabled']   = false;
-			$attrs['imageSpans']         = array();
 			$attrs['sectionsEnabled']    = false;
 			$attrs['sections']           = array();
 			$attrs['randomizeOrder']     = false;

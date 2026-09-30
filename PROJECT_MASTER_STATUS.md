@@ -76,7 +76,7 @@ Dynamic Gallery Wall
 | **AI Enrichment** | Manual Batch in Studio (interactive progress) | Studio Batch + Unattended Server Queue (Roadmap) |
 | **Generated Metadata** | Title, Alt Text, Caption, 4–6 Vision Keywords | Title, Alt, Caption, Keywords, Colors, Focal Zoom |
 | **Smart Focal Point** | Centering only (`1.0x` zoom) | Custom Focal Point + **1.0x – 3.0x Zoom Scale** |
-| **Layouts** | Grid, Masonry, Justified, Mosaic, **Curated Art Wall (Hero Triptych)** | Grid, Masonry, Justified, Mosaic, **Curated Art Wall (Salon, Staircase, Symmetric, Freeform Drag & 90° Frame Rotation)** + **Pinwheel, Bento, Custom Spans** |
+| **Layouts** | Grid, Masonry, Justified, Mosaic, **Bento Spans (PhotoBlocks Tile Geometry)**, **Curated Art Wall (Hero Triptych)** | Grid, Masonry, Justified, Mosaic, Bento Spans + **Curated Art Wall (Salon, Staircase, Symmetric, Freeform Drag & 90° Frame Rotation)** + **Pinwheel Spiral, Cinema Reel Runway, Curator Specimen Archive** |
 | **Filtering Modes** | Single-select filter pills (`All`, `Cats`, `Nature`) | Single-select + **Multi-Select Faceted Checkbox Filtering** |
 | **Toolbar & Controls Skins** | **Modern Capsule** (clean rounded pills, light & dark auto-adaptation) | **Modern Capsule** + **Minimalist Hairline**, **Obsidian Dark**, & **Frosted Glass** |
 | **Color Swatches** | Colors extracted and saved in meta | **Interactive Color Swatch Filter Bar** (click color pill to filter) |

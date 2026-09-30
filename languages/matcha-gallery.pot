@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29 23:24:25+00:00\n"
+"POT-Creation-Date: 2026-09-30 12:34:39+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Add or remove AI keywords"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:827
+#: includes/Blocks/Smart_Gallery_Block.php:826
 msgid "Add to favorites"
 msgstr ""
 
@@ -188,7 +188,7 @@ msgstr ""
 msgid "AI Vision Tagging"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:605
+#: includes/Blocks/Smart_Gallery_Block.php:604
 msgid "All"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "All Blueprints"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:505
+#: includes/Blocks/Smart_Gallery_Block.php:504
 msgid "All Chapters"
 msgstr ""
 
@@ -321,8 +321,12 @@ msgstr ""
 msgid "Bento Showcase"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:186 blocks/smart-gallery/components/InspectorControls.js:256
-msgid "Bento Showcase (PRO)"
+#: blocks/smart-gallery/components/InspectorControls.js:256
+msgid "Bento Showcase (PhotoBlocks)"
+msgstr ""
+
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:181
+msgid "Bento Spans (PhotoBlocks)"
 msgstr ""
 
 #: includes/Admin/Studio_Page.php:298
@@ -341,11 +345,11 @@ msgstr ""
 msgid "Build your gallery shortcode visually to use in Elementor, Divi, Classic Editor, or theme templates."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:932 includes/Blocks/Smart_Gallery_Block.php:934
+#: includes/Blocks/Smart_Gallery_Block.php:931 includes/Blocks/Smart_Gallery_Block.php:933
 msgid "Buy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:934
+#: includes/Blocks/Smart_Gallery_Block.php:933
 msgid "Buy License"
 msgstr ""
 
@@ -369,12 +373,12 @@ msgstr ""
 msgid "Cinema Reel (Horizontal Runway - PRO)"
 msgstr ""
 
-#: blocks/smart-gallery/components/InspectorControls.js:263
-msgid "Cinema Reel & Curator Specimen are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them."
-msgstr ""
-
 #: blocks/smart-gallery/components/InspectorControls.js:329
 msgid "Cinema Reel displays a 16:9 widescreen horizontal runway with smooth touch & trackpad scroll-snap momentum."
+msgstr ""
+
+#: blocks/smart-gallery/components/InspectorControls.js:263
+msgid "Cinema Reel, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them."
 msgstr ""
 
 #: blocks/smart-gallery/components/InspectorControls.js:454
@@ -515,7 +519,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:967
+#: includes/Blocks/Smart_Gallery_Block.php:966
 msgid "Copy ID List"
 msgstr ""
 
@@ -595,11 +599,11 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:550
+#: includes/Blocks/Smart_Gallery_Block.php:549
 msgid "Date Added (Newest)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:551
+#: includes/Blocks/Smart_Gallery_Block.php:550
 msgid "Date Added (Oldest)"
 msgstr ""
 
@@ -607,7 +611,7 @@ msgstr ""
 msgid "Dedicated VIP Priority Support"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:547
+#: includes/Blocks/Smart_Gallery_Block.php:546
 msgid "Default Order"
 msgstr ""
 
@@ -731,7 +735,7 @@ msgstr ""
 msgid "Favorite Tray + ID Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:964
+#: includes/Blocks/Smart_Gallery_Block.php:963
 msgid "Favorites Selected"
 msgstr ""
 
@@ -747,11 +751,11 @@ msgstr ""
 msgid "Filter by AI Keyword Tag"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:558
+#: includes/Blocks/Smart_Gallery_Block.php:557
 msgid "Filter by color"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:570
+#: includes/Blocks/Smart_Gallery_Block.php:569
 #. translators: %s: Hex color code
 msgid "Filter color %s"
 msgstr ""
@@ -844,7 +848,7 @@ msgstr ""
 msgid "Gallery #%d"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:502
+#: includes/Blocks/Smart_Gallery_Block.php:501
 msgid "Gallery Chapters"
 msgstr ""
 
@@ -852,7 +856,7 @@ msgstr ""
 msgid "Gallery duplicated successfully with all layout parameters and images cloned."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:597
+#: includes/Blocks/Smart_Gallery_Block.php:596
 msgid "Gallery filters"
 msgstr ""
 
@@ -864,7 +868,7 @@ msgstr ""
 msgid "Gallery not found."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:957
+#: includes/Blocks/Smart_Gallery_Block.php:956
 msgid "Gallery Pages"
 msgstr ""
 
@@ -1116,7 +1120,7 @@ msgstr ""
 msgid "Load More Button"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:952
+#: includes/Blocks/Smart_Gallery_Block.php:951
 msgid "Load More Photos"
 msgstr ""
 
@@ -1420,7 +1424,7 @@ msgstr ""
 msgid "Open any post or page, click + to insert a new block, and search for \"Matcha Gallery\" or type /matcha. Select your saved gallery from the inspector dropdown on the right."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:928
+#: includes/Blocks/Smart_Gallery_Block.php:927
 msgid "Open Link"
 msgstr ""
 
@@ -1456,7 +1460,7 @@ msgstr ""
 msgid "Pagination Systems"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:559
+#: includes/Blocks/Smart_Gallery_Block.php:558
 msgid "Palette"
 msgstr ""
 
@@ -1476,7 +1480,7 @@ msgstr ""
 msgid "PhotoBlocks Mosaic"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:184
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:185
 msgid "PhotoBlocks Mosaic (PRO)"
 msgstr ""
 
@@ -1508,11 +1512,11 @@ msgstr ""
 msgid "Pinwheel Spiral"
 msgstr ""
 
-#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:185 blocks/smart-gallery/components/InspectorControls.js:257
+#: includes/Integrations/Elementor/Widgets/Matcha_Gallery_Widget.php:186 blocks/smart-gallery/components/InspectorControls.js:257
 msgid "Pinwheel Spiral (PRO)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:850
+#: includes/Blocks/Smart_Gallery_Block.php:849
 msgid "Play Video"
 msgstr ""
 
@@ -1604,11 +1608,11 @@ msgstr ""
 msgid "Quick Start Video & Docs"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:923
+#: includes/Blocks/Smart_Gallery_Block.php:922
 msgid "Quick View"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:552
+#: includes/Blocks/Smart_Gallery_Block.php:551
 msgid "Random Shuffle"
 msgstr ""
 
@@ -1676,11 +1680,11 @@ msgstr ""
 msgid "Search Galleries"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:538
+#: includes/Blocks/Smart_Gallery_Block.php:537
 msgid "Search gallery..."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:539
+#: includes/Blocks/Smart_Gallery_Block.php:538
 msgid "Search images"
 msgstr ""
 
@@ -1744,15 +1748,15 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:877
+#: includes/Blocks/Smart_Gallery_Block.php:876
 msgid "Shop (%s)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:807
+#: includes/Blocks/Smart_Gallery_Block.php:806
 msgid "Shop Now"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:877
+#: includes/Blocks/Smart_Gallery_Block.php:876
 msgid "Shop Product"
 msgstr ""
 
@@ -1813,7 +1817,7 @@ msgstr ""
 msgid "Social Sharing & High-Res Lightbox Zoom"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:546
+#: includes/Blocks/Smart_Gallery_Block.php:545
 msgid "Sort images"
 msgstr ""
 
@@ -1877,11 +1881,11 @@ msgstr ""
 msgid "These are the active AI keywords assigned to your media library images."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:548
+#: includes/Blocks/Smart_Gallery_Block.php:547
 msgid "Title (A → Z)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:549
+#: includes/Blocks/Smart_Gallery_Block.php:548
 msgid "Title (Z → A)"
 msgstr ""
 
@@ -1961,7 +1965,7 @@ msgstr ""
 msgid "Use dynamic source (AI tags)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:818
+#: includes/Blocks/Smart_Gallery_Block.php:817
 msgid "Video Reel"
 msgstr ""
 
@@ -1969,7 +1973,7 @@ msgstr ""
 msgid "View Gallery"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:850
+#: includes/Blocks/Smart_Gallery_Block.php:849
 msgid "View Photo"
 msgstr ""
 
@@ -1989,7 +1993,7 @@ msgstr ""
 msgid "Vision Model"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:807 includes/Blocks/Smart_Gallery_Block.php:865
+#: includes/Blocks/Smart_Gallery_Block.php:806 includes/Blocks/Smart_Gallery_Block.php:864
 msgid "Visit Link"
 msgstr ""
 

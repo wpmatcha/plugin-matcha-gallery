@@ -178,12 +178,12 @@ class Matcha_Gallery_Widget extends Widget_Base {
 			'grid'      => __( 'Classic Grid', 'matcha-gallery' ),
 			'masonry'   => __( 'Pinterest Masonry', 'matcha-gallery' ),
 			'justified' => __( 'Flickr Justified Rows', 'matcha-gallery' ),
+			'bento'     => __( 'Bento Spans (PhotoBlocks)', 'matcha-gallery' ),
 		);
 
 		if ( $is_pro ) {
 			$layout_options['mosaic']   = __( 'PhotoBlocks Mosaic (PRO)', 'matcha-gallery' );
 			$layout_options['pinwheel'] = __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' );
-			$layout_options['bento']    = __( 'Bento Showcase (PRO)', 'matcha-gallery' );
 		}
 
 		$this->add_control(

@@ -253,14 +253,14 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						{ label: __( 'Lookbook Duet (2026 Editorial)', 'matcha-gallery' ), value: 'lookbook-duet' },
 						{ label: __( 'Cinema Reel (Horizontal Runway - PRO)', 'matcha-gallery' ), value: 'cinema-reel' },
 						{ label: __( 'Curator Specimen (Swiss Archive - PRO)', 'matcha-gallery' ), value: 'curator-specimen' },
-						{ label: __( 'Bento Showcase (PRO)', 'matcha-gallery' ), value: 'bento' },
+						{ label: __( 'Bento Showcase (PhotoBlocks)', 'matcha-gallery' ), value: 'bento' },
 						{ label: __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
 					onChange={ ( value ) => {
 						const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
-						if ( [ 'cinema-reel', 'curator-specimen', 'bento', 'pinwheel' ].includes( value ) && ! isPro ) {
+						if ( [ 'cinema-reel', 'curator-specimen', 'pinwheel' ].includes( value ) && ! isPro ) {
 							setAttributes( { layout: 'lookbook-duet' } );
-							alert( __( 'Cinema Reel & Curator Specimen are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.', 'matcha-gallery' ) );
+							alert( __( 'Cinema Reel, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.', 'matcha-gallery' ) );
 							return;
 						}
 						setAttributes( { layout: value } );

@@ -100,7 +100,7 @@ if (root) {
         <p class="matcha-pro-modal-desc">${escapeHtml(featureDesc)}</p>
         
         <div class="matcha-pro-features-list">
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>PhotoBlocks, Pinwheel & Bento Layouts</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Pinwheel Spiral, Cinema Reel & Curator Layouts</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>AI Smart Fill & 2D Focal Pan/Zoom Cropping</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Luxury Picture Frames & Shadow Matting</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Client Proofing Sessions & Story Chapters</span></div>
@@ -920,7 +920,7 @@ if (root) {
       notice: '<strong>PhotoBlocks Mosaic:</strong> Custom tile spans with ambient highlights.'
     },
     bento: {
-      name: 'Bento Spans (PRO)',
+      name: 'Bento Spans',
       allowedSkins: ['skin-pure-minimalist', 'skin-aura', 'skin-editorial'],
       defaultSkin: 'skin-pure-minimalist',
       notice: '<strong>Bento Spans:</strong> Asymmetric grid tiles with PhotoBlocks geometry (Standard, Wide, Tall, Hero).'
@@ -1164,7 +1164,6 @@ if (root) {
 
           <!-- 7. Bento Spans (PhotoBlocks Mosaic) -->
           <div class="matcha-blueprint-card ${(curLayout === 'bento' || curLayout === 'mosaic' || curLayout === 'pinwheel') ? 'is-active' : ''}" data-layout="bento">
-            <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.bento}</span>
             <div class="matcha-blueprint-title">
               Bento Spans
@@ -2082,7 +2081,7 @@ if (root) {
       <!-- Tile Geometry Spans -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.bento} PhotoBlocks Tile Geometry ${!isPro ? `<span class="matcha-pro-badge">PRO</span>` : ''}</span>
+          <span class="heading-wrap">${Icons.bento} PhotoBlocks Tile Geometry</span>
         </div>
         <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 8px;">Assign custom geometric tile spans (Standard, Wide, Tall, Hero) in Bento & Mosaic layouts.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
@@ -3758,10 +3757,6 @@ if (root) {
 
     document.querySelectorAll('.prop-span-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (!isPro) {
-          showProModal('PhotoBlocks Tile Geometry', 'Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.');
-          return;
-        }
         const span = btn.dataset.span;
         const currentSpans = { ...(getState().config.imageSpans || {}) };
         currentSpans[id] = span;
@@ -4215,15 +4210,14 @@ if (root) {
       card.addEventListener('click', () => {
         const layout = card.dataset.layout;
 
-        if (!isPro && ['pinwheel', 'bento', 'cinema-reel', 'curator-specimen'].includes(layout)) {
+        if (!isPro && ['pinwheel', 'cinema-reel', 'curator-specimen'].includes(layout)) {
           const names = {
             pinwheel: 'Pinwheel Spiral',
-            bento: 'Bento Spans (PhotoBlocks)',
             'cinema-reel': 'Cinema Reel (Runway Strip)',
             'curator-specimen': 'Curator Specimen Archive'
           };
           const descs = {
-            bento: 'Asymmetric PhotoBlocks geometric tile spanning (1x1, 2x1 wide, 1x2 tall, 2x2 hero) and modern hero spreads.',
+            pinwheel: 'Center hero spotlight with surrounding spiral thumbnails inspired by the golden ratio.',
             'cinema-reel': '16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.',
             'curator-specimen': 'Architectural 2-column museum showcase with generous 40px negative space and deep shadow elevation.'
           };
@@ -5183,7 +5177,7 @@ if (root) {
     const activeCardTheme = (!isPro && ['glass', 'glow'].includes(cfg.cardTheme)) ? 'clean' : (cfg.cardTheme || 'clean');
     const rawFrameStyle = (!isPro && ['black-metal', 'natural-oak', 'gold-brass', 'glass-float'].includes(cfg.frameStyle)) ? 'none' : (cfg.frameStyle || 'none');
     const activeFrameStyle = (activeSkinKey === 'skin-editorial' || activeSkinKey === 'skin-aura') ? 'none' : rawFrameStyle;
-    const activeLayout = (!isPro && ['pinwheel', 'bento', 'cinema-reel', 'curator-specimen'].includes(cfg.layout)) ? 'grid' : (cfg.layout || 'grid');
+    const activeLayout = (!isPro && ['pinwheel', 'cinema-reel', 'curator-specimen'].includes(cfg.layout)) ? 'grid' : (cfg.layout || 'grid');
     const activePagination = (!isPro && ['infinite', 'pages'].includes(cfg.paginationType)) ? 'load-more' : (cfg.paginationType || 'none');
     const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
 
@@ -5341,9 +5335,9 @@ if (root) {
               const isAi = meta?.ai_generated && keywords.length > 0;
               const isSpanLayout = ['bento', 'mosaic', 'pinwheel'].includes(cfg.layout);
               const mosaicRhythm = ['2x2', '1x1', '1x1', '2x1', '1x1', '1x2', '1x1', '2x1'];
-              const currentSpan = (isPro && imageSpans[m.id])
+              const currentSpan = imageSpans[m.id]
                 ? imageSpans[m.id]
-                : (isSpanLayout && imageSpans[m.id] ? imageSpans[m.id] : (isSpanLayout && idx === 0 ? '2x2' : (isSpanLayout && (idx === 3 || idx === 5) ? '2x1' : (imageSpans[m.id] || '1x1'))));
+                : (isSpanLayout && idx === 0 ? '2x2' : (isSpanLayout && (idx === 3 || idx === 5) ? '2x1' : '1x1'));
               const spanClass = isSpanLayout ? `matcha-gallery__item--span-${currentSpan}` : '';
               const link = imageLinks[m.id] || {};
               const videoUrl = (cfg.imageVideos || {})[m.id] || '';
@@ -5548,10 +5542,6 @@ if (root) {
       canvas.querySelectorAll('.matcha-span-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
-          if (!isPro) {
-            showProModal('PhotoBlocks Tile Geometry', 'Assign custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero) to create asymmetric photo walls. Available in Matcha Gallery Pro.');
-            return;
-          }
           const id = btn.dataset.id;
           const span = btn.dataset.span;
           const currentSpans = { ...(getState().config.imageSpans || {}) };
