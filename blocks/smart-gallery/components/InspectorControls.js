@@ -249,18 +249,18 @@ export default function GalleryInspectorControls( { attributes, setAttributes } 
 						{ label: __( 'Pinterest Masonry', 'matcha-gallery' ), value: 'masonry' },
 						{ label: __( 'Flickr Justified Rows', 'matcha-gallery' ), value: 'justified' },
 						{ label: __( 'PhotoBlocks Mosaic', 'matcha-gallery' ), value: 'mosaic' },
-						{ label: __( 'Curated Art Wall (Hero Triptych)', 'matcha-gallery' ), value: 'art-wall' },
 						{ label: __( 'Lookbook Duet (2026 Editorial)', 'matcha-gallery' ), value: 'lookbook-duet' },
-						{ label: __( 'Cinema Reel (Horizontal Runway - PRO)', 'matcha-gallery' ), value: 'cinema-reel' },
-						{ label: __( 'Curator Specimen (Swiss Archive - PRO)', 'matcha-gallery' ), value: 'curator-specimen' },
+						{ label: __( 'Cinema Reel (Horizontal Runway)', 'matcha-gallery' ), value: 'cinema-reel' },
 						{ label: __( 'Bento Showcase (PhotoBlocks)', 'matcha-gallery' ), value: 'bento' },
+						{ label: __( 'Curated Art Wall (Hero Triptych - PRO)', 'matcha-gallery' ), value: 'art-wall' },
+						{ label: __( 'Curator Specimen (Swiss Archive - PRO)', 'matcha-gallery' ), value: 'curator-specimen' },
 						{ label: __( 'Pinwheel Spiral (PRO)', 'matcha-gallery' ), value: 'pinwheel' },
 					] }
 					onChange={ ( value ) => {
 						const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
-						if ( [ 'cinema-reel', 'curator-specimen', 'pinwheel' ].includes( value ) && ! isPro ) {
-							setAttributes( { layout: 'lookbook-duet' } );
-							alert( __( 'Cinema Reel, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.', 'matcha-gallery' ) );
+						if ( [ 'art-wall', 'curator-specimen', 'pinwheel' ].includes( value ) && ! isPro ) {
+							setAttributes( { layout: 'cinema-reel' } );
+							alert( __( 'Curated Art Wall, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.', 'matcha-gallery' ) );
 							return;
 						}
 						setAttributes( { layout: value } );

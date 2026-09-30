@@ -159,7 +159,7 @@ final class Gallery_CPT {
 		$tags = array_filter( array_map( 'sanitize_title', (array) ( $cfg['aiTags'] ?? array() ) ) );
 		$out['aiTags'] = array_slice( $tags, 0, 30 );
 
-		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento', 'art-wall', 'lookbook-duet', 'cinema-reel', 'curator-specimen' ) : array( 'grid', 'masonry', 'justified', 'mosaic', 'bento', 'art-wall', 'lookbook-duet' );
+		$default_layouts = $is_pro ? array( 'grid', 'masonry', 'justified', 'mosaic', 'pinwheel', 'bento', 'art-wall', 'lookbook-duet', 'cinema-reel', 'curator-specimen' ) : array( 'grid', 'masonry', 'justified', 'mosaic', 'bento', 'lookbook-duet', 'cinema-reel' );
 		$allowed_layouts = apply_filters( 'matcha_gallery_allowed_layouts', $default_layouts );
 		$out['layout']   = in_array( $cfg['layout'] ?? 'grid', (array) $allowed_layouts, true ) ? $cfg['layout'] : 'grid';
 

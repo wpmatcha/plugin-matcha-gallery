@@ -23,13 +23,14 @@ Matcha Gallery produces clean, modern HTML5/CSS3 output with zero jQuery depende
 
 * **Matcha Studio Visual Editor:** A distraction-free, 3-panel visual workspace inspired by Figma. Customize layouts, picture framing, drop shadows, and matting with real-time WYSIWYG preview.
 * **AI Vision & Metadata Generator:** Powered by Google Gemini AI. Automatically generates ADA-compliant alt text, human-readable titles, descriptive captions, and SEO keyword taxonomy.
-* **6 Algorithmic Layout Blueprints:**
+* **7 Algorithmic Layout Blueprints:**
   * *Classic Grid* — Uniform aspect ratio with responsive column presets.
   * *Pinterest Masonry* — Fluid cascading heights preserving native aspect ratios.
   * *PhotoBlocks Mosaic* — Custom geometric tile spans (1x1, 2x1 wide, 1x2 tall, 2x2 hero).
-  * *Pinwheel Spiral* — Center hero spotlight with surrounding spiral thumbnails.
   * *Bento Showcase* — Modern tech-style hero spread.
   * *Justified Rows* — Flickr-style edge-to-edge justified rows.
+  * *Lookbook Duet* — 2026 editorial magazine layout with staggered cadence.
+  * *Cinema Reel* — 16:9 widescreen horizontal runway with smooth momentum scroll-snap.
 * **1-Click ✨ Smart Fill:** AI analyzes image aspect ratios across your entire collection and automatically assigns the optimal geometric tile layout with one click.
 * **In-Frame Pan & Zoom Cropping:** Interactive 2D target reticle and zoom slider (1.0x to 2.5x) to set pixel-perfect focal framing without cutting off heads or subjects.
 * **Realistic Picture Framing & Matting:** 5 gallery-grade picture frames (*White Matting, Slim Black Metal, Natural Oak Wood, Brushed Gold Brass, Glass Float*) with customizable 0–32px matting margins.

@@ -627,18 +627,18 @@
             { label: (0, import_i18n3.__)("Pinterest Masonry", "matcha-gallery"), value: "masonry" },
             { label: (0, import_i18n3.__)("Flickr Justified Rows", "matcha-gallery"), value: "justified" },
             { label: (0, import_i18n3.__)("PhotoBlocks Mosaic", "matcha-gallery"), value: "mosaic" },
-            { label: (0, import_i18n3.__)("Curated Art Wall (Hero Triptych)", "matcha-gallery"), value: "art-wall" },
             { label: (0, import_i18n3.__)("Lookbook Duet (2026 Editorial)", "matcha-gallery"), value: "lookbook-duet" },
-            { label: (0, import_i18n3.__)("Cinema Reel (Horizontal Runway - PRO)", "matcha-gallery"), value: "cinema-reel" },
-            { label: (0, import_i18n3.__)("Curator Specimen (Swiss Archive - PRO)", "matcha-gallery"), value: "curator-specimen" },
+            { label: (0, import_i18n3.__)("Cinema Reel (Horizontal Runway)", "matcha-gallery"), value: "cinema-reel" },
             { label: (0, import_i18n3.__)("Bento Showcase (PhotoBlocks)", "matcha-gallery"), value: "bento" },
+            { label: (0, import_i18n3.__)("Curated Art Wall (Hero Triptych - PRO)", "matcha-gallery"), value: "art-wall" },
+            { label: (0, import_i18n3.__)("Curator Specimen (Swiss Archive - PRO)", "matcha-gallery"), value: "curator-specimen" },
             { label: (0, import_i18n3.__)("Pinwheel Spiral (PRO)", "matcha-gallery"), value: "pinwheel" }
           ],
           onChange: (value) => {
             const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
-            if (["cinema-reel", "curator-specimen", "pinwheel"].includes(value) && !isPro) {
-              setAttributes({ layout: "lookbook-duet" });
-              alert((0, import_i18n3.__)("Cinema Reel, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.", "matcha-gallery"));
+            if (["art-wall", "curator-specimen", "pinwheel"].includes(value) && !isPro) {
+              setAttributes({ layout: "cinema-reel" });
+              alert((0, import_i18n3.__)("Curated Art Wall, Curator Specimen & Pinwheel are Pro layouts. Please upgrade to Matcha Gallery Pro to unlock them.", "matcha-gallery"));
               return;
             }
             setAttributes({ layout: value });

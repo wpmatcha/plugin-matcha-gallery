@@ -100,7 +100,7 @@ if (root) {
         <p class="matcha-pro-modal-desc">${escapeHtml(featureDesc)}</p>
         
         <div class="matcha-pro-features-list">
-          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Pinwheel Spiral, Cinema Reel & Curator Layouts</span></div>
+          <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Art Wall, Pinwheel Spiral & Curator Specimen</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>AI Smart Fill & 2D Focal Pan/Zoom Cropping</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Luxury Picture Frames & Shadow Matting</span></div>
           <div class="matcha-pro-feat-item"><span class="icon">${Icons.check}</span><span>Client Proofing Sessions & Story Chapters</span></div>
@@ -959,6 +959,14 @@ if (root) {
     return 'skin-pure-minimalist';
   }
 
+  function getActiveLayout(cfg) {
+    const l = cfg?.layout || 'grid';
+    if (!isPro && ['pinwheel', 'art-wall', 'curator-specimen'].includes(l)) {
+      return 'grid';
+    }
+    return l;
+  }
+
   function isSkinSupported(skinKey, layoutKey) {
     const allowed = layoutSkinCompatibility[layoutKey]?.allowedSkins || ['skin-pure-minimalist'];
     return allowed.includes(skinKey);
@@ -1086,7 +1094,7 @@ if (root) {
 
   function updateStatusChips() {
     const cfg = getState().config || {};
-    const curLayout = cfg.layout || 'grid';
+    const curLayout = getActiveLayout(cfg);
     const curSkin = getActiveSkinKey(cfg);
     const layoutLabel = document.getElementById('activeLayoutLabel');
     if (layoutLabel) layoutLabel.textContent = getLayoutName(curLayout);
@@ -1099,7 +1107,7 @@ if (root) {
   }
 
   function blueprintsHTML(cfg) {
-    const curLayout = cfg.layout || 'grid';
+    const curLayout = getActiveLayout(cfg);
     const activeSkinKey = getActiveSkinKey(cfg);
     return `
       <div class="matcha-card">
@@ -1138,11 +1146,10 @@ if (root) {
 
           <!-- 4. Cinema Reel (2026) -->
           <div class="matcha-blueprint-card ${curLayout === 'cinema-reel' ? 'is-active' : ''}" data-layout="cinema-reel">
-            <span class="matcha-pro-badge">PRO</span>
             <span class="matcha-blueprint-icon">${Icons.cinemaReel}</span>
             <div class="matcha-blueprint-title">
               Cinema Reel
-              <span class="matcha-pro-badge" style="background:rgba(94,194,127,0.2);color:#5ec27f;border-color:rgba(94,194,127,0.4);font-size:8px;padding:1px 4px;">2026</span>
+              <span style="background:rgba(94,194,127,0.2);color:#5ec27f;border:1px solid rgba(94,194,127,0.4);border-radius:4px;font-size:8px;padding:1px 4px;font-weight:700;">2026</span>
             </div>
             <div class="matcha-blueprint-desc">Horizontal widescreen runway</div>
           </div>
@@ -1395,7 +1402,8 @@ if (root) {
     const curWallRatio = cfg.wallFrameRatio || '18x24';
     const isLandscape = curWallOrient === 'landscape';
     const activeSkinKey = getActiveSkinKey(cfg);
-    const isArtWall = cfg.layout === 'art-wall';
+    const curLayout = getActiveLayout(cfg);
+    const isArtWall = curLayout === 'art-wall';
 
     // --- 1. Stage & Layout Geometry Card ---
     const presetLabels = {
@@ -1522,11 +1530,11 @@ if (root) {
           Layout & Blueprint
         </span>
       `;
-      stageBadge = cfg.layout === 'justified' 
+      stageBadge = curLayout === 'justified' 
         ? `${cfg.rowHeight || 240}px Row` 
         : `${cfg.columns || 3} Cols • ${cfg.gutterSize ?? 22}px`;
       stageBody = `
-        ${cfg.layout === 'justified' ? `
+        ${curLayout === 'justified' ? `
           <div class="range-row" style="margin-bottom:10px;">
             <label style="font-size:11px;font-weight:600;color:var(--st-text-secondary);">Row Height</label>
             <input id="st-row-height" class="range-input" type="range" min="140" max="400" step="10" value="${cfg.rowHeight || 240}">
@@ -2408,7 +2416,7 @@ if (root) {
 
   function positionFloatingToolbar(item) {
     const toolbar = document.getElementById('artWallFloatingToolbar');
-    if (!toolbar || !item || getState().config.layout !== 'art-wall') {
+    if (!toolbar || !item || !isPro || getState().config.layout !== 'art-wall') {
       if (toolbar) toolbar.style.display = 'none';
       return;
     }
@@ -2811,7 +2819,7 @@ if (root) {
     // Pointer events on grid for dragging
     grid.addEventListener('pointerdown', (e) => {
       const cfg = getState().config;
-      if (cfg.layout !== 'art-wall') return;
+      if (!isPro || cfg.layout !== 'art-wall') return;
       if (e.target.closest('button, svg, input, #artWallFloatingToolbar, .matcha-span-btn')) return;
 
       const item = e.target.closest('.matcha-gallery__item--wall-frame');
@@ -4245,15 +4253,15 @@ if (root) {
       card.addEventListener('click', () => {
         const layout = card.dataset.layout;
 
-        if (!isPro && ['pinwheel', 'cinema-reel', 'curator-specimen'].includes(layout)) {
+        if (!isPro && ['pinwheel', 'art-wall', 'curator-specimen'].includes(layout)) {
           const names = {
             pinwheel: 'Pinwheel Spiral',
-            'cinema-reel': 'Cinema Reel (Runway Strip)',
+            'art-wall': 'Curated Art Wall Canvas',
             'curator-specimen': 'Curator Specimen Archive'
           };
           const descs = {
             pinwheel: 'Center hero spotlight with surrounding spiral thumbnails inspired by the golden ratio.',
-            'cinema-reel': '16:9 widescreen horizontal runway with smooth touch momentum and CSS scroll-snap.',
+            'art-wall': 'Museum exhibition wall with freeform drag-and-drop frames, 57″ gallery eye-level guide, salon presets, and luxury moldings.',
             'curator-specimen': 'Architectural 2-column museum showcase with generous 40px negative space and deep shadow elevation.'
           };
           showProModal(`Unlock ${names[layout] || 'Pro Layout'}`, descs[layout] || 'Dynamic aspect-ratio tile spanning, focal-directed hero spreads, and bespoke gallery layouts are available in Matcha Gallery Pro.');
@@ -5264,7 +5272,7 @@ if (root) {
     const activeCardTheme = (!isPro && ['glass', 'glow'].includes(cfg.cardTheme)) ? 'clean' : (cfg.cardTheme || 'clean');
     const rawFrameStyle = (!isPro && ['black-metal', 'natural-oak', 'gold-brass', 'glass-float'].includes(cfg.frameStyle)) ? 'none' : (cfg.frameStyle || 'none');
     const activeFrameStyle = (activeSkinKey === 'skin-editorial' || activeSkinKey === 'skin-aura') ? 'none' : rawFrameStyle;
-    const activeLayout = (!isPro && ['pinwheel', 'cinema-reel', 'curator-specimen'].includes(cfg.layout)) ? 'grid' : (cfg.layout || 'grid');
+    const activeLayout = getActiveLayout(cfg);
     const activePagination = (!isPro && ['infinite', 'pages'].includes(cfg.paginationType)) ? 'load-more' : (cfg.paginationType || 'none');
     const isMultiSelect = isPro && Boolean(cfg.filterMultiSelect);
 
