@@ -267,6 +267,15 @@ class Smart_Gallery_Block {
 			if ( in_array( $attrs['layout'], array( 'pinwheel', 'art-wall', 'curator-specimen' ), true ) ) {
 				$attrs['layout'] = 'grid';
 			}
+			if ( ( $attrs['skin'] ?? '' ) === 'skin-aura' ) {
+				$attrs['skin'] = 'skin-pure-minimalist';
+			}
+			if ( ( $attrs['stylePreset'] ?? '' ) === 'aura' ) {
+				$attrs['stylePreset'] = 'custom';
+			}
+			if ( in_array( $attrs['toolbarSkin'] ?? '', array( 'underline', 'obsidian', 'glass' ), true ) ) {
+				$attrs['toolbarSkin'] = 'capsule';
+			}
 			if ( in_array( $attrs['cardTheme'], array( 'glass', 'glow' ), true ) ) {
 				$attrs['cardTheme'] = 'clean';
 			}
@@ -297,6 +306,15 @@ class Smart_Gallery_Block {
 				$attrs['wallMolding'] = 'mold-black';
 			}
 			$attrs['artWallFrames'] = array();
+			if ( ! empty( $attrs['imageLinks'] ) && is_array( $attrs['imageLinks'] ) ) {
+				foreach ( $attrs['imageLinks'] as &$l ) {
+					if ( is_array( $l ) ) {
+						$l['price']     = '';
+						$l['productId'] = 0;
+					}
+				}
+				unset( $l );
+			}
 		}
 
 		// Query items.
@@ -396,6 +414,10 @@ class Smart_Gallery_Block {
 			} else {
 				$skin = 'skin-pure-minimalist';
 			}
+		}
+
+		if ( ! $is_pro && 'skin-aura' === $skin ) {
+			$skin = 'skin-pure-minimalist';
 		}
 
 		$frame_style = $attrs['frameStyle'] ?? 'none';
@@ -784,7 +806,7 @@ class Smart_Gallery_Block {
 					$has_title     = ! empty( $attrs['showTitle'] ) && ! empty( $item['title'] );
 					$has_caption   = ! empty( $attrs['showCaption'] ) && ! empty( $item['caption'] );
 					$has_link      = ! empty( $link['url'] );
-					$is_shop       = $has_link && ! empty( $link['price'] );
+					$is_shop       = $is_pro && $has_link && ! empty( $link['price'] );
 					$has_media_btn = (bool) $attrs['lightboxEnabled'];
 					$primary_tag   = ! empty( $item['keywords'][0] ) ? $item['keywords'][0] : '';
 					?>
@@ -868,7 +890,7 @@ class Smart_Gallery_Block {
 										</a>
 									<?php endif; ?>
 
-									<?php if ( ! empty( $link['price'] ) || $is_shop ) : ?>
+									<?php if ( $is_pro && ( ! empty( $link['price'] ) || $is_shop ) ) : ?>
 										<a
 											href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>"
 											target="<?php echo esc_attr( $link['target'] ?? '_self' ); ?>"
@@ -916,7 +938,9 @@ class Smart_Gallery_Block {
 									<p class="card-caption"><?php echo esc_html( $item['caption'] ); ?></p>
 								<?php endif; ?>
 								<div class="card-footer">
-									<span class="card-price"><?php echo esc_html( ! empty( $link['price'] ) ? $link['price'] : '$48.00' ); ?></span>
+									<?php if ( $is_pro && ! empty( $link['price'] ) ) : ?>
+										<span class="card-price"><?php echo esc_html( $link['price'] ); ?></span>
+									<?php endif; ?>
 									<div class="card-actions-group">
 										<?php if ( $has_media_btn ) : ?>
 											<button type="button" class="card-icon-btn matcha-action-btn--media" aria-label="<?php esc_attr_e( 'Quick View', 'matcha-gallery' ); ?>">
@@ -928,10 +952,12 @@ class Smart_Gallery_Block {
 												<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
 											</a>
 										<?php endif; ?>
-										<a href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>" class="card-shop-btn matcha-action-btn--shop" aria-label="<?php esc_attr_e( 'Buy', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
-											<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
-											<?php echo esc_html( $has_video ? __( 'Buy License', 'matcha-gallery' ) : __( 'Buy', 'matcha-gallery' ) ); ?>
-										</a>
+										<?php if ( $is_pro && ( ! empty( $link['price'] ) || $is_shop ) ) : ?>
+											<a href="<?php echo esc_url( ! empty( $link['url'] ) ? $link['url'] : '#' ); ?>" class="card-shop-btn matcha-action-btn--shop" aria-label="<?php esc_attr_e( 'Buy', 'matcha-gallery' ); ?>" onclick="event.stopPropagation();">
+												<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+												<?php echo esc_html( $has_video ? __( 'Buy License', 'matcha-gallery' ) : __( 'Buy', 'matcha-gallery' ) ); ?>
+											</a>
+										<?php endif; ?>
 									</div>
 								</div>
 							</div>

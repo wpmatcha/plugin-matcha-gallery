@@ -543,12 +543,13 @@
           ],
           help: (0, import_i18n3.__)("Curated preset that harmonizes layout, hover effects, and framing.", "matcha-gallery"),
           onChange: (val) => {
+            const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
             const patch = { stylePreset: val, contentPlacement: "overlay" };
             if (val === "exhibition-frame") {
               patch.hoverEffect = "frame";
               patch.layout = "grid";
-              patch.frameStyle = "black-metal";
-              patch.mattingSize = 18;
+              patch.frameStyle = isPro ? "black-metal" : "none";
+              patch.mattingSize = isPro ? 18 : 0;
               patch.skin = "skin-exhibition";
             } else if (val === "architectural-curtain") {
               patch.hoverEffect = "curtain";
@@ -745,15 +746,23 @@
           value: attributes.toolbarSkin || "capsule",
           options: [
             { label: (0, import_i18n3.__)("Modern Capsule (Clean Pill)", "matcha-gallery"), value: "capsule" },
-            { label: (0, import_i18n3.__)("Minimalist Hairline (Fine Art Underline)", "matcha-gallery"), value: "underline" },
-            { label: (0, import_i18n3.__)("Obsidian Dark (Charcoal Pro)", "matcha-gallery"), value: "obsidian" },
-            { label: (0, import_i18n3.__)("Frosted Glass (Glassmorphism Pro)", "matcha-gallery"), value: "glass" }
+            { label: (0, import_i18n3.__)("Minimalist Hairline (Fine Art Underline - PRO)", "matcha-gallery"), value: "underline" },
+            { label: (0, import_i18n3.__)("Obsidian Dark (Charcoal Pro - PRO)", "matcha-gallery"), value: "obsidian" },
+            { label: (0, import_i18n3.__)("Frosted Glass (Glassmorphism Pro - PRO)", "matcha-gallery"), value: "glass" }
           ],
           help: (0, import_i18n3.__)(
             "Harmonizes search bar, filter buttons, sort dropdown, and swatches in a unified design language.",
             "matcha-gallery"
           ),
-          onChange: (value) => setAttributes({ toolbarSkin: value })
+          onChange: (value) => {
+            const isPro = window.matchaGalleryBlockData?.isPro || window.MatchaStudio?.isPro;
+            if (["underline", "obsidian", "glass"].includes(value) && !isPro) {
+              setAttributes({ toolbarSkin: "capsule" });
+              alert((0, import_i18n3.__)("Minimalist Hairline, Obsidian Dark & Frosted Glass are Pro toolbar skins. Please upgrade to Matcha Gallery Pro to unlock them.", "matcha-gallery"));
+              return;
+            }
+            setAttributes({ toolbarSkin: value });
+          }
         }
       ),
       filtersEnabled && /* @__PURE__ */ window.wp.element.createElement(

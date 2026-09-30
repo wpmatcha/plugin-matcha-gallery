@@ -269,6 +269,7 @@ if (root) {
   let trayPage = 1;
   const trayBatchSize = 60;
   let isLoadingMore = false;
+  let isSpatial3D = Boolean(isPro);
 
   // Render 3-Panel Studio Shell + Pro Modal
   root.innerHTML = `
@@ -295,14 +296,15 @@ if (root) {
           </div>
 
           <!-- 3D Spatial Depth Controls (PRO) -->
-          <button type="button" id="btn-spatial-wave-demo" class="matcha-exit-btn" style="color:#e6ede8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Watch all cards execute a sequential 3D spatial wave">
+          <button type="button" id="btn-spatial-wave-demo" class="matcha-exit-btn" style="color:#e6ede8;border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Watch all cards execute a sequential 3D spatial wave (PRO)">
             <span>▶ 3D Wave Demo</span>
+            <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
           </button>
-          <button type="button" id="btn-toggle-spatial-tilt" class="matcha-exit-btn is-active" style="color:#ffffff;border-color:rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Toggle Hardware-Accelerated 3D Holographic Tilt">
-            <span style="color:#ffffff;">✦</span>
+          <button type="button" id="btn-toggle-spatial-tilt" class="matcha-exit-btn ${isPro && isSpatial3D ? 'is-active' : ''}" style="color:${isPro && isSpatial3D ? '#ffffff' : 'var(--st-text-muted)'};border-color:rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:5px;padding:4px 9px;" title="Toggle Hardware-Accelerated 3D Holographic Tilt (PRO)">
+            <span style="color:${isPro && isSpatial3D ? '#ffffff' : 'var(--st-text-muted)'};">✦</span>
             <span>Spatial 3D Tilt</span>
             <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
-            <span id="spatial-status-label" style="font-size:9px;font-family:monospace;font-weight:800;color:#ffffff;">ON</span>
+            <span id="spatial-status-label" style="font-size:9px;font-family:monospace;font-weight:800;color:${isPro && isSpatial3D ? '#ffffff' : 'var(--st-text-muted)'};">${isPro && isSpatial3D ? 'ON' : 'OFF'}</span>
           </button>
 
           <div class="matcha-viewport">
@@ -546,10 +548,24 @@ if (root) {
 
   // Top Bar 3D Spatial Depth Controls
   document.getElementById('btn-spatial-wave-demo')?.addEventListener('click', () => {
+    if (!isPro) {
+      showProModal(
+        'Spatial 3D Depth Engine',
+        'Hardware-accelerated 3D wave choreography and interactive spatial perspective tilt with specular lighting glare are exclusive to Matcha Gallery Pro.'
+      );
+      return;
+    }
     trigger3DWaveDemo();
   });
 
   document.getElementById('btn-toggle-spatial-tilt')?.addEventListener('click', () => {
+    if (!isPro) {
+      showProModal(
+        'Spatial 3D Holographic Tilt',
+        'Hardware-accelerated interactive 3D perspective tilt with specular lighting glare and dynamic shadows is available in Matcha Gallery Pro.'
+      );
+      return;
+    }
     toggleSpatial3D();
   });
 
@@ -952,11 +968,17 @@ if (root) {
   };
 
   function getActiveSkinKey(cfg) {
-    if (cfg.skin) return cfg.skin;
-    if (cfg.stylePreset === 'editorial' || cfg.cardTheme === 'card' || cfg.contentPlacement === 'below') return 'skin-editorial';
-    if (cfg.stylePreset === 'exhibition-frame') return 'skin-exhibition';
-    if (cfg.stylePreset === 'aura') return 'skin-aura';
-    return 'skin-pure-minimalist';
+    let skin = cfg.skin;
+    if (!skin) {
+      if (cfg.stylePreset === 'editorial' || cfg.cardTheme === 'card' || cfg.contentPlacement === 'below') skin = 'skin-editorial';
+      else if (cfg.stylePreset === 'exhibition-frame') skin = 'skin-exhibition';
+      else if (cfg.stylePreset === 'aura') skin = 'skin-aura';
+      else skin = 'skin-pure-minimalist';
+    }
+    if (!isPro && skin === 'skin-aura') {
+      return 'skin-pure-minimalist';
+    }
+    return skin;
   }
 
   function getActiveLayout(cfg) {
@@ -986,10 +1008,18 @@ if (root) {
     return layoutSkinCompatibility[layoutKey]?.name || 'Classic Grid';
   }
 
-  let isSpatial3D = true;
-
   function toggleSpatial3D(enable) {
-    if (!isPro && enable !== false) {
+    if (!isPro) {
+      isSpatial3D = false;
+      const canvas = document.getElementById('studio-canvas');
+      if (canvas) canvas.classList.remove('spatial-3d-active');
+      const toggleBtn = document.getElementById('btn-toggle-spatial-tilt');
+      const label = document.getElementById('spatial-status-label');
+      if (toggleBtn) toggleBtn.classList.remove('is-active');
+      if (label) {
+        label.textContent = 'OFF';
+        label.style.color = 'var(--st-text-muted)';
+      }
       showProModal(
         'Spatial 3D Holographic Tilt',
         'Hardware-accelerated interactive 3D perspective tilt with specular lighting glare and dynamic shadows is available in Matcha Gallery Pro.'
@@ -1019,6 +1049,13 @@ if (root) {
   }
 
   function trigger3DWaveDemo() {
+    if (!isPro) {
+      showProModal(
+        'Spatial 3D Depth Engine',
+        'Hardware-accelerated 3D wave choreography and interactive spatial perspective tilt with specular lighting glare are exclusive to Matcha Gallery Pro.'
+      );
+      return;
+    }
     if (!isSpatial3D) toggleSpatial3D(true);
     const items = document.querySelectorAll('.matcha-gallery__item');
     items.forEach((item, idx) => {
@@ -1047,7 +1084,11 @@ if (root) {
   function initSpatial3DPhysics() {
     const canvas = document.getElementById('studio-canvas');
     if (!canvas) return;
-    canvas.classList.toggle('spatial-3d-active', isSpatial3D);
+    if (!isPro || !isSpatial3D) {
+      canvas.classList.remove('spatial-3d-active');
+      return;
+    }
+    canvas.classList.add('spatial-3d-active');
 
     const items = canvas.querySelectorAll('.matcha-gallery__item');
     items.forEach(item => {
@@ -4287,7 +4328,7 @@ if (root) {
           } else if (nextSkin === 'skin-editorial') {
             patch = { ...patch, stylePreset: 'editorial', cardTheme: 'card', frameStyle: 'none', mattingSize: 0, contentPlacement: 'below', hoverEffect: 'zoom' };
           } else if (nextSkin === 'skin-exhibition') {
-            patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: 'black-metal', mattingSize: 18, contentPlacement: 'overlay', hoverEffect: 'frame' };
+            patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: isPro ? 'black-metal' : 'none', mattingSize: isPro ? 18 : 0, contentPlacement: 'overlay', hoverEffect: 'frame' };
           } else if (nextSkin === 'skin-aura') {
             patch = { ...patch, stylePreset: 'aura', cardTheme: 'dark', frameStyle: 'none', mattingSize: 0, contentPlacement: 'overlay', hoverEffect: 'zoom' };
           }
@@ -4333,7 +4374,7 @@ if (root) {
         } else if (skinKey === 'skin-editorial') {
           patch = { ...patch, stylePreset: 'editorial', cardTheme: 'card', frameStyle: 'none', mattingSize: 0, contentPlacement: 'below', hoverEffect: 'zoom' };
         } else if (skinKey === 'skin-exhibition') {
-          patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: 'black-metal', mattingSize: 18, contentPlacement: 'overlay', hoverEffect: 'frame' };
+          patch = { ...patch, stylePreset: 'exhibition-frame', cardTheme: 'clean', frameStyle: isPro ? 'black-metal' : 'none', mattingSize: isPro ? 18 : 0, contentPlacement: 'overlay', hoverEffect: 'frame' };
         } else if (skinKey === 'skin-aura') {
           patch = { ...patch, stylePreset: 'aura', cardTheme: 'dark', frameStyle: 'none', mattingSize: 0, contentPlacement: 'overlay', hoverEffect: 'zoom' };
         }
@@ -5333,8 +5374,10 @@ if (root) {
           </div>
         ` : ''}
 
-        ${(cfg.searchEnabled !== false || cfg.filtersEnabled || (isPro && cfg.colorFilterEnabled && sortedColors.length > 0) || (isPro && cfg.frontendSortEnabled)) ? `
-          <div class="matcha-gallery__toolbar matcha-gallery__toolbar--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')}">
+        ${(() => {
+          const curToolbarSkin = (!isPro && ['underline', 'obsidian', 'glass'].includes(cfg.toolbarSkin)) ? 'capsule' : (cfg.toolbarSkin || cfg.filterStyle || 'capsule');
+          return (cfg.searchEnabled !== false || cfg.filtersEnabled || (isPro && cfg.colorFilterEnabled && sortedColors.length > 0) || (isPro && cfg.frontendSortEnabled)) ? `
+          <div class="matcha-gallery__toolbar matcha-gallery__toolbar--skin-${escapeHtml(curToolbarSkin)}">
             ${cfg.searchEnabled !== false ? `
               <div class="matcha-gallery__search-wrap">
                 <span class="matcha-search-icon" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;display:flex;align-items:center;pointer-events:none;">
@@ -5367,7 +5410,7 @@ if (root) {
             ` : ''}
 
             ${(cfg.filtersEnabled && allTags.length > 0) ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')} matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar" aria-label="Gallery filters">
+              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(curToolbarSkin)} matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar" aria-label="Gallery filters">
                 ${cfg.showAllFilter !== false ? `
                   <button type="button" class="matcha-filter matcha-filter--active matcha-filter--all" data-filter="*" aria-pressed="true">
                     ${escapeHtml(cfg.allFilterLabel || 'All')}
@@ -5383,7 +5426,8 @@ if (root) {
               </div>
             ` : ''}
           </div>
-        ` : ''}
+        ` : '';
+        })()}
         ${(() => {
           const presetKey = cfg.wallPreset || 'triptych';
           const preset = wallPresets[presetKey] || wallPresets.triptych;
@@ -5428,7 +5472,7 @@ if (root) {
               const imgTitle = meta?.title || stripHtml(m.title?.rendered || '');
               const imgCaption = meta?.caption || '';
               const isAi = meta?.ai_generated && keywords.length > 0;
-              const isSpanLayout = ['bento', 'mosaic', 'pinwheel'].includes(cfg.layout);
+              const isSpanLayout = ['bento', 'mosaic', 'pinwheel'].includes(activeLayout);
               const mosaicRhythm = ['2x2', '1x1', '1x1', '2x1', '1x1', '1x2', '1x1', '2x1'];
               const currentSpan = imageSpans[m.id]
                 ? imageSpans[m.id]
@@ -5452,7 +5496,7 @@ if (root) {
                 itemStyle += `flex:${ratio} 1 calc(${cfg.rowHeight || 240}px * ${ratio});max-width:calc(${cfg.rowHeight || 240}px * ${ratio} * 2);`;
               }
 
-              const isShop = !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
+              const isShop = isPro && !!(link.url && (link.price || link.productId || (link.label && /shop/i.test(link.label)) || link.url.includes('/product/')));
               const primaryTag = keywords[0] || (meta?.tags && meta.tags[0]) || '';
               const ambientGlow = (meta?.colors && meta.colors[0]) ? meta.colors[0] : (cfg.accentColor || '#607d66');
               const paletteDotsHtml = (meta?.colors && meta.colors.length > 0)
@@ -5511,7 +5555,7 @@ if (root) {
                           </div>
                         ` : ''}
 
-                        ${(cfg.proofingEnabled !== false) ? `
+                        ${(isPro && cfg.proofingEnabled) ? `
                           <button type="button" class="item-badge-heart matcha-gallery__proof-btn ${isFavorited ? 'active' : ''}" data-id="${m.id}" aria-label="Favorite for Proofing">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorited ? '#ef4444' : 'none'}" stroke="${isFavorited ? '#ef4444' : 'currentColor'}" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                           </button>
@@ -5530,7 +5574,7 @@ if (root) {
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                             </button>
                           ` : ''}
-                          ${(link.price || isShop) ? `
+                          ${(isPro && (link.price || isShop)) ? `
                             <button type="button" class="dock-btn btn-shop matcha-action-btn--shop" aria-label="Shop Item">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
                               <span>${escapeHtml(link.price || '$48')}</span>
@@ -5554,7 +5598,7 @@ if (root) {
                         <h4 class="card-title">${escapeHtml(imgTitle)}</h4>
                         ${imgCaption ? `<p class="card-caption">${escapeHtml(imgCaption)}</p>` : ''}
                         <div class="card-footer">
-                          <span class="card-price">${escapeHtml(link.price || '$48.00')}</span>
+                          ${(isPro && link.price) ? `<span class="card-price">${escapeHtml(link.price)}</span>` : ''}
                           <div class="card-actions-group">
                             <button type="button" class="card-icon-btn matcha-action-btn--media" aria-label="Quick View">
                               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
@@ -5564,10 +5608,12 @@ if (root) {
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
                               </button>
                             ` : ''}
-                            <button type="button" class="card-shop-btn matcha-action-btn--shop" aria-label="Buy Item">
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
-                              ${hasVideo ? 'Buy License' : 'Buy'}
-                            </button>
+                            ${(isPro && (link.price || isShop)) ? `
+                              <button type="button" class="card-shop-btn matcha-action-btn--shop" aria-label="Buy Item">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                                ${hasVideo ? 'Buy License' : 'Buy'}
+                              </button>
+                            ` : ''}
                           </div>
                         </div>
                       </div>
