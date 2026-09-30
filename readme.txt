@@ -106,6 +106,7 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 * Feature: Cold-load thumbnail preloading and instant frame aspect-ratio reservation for zero layout shifts (CLS < 0.01).
 * Feature: Obsidian Studio UI refresh — refined high-contrast monochrome studio workspace with streamlined layout tabs and synchronized skins.
 * Asset: High-CTR WordPress.org Pure Symbol Icon Suite (256x256, 128x128, and scalable SVG) optimized for plugin directory and wp-admin search visibility.
+* Fix: Strict Pro feature isolation — ensure Spatial 3D tilt, holographic physics, client proofing, shoppable pricing dock, and advanced toolbar skins cleanly fall back to free standards when Pro is inactive.
 * Enhancement: Translation catalogue synchronization and optimized production bundle packaging.
 
 = 1.0.1 =
