@@ -2419,25 +2419,25 @@ body.matcha-is-dragging * {
 	100% { transform: scale(1); }
 }
 
-/* --- FLOATING FROSTED GLASS ACTION DOCK (HOVER: CENTER VIEWFINDER) --- */
+/* --- FLOATING ACTION ICONS (HOVER: CENTER VIEWFINDER) --- */
 .item-action-dock {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%) scale(0.92);
 	z-index: 15;
-	background: rgba(18, 23, 20, 0.88);
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 30px;
-	padding: 5px 8px;
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0;
+	padding: 0;
 	display: flex;
 	align-items: center;
-	gap: 5px;
+	gap: 8px;
 	opacity: 0;
 	transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-	box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55);
+	box-shadow: none !important;
+	backdrop-filter: none !important;
+	-webkit-backdrop-filter: none !important;
 	pointer-events: none;
 }
 .gallery-item:hover .item-action-dock,
@@ -2447,41 +2447,46 @@ body.matcha-is-dragging * {
 	pointer-events: auto;
 }
 .dock-btn {
-	width: 34px;
-	height: 34px;
+	width: 38px;
+	height: 38px;
 	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.08);
-	border: 1px solid rgba(255, 255, 255, 0.12);
-	color: rgba(255, 255, 255, 0.9);
+	background: rgba(15, 23, 42, 0.65);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid rgba(255, 255, 255, 0.24);
+	color: rgba(255, 255, 255, 0.95);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
-	transition: all 0.18s ease;
+	transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 	position: relative;
 	padding: 0;
 	text-decoration: none;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 .dock-btn:hover {
-	background: rgba(255, 255, 255, 0.25);
-	color: #ffffff;
-	transform: scale(1.08);
+	background: #ffffff;
+	color: #0f172a;
+	border-color: #ffffff;
+	transform: scale(1.12);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 .dock-btn.btn-shop {
 	width: auto;
 	border-radius: 20px;
-	padding: 0 12px;
-	gap: 5px;
-	font-size: 11px;
-	font-weight: 700;
-	color: var(--matcha-accent, #607d66);
-	background: color-mix(in srgb, var(--matcha-accent, #607d66) 18%, transparent);
-	border: 1px solid color-mix(in srgb, var(--matcha-accent, #607d66) 38%, transparent);
+	padding: 0 14px;
+	gap: 6px;
+	font-size: 11.5px;
+	font-weight: 600;
+	color: #ffffff;
+	background: rgba(15, 23, 42, 0.72);
+	border: 1px solid rgba(255, 255, 255, 0.24);
 }
 .dock-btn.btn-shop:hover {
-	background: var(--matcha-accent, #607d66);
-	border-color: var(--matcha-accent, #607d66);
+	background: var(--matcha-accent, #5ec27f);
 	color: #ffffff;
+	border-color: var(--matcha-accent, #5ec27f);
 	transform: scale(1.06);
 }
 
