@@ -1330,6 +1330,13 @@
       </label>
       <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
         <span style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="st-toolbar-color-filter" ${isPro && cfg.colorFilterEnabled ? "checked" : ""}>
+          Enable AI Color Palette Swatches
+        </span>
+        <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <span style="display:flex;align-items:center;gap:8px;">
           <input type="checkbox" id="st-frontend-sort" ${isPro && cfg.frontendSortEnabled ? "checked" : ""}>
           Enable Visitor Sort Dropdown
         </span>
@@ -1404,6 +1411,12 @@
               <input type="text" id="st-all-filter-label" class="matcha-dark-input" value="${escapeHtml(cfg.allFilterLabel || "All")}" placeholder="All" />
             </div>
           ` : ""}
+
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Max Visible Category Pills</label>
+            <input type="number" id="st-max-filter-tags" class="matcha-dark-input" min="0" max="100" value="${cfg.maxFilterTags ?? 8}" placeholder="8 (0 = unlimited)" />
+            <span style="font-size:9px;color:var(--st-text-muted);">Limits how many pills to show before truncating (0 = all tags).</span>
+          </div>
         </div>
       ` : ""}
 
@@ -2597,6 +2610,28 @@
         renderCanvas();
         autosaveSoon();
       });
+      document.getElementById("st-toolbar-color-filter")?.addEventListener("change", (e) => {
+        if (!isPro && e.target.checked) {
+          e.target.checked = false;
+          showProModal(
+            "AI Color Swatches Palette Filter",
+            "Visitors can filter your photos by clicking dominant color palette swatches automatically extracted by AI. Available in Matcha Gallery Pro."
+          );
+          return;
+        }
+        patchConfig({ colorFilterEnabled: e.target.checked });
+        const leftCb = document.getElementById("st-color-filter");
+        if (leftCb) leftCb.checked = e.target.checked;
+        renderCanvas();
+        autosaveSoon();
+      });
+      document.getElementById("st-max-filter-tags")?.addEventListener("input", (e) => {
+        const raw = e.target.value.trim();
+        const val = raw === "" ? 0 : parseInt(raw, 10);
+        patchConfig({ maxFilterTags: isNaN(val) ? 8 : val });
+        renderCanvas();
+        autosaveSoon();
+      });
       document.getElementById("st-lightbox")?.addEventListener("change", (e) => {
         patchConfig({ lightboxEnabled: e.target.checked });
         renderCanvas();
@@ -3475,6 +3510,8 @@
           return;
         }
         patchConfig({ colorFilterEnabled: e.target.checked });
+        const rightCb = document.getElementById("st-toolbar-color-filter");
+        if (rightCb) rightCb.checked = e.target.checked;
         renderCanvas();
         autosaveSoon();
       });
@@ -3643,216 +3680,6 @@
           renderCanvas();
           autosaveSoon();
         }
-      });
-    }, openFilterManagerModal = function() {
-      let modal = document.getElementById("matcha-filter-manager-modal");
-      if (!modal) {
-        modal = document.createElement("div");
-        modal.id = "matcha-filter-manager-modal";
-        modal.className = "matcha-modal";
-        document.body.appendChild(modal);
-      }
-      const cfg = getState().config;
-      const allIds = cfg.imageIds || [];
-      let visibleFilterTags = [...cfg.visibleFilterTags || []];
-      const tagMap = {};
-      allIds.forEach((id) => {
-        const m = metaCache.get(id);
-        const kws = m?.keywords || [];
-        kws.forEach((k) => {
-          const clean = k.trim();
-          if (!clean) return;
-          if (!tagMap[clean]) tagMap[clean] = [];
-          tagMap[clean].push(id);
-        });
-      });
-      const existingOrder = cfg.orderedFilterTags || [];
-      const sortedTags = Object.keys(tagMap).sort((a, b) => {
-        const idxA = existingOrder.indexOf(a);
-        const idxB = existingOrder.indexOf(b);
-        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-        if (idxA !== -1) return -1;
-        if (idxB !== -1) return 1;
-        return tagMap[b].length - tagMap[a].length;
-      });
-      modal.innerHTML = `
-      <div class="matcha-modal-backdrop" id="filter-modal-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:999999;"></div>
-      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:500px;width:92vw;max-height:86vh;background:#151a16;border:1px solid var(--st-border-subtle);border-radius:12px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.8);overflow:hidden;font-family:var(--st-font);">
-        
-        <!-- Compact Modal Header -->
-        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:28px;height:28px;border-radius:8px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;display:flex;align-items:center;justify-content:center;">
-              ${Icons.filter}
-            </div>
-            <div>
-              <h3 style="margin:0;font-size:14px;color:#f2f5f3;font-weight:700;letter-spacing:-0.01em;">Gallery Filter Manager</h3>
-              <p style="margin:1px 0 0;font-size:11px;color:#9aa79d;">Drag to reorder pills, toggle visibility, or edit tags.</p>
-            </div>
-          </div>
-          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:#9aa79d;cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;" title="Close">\u2715</button>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="matcha-modal-body" style="padding:12px 18px;overflow-y:auto;flex:1;">
-          ${sortedTags.length === 0 ? `
-            <div style="text-align:center;padding:40px 16px;color:#9aa79d;">
-              <div style="font-size:28px;margin-bottom:8px;opacity:0.6;display:flex;justify-content:center;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
-              </div>
-              <p style="font-size:14px;color:#f2f5f3;font-weight:600;margin:0 0 4px;">No tags found in this gallery</p>
-              <p style="font-size:11px;margin:0;max-width:320px;margin-inline:auto;">Click "AI Enhance" in the sidebar to auto-generate smart tags.</p>
-            </div>
-          ` : `
-            <!-- Dense Utility Subheader -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
-              <input type="search" id="filter-mgr-search" placeholder="Find tag..." style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:5px;padding:3px 8px;font-size:11px;width:130px;outline:none;" />
-              <div style="display:flex;align-items:center;gap:5px;">
-                <button type="button" id="btn-select-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#5ec27f;border:1px solid rgba(94,194,127,0.3);border-radius:4px;background:rgba(94,194,127,0.08);cursor:pointer;" title="Select all tags">Select All</button>
-                <button type="button" id="btn-deselect-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#9aa79d;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:none;cursor:pointer;" title="Deselect all tags">Deselect</button>
-                <button type="button" id="btn-clear-all-gallery-tags" style="padding:2px 7px;font-size:10px;font-weight:600;color:#ef4444;border:1px solid rgba(239,68,68,0.25);border-radius:4px;background:rgba(239,68,68,0.08);cursor:pointer;" title="Delete all tags from photos">Clear All</button>
-              </div>
-            </div>
-
-            <!-- Ultra-Compact Draggable Tag Rows -->
-            <div style="display:flex;flex-direction:column;gap:3px;max-height:55vh;overflow-y:auto;padding-right:2px;" id="filter-manager-tags-list">
-              ${sortedTags.map((tag) => {
-        const count = tagMap[tag].length;
-        const isChecked = visibleFilterTags.length === 0 || visibleFilterTags.includes(tag);
-        return `
-                  <div class="filter-manager-row filter-mgr-row" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:3px 8px;gap:8px;min-height:27px;">
-                    <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
-                      <span class="filter-drag-handle" title="Drag to reorder tag" style="cursor:grab;color:var(--st-text-muted);display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;">${Icons.drag}</span>
-                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? "checked" : ""} style="cursor:pointer;accent-color:#4da468;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
-                      <span class="tag-badge" style="background:rgba(77,164,104,0.14);border:1px solid rgba(77,164,104,0.25);color:#5ec27f;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
-                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tag)}</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">
-                      <button type="button" class="btn-rename-tag matcha-row-icon-btn" data-tag="${escapeHtml(tag)}" title="Rename tag globally">
-                        ${Icons.edit}
-                      </button>
-                      <button type="button" class="btn-delete-tag-global matcha-row-icon-btn matcha-row-icon-btn--danger" data-tag="${escapeHtml(tag)}" title="Delete from all photos in this gallery">
-                        ${Icons.trash}
-                      </button>
-                    </div>
-                  </div>
-                `;
-      }).join("")}
-            </div>
-          `}
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.3);">
-          <span style="font-size:11px;color:#647367;">Drag to order pills. Uncheck to hide.</span>
-          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:6px 16px;font-size:12px;background:linear-gradient(135deg, #4da468, #377d4f);color:#fff;border-radius:6px;border:1px solid #2e6942;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(55,125,79,0.35);">
-            Apply & Save
-          </button>
-        </div>
-      </div>
-    `;
-      modal.style.display = "block";
-      const searchInput = modal.querySelector("#filter-mgr-search");
-      if (searchInput) {
-        searchInput.addEventListener("input", (e) => {
-          const q = e.target.value.toLowerCase().trim();
-          modal.querySelectorAll(".filter-mgr-row").forEach((row) => {
-            const t = (row.dataset.tag || "").toLowerCase();
-            row.style.display = !q || t.includes(q) ? "flex" : "none";
-          });
-        });
-      }
-      modal.querySelector("#btn-select-all-tags")?.addEventListener("click", () => {
-        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
-          cb.checked = true;
-        });
-      });
-      modal.querySelector("#btn-deselect-all-tags")?.addEventListener("click", () => {
-        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
-          cb.checked = false;
-        });
-      });
-      const tagListEl = modal.querySelector("#filter-manager-tags-list");
-      if (tagListEl && window.Sortable) {
-        new window.Sortable(tagListEl, {
-          handle: ".filter-drag-handle",
-          animation: 150,
-          ghostClass: "matcha-sortable-ghost",
-          onEnd: () => {
-            const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
-            const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
-            patchConfig({ orderedFilterTags });
-            autosaveSoon();
-            renderCanvas();
-          }
-        });
-      }
-      const saveAndClose = () => {
-        const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
-        const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
-        const checkedBoxes = modal.querySelectorAll(".tag-vis-check:checked");
-        if (checkedBoxes.length > 0 && checkedBoxes.length < sortedTags.length) {
-          visibleFilterTags = [...checkedBoxes].map((cb) => cb.dataset.tag);
-        } else {
-          visibleFilterTags = [];
-        }
-        patchConfig({ visibleFilterTags, orderedFilterTags });
-        modal.style.display = "none";
-        renderCanvas();
-        renderRightPanel();
-        autosaveSoon();
-      };
-      modal.querySelector("#filter-modal-close").addEventListener("click", saveAndClose);
-      modal.querySelector("#filter-modal-backdrop").addEventListener("click", saveAndClose);
-      modal.querySelector("#filter-modal-done").addEventListener("click", saveAndClose);
-      modal.querySelectorAll(".btn-delete-tag-global").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const tagToDelete = btn.dataset.tag;
-          if (!confirm(`Delete tag "${tagToDelete}" from all photos in this gallery?`)) return;
-          allIds.forEach((id) => {
-            const m = metaCache.get(id);
-            if (m?.keywords) {
-              m.keywords = m.keywords.filter((k) => k !== tagToDelete);
-              metaCache.set(id, m);
-              dirtyMetaIds.add(id);
-            }
-          });
-          autosaveSoon();
-          openFilterManagerModal();
-        });
-      });
-      modal.querySelectorAll(".btn-rename-tag").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const oldTag = btn.dataset.tag;
-          const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
-          if (!newTag || newTag.trim() === "" || newTag.trim() === oldTag) return;
-          const cleanNew = newTag.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
-          allIds.forEach((id) => {
-            const m = metaCache.get(id);
-            if (m?.keywords) {
-              m.keywords = m.keywords.map((k) => k === oldTag ? cleanNew : k);
-              m.keywords = [...new Set(m.keywords)];
-              metaCache.set(id, m);
-              dirtyMetaIds.add(id);
-            }
-          });
-          autosaveSoon();
-          openFilterManagerModal();
-        });
-      });
-      modal.querySelector("#btn-clear-all-gallery-tags")?.addEventListener("click", () => {
-        if (!confirm("Are you sure you want to remove ALL tags from ALL photos in this gallery?")) return;
-        allIds.forEach((id) => {
-          const m = metaCache.get(id);
-          if (m) {
-            m.keywords = [];
-            metaCache.set(id, m);
-            dirtyMetaIds.add(id);
-          }
-        });
-        patchConfig({ visibleFilterTags: [], orderedFilterTags: [] });
-        autosaveSoon();
-        openFilterManagerModal();
       });
     }, capitalize = function(str) {
       return str.charAt(0).toUpperCase() + str.slice(1).replace(/-/g, " ");
@@ -4626,6 +4453,245 @@
     }
     let studioSortableInstance = null;
     let didJustDrag = false;
+    async function openFilterManagerModal() {
+      let modal = document.getElementById("matcha-filter-manager-modal");
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "matcha-filter-manager-modal";
+        modal.className = "matcha-modal";
+        document.body.appendChild(modal);
+      }
+      const cfg = getState().config;
+      const allIds = cfg.imageIds || [];
+      let visibleFilterTags = [...cfg.visibleFilterTags || []];
+      const missingMetaIds = allIds.filter((id) => !metaCache.has(id));
+      if (missingMetaIds.length > 0) {
+        try {
+          const metaRes = await fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${missingMetaIds.join(",")}`, {
+            headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
+          });
+          const fetchedMeta = await metaRes.json();
+          if (fetchedMeta && typeof fetchedMeta === "object") {
+            Object.entries(fetchedMeta).forEach(([idStr, m]) => {
+              const numId = parseInt(idStr, 10);
+              if (numId && !dirtyMetaIds.has(numId)) {
+                metaCache.set(numId, m);
+              }
+            });
+          }
+        } catch (err) {
+          console.warn("[MatchaStudio] Failed to load metadata for filter manager:", err);
+        }
+      }
+      const tagMap = {};
+      const tagDisplayNames = {};
+      allIds.forEach((id) => {
+        const m = metaCache.get(id);
+        const kws = m?.keywords || [];
+        kws.forEach((k) => {
+          const clean = (k || "").trim();
+          const slug = clean.toLowerCase().replace(/[^a-z0-9_-]/g, "-");
+          if (!slug) return;
+          if (!tagMap[slug]) {
+            tagMap[slug] = [];
+            tagDisplayNames[slug] = capitalize(clean.replace(/-/g, " "));
+          }
+          tagMap[slug].push(id);
+        });
+      });
+      const existingOrder = cfg.orderedFilterTags || [];
+      const sortedTags = Object.keys(tagMap).sort((a, b) => {
+        const idxA = existingOrder.indexOf(a);
+        const idxB = existingOrder.indexOf(b);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return tagMap[b].length - tagMap[a].length;
+      });
+      modal.innerHTML = `
+      <div class="matcha-modal-backdrop" id="filter-modal-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:999999;"></div>
+      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:500px;width:92vw;max-height:86vh;background:#151a16;border:1px solid var(--st-border-subtle);border-radius:12px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.8);overflow:hidden;font-family:var(--st-font);">
+        
+        <!-- Compact Modal Header -->
+        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;display:flex;align-items:center;justify-content:center;">
+              ${Icons.filter}
+            </div>
+            <div>
+              <h3 style="margin:0;font-size:14px;color:#f2f5f3;font-weight:700;letter-spacing:-0.01em;">Gallery Filter Manager</h3>
+              <p style="margin:1px 0 0;font-size:11px;color:#9aa79d;">Drag to reorder pills, toggle visibility, or edit tags.</p>
+            </div>
+          </div>
+          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:#9aa79d;cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;" title="Close">\u2715</button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="matcha-modal-body" style="padding:12px 18px;overflow-y:auto;flex:1;">
+          ${sortedTags.length === 0 ? `
+            <div style="text-align:center;padding:40px 16px;color:#9aa79d;">
+              <div style="font-size:28px;margin-bottom:8px;opacity:0.6;display:flex;justify-content:center;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              </div>
+              <p style="font-size:14px;color:#f2f5f3;font-weight:600;margin:0 0 4px;">No tags found in this gallery</p>
+              <p style="font-size:11px;margin:0;max-width:320px;margin-inline:auto;">Click "AI Enhance" in the sidebar to auto-generate smart tags.</p>
+            </div>
+          ` : `
+            <!-- Dense Utility Subheader -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
+              <input type="search" id="filter-mgr-search" placeholder="Find tag..." style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:5px;padding:3px 8px;font-size:11px;width:130px;outline:none;" />
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" id="btn-select-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#5ec27f;border:1px solid rgba(94,194,127,0.3);border-radius:4px;background:rgba(94,194,127,0.08);cursor:pointer;" title="Select all tags">Select All</button>
+                <button type="button" id="btn-deselect-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#9aa79d;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:none;cursor:pointer;" title="Deselect all tags">Deselect</button>
+                <button type="button" id="btn-clear-all-gallery-tags" style="padding:2px 7px;font-size:10px;font-weight:600;color:#ef4444;border:1px solid rgba(239,68,68,0.25);border-radius:4px;background:rgba(239,68,68,0.08);cursor:pointer;" title="Delete all tags from photos">Clear All</button>
+              </div>
+            </div>
+
+            <!-- Ultra-Compact Draggable Tag Rows -->
+            <div style="display:flex;flex-direction:column;gap:3px;max-height:55vh;overflow-y:auto;padding-right:2px;" id="filter-manager-tags-list">
+              ${sortedTags.map((tag) => {
+        const count = tagMap[tag].length;
+        const isChecked = visibleFilterTags.length === 0 || visibleFilterTags.includes(tag);
+        return `
+                  <div class="filter-manager-row filter-mgr-row" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:3px 8px;gap:8px;min-height:27px;">
+                    <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+                      <span class="filter-drag-handle" title="Drag to reorder tag" style="cursor:grab;color:var(--st-text-muted);display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;">${Icons.drag}</span>
+                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? "checked" : ""} style="cursor:pointer;accent-color:#4da468;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
+                      <span class="tag-badge" style="background:rgba(77,164,104,0.14);border:1px solid rgba(77,164,104,0.25);color:#5ec27f;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
+                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tagDisplayNames[tag] || capitalize(tag.replace(/-/g, " ")))}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">
+                      <button type="button" class="btn-rename-tag matcha-row-icon-btn" data-tag="${escapeHtml(tag)}" title="Rename tag globally">
+                        ${Icons.edit}
+                      </button>
+                      <button type="button" class="btn-delete-tag-global matcha-row-icon-btn matcha-row-icon-btn--danger" data-tag="${escapeHtml(tag)}" title="Delete from all photos in this gallery">
+                        ${Icons.trash}
+                      </button>
+                    </div>
+                  </div>
+                `;
+      }).join("")}
+            </div>
+          `}
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.3);">
+          <span style="font-size:11px;color:#647367;">Drag to order pills. Uncheck to hide.</span>
+          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:6px 16px;font-size:12px;background:linear-gradient(135deg, #4da468, #377d4f);color:#fff;border-radius:6px;border:1px solid #2e6942;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(55,125,79,0.35);">
+            Apply & Save
+          </button>
+        </div>
+      </div>
+    `;
+      modal.style.display = "block";
+      const searchInput = modal.querySelector("#filter-mgr-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+          const q = e.target.value.toLowerCase().trim();
+          modal.querySelectorAll(".filter-mgr-row").forEach((row) => {
+            const t = (row.dataset.tag || "").toLowerCase();
+            row.style.display = !q || t.includes(q) ? "flex" : "none";
+          });
+        });
+      }
+      modal.querySelector("#btn-select-all-tags")?.addEventListener("click", () => {
+        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
+          cb.checked = true;
+        });
+      });
+      modal.querySelector("#btn-deselect-all-tags")?.addEventListener("click", () => {
+        modal.querySelectorAll(".tag-vis-check").forEach((cb) => {
+          cb.checked = false;
+        });
+      });
+      const tagListEl = modal.querySelector("#filter-manager-tags-list");
+      if (tagListEl && window.Sortable) {
+        new window.Sortable(tagListEl, {
+          handle: ".filter-drag-handle",
+          animation: 150,
+          ghostClass: "matcha-sortable-ghost",
+          onEnd: () => {
+            const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
+            const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
+            patchConfig({ orderedFilterTags });
+            autosaveSoon();
+            renderCanvas();
+          }
+        });
+      }
+      const saveAndClose = () => {
+        const currentRows = Array.from(modal.querySelectorAll(".filter-mgr-row"));
+        const orderedFilterTags = currentRows.map((row) => row.dataset.tag);
+        const checkedBoxes = modal.querySelectorAll(".tag-vis-check:checked");
+        if (checkedBoxes.length > 0 && checkedBoxes.length < sortedTags.length) {
+          visibleFilterTags = [...checkedBoxes].map((cb) => cb.dataset.tag);
+        } else {
+          visibleFilterTags = [];
+        }
+        patchConfig({ visibleFilterTags, orderedFilterTags });
+        modal.style.display = "none";
+        renderCanvas();
+        renderRightPanel();
+        autosaveSoon();
+      };
+      modal.querySelector("#filter-modal-close").addEventListener("click", saveAndClose);
+      modal.querySelector("#filter-modal-backdrop").addEventListener("click", saveAndClose);
+      modal.querySelector("#filter-modal-done").addEventListener("click", saveAndClose);
+      modal.querySelectorAll(".btn-delete-tag-global").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tagToDelete = btn.dataset.tag;
+          if (!confirm(`Delete tag "${tagToDelete}" from all photos in this gallery?`)) return;
+          allIds.forEach((id) => {
+            const m = metaCache.get(id);
+            if (m?.keywords) {
+              m.keywords = m.keywords.filter((k) => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-") !== tagToDelete);
+              metaCache.set(id, m);
+              dirtyMetaIds.add(id);
+            }
+          });
+          autosaveSoon();
+          openFilterManagerModal();
+        });
+      });
+      modal.querySelectorAll(".btn-rename-tag").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const oldTag = btn.dataset.tag;
+          const displayName = tagDisplayNames[oldTag] || capitalize(oldTag.replace(/-/g, " "));
+          const newTag = prompt(`Rename tag "${displayName}" to:`, displayName);
+          if (!newTag || newTag.trim() === "" || newTag.trim().toLowerCase() === oldTag) return;
+          const cleanNew = newTag.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
+          allIds.forEach((id) => {
+            const m = metaCache.get(id);
+            if (m?.keywords) {
+              m.keywords = m.keywords.map((k) => {
+                const s = k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-");
+                return s === oldTag ? cleanNew : k;
+              });
+              m.keywords = [...new Set(m.keywords)];
+              metaCache.set(id, m);
+              dirtyMetaIds.add(id);
+            }
+          });
+          autosaveSoon();
+          openFilterManagerModal();
+        });
+      });
+      modal.querySelector("#btn-clear-all-gallery-tags")?.addEventListener("click", () => {
+        if (!confirm("Are you sure you want to remove ALL tags from ALL photos in this gallery?")) return;
+        allIds.forEach((id) => {
+          const m = metaCache.get(id);
+          if (m) {
+            m.keywords = [];
+            metaCache.set(id, m);
+            dirtyMetaIds.add(id);
+          }
+        });
+        patchConfig({ visibleFilterTags: [], orderedFilterTags: [] });
+        autosaveSoon();
+        openFilterManagerModal();
+      });
+    }
     async function renderCanvas() {
       const canvas = document.getElementById("studio-canvas");
       if (!canvas) return;
@@ -4656,6 +4722,21 @@
             fetched.forEach((m) => mediaCache.set(m.id, m));
           }
         }
+        const missingMetaIds = allIds.filter((id) => !metaCache.has(id));
+        if (missingMetaIds.length > 0) {
+          const metaRes = await fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${missingMetaIds.join(",")}`, {
+            headers: { "X-WP-Nonce": window.MatchaStudio.nonce }
+          });
+          const fetchedMeta = await metaRes.json();
+          if (fetchedMeta && typeof fetchedMeta === "object") {
+            Object.entries(fetchedMeta).forEach(([idStr, m]) => {
+              const numId = parseInt(idStr, 10);
+              if (numId && !dirtyMetaIds.has(numId)) {
+                metaCache.set(numId, m);
+              }
+            });
+          }
+        }
         medias = allIds.map((id) => mediaCache.get(id) || { id, source_url: "", title: { rendered: "#" + id } });
       } catch (e) {
         medias = allIds.map((id) => mediaCache.get(id) || { id, source_url: "", title: { rendered: "#" + id } });
@@ -4673,20 +4754,25 @@
         const meta = metaCache.get(m.id);
         const keywords = meta?.keywords || [];
         keywords.forEach((kw) => {
-          const slug = kw.toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-");
+          const slug = (kw || "").toLowerCase().trim().replace(/[^a-z0-9_-]/g, "-");
           if (slug) {
             tagCounts[slug] = (tagCounts[slug] || 0) + 1;
           }
         });
-        (meta?.colors || []).forEach((c) => uniqueColors.add(c.toLowerCase()));
+        (meta?.colors || []).forEach((c) => {
+          if (typeof c === "string" && /^#[a-f0-9]{6}$/i.test(c)) {
+            uniqueColors.add(c.toLowerCase());
+          }
+        });
       });
       let allTags = [];
       if (cfg.visibleFilterTags && cfg.visibleFilterTags.length > 0) {
         allTags = cfg.visibleFilterTags.filter((t) => tagCounts[t]);
       } else {
         const sortedByFreq = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
-        const maxTags = cfg.maxFilterTags ?? 8;
-        allTags = sortedByFreq.slice(0, maxTags);
+        const maxTags = cfg.maxFilterTags !== void 0 && cfg.maxFilterTags !== null ? parseInt(cfg.maxFilterTags, 10) : 8;
+        allTags = maxTags > 0 ? sortedByFreq.slice(0, maxTags) : sortedByFreq;
+        allTags.sort();
       }
       if (cfg.orderedFilterTags && cfg.orderedFilterTags.length > 0) {
         const ordered = [];
@@ -4784,25 +4870,25 @@
             ` : ""}
 
             ${isPro && cfg.colorFilterEnabled && sortedColors.length > 0 ? `
-              <div class="matcha-gallery__color-swatches">
-                <span class="matcha-color-label" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
+              <div class="matcha-gallery__color-swatches" role="group" aria-label="Filter by color">
+                <span class="matcha-color-label" title="Palette" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
                 ${sortedColors.map((c) => `
-                  <button type="button" class="matcha-color-dot" data-color="${c}" style="background:${c};" title="Filter by color ${c}"></button>
+                  <button type="button" class="matcha-color-dot" data-color="${c}" style="background-color:${c};" title="Filter by color ${c}" aria-label="${c}"></button>
                 `).join("")}
               </div>
             ` : ""}
 
             ${cfg.filtersEnabled && allTags.length > 0 ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || "capsule")} matcha-gallery__filters--style-${cfg.filterStyle || "pills"} matcha-gallery__filters--align-${cfg.filterAlign || "left"} ${cfg.showFilterCount === false ? "matcha-gallery__filters--hide-count" : ""}" data-filter-logic="${cfg.filterLogic || "or"}" data-filter-multiselect="${isMultiSelect ? "true" : "false"}" role="toolbar">
+              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || "capsule")} matcha-gallery__filters--style-${cfg.filterStyle || "pills"} matcha-gallery__filters--align-${cfg.filterAlign || "left"} ${cfg.showFilterCount === false ? "matcha-gallery__filters--hide-count" : ""}" data-filter-logic="${cfg.filterLogic || "or"}" data-filter-multiselect="${isMultiSelect ? "true" : "false"}" role="toolbar" aria-label="Gallery filters">
                 ${cfg.showAllFilter !== false ? `
-                  <button type="button" class="matcha-filter matcha-filter--active" data-filter="*">
+                  <button type="button" class="matcha-filter matcha-filter--active matcha-filter--all" data-filter="*" aria-pressed="true">
                     ${escapeHtml(cfg.allFilterLabel || "All")}
                     ${cfg.showFilterCount !== false ? `<span class="matcha-filter__count">${medias.length}</span>` : ""}
                   </button>
                 ` : ""}
                 ${allTags.map((tag) => `
-                  <button type="button" class="matcha-filter" data-filter="${escapeHtml(tag)}">
-                    ${escapeHtml(capitalize(tag))}
+                  <button type="button" class="matcha-filter" data-filter="${escapeHtml(tag)}" aria-pressed="false">
+                    ${escapeHtml(capitalize(tag.replace(/-/g, " ")))}
                     ${cfg.showFilterCount !== false ? `<span class="matcha-filter__count">${tagCounts[tag]}</span>` : ""}
                   </button>
                 `).join("")}

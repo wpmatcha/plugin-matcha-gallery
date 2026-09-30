@@ -1885,6 +1885,13 @@ if (root) {
       </label>
       <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
         <span style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="st-toolbar-color-filter" ${isPro && cfg.colorFilterEnabled ? 'checked' : ''}>
+          Enable AI Color Palette Swatches
+        </span>
+        <span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;">PRO</span>
+      </label>
+      <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-bottom:8px;cursor:pointer;color:var(--st-text-primary);">
+        <span style="display:flex;align-items:center;gap:8px;">
           <input type="checkbox" id="st-frontend-sort" ${isPro && cfg.frontendSortEnabled ? 'checked' : ''}>
           Enable Visitor Sort Dropdown
         </span>
@@ -1959,6 +1966,12 @@ if (root) {
               <input type="text" id="st-all-filter-label" class="matcha-dark-input" value="${escapeHtml(cfg.allFilterLabel || 'All')}" placeholder="All" />
             </div>
           ` : ''}
+
+          <div>
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:3px;">Max Visible Category Pills</label>
+            <input type="number" id="st-max-filter-tags" class="matcha-dark-input" min="0" max="100" value="${cfg.maxFilterTags ?? 8}" placeholder="8 (0 = unlimited)" />
+            <span style="font-size:9px;color:var(--st-text-muted);">Limits how many pills to show before truncating (0 = all tags).</span>
+          </div>
         </div>
       ` : ''}
 
@@ -3324,6 +3337,28 @@ if (root) {
       renderCanvas();
       autosaveSoon();
     });
+    document.getElementById('st-toolbar-color-filter')?.addEventListener('change', e => {
+      if (!isPro && e.target.checked) {
+        e.target.checked = false;
+        showProModal(
+          'AI Color Swatches Palette Filter',
+          'Visitors can filter your photos by clicking dominant color palette swatches automatically extracted by AI. Available in Matcha Gallery Pro.'
+        );
+        return;
+      }
+      patchConfig({ colorFilterEnabled: e.target.checked });
+      const leftCb = document.getElementById('st-color-filter');
+      if (leftCb) leftCb.checked = e.target.checked;
+      renderCanvas();
+      autosaveSoon();
+    });
+    document.getElementById('st-max-filter-tags')?.addEventListener('input', e => {
+      const raw = e.target.value.trim();
+      const val = raw === '' ? 0 : parseInt(raw, 10);
+      patchConfig({ maxFilterTags: isNaN(val) ? 8 : val });
+      renderCanvas();
+      autosaveSoon();
+    });
     document.getElementById('st-lightbox')?.addEventListener('change', e => {
       patchConfig({ lightboxEnabled: e.target.checked });
       renderCanvas();
@@ -4331,6 +4366,8 @@ if (root) {
         return;
       }
       patchConfig({ colorFilterEnabled: e.target.checked });
+      const rightCb = document.getElementById('st-toolbar-color-filter');
+      if (rightCb) rightCb.checked = e.target.checked;
       renderCanvas();
       autosaveSoon();
     });
@@ -4857,7 +4894,7 @@ if (root) {
   }
 
   // --- Central Gallery Filter & Tag Manager Modal ---
-  function openFilterManagerModal() {
+  async function openFilterManagerModal() {
     let modal = document.getElementById('matcha-filter-manager-modal');
     if (!modal) {
       modal = document.createElement('div');
@@ -4870,16 +4907,42 @@ if (root) {
     const allIds = cfg.imageIds || [];
     let visibleFilterTags = [...(cfg.visibleFilterTags || [])];
 
-    // Tally all unique tags across gallery photos
+    // Ensure all gallery photo metadata is loaded in metaCache
+    const missingMetaIds = allIds.filter(id => !metaCache.has(id));
+    if (missingMetaIds.length > 0) {
+      try {
+        const metaRes = await fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${missingMetaIds.join(',')}`, {
+          headers: { 'X-WP-Nonce': window.MatchaStudio.nonce }
+        });
+        const fetchedMeta = await metaRes.json();
+        if (fetchedMeta && typeof fetchedMeta === 'object') {
+          Object.entries(fetchedMeta).forEach(([idStr, m]) => {
+            const numId = parseInt(idStr, 10);
+            if (numId && !dirtyMetaIds.has(numId)) {
+              metaCache.set(numId, m);
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('[MatchaStudio] Failed to load metadata for filter manager:', err);
+      }
+    }
+
+    // Tally all unique tags across gallery photos (normalized slugs + display titles)
     const tagMap = {};
+    const tagDisplayNames = {};
     allIds.forEach(id => {
       const m = metaCache.get(id);
       const kws = m?.keywords || [];
       kws.forEach(k => {
-        const clean = k.trim();
-        if (!clean) return;
-        if (!tagMap[clean]) tagMap[clean] = [];
-        tagMap[clean].push(id);
+        const clean = (k || '').trim();
+        const slug = clean.toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+        if (!slug) return;
+        if (!tagMap[slug]) {
+          tagMap[slug] = [];
+          tagDisplayNames[slug] = capitalize(clean.replace(/-/g, ' '));
+        }
+        tagMap[slug].push(id);
       });
     });
 
@@ -4943,7 +5006,7 @@ if (root) {
                       <span class="filter-drag-handle" title="Drag to reorder tag" style="cursor:grab;color:var(--st-text-muted);display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;">${Icons.drag}</span>
                       <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? 'checked' : ''} style="cursor:pointer;accent-color:#4da468;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
                       <span class="tag-badge" style="background:rgba(77,164,104,0.14);border:1px solid rgba(77,164,104,0.25);color:#5ec27f;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
-                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tag)}</span>
+                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tagDisplayNames[tag] || capitalize(tag.replace(/-/g, ' ')))}</span>
                     </div>
                     <div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">
                       <button type="button" class="btn-rename-tag matcha-row-icon-btn" data-tag="${escapeHtml(tag)}" title="Rename tag globally">
@@ -5038,7 +5101,7 @@ if (root) {
         allIds.forEach(id => {
           const m = metaCache.get(id);
           if (m?.keywords) {
-            m.keywords = m.keywords.filter(k => k !== tagToDelete);
+            m.keywords = m.keywords.filter(k => k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, '-') !== tagToDelete);
             metaCache.set(id, m);
             dirtyMetaIds.add(id);
           }
@@ -5052,14 +5115,18 @@ if (root) {
     modal.querySelectorAll('.btn-rename-tag').forEach(btn => {
       btn.addEventListener('click', () => {
         const oldTag = btn.dataset.tag;
-        const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
-        if (!newTag || newTag.trim() === '' || newTag.trim() === oldTag) return;
+        const displayName = tagDisplayNames[oldTag] || capitalize(oldTag.replace(/-/g, ' '));
+        const newTag = prompt(`Rename tag "${displayName}" to:`, displayName);
+        if (!newTag || newTag.trim() === '' || newTag.trim().toLowerCase() === oldTag) return;
 
         const cleanNew = newTag.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
         allIds.forEach(id => {
           const m = metaCache.get(id);
           if (m?.keywords) {
-            m.keywords = m.keywords.map(k => k === oldTag ? cleanNew : k);
+            m.keywords = m.keywords.map(k => {
+              const s = k.toLowerCase().trim().replace(/[^a-z0-9_-]/g, '-');
+              return s === oldTag ? cleanNew : k;
+            });
             m.keywords = [...new Set(m.keywords)];
             metaCache.set(id, m);
             dirtyMetaIds.add(id);
@@ -5121,6 +5188,21 @@ if (root) {
           fetched.forEach(m => mediaCache.set(m.id, m));
         }
       }
+      const missingMetaIds = allIds.filter(id => !metaCache.has(id));
+      if (missingMetaIds.length > 0) {
+        const metaRes = await fetch(`${window.MatchaStudio.root}matcha-gallery/v1/attachments-meta?ids=${missingMetaIds.join(',')}`, {
+          headers: { 'X-WP-Nonce': window.MatchaStudio.nonce }
+        });
+        const fetchedMeta = await metaRes.json();
+        if (fetchedMeta && typeof fetchedMeta === 'object') {
+          Object.entries(fetchedMeta).forEach(([idStr, m]) => {
+            const numId = parseInt(idStr, 10);
+            if (numId && !dirtyMetaIds.has(numId)) {
+              metaCache.set(numId, m);
+            }
+          });
+        }
+      }
       medias = allIds.map(id => mediaCache.get(id) || { id, source_url: '', title: { rendered: '#' + id } });
     } catch (e) {
       medias = allIds.map(id => mediaCache.get(id) || { id, source_url: '', title: { rendered: '#' + id } });
@@ -5140,12 +5222,16 @@ if (root) {
       const meta = metaCache.get(m.id);
       const keywords = meta?.keywords || [];
       keywords.forEach(kw => {
-        const slug = kw.toLowerCase().trim().replace(/[^a-z0-9_-]/g, '-');
+        const slug = (kw || '').toLowerCase().trim().replace(/[^a-z0-9_-]/g, '-');
         if (slug) {
           tagCounts[slug] = (tagCounts[slug] || 0) + 1;
         }
       });
-      (meta?.colors || []).forEach(c => uniqueColors.add(c.toLowerCase()));
+      (meta?.colors || []).forEach(c => {
+        if (typeof c === 'string' && /^#[a-f0-9]{6}$/i.test(c)) {
+          uniqueColors.add(c.toLowerCase());
+        }
+      });
     });
 
     let allTags = [];
@@ -5153,8 +5239,9 @@ if (root) {
       allTags = cfg.visibleFilterTags.filter(t => tagCounts[t]);
     } else {
       const sortedByFreq = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
-      const maxTags = cfg.maxFilterTags ?? 8;
-      allTags = sortedByFreq.slice(0, maxTags);
+      const maxTags = (cfg.maxFilterTags !== undefined && cfg.maxFilterTags !== null) ? parseInt(cfg.maxFilterTags, 10) : 8;
+      allTags = maxTags > 0 ? sortedByFreq.slice(0, maxTags) : sortedByFreq;
+      allTags.sort();
     }
     if (cfg.orderedFilterTags && cfg.orderedFilterTags.length > 0) {
       const ordered = [];
@@ -5263,25 +5350,25 @@ if (root) {
             ` : ''}
 
             ${(isPro && cfg.colorFilterEnabled && sortedColors.length > 0) ? `
-              <div class="matcha-gallery__color-swatches">
-                <span class="matcha-color-label" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
+              <div class="matcha-gallery__color-swatches" role="group" aria-label="Filter by color">
+                <span class="matcha-color-label" title="Palette" style="display:flex;align-items:center;color:#64748b;">${Icons.palette}</span>
                 ${sortedColors.map(c => `
-                  <button type="button" class="matcha-color-dot" data-color="${c}" style="background:${c};" title="Filter by color ${c}"></button>
+                  <button type="button" class="matcha-color-dot" data-color="${c}" style="background-color:${c};" title="Filter by color ${c}" aria-label="${c}"></button>
                 `).join('')}
               </div>
             ` : ''}
 
             ${(cfg.filtersEnabled && allTags.length > 0) ? `
-              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')} matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar">
+              <div class="matcha-gallery__filters matcha-gallery__filters--skin-${escapeHtml(cfg.toolbarSkin || cfg.filterStyle || 'capsule')} matcha-gallery__filters--style-${cfg.filterStyle || 'pills'} matcha-gallery__filters--align-${cfg.filterAlign || 'left'} ${cfg.showFilterCount === false ? 'matcha-gallery__filters--hide-count' : ''}" data-filter-logic="${cfg.filterLogic || 'or'}" data-filter-multiselect="${isMultiSelect ? 'true' : 'false'}" role="toolbar" aria-label="Gallery filters">
                 ${cfg.showAllFilter !== false ? `
-                  <button type="button" class="matcha-filter matcha-filter--active" data-filter="*">
+                  <button type="button" class="matcha-filter matcha-filter--active matcha-filter--all" data-filter="*" aria-pressed="true">
                     ${escapeHtml(cfg.allFilterLabel || 'All')}
                     ${cfg.showFilterCount !== false ? `<span class="matcha-filter__count">${medias.length}</span>` : ''}
                   </button>
                 ` : ''}
                 ${allTags.map(tag => `
-                  <button type="button" class="matcha-filter" data-filter="${escapeHtml(tag)}">
-                    ${escapeHtml(capitalize(tag))}
+                  <button type="button" class="matcha-filter" data-filter="${escapeHtml(tag)}" aria-pressed="false">
+                    ${escapeHtml(capitalize(tag.replace(/-/g, ' ')))}
                     ${cfg.showFilterCount !== false ? `<span class="matcha-filter__count">${tagCounts[tag]}</span>` : ''}
                   </button>
                 `).join('')}

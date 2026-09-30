@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 use Matcha_AI_Smart_Gallery\Gallery\Gallery_CPT;
+use Matcha_AI_Smart_Gallery\Media\Attachment_Metadata;
 
 /**
  * Renders the isolated full-screen Studio.
@@ -1294,11 +1295,12 @@ final class Studio_Page {
 		$preload_media = array();
 		$preload_meta  = array();
 		if ( ! empty( $config['imageIds'] ) && is_array( $config['imageIds'] ) ) {
-			foreach ( $config['imageIds'] as $img_id ) {
-				$img_id = absint( $img_id );
-				if ( ! $img_id ) {
-					continue;
-				}
+			$valid_ids = array_filter( array_map( 'absint', $config['imageIds'] ) );
+			if ( ! empty( $valid_ids ) ) {
+				update_postmeta_cache( $valid_ids );
+				update_object_term_cache( $valid_ids, 'attachment' );
+			}
+			foreach ( $valid_ids as $img_id ) {
 				$thumb_src = wp_get_attachment_image_src( $img_id, 'thumbnail' );
 				$med_src   = wp_get_attachment_image_src( $img_id, 'medium' );
 				$large_src = wp_get_attachment_image_src( $img_id, 'large' );
@@ -1345,10 +1347,16 @@ final class Studio_Page {
 					),
 				);
 
-				$ai_meta = get_post_meta( $img_id, '_matcha_ai_metadata', true );
-				if ( ! empty( $ai_meta ) && is_array( $ai_meta ) ) {
-					$preload_meta[ $img_id ] = $ai_meta;
-				}
+				$meta = Attachment_Metadata::get_metadata( $img_id );
+				$preload_meta[ $img_id ] = array(
+					'keywords'     => $meta['keywords'],
+					'ai_generated' => $meta['ai_generated'],
+					'alt'          => $meta['alt_text'],
+					'title'        => $meta['title'],
+					'caption'      => $meta['caption'],
+					'colors'       => $meta['colors'] ?? array(),
+					'focal_point'  => $meta['focal_point'] ?? array( 'x' => 50, 'y' => 50 ),
+				);
 			}
 		}
 
