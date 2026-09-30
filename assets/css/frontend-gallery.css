@@ -956,7 +956,9 @@ button.matcha-gallery__proof-btn.is-favorited .matcha-heart-icon svg {
 }
 
 /* Default Zoom (The Grid Malabo) */
+.matcha-gallery--hover-zoom .matcha-gallery__item:hover img,
 .matcha-gallery--hover-zoom .matcha-gallery__item-inner:hover img,
+.matcha-gallery:not([class*="matcha-gallery--hover-"]) .matcha-gallery__item:hover img,
 .matcha-gallery:not([class*="matcha-gallery--hover-"]) .matcha-gallery__item-inner:hover img {
 	transform: scale(1.08) !important;
 }
@@ -1348,12 +1350,75 @@ span.matcha-action-btn {
 	box-shadow: 0 8px 32px rgba(0,0,0,0.08);
 }
 
-/* Realistic Shadow Elevations */
-.matcha-gallery--shadow-none .matcha-gallery__item-inner { box-shadow: none !important; }
-.matcha-gallery--shadow-soft .matcha-gallery__item-inner { box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
-.matcha-gallery--shadow-medium .matcha-gallery__item-inner { box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
-.matcha-gallery--shadow-gallery-spotlight .matcha-gallery__item-inner { box-shadow: 0 18px 45px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); }
-.matcha-gallery--shadow-deep-lift .matcha-gallery__item-inner { box-shadow: 0 28px 65px rgba(0,0,0,0.25), 0 4px 14px rgba(0,0,0,0.12); }
+/* Realistic Shadow Elevations & Depth (All Skins) */
+.matcha-gallery--shadow-none .matcha-gallery__item-inner,
+.matcha-gallery--shadow-none.skin-editorial .gallery-item,
+.matcha-gallery--shadow-none.skin-editorial .matcha-gallery__item {
+	box-shadow: none !important;
+}
+.matcha-gallery--shadow-none .matcha-gallery__item:hover,
+.matcha-gallery--shadow-none .matcha-gallery__item-inner:hover,
+.matcha-gallery--shadow-none.skin-editorial .gallery-item:hover,
+.matcha-gallery--shadow-none.skin-editorial .matcha-gallery__item:hover {
+	box-shadow: none !important;
+	transform: none !important;
+}
+
+.matcha-gallery--shadow-soft:not(.skin-editorial) .matcha-gallery__item-inner,
+.matcha-gallery--shadow-soft.skin-editorial .gallery-item,
+.matcha-gallery--shadow-soft.skin-editorial .matcha-gallery__item {
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.07) !important;
+	transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.matcha-gallery--shadow-soft:not(.skin-editorial) .matcha-gallery__item:hover .matcha-gallery__item-inner,
+.matcha-gallery--shadow-soft:not(.skin-editorial) .matcha-gallery__item-inner:hover,
+.matcha-gallery--shadow-soft.skin-editorial .gallery-item:hover,
+.matcha-gallery--shadow-soft.skin-editorial .matcha-gallery__item:hover {
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.11) !important;
+	transform: translateY(-3px) !important;
+}
+
+.matcha-gallery--shadow-medium:not(.skin-editorial) .matcha-gallery__item-inner,
+.matcha-gallery--shadow-medium.skin-editorial .gallery-item,
+.matcha-gallery--shadow-medium.skin-editorial .matcha-gallery__item {
+	box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12) !important;
+	transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.matcha-gallery--shadow-medium:not(.skin-editorial) .matcha-gallery__item:hover .matcha-gallery__item-inner,
+.matcha-gallery--shadow-medium:not(.skin-editorial) .matcha-gallery__item-inner:hover,
+.matcha-gallery--shadow-medium.skin-editorial .gallery-item:hover,
+.matcha-gallery--shadow-medium.skin-editorial .matcha-gallery__item:hover {
+	box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18) !important;
+	transform: translateY(-5px) !important;
+}
+
+.matcha-gallery--shadow-gallery-spotlight:not(.skin-editorial) .matcha-gallery__item-inner,
+.matcha-gallery--shadow-gallery-spotlight.skin-editorial .gallery-item,
+.matcha-gallery--shadow-gallery-spotlight.skin-editorial .matcha-gallery__item {
+	box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+	transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.matcha-gallery--shadow-gallery-spotlight:not(.skin-editorial) .matcha-gallery__item:hover .matcha-gallery__item-inner,
+.matcha-gallery--shadow-gallery-spotlight:not(.skin-editorial) .matcha-gallery__item-inner:hover,
+.matcha-gallery--shadow-gallery-spotlight.skin-editorial .gallery-item:hover,
+.matcha-gallery--shadow-gallery-spotlight.skin-editorial .matcha-gallery__item:hover {
+	box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28), 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+	transform: translateY(-6px) !important;
+}
+
+.matcha-gallery--shadow-deep-lift:not(.skin-editorial) .matcha-gallery__item-inner,
+.matcha-gallery--shadow-deep-lift.skin-editorial .gallery-item,
+.matcha-gallery--shadow-deep-lift.skin-editorial .matcha-gallery__item {
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25), 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+	transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.matcha-gallery--shadow-deep-lift:not(.skin-editorial) .matcha-gallery__item:hover .matcha-gallery__item-inner,
+.matcha-gallery--shadow-deep-lift:not(.skin-editorial) .matcha-gallery__item-inner:hover,
+.matcha-gallery--shadow-deep-lift.skin-editorial .gallery-item:hover,
+.matcha-gallery--shadow-deep-lift.skin-editorial .matcha-gallery__item:hover {
+	box-shadow: 0 38px 90px rgba(0, 0, 0, 0.36), 0 12px 30px rgba(0, 0, 0, 0.2) !important;
+	transform: translateY(-8px) scale(1.015) !important;
+}
 
 /* Wall & Canvas Backdrops */
 .matcha-gallery--backdrop-white { background: #ffffff; padding: 24px; border-radius: 12px; }
@@ -1607,126 +1672,136 @@ span.matcha-action-btn {
 }
 
 /* ==========================================================================
-   Creative Gallery Hover Presets (Inspired by The Grid — No AI Tropes)
+   Creative Gallery Hover Presets (Inspired by The Grid — All Skins)
    ========================================================================== */
 
 /* 1. Cinematic Pullback (The Grid: Bogota) — Scales down into matte canvas */
+.matcha-gallery--hover-pullback .item-media-wrap,
 .matcha-gallery--hover-pullback .matcha-gallery__item-inner {
 	background: #090d16 !important;
 }
-.matcha-gallery--hover-pullback .matcha-gallery__item-inner img {
-	transform-origin: center center !important;
-}
+.matcha-gallery--hover-pullback .matcha-gallery__item:hover img,
 .matcha-gallery--hover-pullback .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-pullback .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
-	transform: scale(0.93) !important;
+.matcha-gallery--hover-pullback .matcha-gallery__item.is-touch-revealed img {
+	transform: scale(0.92) !important;
 	border-radius: 6px !important;
 }
 
 /* 2. Editorial Hairline Frame (The Grid: Brasilia) — Fine art matting border */
+.matcha-gallery--hover-frame .item-media-wrap::after,
+.matcha-gallery--hover-frame:not(.skin-editorial) .matcha-gallery__item-inner::after,
 .matcha-gallery--hover-frame .matcha-item-frame {
+	content: "" !important;
 	display: block !important;
 	position: absolute !important;
 	inset: 12px !important;
-	border: 1px solid var(--matcha-hover-frame-color, rgba(255, 255, 255, 0.45)) !important;
+	border: 1px solid var(--matcha-hover-frame-color, rgba(255, 255, 255, 0.75)) !important;
 	border-radius: 4px !important;
 	pointer-events: none !important;
 	opacity: 0 !important;
 	transform: scale(0.92) !important;
 	transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease !important;
 	z-index: 12 !important;
+	box-sizing: border-box !important;
 }
+.matcha-gallery--hover-frame .matcha-gallery__item:hover .item-media-wrap::after,
+.matcha-gallery--hover-frame:not(.skin-editorial) .matcha-gallery__item:hover .matcha-gallery__item-inner::after,
 .matcha-gallery--hover-frame .matcha-gallery__item-inner:hover .matcha-item-frame,
-.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed .matcha-item-frame {
+.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed .item-media-wrap::after {
 	opacity: 1 !important;
 	transform: scale(1) !important;
-	border-color: var(--matcha-hover-frame-color, rgba(255, 255, 255, 0.85)) !important;
 }
+.matcha-gallery--hover-frame .matcha-gallery__item:hover img,
 .matcha-gallery--hover-frame .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+.matcha-gallery--hover-frame .matcha-gallery__item.is-touch-revealed img {
 	transform: scale(1.04) !important;
 }
 
 /* 3. Architectural Slide Curtain (The Grid: Sofia) — Mechanical bottom-up wipe */
+.matcha-gallery--hover-curtain .item-media-wrap::before,
+.matcha-gallery--hover-curtain:not(.skin-editorial) .item-overlay,
 .matcha-gallery--hover-curtain .matcha-item-overlay {
-	opacity: 1 !important;
+	content: "" !important;
+	position: absolute !important;
+	inset: 0 !important;
+	background: linear-gradient(to top, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.55) 50%, rgba(15, 23, 42, 0.25) 100%) !important;
+	backdrop-filter: blur(2px) !important;
+	-webkit-backdrop-filter: blur(2px) !important;
 	transform: translateY(101%) !important;
-	transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover .matcha-item-overlay,
-.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-item-overlay {
-	transform: translateY(0) !important;
-}
-.matcha-gallery--hover-curtain .matcha-item-content {
-	transform: translateY(22px) !important;
-	transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) 0.04s, opacity 0.25s ease 0.04s !important;
-}
-.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover .matcha-item-content,
-.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-item-content {
-	transform: translateY(0) !important;
 	opacity: 1 !important;
+	transition: transform 0.36s cubic-bezier(0.16, 1, 0.3, 1) !important;
+	z-index: 8 !important;
+	pointer-events: none !important;
+	display: block !important;
 }
+.matcha-gallery--hover-curtain .matcha-gallery__item:hover .item-media-wrap::before,
+.matcha-gallery--hover-curtain:not(.skin-editorial) .matcha-gallery__item:hover .item-overlay,
+.matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover .matcha-item-overlay,
+.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .item-media-wrap::before {
+	transform: translateY(0) !important;
+}
+.matcha-gallery--hover-curtain .matcha-gallery__item:hover img,
 .matcha-gallery--hover-curtain .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+.matcha-gallery--hover-curtain .matcha-gallery__item.is-touch-revealed img {
 	transform: scale(1.05) translateY(-3px) !important;
 }
 
-/* 4. Minimalist Bottom Drawer (The Grid: Lome) — Leaves top 60% photo crystal clear */
+/* 4. Minimalist Bottom Drawer (The Grid: Lome) — Leaves top 55% photo crystal clear */
+.matcha-gallery--hover-drawer .item-media-wrap::before,
+.matcha-gallery--hover-drawer:not(.skin-editorial) .item-overlay,
 .matcha-gallery--hover-drawer .matcha-item-overlay {
+	content: "" !important;
+	position: absolute !important;
 	top: auto !important;
 	bottom: 0 !important;
-	height: 44% !important;
-	background: linear-gradient(to top, rgba(15, 23, 42, 0.96) 0%, rgba(15, 23, 42, 0.82) 75%, transparent 100%) !important;
+	left: 0 !important;
+	right: 0 !important;
+	height: 45% !important;
+	background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.78) 65%, transparent 100%) !important;
+	backdrop-filter: blur(3px) !important;
+	-webkit-backdrop-filter: blur(3px) !important;
 	transform: translateY(101%) !important;
 	opacity: 1 !important;
 	transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+	z-index: 8 !important;
+	pointer-events: none !important;
+	display: block !important;
 }
+.matcha-gallery--hover-drawer .matcha-gallery__item:hover .item-media-wrap::before,
+.matcha-gallery--hover-drawer:not(.skin-editorial) .matcha-gallery__item:hover .item-overlay,
 .matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover .matcha-item-overlay,
-.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-item-overlay {
+.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .item-media-wrap::before {
 	transform: translateY(0) !important;
 }
-.matcha-gallery--hover-drawer .matcha-item-content {
-	top: auto !important;
-	bottom: 0 !important;
-	height: 44% !important;
-	justify-content: flex-end !important;
-	padding: 10px 14px 14px !important;
-	transform: translateY(16px) !important;
-	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease !important;
-}
-.matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover .matcha-item-content,
-.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-item-content {
-	transform: translateY(0) !important;
-	opacity: 1 !important;
-}
-.matcha-gallery--hover-drawer .matcha-item-title {
-	margin-bottom: 6px !important;
-	font-size: 13px !important;
-}
+.matcha-gallery--hover-drawer .matcha-gallery__item:hover img,
 .matcha-gallery--hover-drawer .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+.matcha-gallery--hover-drawer .matcha-gallery__item.is-touch-revealed img {
 	transform: scale(1.04) translateY(-3%) !important;
 }
 
 /* 5. Editorial Monochrome to Vivid */
-.matcha-gallery--hover-grayscale .matcha-gallery__item-inner img {
+.matcha-gallery--hover-grayscale .matcha-gallery__item-inner img,
+.matcha-gallery--hover-grayscale .item-img {
 	filter: grayscale(100%) contrast(92%) !important;
 }
+.matcha-gallery--hover-grayscale .matcha-gallery__item:hover img,
 .matcha-gallery--hover-grayscale .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-grayscale .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+.matcha-gallery--hover-grayscale .matcha-gallery__item.is-touch-revealed img {
 	filter: grayscale(0%) contrast(105%) !important;
 	transform: scale(1.05) !important;
 }
 
 /* 6. Clean Static (No Motion) */
+.matcha-gallery--hover-none .matcha-gallery__item:hover img,
 .matcha-gallery--hover-none .matcha-gallery__item-inner:hover img,
-.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner img {
+.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed img {
 	transform: none !important;
+	filter: none !important;
 }
+.matcha-gallery--hover-none .matcha-gallery__item:hover,
 .matcha-gallery--hover-none .matcha-gallery__item-inner:hover,
-.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed .matcha-gallery__item-inner {
+.matcha-gallery--hover-none .matcha-gallery__item.is-touch-revealed {
 	transform: none !important;
-	box-shadow: none !important;
 }
 
 /* Multimedia Video Badges & Lightbox Player */
@@ -3304,7 +3379,7 @@ span.matcha-action-btn {
 	flex-direction: column !important;
 	background: #ffffff;
 	border-radius: var(--matcha-radius, 12px);
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+	box-shadow: var(--matcha-shadow, 0 4px 14px rgba(0, 0, 0, 0.07));
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	overflow: hidden;
 	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3312,7 +3387,7 @@ span.matcha-action-btn {
 .skin-editorial .gallery-item:hover,
 .skin-editorial .matcha-gallery__item:hover {
 	transform: translateY(-4px);
-	box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+	box-shadow: var(--matcha-shadow-hover, 0 10px 24px rgba(0, 0, 0, 0.11));
 }
 .skin-editorial .matcha-gallery__item-inner {
 	display: flex !important;
@@ -3340,11 +3415,11 @@ span.matcha-action-btn {
 .skin-editorial.matcha-gallery--lookbook-duet .item-media-wrap {
 	height: auto;
 }
-.skin-editorial .gallery-item:hover .item-img,
-.skin-editorial .matcha-gallery__item:hover img {
+.matcha-gallery:not([class*="matcha-gallery--hover-"]).skin-editorial .gallery-item:hover .item-img,
+.matcha-gallery:not([class*="matcha-gallery--hover-"]).skin-editorial .matcha-gallery__item:hover img {
 	transform: scale(1.03);
 }
-.skin-editorial .item-overlay,
+.skin-editorial:not(.matcha-gallery--hover-curtain):not(.matcha-gallery--hover-drawer) .item-overlay,
 .skin-editorial .item-action-dock {
 	display: none !important;
 }

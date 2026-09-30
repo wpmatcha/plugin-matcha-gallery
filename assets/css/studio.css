@@ -2561,7 +2561,7 @@ body.matcha-is-dragging * {
 	flex-direction: column !important;
 	background: #ffffff;
 	border-radius: var(--matcha-radius, 12px);
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+	box-shadow: var(--matcha-shadow, 0 4px 14px rgba(0, 0, 0, 0.07));
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	overflow: hidden;
 	transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2569,7 +2569,7 @@ body.matcha-is-dragging * {
 .skin-editorial .gallery-item:hover,
 .skin-editorial .matcha-gallery__item:hover {
 	transform: translateY(-4px);
-	box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+	box-shadow: var(--matcha-shadow-hover, 0 10px 24px rgba(0, 0, 0, 0.11));
 }
 .skin-editorial .matcha-gallery__item-inner {
 	display: flex !important;
@@ -2597,11 +2597,11 @@ body.matcha-is-dragging * {
 .skin-editorial.matcha-gallery--lookbook-duet .item-media-wrap {
 	height: auto;
 }
-.skin-editorial .gallery-item:hover .item-img,
-.skin-editorial .matcha-gallery__item:hover img {
+.matcha-gallery:not([class*="matcha-gallery--hover-"]).skin-editorial .gallery-item:hover .item-img,
+.matcha-gallery:not([class*="matcha-gallery--hover-"]).skin-editorial .matcha-gallery__item:hover img {
 	transform: scale(1.03);
 }
-.skin-editorial .item-overlay,
+.skin-editorial:not(.matcha-gallery--hover-curtain):not(.matcha-gallery--hover-drawer) .item-overlay,
 .skin-editorial .item-action-dock {
 	display: none !important; /* Actions are clean in card footer! */
 }
