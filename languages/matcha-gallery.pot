@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06 18:50:08+00:00\n"
+"POT-Creation-Date: 2026-10-06 19:00:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Add or remove AI keywords"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:926
+#: includes/Blocks/Smart_Gallery_Block.php:927
 msgid "Add to favorites"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgstr ""
 msgid "AI Vision Tagging"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:704
+#: includes/Blocks/Smart_Gallery_Block.php:705
 msgid "All"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 msgid "All AI Keywords"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:592
+#: includes/Blocks/Smart_Gallery_Block.php:593
 msgid "All Albums"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr ""
 msgid "All Blueprints"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:603
+#: includes/Blocks/Smart_Gallery_Block.php:604
 msgid "All Chapters"
 msgstr ""
 
@@ -377,11 +377,11 @@ msgstr ""
 msgid "Build your gallery shortcode visually to use in Elementor, Divi, Classic Editor, or theme templates."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1034 includes/Blocks/Smart_Gallery_Block.php:1036
+#: includes/Blocks/Smart_Gallery_Block.php:1035 includes/Blocks/Smart_Gallery_Block.php:1037
 msgid "Buy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1036
+#: includes/Blocks/Smart_Gallery_Block.php:1037
 msgid "Buy License"
 msgstr ""
 
@@ -555,7 +555,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1070
+#: includes/Blocks/Smart_Gallery_Block.php:1071
 msgid "Copy ID List"
 msgstr ""
 
@@ -643,11 +643,11 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:649
+#: includes/Blocks/Smart_Gallery_Block.php:650
 msgid "Date Added (Newest)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:650
+#: includes/Blocks/Smart_Gallery_Block.php:651
 msgid "Date Added (Oldest)"
 msgstr ""
 
@@ -655,7 +655,7 @@ msgstr ""
 msgid "Dedicated VIP Priority Support"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:646
+#: includes/Blocks/Smart_Gallery_Block.php:647
 msgid "Default Order"
 msgstr ""
 
@@ -787,7 +787,7 @@ msgstr ""
 msgid "Favorite Tray + ID Copy"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1067
+#: includes/Blocks/Smart_Gallery_Block.php:1068
 msgid "Favorites Selected"
 msgstr ""
 
@@ -803,11 +803,11 @@ msgstr ""
 msgid "Filter by AI Keyword Tag"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:657
+#: includes/Blocks/Smart_Gallery_Block.php:658
 msgid "Filter by color"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:669
+#: includes/Blocks/Smart_Gallery_Block.php:670
 #. translators: %s: Hex color code
 msgid "Filter color %s"
 msgstr ""
@@ -904,11 +904,11 @@ msgstr ""
 msgid "Gallery #%d"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:542
+#: includes/Blocks/Smart_Gallery_Block.php:543
 msgid "Gallery Albums"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:600
+#: includes/Blocks/Smart_Gallery_Block.php:601
 msgid "Gallery Chapters"
 msgstr ""
 
@@ -916,7 +916,7 @@ msgstr ""
 msgid "Gallery duplicated successfully with all layout parameters and images cloned."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:696
+#: includes/Blocks/Smart_Gallery_Block.php:697
 msgid "Gallery filters"
 msgstr ""
 
@@ -928,7 +928,7 @@ msgstr ""
 msgid "Gallery not found."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1060
+#: includes/Blocks/Smart_Gallery_Block.php:1061
 msgid "Gallery Pages"
 msgstr ""
 
@@ -1184,7 +1184,7 @@ msgstr ""
 msgid "Load More Button"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1055
+#: includes/Blocks/Smart_Gallery_Block.php:1056
 msgid "Load More Photos"
 msgstr ""
 
@@ -1504,7 +1504,7 @@ msgstr ""
 msgid "Obsidian Dark (Charcoal Pro - PRO)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:565
+#: includes/Blocks/Smart_Gallery_Block.php:566
 msgid "Open Album: %s (%d photos)"
 msgstr ""
 
@@ -1512,7 +1512,7 @@ msgstr ""
 msgid "Open any post or page, click + to insert a new block, and search for \"Matcha Gallery\" or type /matcha. Select your saved gallery from the inspector dropdown on the right."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1029
+#: includes/Blocks/Smart_Gallery_Block.php:1030
 msgid "Open Link"
 msgstr ""
 
@@ -1556,7 +1556,7 @@ msgstr ""
 msgid "Pagination Systems"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:658
+#: includes/Blocks/Smart_Gallery_Block.php:659
 msgid "Palette"
 msgstr ""
 
@@ -1568,7 +1568,7 @@ msgstr ""
 msgid "Permission denied."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:583
+#: includes/Blocks/Smart_Gallery_Block.php:584
 msgid "photo"
 msgstr ""
 
@@ -1584,7 +1584,7 @@ msgstr ""
 msgid "PhotoBlocks Mosaic (PRO)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:583
+#: includes/Blocks/Smart_Gallery_Block.php:584
 msgid "photos"
 msgstr ""
 
@@ -1620,7 +1620,7 @@ msgstr ""
 msgid "Pinwheel Spiral (PRO)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:949
+#: includes/Blocks/Smart_Gallery_Block.php:950
 msgid "Play Video"
 msgstr ""
 
@@ -1712,11 +1712,11 @@ msgstr ""
 msgid "Quick Start Video & Docs"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:1024
+#: includes/Blocks/Smart_Gallery_Block.php:1025
 msgid "Quick View"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:651
+#: includes/Blocks/Smart_Gallery_Block.php:652
 msgid "Random Shuffle"
 msgstr ""
 
@@ -1784,11 +1784,11 @@ msgstr ""
 msgid "Search Galleries"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:637
+#: includes/Blocks/Smart_Gallery_Block.php:638
 msgid "Search gallery..."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:638
+#: includes/Blocks/Smart_Gallery_Block.php:639
 msgid "Search images"
 msgstr ""
 
@@ -1860,15 +1860,15 @@ msgstr ""
 msgid "Shop"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:976
+#: includes/Blocks/Smart_Gallery_Block.php:977
 msgid "Shop (%s)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:906
+#: includes/Blocks/Smart_Gallery_Block.php:907
 msgid "Shop Now"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:976
+#: includes/Blocks/Smart_Gallery_Block.php:977
 msgid "Shop Product"
 msgstr ""
 
@@ -1929,7 +1929,7 @@ msgstr ""
 msgid "Social Sharing & High-Res Lightbox Zoom"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:645
+#: includes/Blocks/Smart_Gallery_Block.php:646
 msgid "Sort images"
 msgstr ""
 
@@ -1997,11 +1997,11 @@ msgstr ""
 msgid "These are the active AI keywords assigned to your media library images."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:647
+#: includes/Blocks/Smart_Gallery_Block.php:648
 msgid "Title (A → Z)"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:648
+#: includes/Blocks/Smart_Gallery_Block.php:649
 msgid "Title (Z → A)"
 msgstr ""
 
@@ -2085,7 +2085,7 @@ msgstr ""
 msgid "Use site-wide credentials managed under WordPress Settings > Connectors. Share 1 key across all plugins."
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:917
+#: includes/Blocks/Smart_Gallery_Block.php:918
 msgid "Video Reel"
 msgstr ""
 
@@ -2093,7 +2093,7 @@ msgstr ""
 msgid "View Gallery"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:949
+#: includes/Blocks/Smart_Gallery_Block.php:950
 msgid "View Photo"
 msgstr ""
 
@@ -2113,7 +2113,7 @@ msgstr ""
 msgid "Vision Model"
 msgstr ""
 
-#: includes/Blocks/Smart_Gallery_Block.php:906 includes/Blocks/Smart_Gallery_Block.php:964
+#: includes/Blocks/Smart_Gallery_Block.php:907 includes/Blocks/Smart_Gallery_Block.php:965
 msgid "Visit Link"
 msgstr ""
 

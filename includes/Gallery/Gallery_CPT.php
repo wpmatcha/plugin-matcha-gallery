@@ -252,20 +252,21 @@ final class Gallery_CPT {
 		$out['colorFilterEnabled'] = $is_pro && ! empty( $cfg['colorFilterEnabled'] );
 		$out['proofingEnabled']    = $is_pro && ! empty( $cfg['proofingEnabled'] );
 		$out['shoppableEnabled']   = $is_pro && ! empty( $cfg['shoppableEnabled'] );
-		$out['sectionsEnabled']    = $is_pro && ! empty( $cfg['sectionsEnabled'] );
-		$out['chapterDisplay']     = in_array( $cfg['chapterDisplay'] ?? 'tabs', array( 'tabs', 'stacks' ), true ) ? $cfg['chapterDisplay'] : 'tabs';
+		$out['sectionsEnabled']    = ! empty( $cfg['sectionsEnabled'] );
+		$out['chapterDisplay']     = ( $is_pro && in_array( $cfg['chapterDisplay'] ?? 'tabs', array( 'tabs', 'stacks' ), true ) ) ? $cfg['chapterDisplay'] : 'tabs';
 		$out['chapterStackStyle']  = in_array( $cfg['chapterStackStyle'] ?? 'editorial', array( 'editorial', 'polaroid', 'minimal' ), true ) ? $cfg['chapterStackStyle'] : 'editorial';
 		$out['filterMultiSelect']  = $is_pro && ! empty( $cfg['filterMultiSelect'] );
 
-		// Sanitize multi-section chapters (Pro)
+		// Sanitize multi-section chapters (Free: max 2 chapters; Pro: unlimited + custom covers)
 		$out['sections'] = array();
-		if ( $is_pro && ! empty( $cfg['sections'] ) && is_array( $cfg['sections'] ) ) {
-			foreach ( $cfg['sections'] as $sec ) {
+		if ( ! empty( $cfg['sections'] ) && is_array( $cfg['sections'] ) ) {
+			$raw_sections = $is_pro ? $cfg['sections'] : array_slice( $cfg['sections'], 0, 2 );
+			foreach ( $raw_sections as $sec ) {
 				if ( is_array( $sec ) ) {
 					$out['sections'][] = array(
 						'id'           => sanitize_title( $sec['id'] ?? uniqid( 'sec_' ) ),
 						'title'        => sanitize_text_field( $sec['title'] ?? 'Section' ),
-						'coverImageId' => ! empty( $sec['coverImageId'] ) ? absint( $sec['coverImageId'] ) : 0,
+						'coverImageId' => ( $is_pro && ! empty( $sec['coverImageId'] ) ) ? absint( $sec['coverImageId'] ) : 0,
 						'imageIds'     => array_values( array_filter( array_map( 'intval', (array) ( $sec['imageIds'] ?? array() ) ) ) ),
 					);
 				}

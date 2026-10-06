@@ -295,8 +295,9 @@ class Smart_Gallery_Block {
 			$attrs['colorFilterEnabled'] = false;
 			$attrs['proofingEnabled']    = false;
 			$attrs['shoppableEnabled']   = false;
-			$attrs['sectionsEnabled']    = false;
-			$attrs['sections']           = array();
+			if ( ! empty( $attrs['sections'] ) && is_array( $attrs['sections'] ) ) {
+				$attrs['sections'] = array_slice( $attrs['sections'], 0, 2 );
+			}
 			$attrs['chapterDisplay']     = 'tabs';
 			$attrs['randomizeOrder']     = false;
 			$attrs['frontendSortEnabled']= false;
@@ -470,7 +471,7 @@ class Smart_Gallery_Block {
 		if ( $attrs['proofingEnabled'] ) {
 			$wrapper_classes[] = 'matcha-gallery--proofing';
 		}
-		if ( $has_sections && 'stacks' === ( $attrs['chapterDisplay'] ?? 'tabs' ) ) {
+		if ( $has_sections && $is_pro && 'stacks' === ( $attrs['chapterDisplay'] ?? 'tabs' ) ) {
 			$wrapper_classes[] = 'has-album-deck-active';
 		}
 
@@ -529,7 +530,7 @@ class Smart_Gallery_Block {
 		>
 			<?php if ( $has_sections ) : ?>
 				<?php
-				$chapter_display     = $attrs['chapterDisplay'] ?? 'tabs';
+				$chapter_display     = ( $is_pro && ( $attrs['chapterDisplay'] ?? 'tabs' ) === 'stacks' ) ? 'stacks' : 'tabs';
 				$chapter_stack_style = $attrs['chapterStackStyle'] ?? 'editorial';
 				?>
 				<?php if ( 'stacks' === $chapter_display ) : ?>
@@ -548,7 +549,7 @@ class Smart_Gallery_Block {
 								continue;
 							}
 
-							$cover_id = ! empty( $sec['coverImageId'] ) && isset( $items_by_id[ (int) $sec['coverImageId'] ] )
+							$cover_id = ( $is_pro && ! empty( $sec['coverImageId'] ) && isset( $items_by_id[ (int) $sec['coverImageId'] ] ) )
 								? (int) $sec['coverImageId']
 								: (int) ( $sec_img_ids[0] ?? 0 );
 

@@ -130,12 +130,15 @@ if (root) {
     };
   }
 
+  const MAX_FREE_CHAPTERS = 2;
+
   // Smart Chapter Creation Dialog with Real-World Story Examples
   function openCreateChapterModal(initialPhotoId = null) {
-    if (!isPro) {
+    const curSections = getState().config.sections || [];
+    if (!isPro && curSections.length >= MAX_FREE_CHAPTERS) {
       showProModal(
-        'Multi-Section Gallery Chapters',
-        'Divide your gallery into tabbed story chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.'
+        'Unlimited Gallery Chapters',
+        `You've unlocked your ${MAX_FREE_CHAPTERS} free story chapters! Upgrade to Matcha Gallery Pro to add unlimited chapters, custom album cover art, and 3D physical album stacks.`
       );
       return;
     }
@@ -772,11 +775,11 @@ if (root) {
             <span style="color:#5ec27f;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ''}
           </span>
           <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
-            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter ${!isPro ? (sections.length < MAX_FREE_CHAPTERS ? `<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">${MAX_FREE_CHAPTERS - sections.length} FREE</span>` : `<span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>`) : ''}
           </button>
         </div>
 
-        ${isPro && sections.length > 0 ? `
+        ${sections.length > 0 ? `
           <!-- Clean Full-Width Presentation Mode Segmented Control -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;margin-bottom:8px;">
             <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay !== 'stacks' ? 'rgba(94,194,127,0.18)' : 'transparent'};color:${cfg.chapterDisplay !== 'stacks' ? '#5ec27f' : 'var(--st-text-muted)'};border:${cfg.chapterDisplay !== 'stacks' ? '1px solid rgba(94,194,127,0.35)' : '1px solid transparent'};transition:all 0.15s ease;">
@@ -787,7 +790,7 @@ if (root) {
             </button>
           </div>
 
-          ${cfg.chapterDisplay === 'stacks' ? `
+          ${isPro && cfg.chapterDisplay === 'stacks' ? `
             <!-- Stack Aesthetic Dropdown -->
             <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;margin-bottom:8px;background:rgba(94,194,127,0.06);border:1px solid rgba(94,194,127,0.18);border-radius:6px;">
               <span style="font-size:9.5px;color:#94a3b8;font-weight:600;">Album Style:</span>
@@ -1334,17 +1337,17 @@ if (root) {
     return `
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters <span class="matcha-pro-badge">PRO</span></span>
+          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">(2 FREE)</span>'}</span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
-          <input type="checkbox" id="st-sections-toggle" ${isPro && cfg.sectionsEnabled !== false ? "checked" : ""}>
+          <input type="checkbox" id="st-sections-toggle" ${cfg.sectionsEnabled !== false ? "checked" : ""}>
           Enable Chapters & Stories
         </label>
         <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 10px 22px;">
-          Divide your gallery into tabbed sections (e.g. Ceremony, Reception, Portraits).
+          Divide your gallery into tabbed sections (up to 2 in Free; unlimited in Pro).
         </p>
 
-        <div style="margin: 6px 0 16px 22px; ${isPro && cfg.sectionsEnabled !== false ? '' : 'display:none;'}" id="st-chapter-display-wrap">
+        <div style="margin: 6px 0 16px 22px; ${cfg.sectionsEnabled !== false ? '' : 'display:none;'}" id="st-chapter-display-wrap">
           <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;letter-spacing:0.5px;">PRESENTATION MODE</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
             <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="${cfg.chapterDisplay !== 'stacks' ? 'border-color:#5ec27f;background:rgba(94,194,127,0.15);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
@@ -2199,10 +2202,10 @@ if (root) {
         </div>
       </div>
 
-      <!-- Assigned Chapters (PRO) -->
+      <!-- Assigned Chapters -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.folder} Assigned Chapters <span class="matcha-pro-badge">PRO</span></span>
+          <span class="heading-wrap">${Icons.folder} Assigned Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">(2 FREE)</span>'}</span>
         </div>
         ${(cfg.sections && cfg.sections.length > 0) ? `
           <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 10px;">Select which chapter tabs this photo appears under.</p>
@@ -4097,14 +4100,6 @@ if (root) {
 
     document.querySelectorAll('.prop-chapter-checkbox').forEach(chk => {
       chk.addEventListener('change', e => {
-        if (!isPro) {
-          e.target.checked = !e.target.checked;
-          showProModal(
-            'Multi-Section Gallery Chapters',
-            'Divide your gallery into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.'
-          );
-          return;
-        }
         const secId = chk.dataset.secId;
         const sections = [...(getState().config.sections || [])];
         const targetSec = sections.find(s => s.id === secId);
@@ -4521,11 +4516,6 @@ if (root) {
 
   function bindSuperpowers() {
     document.getElementById('st-sections-toggle')?.addEventListener('change', e => {
-      if (!isPro && e.target.checked) {
-        e.target.checked = false;
-        showProModal('Multi-Section Chapters', 'Divide your story into tabbed chapters (e.g. Ceremony, Reception, Portraits). Available in Matcha Gallery Pro.');
-        return;
-      }
       patchConfig({ sectionsEnabled: e.target.checked });
       renderRightPanel();
       renderCanvas();
