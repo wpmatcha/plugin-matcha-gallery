@@ -9,10 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-30 22:01:22+00:00\n"
+"POT-Creation-Date: 2026-10-06 16:10:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP Matcha Make-POT 1.0\n"
 "X-Domain: matcha-gallery\n"
+
+#: includes/Admin/Settings_Page.php:743
+msgid " via WordPress AI Connector"
+msgstr ""
 
 #: blocks/smart-gallery/components/GalleryPlaceholder.js:40
 msgid "-- Or Choose a Studio Gallery --"
@@ -22,7 +26,7 @@ msgstr ""
 msgid "-- Select a Matcha Gallery --"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:238
+#: includes/Admin/Media_Actions.php:239
 #. translators: %d: Number of errors.
 msgid "%d image failed (check error log)."
 msgid_plural "%d images failed (check error log)."
@@ -89,7 +93,7 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:415
+#: includes/Admin/Settings_Page.php:462
 msgid "Adapts the AI system prompt to emphasize niche-specific vocabulary and classification."
 msgstr ""
 
@@ -122,11 +126,11 @@ msgstr ""
 msgid "AI Color Dot Swatches (PRO)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:226
+#: includes/Admin/Settings_Page.php:227
 msgid "AI Enriched Photos"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:337
+#: includes/Admin/Settings_Page.php:384
 msgid "AI Generation Rules"
 msgstr ""
 
@@ -135,7 +139,7 @@ msgctxt "taxonomy singular name"
 msgid "AI Keyword"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:262 includes/Admin/Studio_Page.php:193 includes/Admin/Studio_Page.php:194 includes/Taxonomy/AI_Keywords_Taxonomy.php:54 blocks/smart-gallery/components/InspectorControls.js:225
+#: includes/Admin/Media_Actions.php:263 includes/Admin/Studio_Page.php:193 includes/Admin/Studio_Page.php:194 includes/Taxonomy/AI_Keywords_Taxonomy.php:54 blocks/smart-gallery/components/InspectorControls.js:225
 msgid "AI Keywords"
 msgstr ""
 
@@ -144,23 +148,23 @@ msgctxt "taxonomy general name"
 msgid "AI Keywords"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:369
+#: includes/Admin/Settings_Page.php:416
 msgid "AI Keywords & Filter Tags"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:266
+#: includes/Admin/Settings_Page.php:267
 msgid "AI Keywords Cloud"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:394
+#: includes/Admin/Media_Actions.php:395
 msgid "AI metadata generated successfully!"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:257
+#: includes/Admin/Settings_Page.php:258
 msgid "AI Provider & API"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:280
+#: includes/Admin/Settings_Page.php:281
 msgid "AI Provider Credentials"
 msgstr ""
 
@@ -176,11 +180,11 @@ msgstr ""
 msgid "AI vision keywords cloud"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:399
+#: includes/Admin/Settings_Page.php:446
 msgid "AI Vision Persona & Brand Tone"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:542
+#: includes/Admin/Settings_Page.php:589
 msgid "AI Vision Superpowers"
 msgstr ""
 
@@ -204,11 +208,11 @@ msgstr ""
 msgid "All Chapters"
 msgstr ""
 
-#: includes/Admin/Admin_Header.php:87 includes/Admin/Settings_Page.php:199 includes/Admin/Studio_Page.php:163 includes/Admin/Studio_Page.php:164 includes/Admin/Studio_Page.php:869
+#: includes/Admin/Admin_Header.php:87 includes/Admin/Settings_Page.php:200 includes/Admin/Studio_Page.php:163 includes/Admin/Studio_Page.php:164 includes/Admin/Studio_Page.php:869
 msgid "All Galleries"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:435
+#: includes/Admin/Settings_Page.php:482
 msgid "All Images (No Tag Filter)"
 msgstr ""
 
@@ -236,32 +240,32 @@ msgstr ""
 msgid "Allow visitors to download high-res image sets"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:366
+#: includes/Admin/Settings_Page.php:413
 msgid "Alt Text (SEO & Accessibility)"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:297
+#: includes/Admin/Media_Actions.php:298
 msgid "Analyze AI"
 msgstr ""
 
-#: includes/AI/AI_REST.php:395
+#: includes/AI/AI_REST.php:400
 msgid "API endpoint resolves to a private IP — blocked for security."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:326
+#: includes/Admin/Settings_Page.php:373
 msgid "API Endpoint URL"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:751
+#: includes/Admin/Settings_Page.php:811
 #. translators: 1: Status code, 2: Error message
 msgid "API Error (HTTP %1$d): %2$s"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:286
+#: includes/Admin/Settings_Page.php:326
 msgid "API Key"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:408
+#: includes/Admin/Settings_Page.php:455
 msgid "Architectural & Interior Design (Spatial structure, lighting, decor)"
 msgstr ""
 
@@ -281,7 +285,7 @@ msgstr ""
 msgid "Attachment is not an image."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:346
+#: includes/Admin/Settings_Page.php:393
 msgid "Auto-analyze on Image Upload"
 msgstr ""
 
@@ -301,15 +305,15 @@ msgstr ""
 msgid "Automatically populate the gallery with images matching specific AI keywords."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:347
+#: includes/Admin/Settings_Page.php:394
 msgid "Automatically run AI analysis whenever a new image is uploaded to the Media Library."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:260
+#: includes/Admin/Settings_Page.php:261
 msgid "Automation & Rules"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:827
+#: includes/Admin/Settings_Page.php:887
 msgid "Background Queue (Action Scheduler) for 1000+ Images"
 msgstr ""
 
@@ -341,7 +345,7 @@ msgstr ""
 msgid "Build Complete Galleries Faster"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:427
+#: includes/Admin/Settings_Page.php:474
 msgid "Build your gallery shortcode visually to use in Elementor, Divi, Classic Editor, or theme templates."
 msgstr ""
 
@@ -353,11 +357,11 @@ msgstr ""
 msgid "Buy License"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:368
+#: includes/Admin/Settings_Page.php:415
 msgid "Caption & Description"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:826
+#: includes/Admin/Settings_Page.php:886
 msgid "Carousel Slider & 3D Tilt Showcase"
 msgstr ""
 
@@ -397,7 +401,7 @@ msgstr ""
 msgid "Classic Uniform Grid, Pinterest Vertical Masonry, Flickr Justified Rows, plus Pro PhotoBlocks Mosaic, Pinwheel Spiral, and Bento Showcase."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:829
+#: includes/Admin/Settings_Page.php:889
 msgid "Claude 3.5 Sonnet & Google Gemini Pro Support"
 msgstr ""
 
@@ -445,7 +449,7 @@ msgstr ""
 msgid "Columns"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:449 blocks/smart-gallery/components/InspectorControls.js:335
+#: includes/Admin/Settings_Page.php:496 blocks/smart-gallery/components/InspectorControls.js:335
 msgid "Columns (Desktop)"
 msgstr ""
 
@@ -481,33 +485,33 @@ msgstr ""
 msgid "Configure AI Settings ↗"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:194
+#: includes/Admin/Settings_Page.php:195
 msgid "Configure neural vision models, automatic media library tagging, smart taxonomy keywords, and prompt automation presets."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:281
-msgid "Configure your OpenAI or OpenAI-compatible Vision endpoint. Your API key is encrypted and stored locally."
+#: includes/Admin/Settings_Page.php:282
+msgid "Configure your OpenAI or Google Gemini Vision endpoint, or connect seamlessly via WordPress AI Connectors."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:520
+#: includes/Admin/Settings_Page.php:567
 msgid "Connect any OpenAI-compatible Vision API key. Recommended providers with high speed and low inference cost:"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:673
+#: includes/Admin/Settings_Page.php:731
 #. translators: %s: Error message
 msgid "Connection failed: %s"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:689
-#. translators: 1: Latency in ms, 2: Model name
-msgid "Connection successful! Responded in %1$dms using %2$s."
+#: includes/Admin/Settings_Page.php:748
+#. translators: 1: Latency in ms, 2: Model name, 3: Source label
+msgid "Connection successful%3$s! Responded in %1$dms using %2$s."
 msgstr ""
 
 #: blocks/smart-gallery/components/InspectorControls.js:204
 msgid "Content Source"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:338
+#: includes/Admin/Settings_Page.php:385
 msgid "Control when AI triggers and what metadata fields get generated."
 msgstr ""
 
@@ -519,7 +523,7 @@ msgstr ""
 msgid "Copy ID List"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:469
+#: includes/Admin/Settings_Page.php:516
 msgid "Copy Shortcode"
 msgstr ""
 
@@ -535,7 +539,7 @@ msgstr ""
 msgid "Could not delete gallery."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:202 includes/Admin/Studio_Page.php:686
+#: includes/Admin/Settings_Page.php:203 includes/Admin/Studio_Page.php:686
 msgid "Create Gallery"
 msgstr ""
 
@@ -577,6 +581,10 @@ msgstr ""
 
 #: blocks/smart-gallery/components/InspectorControls.js:477
 msgid "Custom border color for Brasilia hairline frame."
+msgstr ""
+
+#: includes/AI/Connector_Bridge.php:91
+msgid "Custom Filter Connector"
 msgstr ""
 
 #: includes/Admin/Studio_Page.php:816
@@ -639,7 +647,7 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:566
+#: includes/Admin/Settings_Page.php:613
 msgid "Documentation & Help"
 msgstr ""
 
@@ -659,11 +667,11 @@ msgstr ""
 msgid "Dynamic Color Dots"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:406
+#: includes/Admin/Settings_Page.php:453
 msgid "E-Commerce & Products (SKU, materials, finish, product angles)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:322
+#: includes/Admin/Settings_Page.php:369
 msgid "e.g. gemini-1.5-flash, gemini-2.0-flash, gpt-4o-mini"
 msgstr ""
 
@@ -715,16 +723,20 @@ msgstr ""
 msgid "Enable lightbox"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:461
+#: includes/Admin/Settings_Page.php:508
 msgid "Enable Lightbox Popup"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:460
+#: includes/Admin/Settings_Page.php:507
 msgid "Enable Tag Filter Bar"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:244
+#: includes/Admin/Settings_Page.php:245
 msgid "Enrichment Coverage"
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:306
+msgid "Entering a key below will override this connector."
 msgstr ""
 
 #: blocks/smart-gallery/components/InspectorControls.js:159
@@ -747,7 +759,7 @@ msgstr ""
 msgid "Features & Pro Comparison"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:433
+#: includes/Admin/Settings_Page.php:480
 msgid "Filter by AI Keyword Tag"
 msgstr ""
 
@@ -780,7 +792,7 @@ msgstr ""
 msgid "Floating Glass"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:328
+#: includes/Admin/Settings_Page.php:375
 msgid "For Google Gemini: https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 msgstr ""
 
@@ -800,7 +812,7 @@ msgstr ""
 msgid "Free Edition"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:343 includes/Admin/Studio_Page.php:667 includes/Admin/Studio_Page.php:867
+#: includes/Admin/Settings_Page.php:191 includes/Admin/Studio_Page.php:343 includes/Admin/Studio_Page.php:667 includes/Admin/Studio_Page.php:867
 msgid "FREE VERSION"
 msgstr ""
 
@@ -872,7 +884,7 @@ msgstr ""
 msgid "Gallery Pages"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:139
+#: includes/Admin/Media_Actions.php:140
 msgid "Generate AI Metadata"
 msgstr ""
 
@@ -880,24 +892,28 @@ msgstr ""
 msgid "Generate itemized PDF proposals and wall layout sheets directly from the visual builder, complete with dimensions, prices, and client info."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:318
+#: includes/Admin/Media_Actions.php:319
 msgid "Generate with AI"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:480
+#: includes/Admin/Settings_Page.php:527
 msgid "Generated AI Keywords Cloud"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:466
+#: includes/Admin/Settings_Page.php:513
 msgid "Generated Shortcode:"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:556
+#: includes/Admin/Settings_Page.php:603
 msgid "Generates descriptive alt text and captions for search engines and screen readers."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:300
-msgid "Get an API key from the OpenAI Platform or any compatible Vision API provider."
+#: includes/Admin/Settings_Page.php:344
+msgid "Get a free key from Google AI Studio (recommended, 100% free tier) or OpenAI Platform."
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:346
+msgid "Get Free Gemini Key →"
 msgstr ""
 
 #: includes/Admin/Admin_Header.php:53 includes/Admin/Admin_Header.php:117 includes/Admin/Studio_Page.php:466
@@ -908,7 +924,7 @@ msgstr ""
 msgid "Get Matcha Gallery Pro ↗"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:576
+#: includes/Admin/Settings_Page.php:623
 msgid "Get Priority Support"
 msgstr ""
 
@@ -936,7 +952,7 @@ msgstr ""
 msgid "Gold Brass (PRO)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:444 includes/Admin/Studio_Page.php:976 includes/Pro/Pro_Features.php:83
+#: includes/Admin/Settings_Page.php:491 includes/Admin/Studio_Page.php:976 includes/Pro/Pro_Features.php:83
 msgid "Grid"
 msgstr ""
 
@@ -972,7 +988,7 @@ msgstr ""
 msgid "Harmonizes search bar, filter buttons, sort dropdown, and swatches in a unified design language."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:189 includes/Admin/Studio_Page.php:342 includes/Admin/Studio_Page.php:666 includes/Admin/Studio_Page.php:866
+#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:342 includes/Admin/Studio_Page.php:666 includes/Admin/Studio_Page.php:866
 msgid "Hello %s"
 msgstr ""
 
@@ -988,7 +1004,7 @@ msgstr ""
 msgid "Hero Triptych (3 Frames)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:409
+#: includes/Admin/Settings_Page.php:456
 msgid "High-Fashion & Editorial (Avant-garde styling, magazine mood)"
 msgstr ""
 
@@ -996,11 +1012,11 @@ msgstr ""
 msgid "Hover Animation"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:367
+#: includes/Admin/Settings_Page.php:414
 msgid "Human-readable Title"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:358
+#: includes/Admin/Settings_Page.php:405
 msgid "If unchecked, AI will only populate empty fields and preserve existing alt text and titles."
 msgstr ""
 
@@ -1032,11 +1048,11 @@ msgstr ""
 msgid "Instant front-end AJAX pills with photo counters"
 msgstr ""
 
-#: includes/AI/AI_REST.php:376 includes/AI/AI_REST.php:381
+#: includes/AI/AI_REST.php:381 includes/AI/AI_REST.php:386
 msgid "Invalid API endpoint URL."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:363
+#: includes/Admin/Media_Actions.php:364
 msgid "Invalid attachment ID."
 msgstr ""
 
@@ -1048,7 +1064,7 @@ msgstr ""
 msgid "Justified"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:552
+#: includes/Admin/Settings_Page.php:599
 msgid "Keywords are saved into standard WP taxonomies for instant filtering."
 msgstr ""
 
@@ -1080,7 +1096,7 @@ msgstr ""
 msgid "Layout Engine Active"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:442 blocks/smart-gallery/components/InspectorControls.js:246
+#: includes/Admin/Settings_Page.php:489 blocks/smart-gallery/components/InspectorControls.js:246
 msgid "Layout Type"
 msgstr ""
 
@@ -1152,23 +1168,27 @@ msgstr ""
 msgid "Manage and customize your photo galleries. Engineered for Zero-CLS instant loading, 6 architectural layouts, and luxury picture framing."
 msgstr ""
 
+#: includes/Admin/Settings_Page.php:303
+msgid "Manage in Settings > Connectors →"
+msgstr ""
+
 #: includes/Admin/Studio_Page.php:681
 msgid "Manage Pro License ↗"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:445 includes/Admin/Studio_Page.php:980 includes/Pro/Pro_Features.php:84
+#: includes/Admin/Settings_Page.php:492 includes/Admin/Studio_Page.php:980 includes/Pro/Pro_Features.php:84
 msgid "Masonry"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:331 includes/Admin/Studio_Page.php:141 includes/Admin/Studio_Page.php:142
+#: includes/Admin/Media_Actions.php:332 includes/Admin/Studio_Page.php:141 includes/Admin/Studio_Page.php:142
 msgid "Matcha AI"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:60 includes/Admin/Settings_Page.php:61
+#: includes/Admin/Settings_Page.php:61 includes/Admin/Settings_Page.php:62
 msgid "Matcha AI Gallery"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:192
+#: includes/Admin/Settings_Page.php:193
 msgid "Matcha AI Settings"
 msgstr ""
 
@@ -1194,7 +1214,7 @@ msgstr ""
 msgid "Matcha AI: API returned HTTP %1$d — %2$s"
 msgstr ""
 
-#: includes/AI/Metadata_Generator.php:68
+#: includes/AI/Metadata_Generator.php:69
 #. translators: %d: Attachment ID.
 msgid "Matcha AI: Attachment %d is not an image."
 msgstr ""
@@ -1203,7 +1223,7 @@ msgstr ""
 msgid "Matcha AI: Could not decode API response."
 msgstr ""
 
-#: includes/AI/Metadata_Generator.php:140
+#: includes/AI/Metadata_Generator.php:141
 #. translators: %d: Attachment ID.
 msgid "Matcha AI: Could not locate image file for attachment %d."
 msgstr ""
@@ -1218,7 +1238,7 @@ msgstr ""
 msgid "Matcha AI: Could not parse metadata JSON from API — %s"
 msgstr ""
 
-#: includes/AI/Metadata_Generator.php:153
+#: includes/AI/Metadata_Generator.php:154
 #. translators: %s: File path.
 msgid "Matcha AI: Could not read image file: %s"
 msgstr ""
@@ -1241,14 +1261,14 @@ msgstr ""
 msgid "Matcha AI: Gemini returned an empty response."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:226
+#: includes/Admin/Media_Actions.php:227
 #. translators: %d: Number of images processed.
 msgid "Matcha AI: Generated metadata for %d image."
 msgid_plural "Matcha AI: Generated metadata for %d images."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/Admin/Media_Actions.php:209
+#: includes/Admin/Media_Actions.php:210
 msgid "Matcha AI: No API key configured. Please set your API key in Settings → Matcha AI Gallery."
 msgstr ""
 
@@ -1291,6 +1311,10 @@ msgstr ""
 msgid "Matcha Gallery requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade your PHP version."
 msgstr ""
 
+#: includes/Admin/Settings_Page.php:299
+msgid "Matcha is automatically using your central site credentials. You do not need to enter a duplicate API key below unless you wish to override it."
+msgstr ""
+
 #: includes/Admin/Studio_Page.php:347
 msgid "Matcha is the fast, intelligent WordPress photo gallery suite. Build high-converting masonry, grid, justified, and mosaic galleries with zero CLS layout shift and automated AI vision tagging."
 msgstr ""
@@ -1299,11 +1323,11 @@ msgstr ""
 msgid "Matcha Studio Gallery"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:217
+#: includes/Admin/Settings_Page.php:218
 msgid "Media Library Images"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:364
+#: includes/Admin/Settings_Page.php:411
 msgid "Metadata Fields to Generate"
 msgstr ""
 
@@ -1327,7 +1351,7 @@ msgstr ""
 msgid "Mobile Touch Action"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:726
+#: includes/Admin/Settings_Page.php:786
 #. translators: 1: Current model name, 2: Comma-separated list of available models, 3: Recommended model name
 msgid "Model \"%1$s\" is not found on your key. Available on your key: %2$s. Recommended: \"%3$s\""
 msgstr ""
@@ -1348,7 +1372,7 @@ msgstr ""
 msgid "Mosaic"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:828
+#: includes/Admin/Settings_Page.php:888
 msgid "Multi-select Faceted Filters & Deep-Linking"
 msgstr ""
 
@@ -1364,7 +1388,7 @@ msgstr ""
 msgid "Natural oak, brass, black metal & glass matting"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:569
+#: includes/Admin/Settings_Page.php:616
 msgid "Need help setting up custom prompt templates or troubleshooting API tokens?"
 msgstr ""
 
@@ -1384,16 +1408,16 @@ msgstr ""
 msgid "No AI keywords found."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:485
+#: includes/Admin/Settings_Page.php:532
 msgid "No AI keywords generated yet. Upload an image or use the Media Library bulk action to get started."
 msgstr ""
 
-#: includes/AI/AI_REST.php:184
-msgid "No API key configured. Go to Matcha AI → AI Settings."
+#: includes/Admin/Media_Actions.php:378
+msgid "No API credentials configured. Enter a key in Matcha AI Settings or connect a provider in Settings > Connectors."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:377
-msgid "No API key configured. Go to Settings → Matcha AI Gallery."
+#: includes/AI/AI_REST.php:186
+msgid "No API key configured. Enter a key in Matcha AI Settings or connect a provider in Settings > Connectors."
 msgstr ""
 
 #: includes/Admin/Studio_Page.php:957
@@ -1440,12 +1464,20 @@ msgstr ""
 msgid "Open Matcha Studio Builder ↗"
 msgstr ""
 
+#: includes/Admin/Settings_Page.php:319
+msgid "Open Settings > Connectors"
+msgstr ""
+
 #: includes/Admin/Studio_Page.php:437
 msgid "Open Studio"
 msgstr ""
 
 #: includes/Admin/Studio_Page.php:1186
 msgid "Open Studio ↗"
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:328
+msgid "Optional (Connected via WP)"
 msgstr ""
 
 #: blocks/smart-gallery/components/GalleryPlaceholder.js:105
@@ -1456,7 +1488,7 @@ msgstr ""
 msgid "Override the layout configured in Matcha Studio for this specific page."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:357
+#: includes/Admin/Settings_Page.php:404
 msgid "Overwrite Existing Metadata"
 msgstr ""
 
@@ -1472,7 +1504,7 @@ msgstr ""
 msgid "Password galleries, favorites & ID copy tray"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:594
+#: includes/Admin/Settings_Page.php:641
 msgid "Permission denied."
 msgstr ""
 
@@ -1524,8 +1556,8 @@ msgstr ""
 msgid "Play Video"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:610
-msgid "Please enter an API key first."
+#: includes/Admin/Settings_Page.php:668
+msgid "Please enter an API key or configure an active provider in Settings > Connectors."
 msgstr ""
 
 #: includes/Taxonomy/AI_Keywords_Taxonomy.php:42
@@ -1544,11 +1576,11 @@ msgstr ""
 msgid "Printable PDF Sheets"
 msgstr ""
 
-#: includes/AI/AI_REST.php:401
+#: includes/AI/AI_REST.php:406
 msgid "Private IP endpoints are not allowed."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:401 includes/Admin/Studio_Page.php:623
+#: includes/Admin/Settings_Page.php:448 includes/Admin/Studio_Page.php:623
 msgid "PRO"
 msgstr ""
 
@@ -1564,15 +1596,15 @@ msgstr ""
 msgid "Pro Feature"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:413
+#: includes/Admin/Settings_Page.php:460
 msgid "Pro feature: Custom vision personas calibrate AI prompt instructions for specialized photography niches."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:269
+#: includes/Admin/Settings_Page.php:270
 msgid "Pro Features"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:816
+#: includes/Admin/Settings_Page.php:876
 msgid "Pro features are active. Thank you for your support!"
 msgstr ""
 
@@ -1584,11 +1616,11 @@ msgstr ""
 msgid "PRO Superpower"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:821
+#: includes/Admin/Settings_Page.php:881
 msgid "PRO UPGRADE"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:190 includes/Admin/Studio_Page.php:343 includes/Admin/Studio_Page.php:667 includes/Admin/Studio_Page.php:867
+#: includes/Admin/Settings_Page.php:191 includes/Admin/Studio_Page.php:343 includes/Admin/Studio_Page.php:667 includes/Admin/Studio_Page.php:867
 msgid "PRO VERSION"
 msgstr ""
 
@@ -1600,7 +1632,7 @@ msgstr ""
 msgid "Quick Access"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:517
+#: includes/Admin/Settings_Page.php:564
 msgid "Quick API Setup"
 msgstr ""
 
@@ -1628,7 +1660,7 @@ msgstr ""
 msgid "Rate Matcha ★★★★★"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:572
+#: includes/Admin/Settings_Page.php:619
 msgid "Read Documentation"
 msgstr ""
 
@@ -1640,11 +1672,11 @@ msgstr ""
 msgid "Real-time keyword search, multi-select category pills with photo counters, and AI color-swatch dot palettes for intuitive browsing."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:317
+#: includes/Admin/Media_Actions.php:318
 msgid "Regenerate with AI"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:287
+#: includes/Admin/Settings_Page.php:330
 msgid "Required"
 msgstr ""
 
@@ -1668,7 +1700,7 @@ msgstr ""
 msgid "Salon Exhibition (6 Frames)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:506
+#: includes/Admin/Settings_Page.php:553
 msgid "Save Changes"
 msgstr ""
 
@@ -1692,7 +1724,7 @@ msgstr ""
 msgid "Search images"
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:346
+#: includes/Admin/Media_Actions.php:347
 msgid "Security check failed."
 msgstr ""
 
@@ -1704,7 +1736,7 @@ msgstr ""
 msgid "Select a gallery from the widget panel on the left to display your photos."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:305
+#: includes/Admin/Settings_Page.php:352
 msgid "Select AI Provider Preset"
 msgstr ""
 
@@ -1732,7 +1764,7 @@ msgstr ""
 msgid "Sell fine-art canvas prints & digital downloads"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:556
+#: includes/Admin/Settings_Page.php:603
 msgid "SEO & Accessibility"
 msgstr ""
 
@@ -1768,7 +1800,7 @@ msgstr ""
 msgid "Shoppable Hotspots & Buy Links"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:263
+#: includes/Admin/Settings_Page.php:264
 msgid "Shortcode Builder"
 msgstr ""
 
@@ -1776,7 +1808,7 @@ msgstr ""
 msgid "Show \"All\" filter"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:292
+#: includes/Admin/Settings_Page.php:336
 msgid "Show / Hide Key"
 msgstr ""
 
@@ -1805,11 +1837,11 @@ msgstr ""
 msgid "Slim Black Metal (PRO)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:426
+#: includes/Admin/Settings_Page.php:473
 msgid "Smart Shortcode Generator"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:552
+#: includes/Admin/Settings_Page.php:599
 msgid "Smart Taxonomies"
 msgstr ""
 
@@ -1817,7 +1849,7 @@ msgstr ""
 msgid "Smooth Zoom (The Grid Malabo)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:831
+#: includes/Admin/Settings_Page.php:891
 msgid "Social Sharing & High-Res Lightbox Zoom"
 msgstr ""
 
@@ -1833,7 +1865,7 @@ msgstr ""
 msgid "Staircase Ascending (6 Frames)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:405
+#: includes/Admin/Settings_Page.php:452
 msgid "Standard Studio (Balanced artistic analysis)"
 msgstr ""
 
@@ -1849,7 +1881,7 @@ msgstr ""
 msgid "Style Preset"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:822
+#: includes/Admin/Settings_Page.php:882
 msgid "Supercharge Matcha AI with Pro"
 msgstr ""
 
@@ -1861,7 +1893,7 @@ msgstr ""
 msgid "Symmetric Quad (6 Frames)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:548
+#: includes/Admin/Settings_Page.php:595
 msgid "Tagging runs at upload or on-demand; visitor pages load at 0ms CLS."
 msgstr ""
 
@@ -1869,7 +1901,7 @@ msgstr ""
 msgid "Tap to Reveal Overlay (Captions & Links)"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:374
+#: includes/Admin/Settings_Page.php:421
 msgid "Target Language / Locale"
 msgstr ""
 
@@ -1877,11 +1909,11 @@ msgstr ""
 msgid "Taxonomy & Keywords"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:295
+#: includes/Admin/Settings_Page.php:339
 msgid "Test Connection"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:481
+#: includes/Admin/Settings_Page.php:528
 msgid "These are the active AI keywords assigned to your media library images."
 msgstr ""
 
@@ -1917,11 +1949,11 @@ msgstr ""
 msgid "Type to search AI keywords"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:235
+#: includes/Admin/Settings_Page.php:236
 msgid "Unique Vision Keywords"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:745
+#: includes/Admin/Settings_Page.php:805
 msgid "Unknown API error"
 msgstr ""
 
@@ -1933,7 +1965,7 @@ msgstr ""
 msgid "Unlimited AI Vision Tagging"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:823
+#: includes/Admin/Settings_Page.php:883
 msgid "Unlock advanced layouts, background batch queues, multi-category filters, and WooCommerce support."
 msgstr ""
 
@@ -1953,7 +1985,7 @@ msgstr ""
 msgid "Upgrade Now"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:835
+#: includes/Admin/Settings_Page.php:895
 msgid "Upgrade to Pro →"
 msgstr ""
 
@@ -1967,6 +1999,10 @@ msgstr ""
 
 #: blocks/smart-gallery/components/GalleryPlaceholder.js:109
 msgid "Use dynamic source (AI tags)"
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:335
+msgid "Using site connector: %s (or enter key to override)"
 msgstr ""
 
 #: includes/Blocks/Smart_Gallery_Block.php:839
@@ -1993,7 +2029,7 @@ msgstr ""
 msgid "VIP Support – Skip the Queue"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:320
+#: includes/Admin/Settings_Page.php:367
 msgid "Vision Model"
 msgstr ""
 
@@ -2013,7 +2049,7 @@ msgstr ""
 msgid "Watermark & Shield"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:407
+#: includes/Admin/Settings_Page.php:454
 msgid "Wedding & Portrait Photography (Emotional intimacy, attire, event mood)"
 msgstr ""
 
@@ -2037,8 +2073,16 @@ msgstr ""
 msgid "WooCommerce Prints & Sales"
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:830
+#: includes/Admin/Settings_Page.php:890
 msgid "WooCommerce Products & Custom Post Type Grids"
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:315
+msgid "WordPress 7.0 Connectors available: Centralize your AI keys across all plugins in WordPress Settings."
+msgstr ""
+
+#: includes/Admin/Settings_Page.php:293
+msgid "WordPress AI Connector Active"
 msgstr ""
 
 #: includes/Admin/Studio_Page.php:1214
@@ -2057,11 +2101,11 @@ msgstr ""
 msgid "You do not have permission to analyze images."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:354
+#: includes/Admin/Media_Actions.php:355
 msgid "You do not have permission to do this."
 msgstr ""
 
-#: includes/Admin/Media_Actions.php:370 includes/AI/AI_REST.php:103
+#: includes/Admin/Media_Actions.php:371 includes/AI/AI_REST.php:103
 msgid "You do not have permission to edit this attachment."
 msgstr ""
 
@@ -2070,7 +2114,7 @@ msgstr ""
 msgid "You do not have permission to use attachment #%d."
 msgstr ""
 
-#: includes/Admin/Settings_Page.php:548
+#: includes/Admin/Settings_Page.php:595
 msgid "Zero Front-End Latency"
 msgstr ""
 

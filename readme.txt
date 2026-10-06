@@ -38,6 +38,7 @@ Matcha Gallery produces clean, modern HTML5/CSS3 output with zero jQuery depende
 * **AI Color Swatches & Live Filter Toolbar:** Instant color dot filter buttons extracted by AI, plus live keyword search and animated category filter pills.
 * **Client Proofing & Shoppable Portfolios:** Visitors can favorite photos with heart icons (`🤍 → ❤️`) and export clean selection lists, or click glassmorphic *Buy / Shop Now* buttons.
 * **1-Click 📷 Export Wall & Client Proofing Sheet:** Download a 2x crystal-clear PNG snapshot of your arranged gallery wall, or print a branded client proposal sheet with dimensions and pricing.
+* **WordPress 7.0 Connectors Ready:** Seamlessly bridges with the native WordPress 7.0+ AI Connectors API (`Settings > Connectors`) and environment credentials (`wp-config.php`). If active on your site, Matcha auto-connects with zero duplicate setup.
 * **Gutenberg Block & Shortcode:** Embed galleries seamlessly via the native `[matcha_gallery id="..."]` shortcode or the dedicated Gutenberg block.
 
 == Third-Party Services ==
@@ -81,6 +82,9 @@ Yes, absolutely! All 6 layouts, picture framing, matting, multi-section chapters
 = Will AI overwrite my existing image alt text? =
 By default, no. Matcha Gallery only enriches images with missing alt text or captions. You can toggle "Overwrite existing metadata" in Settings if you wish to re-generate everything.
 
+= Does Matcha Gallery work with WordPress 7.0 AI Connectors? =
+Yes! Matcha Gallery includes a Smart Hybrid bridge. If your site is running WordPress 7.0+ with an active AI connector configured in Settings > Connectors (or via wp-config.php), Matcha auto-detects it. You can also provide a direct API key (such as a 100% free Google Gemini Flash key) anytime.
+
 = Is Matcha Gallery fast and lightweight? =
 Yes! The frontend runtime is under 15KB of vanilla JavaScript with zero jQuery or external framework dependencies. It uses native CSS Grid and Flexbox for maximum rendering speed and 100/100 Google PageSpeed scores.
 
@@ -101,6 +105,7 @@ You can insert the native **Matcha Gallery** Gutenberg block, or paste the short
 == Changelog ==
 
 = 1.0.2 =
+* Feature: Smart Hybrid WordPress 7.0+ AI Connectors Bridge (`Settings > Connectors`) — auto-detects site-level OpenAI and Google Gemini credentials with fallback to free direct keys.
 * Feature: Lookbook Duet layout blueprint — editorial 2-column spread with alternating cadence and caption margins.
 * Feature: True Continuous CSS Multi-Column Masonry — seamless vertical column masonry with fluid responsive breakpoints.
 * Feature: Cold-load thumbnail preloading and instant frame aspect-ratio reservation for zero layout shifts (CLS < 0.01).

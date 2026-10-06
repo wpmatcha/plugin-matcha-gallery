@@ -39,9 +39,10 @@ class Metadata_Generator {
 		$client = apply_filters( 'matcha_gallery_ai_client', $client );
 
 		if ( null === $client ) {
-			$key      = Plugin::get_setting( 'api_key', '' );
-			$model    = Plugin::get_setting( 'api_model', '' );
-			$endpoint = Plugin::get_setting( 'api_endpoint', '' );
+			$creds    = Connector_Bridge::get_resolved_credentials();
+			$key      = $creds['api_key'];
+			$model    = $creds['model'];
+			$endpoint = $creds['endpoint'];
 
 			if ( str_starts_with( $key, 'AIza' ) || str_contains( $endpoint, 'googleapis.com' ) || str_contains( strtolower( $model ), 'gemini' ) ) {
 				$this->client = new Gemini_Client( $key, $model );

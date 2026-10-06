@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Matcha_AI_Smart_Gallery\Plugin;
 use Matcha_AI_Smart_Gallery\AI\Metadata_Generator;
+use Matcha_AI_Smart_Gallery\AI\Connector_Bridge;
 use Matcha_AI_Smart_Gallery\Media\Attachment_Metadata;
 
 /**
@@ -103,8 +104,8 @@ class Media_Actions {
 			return;
 		}
 
-		// Only process if API key is configured.
-		if ( empty( Plugin::get_setting( 'api_key', '' ) ) ) {
+		// Only process if API credentials are configured.
+		if ( ! Connector_Bridge::has_credentials() ) {
 			return;
 		}
 
@@ -157,7 +158,7 @@ class Media_Actions {
 			return $redirect_url;
 		}
 
-		if ( empty( Plugin::get_setting( 'api_key', '' ) ) ) {
+		if ( ! Connector_Bridge::has_credentials() ) {
 			return add_query_arg( 'matcha_bulk_error', 'no_api_key', $redirect_url );
 		}
 
@@ -372,9 +373,9 @@ class Media_Actions {
 			);
 		}
 
-		if ( empty( Plugin::get_setting( 'api_key', '' ) ) ) {
+		if ( ! Connector_Bridge::has_credentials() ) {
 			wp_send_json_error(
-				array( 'message' => __( 'No API key configured. Go to Settings → Matcha AI Gallery.', 'matcha-gallery' ) ),
+				array( 'message' => __( 'No API credentials configured. Enter a key in Matcha AI Settings or connect a provider in Settings > Connectors.', 'matcha-gallery' ) ),
 				400
 			);
 		}
