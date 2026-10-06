@@ -151,20 +151,51 @@
 	display: none !important;
 }
 
+button.matcha-album-card,
 .matcha-album-card {
 	position: relative;
 	cursor: pointer;
 	user-select: none;
 	perspective: 1000px;
-	outline: none;
-	background: transparent;
-	border: none;
-	padding: 0;
+	outline: none !important;
+	background: transparent !important;
+	background-color: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	margin: 0 !important;
 	text-align: left;
 	display: flex;
 	flex-direction: column;
 	transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 	text-decoration: none !important;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+button.matcha-album-card:hover,
+button.matcha-album-card:focus,
+button.matcha-album-card:focus-visible,
+button.matcha-album-card:active,
+.matcha-album-card:hover,
+.matcha-album-card:focus,
+.matcha-album-card:active {
+	background: transparent !important;
+	background-color: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+button.matcha-album-card:hover .matcha-album-title,
+.matcha-album-card:hover .matcha-album-title {
+	color: var(--matcha-accent, #5ec27f) !important;
+}
+
+button.matcha-album-card:hover .matcha-album-count-badge,
+.matcha-album-card:hover .matcha-album-count-badge {
+	background: rgba(94, 194, 127, 0.15) !important;
+	color: var(--matcha-accent, #5ec27f) !important;
 }
 
 .matcha-album-stack {
@@ -253,6 +284,7 @@
 	display: flex;
 	align-items: center;
 	gap: 6px;
+	transition: color 0.2s ease;
 }
 
 .matcha-gallery--theme-dark .matcha-album-title {
@@ -270,6 +302,7 @@
 	background: rgba(15, 23, 42, 0.06);
 	color: #475569;
 	white-space: nowrap;
+	transition: all 0.2s ease;
 }
 
 .matcha-gallery--theme-dark .matcha-album-count-badge {
