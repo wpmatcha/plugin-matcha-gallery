@@ -155,7 +155,7 @@ if (root) {
       <div class="matcha-pro-modal" style="max-width:440px;" role="dialog" aria-modal="true">
         <button type="button" class="close-btn" aria-label="Close" id="chapter-modal-close-btn">&times;</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <div style="width:38px;height:38px;border-radius:10px;background:rgba(94,194,127,0.16);color:#5ec27f;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#10b981;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             ${Icons.folder}
           </div>
           <div>
@@ -286,7 +286,7 @@ if (root) {
               <img src="${window.MatchaStudio?.iconUrl || ''}" width="24" height="24" style="border-radius:6px;display:block;object-fit:cover;" alt="Matcha" />
             </span>
             <span>Matcha Studio</span>
-            <span class="matcha-pro-tag" style="background:rgba(77,164,104,0.18);color:#5ec27f;border-color:rgba(77,164,104,0.35);font-weight:700;">STUDIO</span>
+            <span class="matcha-pro-tag" style="background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.25);font-weight:700;">STUDIO</span>
           </a>
           <input id="studio-title" class="matcha-studio__title" value="${escapeHtml(initialTitle || 'Untitled Gallery')}" placeholder="Gallery Title..." />
           <span id="save-status" style="font-size:11px;color:#ffffff;font-weight:700;"></span>
@@ -772,29 +772,29 @@ if (root) {
         <!-- Chapter Header & Action -->
         <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.5px;text-transform:uppercase;">
-            <span style="color:#5ec27f;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ''}
+            <span style="color:#10b981;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ''}
           </span>
-          <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
-            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter ${!isPro ? (sections.length < MAX_FREE_CHAPTERS ? `<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">${MAX_FREE_CHAPTERS - sections.length} FREE</span>` : `<span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>`) : ''}
+          <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(16,185,129,0.35);background:rgba(16,185,129,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
+            <span style="color:#10b981;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter ${!isPro ? (sections.length < MAX_FREE_CHAPTERS ? `<span style="font-size:8px;padding:1px 4px;background:rgba(16,185,129,0.15);color:#10b981;border-radius:3px;font-weight:700;">${MAX_FREE_CHAPTERS - sections.length} FREE</span>` : `<span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>`) : ''}
           </button>
         </div>
 
         ${sections.length > 0 ? `
           <!-- Clean Full-Width Presentation Mode Segmented Control -->
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;margin-bottom:8px;">
-            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay !== 'stacks' ? 'rgba(94,194,127,0.18)' : 'transparent'};color:${cfg.chapterDisplay !== 'stacks' ? '#5ec27f' : 'var(--st-text-muted)'};border:${cfg.chapterDisplay !== 'stacks' ? '1px solid rgba(94,194,127,0.35)' : '1px solid transparent'};transition:all 0.15s ease;">
+            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay !== 'stacks' ? 'rgba(16,185,129,0.15)' : 'transparent'};color:${cfg.chapterDisplay !== 'stacks' ? '#10b981' : 'var(--st-text-muted)'};border:${cfg.chapterDisplay !== 'stacks' ? '1px solid rgba(16,185,129,0.35)' : '1px solid transparent'};transition:all 0.15s ease;">
               <span>📑</span> Classic Tabs
             </button>
-            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay === 'stacks' ? 'is-active' : ''}" data-display="stacks" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay === 'stacks' ? 'rgba(94,194,127,0.18)' : 'transparent'};color:${cfg.chapterDisplay === 'stacks' ? '#5ec27f' : 'var(--st-text-muted)'};border:${cfg.chapterDisplay === 'stacks' ? '1px solid rgba(94,194,127,0.35)' : '1px solid transparent'};transition:all 0.15s ease;">
+            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay === 'stacks' ? 'is-active' : ''}" data-display="stacks" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay === 'stacks' ? 'rgba(16,185,129,0.15)' : 'transparent'};color:${cfg.chapterDisplay === 'stacks' ? '#10b981' : 'var(--st-text-muted)'};border:${cfg.chapterDisplay === 'stacks' ? '1px solid rgba(16,185,129,0.35)' : '1px solid transparent'};transition:all 0.15s ease;">
               <span>📚</span> 3D Albums <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
             </button>
           </div>
 
           ${isPro && cfg.chapterDisplay === 'stacks' ? `
             <!-- Stack Aesthetic Dropdown -->
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;margin-bottom:8px;background:rgba(94,194,127,0.06);border:1px solid rgba(94,194,127,0.18);border-radius:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;margin-bottom:8px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:6px;">
               <span style="font-size:9.5px;color:#94a3b8;font-weight:600;">Album Style:</span>
-              <select id="quick-chapter-stack-style" class="matcha-dark-select" style="padding:2px 6px;font-size:10px;height:24px;border:none;background:transparent;color:#5ec27f;font-weight:700;cursor:pointer;">
+              <select id="quick-chapter-stack-style" class="matcha-dark-select" style="padding:2px 6px;font-size:10px;height:24px;border:none;background:transparent;color:#10b981;font-weight:700;cursor:pointer;">
                 <option value="editorial" ${(cfg.chapterStackStyle || 'editorial') === 'editorial' ? 'selected' : ''}>Luxury Editorial</option>
                 <option value="polaroid" ${cfg.chapterStackStyle === 'polaroid' ? 'selected' : ''}>Polaroid Deck</option>
                 <option value="minimal" ${cfg.chapterStackStyle === 'minimal' ? 'selected' : ''}>Minimalist Glass</option>
@@ -818,7 +818,7 @@ if (root) {
         ${currentSection ? `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;margin-bottom:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;">
             <span style="font-size:11px;font-weight:700;color:#ffffff;display:flex;align-items:center;gap:5px;">
-              <span style="color:#5ec27f;">${Icons.folder}</span> "${escapeHtml(currentSection.title)}"
+              <span style="color:#10b981;">${Icons.folder}</span> "${escapeHtml(currentSection.title)}"
             </span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="btn-rename-sec" class="matcha-exit-btn" style="padding:2px 6px;font-size:9px;">Rename</button>
@@ -832,14 +832,14 @@ if (root) {
         </button>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
           <button type="button" id="matcha-run-ai" class="matcha-exit-btn" style="font-weight:700;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;" title="Run Gemini AI Vision Auto-Tagging">
-            <span style="color:#5ec27f;">${Icons.bolt}</span> AI Enhance
+            <span style="color:#10b981;">${Icons.bolt}</span> AI Enhance
           </button>
           <button type="button" id="matcha-smart-fill" class="matcha-exit-btn" style="font-weight:700;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:5px;" title="Auto-match aspect ratios and tile geometry">
             <span style="color:#38bdf8;">${Icons.sparkles}</span> Smart Fill <span class="matcha-pro-badge">PRO</span>
           </button>
         </div>
         <div class="matcha-progress" style="height:4px;background:#202632;border-radius:4px;overflow:hidden;margin:6px 0;display:none;">
-          <div id="matcha-ai-bar" class="matcha-progress__bar" style="height:100%;background:linear-gradient(90deg, #5ec27f, #4da468);width:0%;transition:width 0.3s ease;"></div>
+          <div id="matcha-ai-bar" class="matcha-progress__bar" style="height:100%;background:linear-gradient(90deg, #10b981, #34d399);width:0%;transition:width 0.3s ease;"></div>
         </div>
         <div id="matcha-ai-status" style="font-size:10px;color:var(--st-text-secondary);text-align:center;min-height:14px;margin-bottom:8px;"></div>
 
@@ -866,40 +866,40 @@ if (root) {
 
           <!-- Sort Dropdown -->
           <div style="position:relative;">
-            <button type="button" id="btn-tray-sort-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${(getState().config.sortBy || 'manual') !== 'manual' ? '#5ec27f' : '#b5c7ba'};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Sort Gallery Photos">
+            <button type="button" id="btn-tray-sort-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${(getState().config.sortBy || 'manual') !== 'manual' ? '#10b981' : 'var(--st-text-secondary)'};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Sort Gallery Photos">
               ${Icons.sort}
             </button>
             <div id="tray-sort-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:185px;background:var(--st-bg-card);border:1px solid var(--st-border-strong);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.8);z-index:9999;padding:4px;">
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'manual' ? 'is-selected' : ''}" data-sort="manual">
                 <span>Manual (Drag & Drop)</span>
-                ${(getState().config.sortBy || 'manual') === 'manual' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : ''}
+                ${(getState().config.sortBy || 'manual') === 'manual' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : ''}
               </div>
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'name-asc' ? 'is-selected' : ''}" data-sort="name-asc">
                 <span>Title (A → Z)</span>
-                ${(getState().config.sortBy || 'manual') === 'name-asc' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : ''}
+                ${(getState().config.sortBy || 'manual') === 'name-asc' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : ''}
               </div>
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'name-desc' ? 'is-selected' : ''}" data-sort="name-desc">
                 <span>Title (Z → A)</span>
-                ${(getState().config.sortBy || 'manual') === 'name-desc' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : ''}
+                ${(getState().config.sortBy || 'manual') === 'name-desc' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : ''}
               </div>
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'newest' ? 'is-selected' : ''}" data-sort="newest">
                 <span>Date Added (Newest)</span>
-                ${isPro ? ((getState().config.sortBy || 'manual') === 'newest' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
+                ${isPro ? ((getState().config.sortBy || 'manual') === 'newest' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
               </div>
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'oldest' ? 'is-selected' : ''}" data-sort="oldest">
                 <span>Date Added (Oldest)</span>
-                ${isPro ? ((getState().config.sortBy || 'manual') === 'oldest' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
+                ${isPro ? ((getState().config.sortBy || 'manual') === 'oldest' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
               </div>
               <div class="tray-menu-item ${(getState().config.sortBy || 'manual') === 'random' ? 'is-selected' : ''}" data-sort="random">
                 <span>Random Shuffle</span>
-                ${isPro ? ((getState().config.sortBy || 'manual') === 'random' ? '<span style="color:#5ec27f;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
+                ${isPro ? ((getState().config.sortBy || 'manual') === 'random' ? '<span style="color:#10b981;font-weight:700;">✓</span>' : '') : '<span class="matcha-pro-badge" style="font-size:9px;padding:1px 5px;margin-left:auto;">PRO</span>'}
               </div>
             </div>
           </div>
 
           <!-- Filter Status Dropdown -->
           <div style="position:relative;">
-            <button type="button" id="btn-tray-filter-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${trayFilterBy !== 'all' ? '#5ec27f' : '#b5c7ba'};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Filter Photos by Status">
+            <button type="button" id="btn-tray-filter-toggle" class="matcha-hud-btn" style="width:30px;height:30px;padding:0;display:flex;align-items:center;justify-content:center;color:${trayFilterBy !== 'all' ? '#10b981' : 'var(--st-text-secondary)'};border-radius:6px;border:1px solid var(--st-border-subtle);" title="Filter Photos by Status">
               ${Icons.filter}
             </button>
             <div id="tray-filter-dropdown" class="matcha-combobox-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);right:0;width:170px;background:var(--st-bg-card);border:1px solid var(--st-border-strong);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.8);z-index:9999;padding:4px;">
@@ -909,7 +909,7 @@ if (root) {
               </div>
               <div class="tray-menu-item ${trayFilterBy === 'ai' ? 'is-selected' : ''}" data-filter="ai">
                 <span>AI Analyzed</span>
-                <span style="font-size:10px;color:#5ec27f;font-weight:700;">✓</span>
+                <span style="font-size:10px;color:#10b981;font-weight:700;">✓</span>
               </div>
               <div class="tray-menu-item ${trayFilterBy === 'no-alt' ? 'is-selected' : ''}" data-filter="no-alt">
                 <span>Needs Alt Text</span>
@@ -1182,7 +1182,7 @@ if (root) {
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.layoutGrid} Layout Blueprints</span>
           <button type="button" id="btn-smart-shuffle" style="background:none;border:none;color:#ffffff;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;">
-            <span style="color:#5ec27f;">${Icons.sparkles}</span> Auto-Arrange
+            <span style="color:#10b981;">${Icons.sparkles}</span> Auto-Arrange
           </button>
         </div>
         <p style="font-size:11px;color:var(--st-text-muted);margin:0 0 12px;">Select an algorithmic layout style or let AI auto-arrange.</p>
@@ -1207,7 +1207,7 @@ if (root) {
             <span class="matcha-blueprint-icon">${Icons.lookbook}</span>
             <div class="matcha-blueprint-title">
               Lookbook Duet
-              <span class="matcha-pro-badge" style="background:rgba(94,194,127,0.2);color:#5ec27f;border-color:rgba(94,194,127,0.4);font-size:8px;padding:1px 4px;">2026</span>
+              <span class="matcha-pro-badge" style="background:rgba(16,185,129,0.15);color:#10b981;border-color:rgba(16,185,129,0.35);font-size:8px;padding:1px 4px;">2026</span>
             </div>
             <div class="matcha-blueprint-desc">Staggered editorial rhythm</div>
           </div>
@@ -1217,7 +1217,7 @@ if (root) {
             <span class="matcha-blueprint-icon">${Icons.cinemaReel}</span>
             <div class="matcha-blueprint-title">
               Cinema Reel
-              <span style="background:rgba(94,194,127,0.2);color:#5ec27f;border:1px solid rgba(94,194,127,0.4);border-radius:4px;font-size:8px;padding:1px 4px;font-weight:700;">2026</span>
+              <span style="background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.35);border-radius:4px;font-size:8px;padding:1px 4px;font-weight:700;">2026</span>
             </div>
             <div class="matcha-blueprint-desc">Horizontal widescreen runway</div>
           </div>
@@ -1337,7 +1337,7 @@ if (root) {
     return `
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">(2 FREE)</span>'}</span>
+          <span class="heading-wrap">${Icons.folder} Multi-Section Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 5px;background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.25);border-radius:4px;font-weight:700;">(2 FREE)</span>'}</span>
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
           <input type="checkbox" id="st-sections-toggle" ${cfg.sectionsEnabled !== false ? "checked" : ""}>
@@ -1350,10 +1350,10 @@ if (root) {
         <div style="margin: 6px 0 16px 22px; ${cfg.sectionsEnabled !== false ? '' : 'display:none;'}" id="st-chapter-display-wrap">
           <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;letter-spacing:0.5px;">PRESENTATION MODE</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
-            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="${cfg.chapterDisplay !== 'stacks' ? 'border-color:#5ec27f;background:rgba(94,194,127,0.15);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
+            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="${cfg.chapterDisplay !== 'stacks' ? 'border-color:var(--st-accent-primary);background:rgba(16,185,129,0.12);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
               📑 Classic Tabs
             </button>
-            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay === 'stacks' ? 'is-active' : ''}" data-display="stacks" style="${cfg.chapterDisplay === 'stacks' ? 'border-color:#5ec27f;background:rgba(94,194,127,0.15);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
+            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay === 'stacks' ? 'is-active' : ''}" data-display="stacks" style="${cfg.chapterDisplay === 'stacks' ? 'border-color:var(--st-accent-primary);background:rgba(16,185,129,0.12);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
               📚 3D Stacks <span class="matcha-pro-badge" style="font-size:8px;">PRO</span>
             </button>
           </div>
@@ -1521,7 +1521,7 @@ if (root) {
       `;
       stageBadge = `${presetLabels[curWallPreset] || 'Salon'} • ${texLabels[curWallTex] || 'Charcoal'}`;
       stageBody = `
-        <div style="background:rgba(255, 255, 255, 0.03);border:1px solid rgba(255, 255, 255, 0.1);border-radius:8px;padding:12px;margin-bottom:4px;">
+        <div style="background:var(--st-bg-surface);border:1px solid var(--st-border-subtle);border-radius:8px;padding:12px;margin-bottom:4px;">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#ffffff;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;">
             <span>ART WALL CANVAS <span class="matcha-pro-badge">PRO</span></span>
           </div>
@@ -1530,10 +1530,10 @@ if (root) {
           <div style="margin-bottom:12px;">
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Wall Texture & Material</label>
             <div style="display:flex;gap:5px;">
-              <button type="button" class="wall-color-btn ${curWallTex === 'charcoal' ? 'active' : ''}" data-tex="charcoal" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#161c18;border:1px solid ${curWallTex === 'charcoal' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Charcoal</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'charcoal' ? 'active' : ''}" data-tex="charcoal" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#171b24;border:1px solid ${curWallTex === 'charcoal' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Charcoal</button>
               <button type="button" class="wall-color-btn ${curWallTex === 'gallery-white' || curWallTex === 'white' ? 'active' : ''}" data-tex="gallery-white" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#e8e4dc;border:1px solid ${curWallTex === 'gallery-white' || curWallTex === 'white' ? 'var(--st-accent-primary)' : '#ccc'};color:#222;border-radius:4px;cursor:pointer;">Plaster</button>
-              <button type="button" class="wall-color-btn ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'active' : ''}" data-tex="warm-linen" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#261f1b;border:1px solid ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Linen</button>
-              <button type="button" class="wall-color-btn ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'active' : ''}" data-tex="sage-green" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#14221a;border:1px solid ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Sage</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'active' : ''}" data-tex="warm-linen" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#202532;border:1px solid ${curWallTex === 'warm-linen' || curWallTex === 'cream' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Linen</button>
+              <button type="button" class="wall-color-btn ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'active' : ''}" data-tex="sage-green" style="flex:1;padding:6px 2px;font-size:10px;font-weight:600;background:#111b15;border:1px solid ${curWallTex === 'sage-green' || curWallTex === 'sage' ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;">Sage</button>
             </div>
           </div>
 
@@ -1552,7 +1552,7 @@ if (root) {
           <div style="margin-bottom:12px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.06);">
             <label style="display:flex;align-items:center;justify-content:space-between;font-size:11px;cursor:pointer;color:var(--st-text-primary);font-weight:600;">
               <span>57" Museum Eye-Level Guide</span>
-              <input type="checkbox" id="st-eyelevel-toggle" ${cfg.artWallEyeLevel !== false ? 'checked' : ''} style="accent-color:#5ec27f;cursor:pointer;width:15px;height:15px;">
+              <input type="checkbox" id="st-eyelevel-toggle" ${cfg.artWallEyeLevel !== false ? 'checked' : ''} style="accent-color:#10b981;cursor:pointer;width:15px;height:15px;">
             </label>
             <div style="font-size:10px;color:var(--st-text-muted);line-height:1.4;margin-top:4px;">
               Standard international gallery hanging reference (57" from floor) with horizon snapping.
@@ -1563,7 +1563,7 @@ if (root) {
           <div style="margin-bottom:12px;">
             <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;">Frame Moldings</label>
             <div style="display:flex;gap:6px;">
-              <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-black' ? 'active' : ''}" data-mold="mold-black" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#0f1311;border:1px solid ${curWallMolding === 'mold-black' ? 'var(--st-accent-primary)' : 'rgba(255,255,255,0.15)'};color:#fff;border-radius:4px;cursor:pointer;">Matte Black</button>
+              <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-black' ? 'active' : ''}" data-mold="mold-black" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#0b0d11;border:1px solid ${curWallMolding === 'mold-black' ? 'var(--st-accent-primary)' : 'rgba(255,255,255,0.15)'};color:#fff;border-radius:4px;cursor:pointer;">Matte Black</button>
               <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-oak' ? 'active' : ''}" data-mold="mold-oak" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#9e744a;border:1px solid ${curWallMolding === 'mold-oak' ? 'var(--st-accent-primary)' : '#7a5834'};color:#fff;border-radius:4px;cursor:pointer;">Natural Oak</button>
               <button type="button" class="frame-mold-btn ${curWallMolding === 'mold-white' ? 'active' : ''}" data-mold="mold-white" style="flex:1;padding:6px;font-size:10px;font-weight:600;background:#f8fafc;border:1px solid ${curWallMolding === 'mold-white' ? 'var(--st-accent-primary)' : '#ccc'};color:#222;border-radius:4px;cursor:pointer;">Nordic White</button>
             </div>
@@ -1573,13 +1573,13 @@ if (root) {
           <div style="margin-bottom:12px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
               <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);">Frame Orientation</label>
-              <span id="st-wall-orient-badge" style="font-size:9.5px;color:#5ec27f;font-family:monospace;font-weight:700;">${isLandscape ? 'LANDSCAPE' : 'PORTRAIT'}</span>
+              <span id="st-wall-orient-badge" style="font-size:9.5px;color:#10b981;font-family:monospace;font-weight:700;">${isLandscape ? 'LANDSCAPE' : 'PORTRAIT'}</span>
             </div>
             <div style="display:flex;gap:6px;">
-              <button type="button" class="frame-orient-btn ${!isLandscape ? 'active' : ''}" data-orient="portrait" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${!isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${!isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+              <button type="button" class="frame-orient-btn ${!isLandscape ? 'active' : ''}" data-orient="portrait" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${!isLandscape ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${!isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
                 <span>↕️</span><span>Portrait</span>
               </button>
-              <button type="button" class="frame-orient-btn ${isLandscape ? 'active' : ''}" data-orient="landscape" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${isLandscape ? 'rgba(94, 194, 127, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:${isLandscape ? '#fff' : 'var(--st-text-secondary)'};border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+              <button type="button" class="frame-orient-btn ${isLandscape ? 'active' : ''}" data-orient="landscape" style="flex:1;padding:6px;font-size:10.5px;font-weight:600;background:${isLandscape ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255,255,255,0.06)'};border:1px solid ${isLandscape ? 'var(--st-accent-primary)' : 'var(--st-border-subtle)'};color:${isLandscape ? '#fff' : 'var(--st-text-secondary)'};border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
                 <span>↔️</span><span>Landscape</span>
               </button>
               <button type="button" id="btn-wall-flip-orient" class="frame-orient-btn" style="padding:6px 10px;font-size:11px;background:rgba(255,255,255,0.06);border:1px solid var(--st-border-subtle);color:var(--st-text-primary);border-radius:4px;cursor:pointer;" title="Quick 90° Flip">
@@ -1738,7 +1738,7 @@ if (root) {
           </div>
           <div>
             <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--st-text-primary);cursor:pointer;">
-              <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? 'checked' : ''} style="accent-color:#5ec27f;cursor:pointer;">
+              <input type="checkbox" id="st-aura-focal-pan" ${cfg.focalPanEnabled !== false ? 'checked' : ''} style="accent-color:#10b981;cursor:pointer;">
               <span>Smart Focal-Point Pan on Hover</span>
             </label>
           </div>
@@ -2205,7 +2205,7 @@ if (root) {
       <!-- Assigned Chapters -->
       <div class="matcha-card">
         <div class="matcha-card-title">
-          <span class="heading-wrap">${Icons.folder} Assigned Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 4px;background:rgba(94,194,127,0.15);color:#5ec27f;border-radius:3px;font-weight:700;">(2 FREE)</span>'}</span>
+          <span class="heading-wrap">${Icons.folder} Assigned Chapters ${isPro ? '' : '<span style="font-size:8px;padding:1px 5px;background:rgba(16,185,129,0.12);color:#10b981;border:1px solid rgba(16,185,129,0.25);border-radius:4px;font-weight:700;">(2 FREE)</span>'}</span>
         </div>
         ${(cfg.sections && cfg.sections.length > 0) ? `
           <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 10px;">Select which chapter tabs this photo appears under.</p>
@@ -2214,14 +2214,14 @@ if (root) {
               const isAssigned = (sec.imageIds || []).includes(id);
               const isCover = parseInt(sec.coverImageId, 10) === id;
               return `
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid ${isCover ? '#5ec27f' : (isAssigned ? 'rgba(94,194,127,0.35)' : 'rgba(255,255,255,0.07)')};border-radius:6px;gap:6px;transition:all 0.15s ease;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid ${isCover ? '#10b981' : (isAssigned ? 'rgba(16,185,129,0.35)' : 'rgba(255,255,255,0.07)')};border-radius:6px;gap:6px;transition:all 0.15s ease;">
                   <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0;margin:0;">
                     <input type="checkbox" class="prop-chapter-checkbox" data-sec-id="${sec.id}" ${isAssigned ? 'checked' : ''} style="cursor:pointer;" />
                     <span style="font-weight:600;font-size:11px;color:var(--st-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(sec.title)}</span>
                   </label>
                   <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
                     ${isAssigned ? `
-                      <button type="button" class="btn-set-chapter-cover ${isCover ? 'is-active' : ''}" data-sec-id="${sec.id}" title="${isCover ? 'Hero cover photo for this album' : 'Set as Album Cover Photo'}" style="padding:2px 7px;font-size:9.5px;font-weight:700;border-radius:4px;cursor:pointer;border:1px solid ${isCover ? '#5ec27f' : 'rgba(255,255,255,0.18)'};background:${isCover ? 'rgba(94,194,127,0.22)' : 'rgba(255,255,255,0.06)'};color:${isCover ? '#5ec27f' : 'var(--st-text-muted)'};">
+                      <button type="button" class="btn-set-chapter-cover ${isCover ? 'is-active' : ''}" data-sec-id="${sec.id}" title="${isCover ? 'Hero cover photo for this album' : 'Set as Album Cover Photo'}" style="padding:2px 7px;font-size:9.5px;font-weight:700;border-radius:4px;cursor:pointer;border:1px solid ${isCover ? '#10b981' : 'rgba(255,255,255,0.18)'};background:${isCover ? 'rgba(16,185,129,0.22)' : 'rgba(255,255,255,0.06)'};color:${isCover ? '#10b981' : 'var(--st-text-muted)'};">
                         ${isCover ? '★ Cover' : 'Set Cover'}
                       </button>
                     ` : ''}
@@ -2238,17 +2238,17 @@ if (root) {
           <div style="margin:8px 0 10px;padding:8px 10px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;gap:8px;">
             <div style="font-size:10px;color:var(--st-text-secondary);line-height:1.35;">
               ${cfg.chapterDisplay === 'stacks' 
-                ? `<span style="color:#5ec27f;font-weight:700;">📚 3D Stacks Active:</span> Album cover photo appears on top of the physical card deck.`
+                ? `<span style="color:#10b981;font-weight:700;">📚 3D Stacks Active:</span> Album cover photo appears on top of the physical card deck.`
                 : `<span style="color:#cbd5e1;font-weight:600;">📑 Classic Tabs:</span> Switch to 3D Stacks to preview physical album cover decks.`
               }
             </div>
-            <button type="button" id="btn-inspector-toggle-stacks" class="matcha-exit-btn" style="padding:3px 8px;font-size:9.5px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${cfg.chapterDisplay === 'stacks' ? 'var(--st-text-muted)' : '#5ec27f'};border-color:${cfg.chapterDisplay === 'stacks' ? 'rgba(255,255,255,0.1)' : 'rgba(94,194,127,0.35)'};">
+            <button type="button" id="btn-inspector-toggle-stacks" class="matcha-exit-btn" style="padding:3px 8px;font-size:9.5px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${cfg.chapterDisplay === 'stacks' ? 'var(--st-text-muted)' : '#10b981'};border-color:${cfg.chapterDisplay === 'stacks' ? 'rgba(255,255,255,0.1)' : 'rgba(16,185,129,0.35)'};">
               ${cfg.chapterDisplay === 'stacks' ? 'Use Tabs' : 'View as 3D Stacks →'}
             </button>
           </div>
         ` : ''}
         <button type="button" id="btn-inspector-create-chapter" class="matcha-exit-btn" style="width:100%;font-size:10px;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:4px;" title="Create a new chapter and assign this photo">
-          <span style="color:#5ec27f;">+</span> Create New Chapter
+          <span style="color:#10b981;">+</span> Create New Chapter
         </button>
       </div>
 
@@ -2602,7 +2602,7 @@ if (root) {
     const badge = document.getElementById('st-wall-orient-badge');
     if (badge) {
       badge.textContent = isLandscape ? 'LANDSCAPE' : 'PORTRAIT';
-      badge.style.color = isLandscape ? '#60a5fa' : '#5ec27f';
+      badge.style.color = isLandscape ? '#60a5fa' : '#10b981';
     }
     syncRatioButtonsText(isLandscape);
   }
@@ -3743,9 +3743,9 @@ if (root) {
         const newParts = parts.filter(p => !currentTags.includes(p.toLowerCase().replace(/[^a-z0-9_-]/g, '-')));
         if (newParts.length > 0) {
           html += `
-            <div class="combobox-item combobox-item--create" data-tags="${escapeHtml(newParts.join(','))}" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;cursor:pointer;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;font-size:11px;font-weight:600;margin-bottom:6px;">
+            <div class="combobox-item combobox-item--create" data-tags="${escapeHtml(newParts.join(','))}" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;cursor:pointer;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.28);color:#10b981;font-size:11px;font-weight:600;margin-bottom:6px;">
               <span>➕ Add ${newParts.length > 1 ? `${newParts.length} tags` : `tag`}: "<strong>${escapeHtml(newParts.join(', '))}</strong>"</span>
-              <span style="font-size:9px;color:#ffffff;background:rgba(77,164,104,0.35);padding:2px 6px;border-radius:4px;border:1px solid rgba(77,164,104,0.4);">Enter ↵</span>
+              <span style="font-size:9px;color:#ffffff;background:rgba(16,185,129,0.3);padding:2px 6px;border-radius:4px;border:1px solid rgba(16,185,129,0.4);">Enter ↵</span>
             </div>
           `;
         }
@@ -3755,17 +3755,17 @@ if (root) {
       if (matchingTags.length > 0) {
         html += `
           <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;">
-            <span style="font-size:9px;font-weight:700;color:#9aa79d;text-transform:uppercase;letter-spacing:0.5px;">Gallery Tags (${matchingTags.length})</span>
-            <span style="font-size:9px;color:#9aa79d;">Click to toggle multi-select</span>
+            <span style="font-size:9px;font-weight:700;color:var(--st-text-muted);text-transform:uppercase;letter-spacing:0.5px;">Gallery Tags (${matchingTags.length})</span>
+            <span style="font-size:9px;color:var(--st-text-muted);">Click to toggle multi-select</span>
           </div>
         `;
 
         html += matchingTags.map(tag => {
           const isSelected = currentTags.includes(tag);
           return `
-            <div class="combobox-item ${isSelected ? 'is-selected' : ''}" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;cursor:pointer;color:${isSelected ? '#ffffff' : '#e2e8f0'};background:${isSelected ? 'rgba(77,164,104,0.18)' : 'transparent'};font-size:11px;transition:all 0.15s ease;margin-bottom:1px;">
+            <div class="combobox-item ${isSelected ? 'is-selected' : ''}" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;cursor:pointer;color:${isSelected ? '#ffffff' : '#e2e8f0'};background:${isSelected ? 'rgba(16,185,129,0.15)' : 'transparent'};font-size:11px;transition:all 0.15s ease;margin-bottom:1px;">
               <span style="display:flex;align-items:center;gap:8px;">
-                <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;border:1px solid ${isSelected ? '#4da468' : 'rgba(255,255,255,0.2)'};background:${isSelected ? '#4da468' : 'rgba(255,255,255,0.04)'};color:#fff;font-size:10px;font-weight:900;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;border:1px solid ${isSelected ? '#10b981' : 'rgba(255,255,255,0.2)'};background:${isSelected ? '#10b981' : 'rgba(255,255,255,0.04)'};color:${isSelected ? '#041d11' : '#fff'};font-size:10px;font-weight:900;">
                   ${isSelected ? '✓' : '+'}
                 </span>
                 <span style="font-weight:${isSelected ? '700' : '500'};">${escapeHtml(tag)}</span>
@@ -4582,10 +4582,10 @@ if (root) {
     if (!t) {
       t = document.createElement('div');
       t.id = 'matcha-studio-toast';
-      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#181e29;border:1px solid rgba(255,255,255,0.15);color:#fff;padding:8px 20px;border-radius:24px;font-size:12px;font-weight:600;box-shadow:0 8px 28px rgba(0,0,0,0.6);z-index:999999;pointer-events:none;transition:opacity 0.3s ease, transform 0.3s ease;opacity:0;display:flex;align-items:center;gap:8px;backdrop-filter:blur(8px);';
+      t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(20,23,32,0.92);border:1px solid rgba(255,255,255,0.12);color:#f8fafc;padding:8px 20px;border-radius:999px;font-size:12px;font-weight:600;box-shadow:0 12px 32px rgba(0,0,0,0.65),0 0 0 1px rgba(255,255,255,0.05);z-index:999999;pointer-events:none;transition:opacity 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s cubic-bezier(0.4,0,0.2,1);opacity:0;display:flex;align-items:center;gap:8px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);';
       document.body.appendChild(t);
     }
-    t.innerHTML = `<span style="color:#5ec27f;font-size:14px;">✦</span> <span>${escapeHtml(msg)}</span>`;
+    t.innerHTML = `<span style="color:#10b981;font-size:14px;">✦</span> <span>${escapeHtml(msg)}</span>`;
     t.style.opacity = '1';
     t.style.transform = 'translateX(-50%) translateY(0)';
     clearTimeout(t._timer);
@@ -5068,7 +5068,7 @@ if (root) {
 
         // Update sort button HUD indicator
         const sortBtn = document.getElementById('btn-tray-sort-toggle');
-        if (sortBtn) sortBtn.style.color = '#b5c7ba';
+        if (sortBtn) sortBtn.style.color = 'var(--st-text-secondary)';
 
         renderCanvas();
         autosaveSoon();
@@ -5141,30 +5141,30 @@ if (root) {
 
     modal.innerHTML = `
       <div class="matcha-modal-backdrop" id="filter-modal-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:999999;"></div>
-      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:500px;width:92vw;max-height:86vh;background:#151a16;border:1px solid var(--st-border-subtle);border-radius:12px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.8);overflow:hidden;font-family:var(--st-font);">
+      <div class="matcha-modal-box" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:500px;width:92vw;max-height:86vh;background:#141720;border:1px solid var(--st-border-strong);border-radius:12px;display:flex;flex-direction:column;z-index:1000000;box-shadow:0 25px 60px rgba(0,0,0,0.85);overflow:hidden;font-family:var(--st-font);">
         
         <!-- Compact Modal Header -->
-        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);">
+        <div class="matcha-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--st-border-subtle);background:rgba(255,255,255,0.02);">
           <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:28px;height:28px;border-radius:8px;background:rgba(77,164,104,0.16);border:1px solid rgba(77,164,104,0.35);color:#5ec27f;display:flex;align-items:center;justify-content:center;">
+            <div style="width:28px;height:28px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.28);color:#10b981;display:flex;align-items:center;justify-content:center;">
               ${Icons.filter}
             </div>
             <div>
-              <h3 style="margin:0;font-size:14px;color:#f2f5f3;font-weight:700;letter-spacing:-0.01em;">Gallery Filter Manager</h3>
-              <p style="margin:1px 0 0;font-size:11px;color:#9aa79d;">Drag to reorder pills, toggle visibility, or edit tags.</p>
+              <h3 style="margin:0;font-size:14px;color:var(--st-text-primary);font-weight:700;letter-spacing:-0.01em;">Gallery Filter Manager</h3>
+              <p style="margin:1px 0 0;font-size:11px;color:var(--st-text-secondary);">Drag to reorder pills, toggle visibility, or edit tags.</p>
             </div>
           </div>
-          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:#9aa79d;cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;" title="Close">✕</button>
+          <button type="button" class="matcha-modal-close" id="filter-modal-close" style="background:none;border:none;color:var(--st-text-muted);cursor:pointer;font-size:20px;line-height:1;padding:2px 4px;" title="Close">✕</button>
         </div>
 
         <!-- Modal Body -->
         <div class="matcha-modal-body" style="padding:12px 18px;overflow-y:auto;flex:1;">
           ${sortedTags.length === 0 ? `
-            <div style="text-align:center;padding:40px 16px;color:#9aa79d;">
+            <div style="text-align:center;padding:40px 16px;color:var(--st-text-secondary);">
               <div style="font-size:28px;margin-bottom:8px;opacity:0.6;display:flex;justify-content:center;">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
               </div>
-              <p style="font-size:14px;color:#f2f5f3;font-weight:600;margin:0 0 4px;">No tags found in this gallery</p>
+              <p style="font-size:14px;color:var(--st-text-primary);font-weight:600;margin:0 0 4px;">No tags found in this gallery</p>
               <p style="font-size:11px;margin:0;max-width:320px;margin-inline:auto;">Click "AI Enhance" in the sidebar to auto-generate smart tags.</p>
             </div>
           ` : `
@@ -5172,8 +5172,8 @@ if (root) {
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap;">
               <input type="search" id="filter-mgr-search" placeholder="Find tag..." style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;border-radius:5px;padding:3px 8px;font-size:11px;width:130px;outline:none;" />
               <div style="display:flex;align-items:center;gap:5px;">
-                <button type="button" id="btn-select-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#5ec27f;border:1px solid rgba(94,194,127,0.3);border-radius:4px;background:rgba(94,194,127,0.08);cursor:pointer;" title="Select all tags">Select All</button>
-                <button type="button" id="btn-deselect-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#9aa79d;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:none;cursor:pointer;" title="Deselect all tags">Deselect</button>
+                <button type="button" id="btn-select-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:#10b981;border:1px solid rgba(16,185,129,0.3);border-radius:4px;background:rgba(16,185,129,0.08);cursor:pointer;" title="Select all tags">Select All</button>
+                <button type="button" id="btn-deselect-all-tags" class="matcha-exit-btn" style="padding:2px 7px;font-size:10px;font-weight:600;color:var(--st-text-secondary);border:1px solid var(--st-border-subtle);border-radius:4px;background:none;cursor:pointer;" title="Deselect all tags">Deselect</button>
                 <button type="button" id="btn-clear-all-gallery-tags" style="padding:2px 7px;font-size:10px;font-weight:600;color:#ef4444;border:1px solid rgba(239,68,68,0.25);border-radius:4px;background:rgba(239,68,68,0.08);cursor:pointer;" title="Delete all tags from photos">Clear All</button>
               </div>
             </div>
@@ -5187,9 +5187,9 @@ if (root) {
                   <div class="filter-manager-row filter-mgr-row" data-tag="${escapeHtml(tag)}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:3px 8px;gap:8px;min-height:27px;">
                     <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
                       <span class="filter-drag-handle" title="Drag to reorder tag" style="cursor:grab;color:var(--st-text-muted);display:flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;">${Icons.drag}</span>
-                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? 'checked' : ''} style="cursor:pointer;accent-color:#4da468;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
-                      <span class="tag-badge" style="background:rgba(77,164,104,0.14);border:1px solid rgba(77,164,104,0.25);color:#5ec27f;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
-                      <span class="tag-name" style="font-size:12px;font-weight:500;color:#f2f5f3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tagDisplayNames[tag] || capitalize(tag.replace(/-/g, ' ')))}</span>
+                      <input type="checkbox" class="tag-vis-check" data-tag="${escapeHtml(tag)}" ${isChecked ? 'checked' : ''} style="cursor:pointer;accent-color:#10b981;width:13px;height:13px;flex-shrink:0;" title="Show as category pill on frontend" />
+                      <span class="tag-badge" style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);color:#10b981;font-size:10px;font-weight:700;padding:1px 5px;border-radius:999px;flex-shrink:0;">${count}</span>
+                      <span class="tag-name" style="font-size:12px;font-weight:500;color:var(--st-text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(tagDisplayNames[tag] || capitalize(tag.replace(/-/g, ' ')))}</span>
                     </div>
                     <div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">
                       <button type="button" class="btn-rename-tag matcha-row-icon-btn" data-tag="${escapeHtml(tag)}" title="Rename tag globally">
@@ -5207,9 +5207,9 @@ if (root) {
         </div>
 
         <!-- Modal Footer -->
-        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.3);">
-          <span style="font-size:11px;color:#647367;">Drag to order pills. Uncheck to hide.</span>
-          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:6px 16px;font-size:12px;background:linear-gradient(135deg, #4da468, #377d4f);color:#fff;border-radius:6px;border:1px solid #2e6942;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(55,125,79,0.35);">
+        <div class="matcha-modal-footer" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--st-border-subtle);background:rgba(0,0,0,0.3);">
+          <span style="font-size:11px;color:var(--st-text-muted);">Drag to order pills. Uncheck to hide.</span>
+          <button type="button" class="matcha-cta-btn" id="filter-modal-done" style="padding:6px 16px;font-size:12px;background:#10b981;color:#041d11;border-radius:6px;border:1px solid #059669;cursor:pointer;font-weight:700;box-shadow:0 2px 8px rgba(16,185,129,0.35);">
             Apply & Save
           </button>
         </div>
@@ -6033,7 +6033,7 @@ if (root) {
           if (currentSection) {
             emptyMsg.innerHTML = `
               <div style="text-align:center;padding:50px 20px;max-width:440px;margin:24px auto;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.15);border-radius:12px;">
-                <div style="width:42px;height:42px;border-radius:50%;background:rgba(94,194,127,0.15);color:#5ec27f;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">${Icons.folder}</div>
+                <div style="width:42px;height:42px;border-radius:50%;background:rgba(16,185,129,0.12);color:#10b981;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">${Icons.folder}</div>
                 <h4 style="font-size:14px;color:#ffffff;margin:0 0 6px;font-weight:700;">Chapter "${escapeHtml(currentSection.title)}" is Empty</h4>
                 <p style="font-size:11px;color:#94a3b8;margin:0 0 16px;line-height:1.5;">Click "+ Add Photos" in the sidebar, or switch to "All Photos" to assign existing photos to this chapter.</p>
                 <div style="display:flex;gap:8px;justify-content:center;">

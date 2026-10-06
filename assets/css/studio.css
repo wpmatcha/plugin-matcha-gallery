@@ -1,28 +1,28 @@
 /* ==========================================================================
-   Matcha Studio — Bespoke Artisanal Dark UI (Matcha Slate & Moss Aesthetic)
+   Matcha Studio — Obsidian & Emerald SaaS Dark UI (Hostinger & Linear Grade)
    ========================================================================== */
 
 :root {
-	--st-bg-base: #0c0f0d;
-	--st-bg-surface: #121714;
-	--st-bg-card: #18201a;
-	--st-bg-elevated: #202b23;
-	--st-border-subtle: #243228;
-	--st-border-strong: #374d3d;
-	--st-text-primary: #ffffff;
-	--st-text-secondary: #b5c7ba;
-	--st-text-muted: #7d9484;
-	--st-brand: #607d66;
-	--st-brand-dark: #3e5242;
-	--st-accent-primary: #4da468;
-	--st-accent-hover: #5ec27f;
-	--st-accent-dark: #35774b;
-	--st-accent-tint: rgba(77, 164, 104, 0.14);
-	--st-accent-border: rgba(77, 164, 104, 0.35);
+	--st-bg-base: #0b0d11;           /* Deep luxury obsidian/slate canvas */
+	--st-bg-surface: #12151b;        /* Topbar & Sidebar surfaces */
+	--st-bg-card: #171b24;           /* Elevated cards, inspector sections */
+	--st-bg-elevated: #202532;       /* Hover states, inputs, dropdown items */
+	--st-border-subtle: rgba(255, 255, 255, 0.08); /* Delicate 1px dividers */
+	--st-border-strong: rgba(255, 255, 255, 0.16); /* Interactive borders */
+	--st-text-primary: #f8fafc;      /* Crisp pure white */
+	--st-text-secondary: #94a3b8;    /* Modern neutral cool slate */
+	--st-text-muted: #64748b;        /* Subtle slate grey */
+	--st-brand: #10b981;             /* Electric Matcha Emerald */
+	--st-brand-dark: #047857;
+	--st-accent-primary: #10b981;    /* Vibrant emerald for primary CTAs */
+	--st-accent-hover: #34d399;      /* Smooth bright emerald hover */
+	--st-accent-dark: #059669;
+	--st-accent-tint: rgba(16, 185, 129, 0.12); /* Clean translucent pill fill */
+	--st-accent-border: rgba(16, 185, 129, 0.32);
 	--st-radius-sm: 6px;
 	--st-radius-md: 10px;
 	--st-radius-lg: 14px;
-	--st-font: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+	--st-font: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
 	--st-font-mono: "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
@@ -102,11 +102,11 @@ html.wp-toolbar {
 }
 
 .matcha-brand-badge span.brand-leaf {
-	background: linear-gradient(135deg, #3e5242, #243528);
-	color: #5ec27f;
+	background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(16, 185, 129, 0.06));
+	color: #10b981;
 	padding: 4px 7px;
 	border-radius: 6px;
-	border: 1px solid rgba(77, 164, 104, 0.45);
+	border: 1px solid rgba(16, 185, 129, 0.35);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -137,22 +137,22 @@ html.wp-toolbar {
 }
 
 .matcha-studio__title {
-	font-size: 12px;
+	font-size: 12.5px;
 	font-weight: 600;
 	letter-spacing: -0.01em;
 	color: var(--st-text-primary);
-	background: var(--st-bg-base);
+	background: var(--st-bg-card);
 	border: 1px solid var(--st-border-subtle);
 	padding: 6px 12px;
 	border-radius: var(--st-radius-sm);
-	min-width: 200px;
+	min-width: 220px;
 	outline: none;
 	transition: all 0.2s ease;
 }
 
 .matcha-studio__title:focus {
 	border-color: var(--st-accent-primary);
-	background: var(--st-bg-surface);
+	background: var(--st-bg-elevated);
 	box-shadow: 0 0 0 2px var(--st-accent-tint);
 }
 
@@ -167,13 +167,13 @@ html.wp-toolbar {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	background: var(--st-accent-tint);
-	border: 1px solid var(--st-accent-border);
-	color: #ffffff;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid var(--st-border-subtle);
+	color: #e2e8f0;
 	padding: 5px 12px;
 	border-radius: 100px;
 	font-size: 11px;
-	font-weight: 700;
+	font-weight: 600;
 	font-family: var(--st-font-mono);
 	letter-spacing: -0.01em;
 	cursor: pointer;
@@ -182,8 +182,8 @@ html.wp-toolbar {
 }
 
 .matcha-ada-pill:hover {
-	background: rgba(77, 164, 104, 0.25);
-	border-color: var(--st-accent-hover);
+	background: rgba(255, 255, 255, 0.09);
+	border-color: var(--st-border-strong);
 	color: #ffffff;
 	transform: translateY(-1px);
 }
@@ -192,7 +192,7 @@ html.wp-toolbar {
 .matcha-viewport {
 	display: flex;
 	gap: 2px;
-	background: var(--st-bg-base);
+	background: var(--st-bg-surface);
 	padding: 3px;
 	border-radius: var(--st-radius-sm);
 	border: 1px solid var(--st-border-subtle);
@@ -221,16 +221,16 @@ html.wp-toolbar {
 .matcha-viewport button.is-active {
 	background: var(--st-bg-elevated);
 	color: #ffffff;
-	border: 1px solid var(--st-accent-border);
+	border: 1px solid var(--st-border-strong);
 	box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 /* Shortcode Pill */
 .matcha-pill {
 	font-size: 11px;
-	background: var(--st-bg-base);
-	border: 1px solid var(--st-border-strong);
-	color: #ffffff;
+	background: var(--st-bg-card);
+	border: 1px solid var(--st-border-subtle);
+	color: #e2e8f0;
 	padding: 5px 12px;
 	border-radius: 100px;
 	font-weight: 600;
@@ -241,35 +241,35 @@ html.wp-toolbar {
 
 .matcha-pill:hover {
 	background: var(--st-bg-elevated);
-	border-color: var(--st-accent-primary);
+	border-color: var(--st-border-strong);
 	color: #ffffff;
 }
 
 /* Publish Primary CTA */
 .matcha-publish-btn {
-	background: linear-gradient(135deg, #4da468, #377d4f);
-	color: #ffffff !important;
-	border: 1px solid #2e6942;
+	background: #10b981;
+	color: #041d11 !important;
+	border: 1px solid #059669;
 	padding: 8px 18px;
 	border-radius: var(--st-radius-sm);
 	font-size: 12px;
 	font-weight: 700;
 	letter-spacing: -0.01em;
 	cursor: pointer;
-	box-shadow: 0 2px 10px rgba(55, 125, 79, 0.35);
-	transition: all 0.15s ease;
-	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 14px rgba(16, 185, 129, 0.28);
+	transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+	text-shadow: none;
 }
 
 .matcha-publish-btn:hover {
-	background: linear-gradient(135deg, #5ec27f, #41945a);
-	border-color: #3e8854;
-	box-shadow: 0 4px 16px rgba(55, 125, 79, 0.5);
+	background: #34d399;
+	border-color: #10b981;
+	box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
 	transform: translateY(-1px);
 }
 
 .matcha-publish-btn:active {
-	background: #317247;
+	background: #059669;
 	transform: translateY(0);
 }
 
@@ -314,8 +314,8 @@ html.wp-toolbar {
 
 .matcha-tabs button {
 	flex: 1;
-	padding: 11px 6px;
-	font-size: 11px;
+	padding: 12px 6px;
+	font-size: 11.5px;
 	font-weight: 600;
 	letter-spacing: -0.01em;
 	background: none;
@@ -332,12 +332,13 @@ html.wp-toolbar {
 
 .matcha-tabs button:hover {
 	color: var(--st-text-secondary);
+	background: rgba(255, 255, 255, 0.02);
 }
 
 .matcha-tabs button.is-active {
-	color: #ffffff;
-	border-color: var(--st-accent-primary);
-	background: var(--st-accent-tint);
+	color: #f8fafc;
+	border-bottom-color: var(--st-accent-primary);
+	background: rgba(16, 185, 129, 0.06);
 	font-weight: 700;
 }
 
@@ -347,23 +348,23 @@ html.wp-toolbar {
 	flex: 1;
 }
 
-/* Strict Artisanal Dark Cards */
+/* Hostinger-Grade SaaS Dark Cards */
 #matcha-studio-root .matcha-card {
 	background: var(--st-bg-card) !important;
 	border: 1px solid var(--st-border-subtle) !important;
-	border-radius: 8px !important;
+	border-radius: 10px !important;
 	padding: 13px 15px !important;
-	margin-bottom: 12px !important;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+	margin-bottom: 10px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22) !important;
 	color: var(--st-text-primary) !important;
 }
 
 #matcha-studio-root .matcha-card-title {
-	font-size: 10px !important;
+	font-size: 10.5px !important;
 	font-weight: 700 !important;
 	text-transform: uppercase !important;
 	letter-spacing: 0.05em !important;
-	color: #b5c7ba !important;
+	color: var(--st-text-secondary) !important;
 	margin: 0 0 11px 0 !important;
 	display: flex !important;
 	align-items: center !important;
@@ -387,16 +388,16 @@ html.wp-toolbar {
 }
 
 #matcha-studio-root .matcha-card--collapsible.matcha-card--collapsed {
-	border-color: rgba(255, 255, 255, 0.07) !important;
-	background: rgba(24, 30, 27, 0.7) !important;
+	border-color: var(--st-border-subtle) !important;
+	background: var(--st-bg-card) !important;
 	margin-bottom: 8px !important;
 }
 
 #matcha-studio-root .matcha-card--collapsible:not(.matcha-card--collapsed) {
-	border-color: rgba(255, 255, 255, 0.16) !important;
-	background: var(--st-bg-card, #1c231f) !important;
+	border-color: var(--st-border-strong) !important;
+	background: var(--st-bg-card) !important;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
-	margin-bottom: 12px !important;
+	margin-bottom: 10px !important;
 }
 
 #matcha-studio-root .matcha-accordion-header {
@@ -829,7 +830,7 @@ body.matcha-is-dragging * {
 	appearance: none;
 	width: 100%;
 	height: 4px;
-	background: #253329;
+	background: #232836;
 	border-radius: 2px;
 	outline: none;
 	margin: 0;
@@ -844,7 +845,7 @@ body.matcha-is-dragging * {
 	width: 14px;
 	height: 14px;
 	border-radius: 50%;
-	background: #4da468;
+	background: #10b981;
 	border: 2px solid #ffffff;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 	cursor: pointer;
@@ -853,15 +854,15 @@ body.matcha-is-dragging * {
 
 #matcha-studio-root .range-row input[type="range"]::-webkit-slider-thumb:hover {
 	transform: scale(1.22);
-	background: #5ec27f;
-	box-shadow: 0 0 8px rgba(94, 194, 127, 0.5);
+	background: #34d399;
+	box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
 }
 
 #matcha-studio-root .range-row input[type="range"]::-moz-range-thumb {
 	width: 14px;
 	height: 14px;
 	border-radius: 50%;
-	background: #4da468;
+	background: #10b981;
 	border: 2px solid #ffffff;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
 	cursor: pointer;
@@ -871,9 +872,9 @@ body.matcha-is-dragging * {
 	font-size: 10px;
 	font-weight: 700;
 	font-family: var(--st-font-mono);
-	color: #ffffff;
-	background: rgba(77, 164, 104, 0.16);
-	border: 1px solid rgba(77, 164, 104, 0.35);
+	color: #34d399;
+	background: rgba(16, 185, 129, 0.12);
+	border: 1px solid rgba(16, 185, 129, 0.28);
 	padding: 2px 6px;
 	border-radius: 4px;
 	min-width: 40px;
@@ -1013,7 +1014,7 @@ body.matcha-is-dragging * {
 }
 
 .matcha-blueprint-card.is-active .matcha-blueprint-icon {
-	color: #5ec27f;
+	color: var(--st-accent-primary, #10b981);
 }
 
 .matcha-blueprint-title {
@@ -1177,16 +1178,16 @@ body.matcha-is-dragging * {
 	bottom: 20px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: rgba(21, 26, 22, 0.88);
-	backdrop-filter: blur(14px);
-	-webkit-backdrop-filter: blur(14px);
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: rgba(18, 21, 28, 0.85);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 100px;
 	padding: 6px 14px;
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
 	z-index: 30;
 	color: #fff;
 }
@@ -1273,11 +1274,11 @@ body.matcha-is-dragging * {
 	position: absolute;
 	width: 24px;
 	height: 24px;
-	border: 2px solid #5ec27f;
+	border: 2px solid #10b981;
 	border-radius: 50%;
 	transform: translate(-50%, -50%);
 	pointer-events: none;
-	box-shadow: 0 0 10px rgba(94, 194, 127, 0.6), inset 0 0 4px rgba(94, 194, 127, 0.4);
+	box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), inset 0 0 4px rgba(16, 185, 129, 0.4);
 	z-index: 5;
 }
 
@@ -1286,7 +1287,7 @@ body.matcha-is-dragging * {
 	position: absolute;
 	width: 4px;
 	height: 4px;
-	background: #5ec27f;
+	background: #10b981;
 	border-radius: 50%;
 	top: 50%;
 	left: 50%;
@@ -1512,13 +1513,13 @@ body.matcha-is-dragging * {
 	margin-top: 4px;
 	font-size: 10px;
 	font-weight: 700;
-	background: #607d66;
-	color: #ffffff;
-	padding: 3px 12px;
+	background: #10b981;
+	color: #041d11;
+	padding: 4px 14px;
 	border-radius: 12px;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	border: 1px solid #4da468;
+	border: 1px solid #059669;
 }
 
 .matcha-pro-modal-backdrop {
@@ -1545,11 +1546,11 @@ body.matcha-is-dragging * {
 }
 
 .matcha-pro-modal {
-	background: #131714;
-	border: 1px solid rgba(255, 255, 255, 0.08);
+	background: #141720;
+	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 16px;
-	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(78, 110, 86, 0.15);
-	max-width: 410px;
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(16, 185, 129, 0.18);
+	max-width: 440px;
 	width: 100%;
 	padding: 28px 24px 20px;
 	position: relative;
@@ -1940,20 +1941,22 @@ body.matcha-is-dragging * {
 .matcha-canvas-statusbar {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	padding: 8px 16px;
-	background: rgba(0, 0, 0, 0.35);
-	border-bottom: 1px solid var(--st-border-subtle);
-	font-size: 11px;
+	justify-content: center;
+	margin-bottom: 20px;
+	z-index: 10;
 }
 
 .matcha-status-chip {
-	background: rgba(255, 255, 255, 0.06);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	padding: 3px 8px;
-	border-radius: 4px;
+	background: rgba(23, 27, 36, 0.75);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	padding: 5px 14px;
+	border-radius: 999px;
 	color: var(--st-text-secondary);
 	font-size: 11px;
+	font-weight: 500;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Specular Light Sheen Overlay for 3D Spatial Tilt */
@@ -1992,7 +1995,7 @@ body.matcha-is-dragging * {
 	right: 20px;
 	top: -10px;
 	font-size: 10px;
-	color: #5ec27f;
+	color: #10b981;
 	font-weight: 700;
 	background: rgba(0, 0, 0, 0.7);
 	padding: 1px 6px;
@@ -2021,7 +2024,7 @@ body.matcha-is-dragging * {
 	border-color: rgba(255, 255, 255, 0.2) !important;
 }
 .preset-wall-btn.active {
-	background: rgba(94, 194, 127, 0.15) !important;
+	background: rgba(16, 185, 129, 0.15) !important;
 	border-color: var(--st-accent-primary) !important;
 	color: #fff !important;
 	box-shadow: 0 0 0 1px var(--st-accent-primary);
@@ -2046,7 +2049,7 @@ body.matcha-is-dragging * {
 	background: rgba(255, 255, 255, 0.1) !important;
 }
 .frame-orient-btn.active {
-	background: rgba(94, 194, 127, 0.16) !important;
+	background: rgba(16, 185, 129, 0.15) !important;
 	border-color: var(--st-accent-primary) !important;
 	color: #ffffff !important;
 }
@@ -2059,7 +2062,7 @@ body.matcha-is-dragging * {
 	border-color: rgba(255, 255, 255, 0.25) !important;
 }
 .ratio-opt-btn.active {
-	background: rgba(94, 194, 127, 0.18) !important;
+	background: rgba(16, 185, 129, 0.15) !important;
 	border-color: var(--st-accent-primary) !important;
 	color: #ffffff !important;
 	font-weight: 700;
@@ -2067,13 +2070,13 @@ body.matcha-is-dragging * {
 
 /* 57" Museum Eye-Level Snapped Glow */
 .art-wall-guide-line.snapped {
-	background: #5ec27f !important;
-	box-shadow: 0 0 14px rgba(94, 194, 127, 0.9);
+	background: #10b981 !important;
+	box-shadow: 0 0 14px rgba(16, 185, 129, 0.9);
 	height: 2px;
 }
 .art-wall-guide-line.snapped .art-wall-guide-label {
-	background: #5ec27f !important;
-	color: #0b120e !important;
+	background: #10b981 !important;
+	color: #041d11 !important;
 }
 
 /* Art Wall Floating Drag Hint */
@@ -2484,9 +2487,9 @@ body.matcha-is-dragging * {
 	border: 1px solid rgba(255, 255, 255, 0.24);
 }
 .dock-btn.btn-shop:hover {
-	background: var(--matcha-accent, #5ec27f);
+	background: var(--matcha-accent, #10b981);
 	color: #ffffff;
-	border-color: var(--matcha-accent, #5ec27f);
+	border-color: var(--matcha-accent, #10b981);
 	transform: scale(1.06);
 }
 
@@ -3221,16 +3224,16 @@ body.matcha-is-dragging * {
 }
 
 .matcha-span-btn.is-active {
-	background: #5ec27f !important;
-	border-color: #5ec27f !important;
-	color: #0b150f !important;
+	background: #10b981 !important;
+	border-color: #10b981 !important;
+	color: #041d11 !important;
 	font-weight: 700 !important;
 }
 
 /* Inspector Prop Span Buttons */
 .prop-span-btn.is-active {
-	background: rgba(94, 194, 127, 0.18) !important;
-	border-color: #5ec27f !important;
+	background: rgba(16, 185, 129, 0.15) !important;
+	border-color: #10b981 !important;
 	color: #ffffff !important;
 	font-weight: 700 !important;
 }
