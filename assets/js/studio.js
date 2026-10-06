@@ -340,13 +340,21 @@
       const currentSection = sections.find((s) => s.id === activeSectionId);
       return `
         <!-- Chapter / Section Switcher Header -->
-        <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;">
           <span style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.5px;text-transform:uppercase;">
             <span style="color:#5ec27f;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ""}
           </span>
-          <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
-            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
-          </button>
+          <div style="display:flex;align-items:center;gap:6px;">
+            ${isPro && sections.length > 0 ? `
+              <div style="display:inline-flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:1px;">
+                <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== "stacks" ? "is-active" : ""}" data-display="tabs" title="Classic Pill Tabs" style="padding:2px 6px;font-size:9.5px;border:none;border-radius:4px;cursor:pointer;background:${cfg.chapterDisplay !== "stacks" ? "#5ec27f" : "transparent"};color:${cfg.chapterDisplay !== "stacks" ? "#0f1712" : "var(--st-text-muted)"};font-weight:700;transition:all 0.15s ease;">Tabs</button>
+                <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay === "stacks" ? "is-active" : ""}" data-display="stacks" title="3D Physical Album Stacks" style="padding:2px 6px;font-size:9.5px;border:none;border-radius:4px;cursor:pointer;background:${cfg.chapterDisplay === "stacks" ? "#5ec27f" : "transparent"};color:${cfg.chapterDisplay === "stacks" ? "#0f1712" : "var(--st-text-muted)"};font-weight:700;transition:all 0.15s ease;">3D Stacks</button>
+              </div>
+            ` : ""}
+            <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
+              <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+            </button>
+          </div>
         </div>
 
         <!-- Wrapped Chapter Pills (Auto-wrapping, zero horizontal overflow) -->
@@ -1628,6 +1636,16 @@
         ` : `
           <p style="font-size:10px;color:var(--st-text-muted);margin:0 0 10px;">No chapters created yet. Divide your gallery into stories like Ceremony, Reception, or Behind-The-Scenes.</p>
         `}
+        ${cfg.sections && cfg.sections.length > 0 ? `
+          <div style="margin:8px 0 10px;padding:8px 10px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <div style="font-size:10px;color:var(--st-text-secondary);line-height:1.35;">
+              ${cfg.chapterDisplay === "stacks" ? `<span style="color:#5ec27f;font-weight:700;">\u{1F4DA} 3D Stacks Active:</span> Album cover photo appears on top of the physical card deck.` : `<span style="color:#cbd5e1;font-weight:600;">\u{1F4D1} Classic Tabs:</span> Switch to 3D Stacks to preview physical album cover decks.`}
+            </div>
+            <button type="button" id="btn-inspector-toggle-stacks" class="matcha-exit-btn" style="padding:3px 8px;font-size:9.5px;font-weight:700;white-space:nowrap;flex-shrink:0;color:${cfg.chapterDisplay === "stacks" ? "var(--st-text-muted)" : "#5ec27f"};border-color:${cfg.chapterDisplay === "stacks" ? "rgba(255,255,255,0.1)" : "rgba(94,194,127,0.35)"};">
+              ${cfg.chapterDisplay === "stacks" ? "Use Tabs" : "View as 3D Stacks \u2192"}
+            </button>
+          </div>
+        ` : ""}
         <button type="button" id="btn-inspector-create-chapter" class="matcha-exit-btn" style="width:100%;font-size:10px;color:#ffffff;display:flex;align-items:center;justify-content:center;gap:4px;" title="Create a new chapter and assign this photo">
           <span style="color:#5ec27f;">+</span> Create New Chapter
         </button>
@@ -3286,6 +3304,19 @@
           autosaveSoon();
         });
       });
+      document.getElementById("btn-inspector-toggle-stacks")?.addEventListener("click", () => {
+        const cur = getState().config.chapterDisplay || "tabs";
+        const next = cur === "stacks" ? "tabs" : "stacks";
+        if (!isPro && next === "stacks") {
+          showProModal("3D Album Stacks", "Present your chapters as physical 3D photo album cover stacks with hover furl physics and drill-down navigation. Available in Matcha Gallery Pro.");
+          return;
+        }
+        patchConfig({ chapterDisplay: next });
+        renderRightPanel();
+        renderLeftTab("images");
+        renderCanvas();
+        autosaveSoon();
+      });
       document.getElementById("btn-inspector-create-chapter")?.addEventListener("click", () => {
         openCreateChapterModal(id);
       });
@@ -3475,6 +3506,19 @@
             window.__matchaTrayLoadMore();
           }
         }
+      });
+      document.querySelectorAll(".btn-quick-chapter-display").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const mode = btn.dataset.display;
+          if (!isPro && mode === "stacks") {
+            showProModal("3D Album Stacks", "Present your chapters as physical 3D photo album cover stacks with hover furl physics and drill-down navigation. Available in Matcha Gallery Pro.");
+            return;
+          }
+          patchConfig({ chapterDisplay: mode });
+          renderLeftTab("images");
+          renderCanvas();
+          autosaveSoon();
+        });
       });
       document.getElementById("btn-add-section")?.addEventListener("click", () => {
         openCreateChapterModal();
