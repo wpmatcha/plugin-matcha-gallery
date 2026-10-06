@@ -329,9 +329,6 @@ class Settings_Page {
 											<?php esc_html_e( 'Enter your own Google Gemini (100% Free) or OpenAI API key specifically for Matcha Gallery.', 'matcha-gallery' ); ?>
 										</p>
 									</div>
-									<div class="matcha-mode-card__check">
-										<span class="dashicons dashicons-yes-alt"></span>
-									</div>
 								</div>
 
 								<!-- Prominent OR Divider -->
@@ -359,9 +356,6 @@ class Settings_Page {
 										<p class="matcha-mode-card__desc">
 											<?php esc_html_e( 'Use site-wide credentials managed under WordPress Settings > Connectors. Share 1 key across all plugins.', 'matcha-gallery' ); ?>
 										</p>
-									</div>
-									<div class="matcha-mode-card__check">
-										<span class="dashicons dashicons-yes-alt"></span>
 									</div>
 								</div>
 							</div>
@@ -399,8 +393,8 @@ class Settings_Page {
 										</div>
 										<div id="matcha-connector-test-result" class="matcha-test-result" style="display:none; margin-top:12px;"></div>
 										<div style="margin-top:14px; padding-top:12px; border-top:1px solid #dcfce7; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-wrap:wrap; gap:8px;">
-											<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" style="color:#15803d; text-decoration:underline; font-weight:600;">
-												<?php esc_html_e( 'Manage Provider in Settings > Connectors →', 'matcha-gallery' ); ?>
+											<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" target="_blank" rel="noopener noreferrer" style="color:#15803d; text-decoration:underline; font-weight:600;">
+												<?php esc_html_e( 'Manage Provider in Settings > Connectors ↗', 'matcha-gallery' ); ?>
 											</a>
 											<span style="color:#166534; font-size:11px;">
 												<?php printf( esc_html__( 'Active model: %s', 'matcha-gallery' ), '<code>' . esc_html( $connector_info['model'] ) . '</code>' ); ?>
@@ -416,8 +410,8 @@ class Settings_Page {
 										<?php esc_html_e( 'WordPress Connectors allows you to configure Google Gemini, OpenAI, or Claude once under WordPress Settings to share across all plugins.', 'matcha-gallery' ); ?>
 									</p>
 									<div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-										<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" class="button button-primary">
-											<?php esc_html_e( 'Open Settings > Connectors →', 'matcha-gallery' ); ?>
+										<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="button button-primary">
+											<?php esc_html_e( 'Open Settings > Connectors ↗', 'matcha-gallery' ); ?>
 										</a>
 										<button type="button" class="button button-secondary matcha-switch-to-direct-btn">
 											<?php esc_html_e( 'Switch to Direct API Key Instead', 'matcha-gallery' ); ?>

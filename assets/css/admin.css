@@ -3455,18 +3455,6 @@
 	line-height: 1.45;
 }
 
-.matcha-mode-card__check {
-	display: none;
-	position: absolute;
-	top: 12px;
-	right: 12px;
-	color: #10b981;
-}
-
-.matcha-mode-card.is-active .matcha-mode-card__check {
-	display: block;
-}
-
 .matcha-or-divider {
 	display: flex;
 	flex-direction: column;
