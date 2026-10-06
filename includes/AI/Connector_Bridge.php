@@ -254,6 +254,15 @@ class Connector_Bridge {
 	 * @return bool
 	 */
 	public static function has_credentials(): bool {
+		$mode = Plugin::get_setting( 'ai_connection_mode', '' );
+
+		if ( 'connector' === $mode ) {
+			$connector = self::get_active_connector();
+			if ( ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
+				return true;
+			}
+		}
+
 		$direct_key = Plugin::get_setting( 'api_key', '' );
 		if ( ! empty( $direct_key ) ) {
 			return true;
@@ -266,8 +275,7 @@ class Connector_Bridge {
 	/**
 	 * Resolve final credentials to use for an AI call.
 	 *
-	 * Prioritizes direct key if explicitly configured; otherwise seamlessly falls back
-	 * to active WordPress Connectors / environment credentials.
+	 * Prioritizes the user's selected mode (direct vs connector); falls back safely.
 	 *
 	 * @return array{
 	 *   api_key: string,
@@ -278,8 +286,25 @@ class Connector_Bridge {
 	 * }
 	 */
 	public static function get_resolved_credentials(): array {
+		$mode       = Plugin::get_setting( 'ai_connection_mode', 'direct' );
 		$direct_key = Plugin::get_setting( 'api_key', '' );
+		$connector  = self::get_active_connector();
 
+		// If user explicitly chose Connector mode:
+		if ( 'connector' === $mode && ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
+			$saved_model    = Plugin::get_setting( 'api_model', '' );
+			$saved_endpoint = Plugin::get_setting( 'api_endpoint', '' );
+
+			return array(
+				'api_key'  => $connector['api_key'],
+				'model'    => ! empty( $saved_model ) ? $saved_model : $connector['model'],
+				'endpoint' => ! empty( $saved_endpoint ) ? $saved_endpoint : $connector['endpoint'],
+				'provider' => $connector['provider'],
+				'source'   => 'connector',
+			);
+		}
+
+		// Direct mode (or fallback to direct key if entered):
 		if ( ! empty( $direct_key ) ) {
 			$model     = Plugin::get_setting( 'api_model', 'gemini-1.5-flash' );
 			$endpoint  = Plugin::get_setting( 'api_endpoint', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
@@ -294,16 +319,12 @@ class Connector_Bridge {
 			);
 		}
 
-		// Fallback to WordPress Connector / environment credentials.
-		$connector = self::get_active_connector();
+		// Fallback to active connector if direct key is empty:
 		if ( ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
-			$saved_model    = Plugin::get_setting( 'api_model', '' );
-			$saved_endpoint = Plugin::get_setting( 'api_endpoint', '' );
-
 			return array(
 				'api_key'  => $connector['api_key'],
-				'model'    => ! empty( $saved_model ) ? $saved_model : $connector['model'],
-				'endpoint' => ! empty( $saved_endpoint ) ? $saved_endpoint : $connector['endpoint'],
+				'model'    => $connector['model'],
+				'endpoint' => $connector['endpoint'],
 				'provider' => $connector['provider'],
 				'source'   => 'connector',
 			);

@@ -151,7 +151,11 @@ class Settings_Page {
 		$requested_persona = sanitize_text_field( $input['ai_persona'] ?? 'standard' );
 		$ai_persona = ( $is_pro && in_array( $requested_persona, $allowed_personas, true ) ) ? $requested_persona : 'standard';
 
+		$raw_mode           = sanitize_text_field( $input['ai_connection_mode'] ?? 'direct' );
+		$ai_connection_mode = in_array( $raw_mode, array( 'direct', 'connector' ), true ) ? $raw_mode : 'direct';
+
 		return array(
+			'ai_connection_mode' => $ai_connection_mode,
 			'api_key'            => $raw_key,
 			'api_model'          => sanitize_text_field( $input['api_model'] ?? 'gemini-1.5-flash' ),
 			'api_endpoint'       => $endpoint,
@@ -278,105 +282,202 @@ class Settings_Page {
 						<div id="tab-api" class="matcha-tab-content is-active">
 					<div class="matcha-card">
 						<div class="matcha-card__header">
-							<h3><?php esc_html_e( 'AI Provider Credentials', 'matcha-gallery' ); ?></h3>
-							<p><?php esc_html_e( 'Configure your OpenAI or Google Gemini Vision endpoint, or connect seamlessly via WordPress AI Connectors.', 'matcha-gallery' ); ?></p>
+							<h3><?php esc_html_e( 'AI Provider Setup', 'matcha-gallery' ); ?></h3>
+							<p><?php esc_html_e( 'Choose how you want to connect AI to Matcha Gallery: enter a direct API key or link via WordPress AI Connectors.', 'matcha-gallery' ); ?></p>
 						</div>
 
 						<?php
 						$connector_info = Connector_Bridge::get_active_connector();
-						?>
-						<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
-							<div class="matcha-connector-banner is-connected" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; padding:14px 18px; margin:0 0 20px 0; display:flex; align-items:flex-start; gap:14px;">
-								<span class="dashicons dashicons-plugins-checked" style="color:#16a34a; font-size:24px; width:24px; height:24px; margin-top:2px;"></span>
-								<div style="flex:1;">
-									<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-										<strong style="color:#15803d; font-size:14px;"><?php esc_html_e( 'WordPress AI Connector Active', 'matcha-gallery' ); ?></strong>
-										<span class="matcha-badge" style="background:#dcfce7; color:#166534; font-weight:600; font-size:11px; padding:2px 8px; border-radius:12px;">
-											<?php echo esc_html( $connector_info['provider_name'] ); ?>
-										</span>
-									</div>
-									<p style="margin:4px 0 8px; color:#166534; font-size:13px; line-height:1.4;">
-										<?php esc_html_e( 'Matcha is automatically using your central site credentials. You do not need to enter a duplicate API key below unless you wish to override it.', 'matcha-gallery' ); ?>
-									</p>
-									<div style="display:flex; gap:12px; font-size:12px; align-items:center; flex-wrap:wrap;">
-										<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" style="color:#15803d; text-decoration:underline; font-weight:600;">
-											<?php esc_html_e( 'Manage in Settings > Connectors →', 'matcha-gallery' ); ?>
-										</a>
-										<span style="color:#86efac;">•</span>
-										<span style="color:#4b5563;"><?php esc_html_e( 'Entering a key below will override this connector.', 'matcha-gallery' ); ?></span>
-									</div>
-								</div>
-							</div>
-						<?php elseif ( ! empty( $connector_info['supported'] ) ) : ?>
-							<div class="matcha-connector-banner is-supported" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 16px; margin:0 0 20px 0; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-								<div style="display:flex; align-items:center; gap:10px;">
-									<span class="dashicons dashicons-admin-settings" style="color:#64748b; font-size:20px; width:20px; height:20px;"></span>
-									<span style="color:#334155; font-size:13px;">
-										<?php esc_html_e( 'WordPress 7.0 Connectors available: Centralize your AI keys across all plugins in WordPress Settings.', 'matcha-gallery' ); ?>
-									</span>
-								</div>
-								<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" class="button button-small" style="white-space:nowrap;">
-									<?php esc_html_e( 'Open Settings > Connectors', 'matcha-gallery' ); ?>
-								</a>
-							</div>
-						<?php endif; ?>
+						$saved_mode     = Plugin::get_setting( 'ai_connection_mode', '' );
 
-						<div class="matcha-field-row">
-							<label for="matcha_api_key">
-								<strong><?php esc_html_e( 'API Key', 'matcha-gallery' ); ?></strong>
-								<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
-									<span class="matcha-badge" style="background:#dcfce7; color:#166534; font-weight:600;"><?php esc_html_e( 'Optional (Connected via WP)', 'matcha-gallery' ); ?></span>
-								<?php else : ?>
-									<span class="matcha-badge matcha-badge--required"><?php esc_html_e( 'Required', 'matcha-gallery' ); ?></span>
-								<?php endif; ?>
-							</label>
-							<?php wp_nonce_field( 'matcha_ai_generate', 'matcha_api_test_nonce' ); ?>
-							<div class="matcha-input-group">
-								<input type="password" id="matcha_api_key" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_key]" value="<?php echo esc_attr( $settings['api_key'] ?? '' ); ?>" class="regular-text" placeholder="<?php echo ! empty( $connector_info['connected'] ) ? esc_attr( sprintf( __( 'Using site connector: %s (or enter key to override)', 'matcha-gallery' ), $connector_info['provider_name'] ) ) : 'sk-proj-... / AIza...'; ?>" autocomplete="off" />
-								<button type="button" id="matcha-toggle-key-visibility" class="button" title="<?php esc_attr_e( 'Show / Hide Key', 'matcha-gallery' ); ?>"><span class="dashicons dashicons-visibility" style="vertical-align:middle;line-height:1.4;"></span></button>
-								<button type="button" id="matcha-test-api-btn" class="button button-secondary">
-									<span class="dashicons dashicons-update" style="vertical-align:middle; font-size:16px;"></span>
-									<?php esc_html_e( 'Test Connection', 'matcha-gallery' ); ?>
-								</button>
+						if ( ! empty( $saved_mode ) && in_array( $saved_mode, array( 'direct', 'connector' ), true ) ) {
+							$active_mode = $saved_mode;
+						} else {
+							$direct_key  = Plugin::get_setting( 'api_key', '' );
+							$active_mode = ( ! empty( $connector_info['connected'] ) && empty( $direct_key ) ) ? 'connector' : 'direct';
+						}
+						?>
+
+						<!-- Connection Mode Selector (OR Condition) -->
+						<div class="matcha-connection-mode-box">
+							<div class="matcha-mode-selector-header">
+								<div>
+									<h4 class="matcha-mode-selector-title"><?php esc_html_e( 'AI Connection Mode (Choose One):', 'matcha-gallery' ); ?></h4>
+									<p class="matcha-mode-selector-subtitle"><?php esc_html_e( 'Choose Direct API Key OR WordPress AI Connector. You only need to set up one method.', 'matcha-gallery' ); ?></p>
+								</div>
+								<span class="matcha-mode-pill-indicator">
+									<?php echo 'connector' === $active_mode ? esc_html__( 'Active: WordPress Connector', 'matcha-gallery' ) : esc_html__( 'Active: Direct API Key', 'matcha-gallery' ); ?>
+								</span>
 							</div>
-							<div id="matcha-api-test-result" class="matcha-test-result" style="display:none;"></div>
-							<p class="description">
-								<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
-									<span style="color:#16a34a;font-weight:600;">✓ <?php printf( esc_html__( 'Connected to site-wide %s connector. Leave empty to use site credentials.', 'matcha-gallery' ), esc_html( $connector_info['provider_name'] ) ); ?></span>
-								<?php else : ?>
+
+							<!-- Hidden setting input for persistence -->
+							<input type="hidden" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[ai_connection_mode]" id="matcha_ai_connection_mode" value="<?php echo esc_attr( $active_mode ); ?>" />
+
+							<div class="matcha-or-switch-wrap">
+								<!-- Option 1: Direct API Key -->
+								<div class="matcha-mode-card <?php echo 'direct' === $active_mode ? 'is-active' : ''; ?>" data-mode="direct" role="button" tabindex="0" title="<?php esc_attr_e( 'Select Direct API Key', 'matcha-gallery' ); ?>">
+									<div class="matcha-mode-card__radio">
+										<span class="matcha-mode-radio-circle"></span>
+									</div>
+									<div class="matcha-mode-card__body">
+										<div class="matcha-mode-card__top">
+											<span class="matcha-mode-card__icon">⚡</span>
+											<strong class="matcha-mode-card__label"><?php esc_html_e( 'Direct API Key', 'matcha-gallery' ); ?></strong>
+											<span class="matcha-badge matcha-badge--free"><?php esc_html_e( 'Free Tier Available', 'matcha-gallery' ); ?></span>
+										</div>
+										<p class="matcha-mode-card__desc">
+											<?php esc_html_e( 'Enter your own Google Gemini (100% Free) or OpenAI API key specifically for Matcha Gallery.', 'matcha-gallery' ); ?>
+										</p>
+									</div>
+									<div class="matcha-mode-card__check">
+										<span class="dashicons dashicons-yes-alt"></span>
+									</div>
+								</div>
+
+								<!-- Prominent OR Divider -->
+								<div class="matcha-or-divider" aria-hidden="true">
+									<div class="matcha-or-divider__line"></div>
+									<div class="matcha-or-divider__badge"><?php esc_html_e( 'OR', 'matcha-gallery' ); ?></div>
+									<div class="matcha-or-divider__line"></div>
+								</div>
+
+								<!-- Option 2: WordPress AI Connector -->
+								<div class="matcha-mode-card <?php echo 'connector' === $active_mode ? 'is-active' : ''; ?>" data-mode="connector" role="button" tabindex="0" title="<?php esc_attr_e( 'Select WordPress AI Connector', 'matcha-gallery' ); ?>">
+									<div class="matcha-mode-card__radio">
+										<span class="matcha-mode-radio-circle"></span>
+									</div>
+									<div class="matcha-mode-card__body">
+										<div class="matcha-mode-card__top">
+											<span class="matcha-mode-card__icon">🔌</span>
+											<strong class="matcha-mode-card__label"><?php esc_html_e( 'WordPress AI Connector', 'matcha-gallery' ); ?></strong>
+											<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
+												<span class="matcha-badge matcha-badge--connected">✓ <?php echo esc_html( $connector_info['provider_name'] ); ?></span>
+											<?php else : ?>
+												<span class="matcha-badge matcha-badge--wp"><?php esc_html_e( 'WP 7.0+ Connectors', 'matcha-gallery' ); ?></span>
+											<?php endif; ?>
+										</div>
+										<p class="matcha-mode-card__desc">
+											<?php esc_html_e( 'Use site-wide credentials managed under WordPress Settings > Connectors. Share 1 key across all plugins.', 'matcha-gallery' ); ?>
+										</p>
+									</div>
+									<div class="matcha-mode-card__check">
+										<span class="dashicons dashicons-yes-alt"></span>
+									</div>
+								</div>
+							</div>
+
+							<!-- Dynamic Context Hint Notice -->
+							<div class="matcha-mode-notice matcha-mode-notice--direct" id="matcha-mode-notice-direct" style="<?php echo 'direct' === $active_mode ? '' : 'display:none;'; ?>">
+								<span class="dashicons dashicons-info"></span>
+								<span><?php esc_html_e( 'Active: Direct API Key. Configure your key and vision model below. You do not need to install or configure WordPress Connectors.', 'matcha-gallery' ); ?></span>
+							</div>
+							<div class="matcha-mode-notice matcha-mode-notice--connector" id="matcha-mode-notice-connector" style="<?php echo 'connector' === $active_mode ? '' : 'display:none;'; ?>">
+								<span class="dashicons dashicons-plugins-checked"></span>
+								<span><?php esc_html_e( 'Active: WordPress AI Connector. Matcha Gallery is linked to your site-wide credentials. You do not need to enter an API key below.', 'matcha-gallery' ); ?></span>
+							</div>
+						</div>
+
+						<!-- Panel 1: WordPress AI Connector Panel -->
+						<div id="matcha-mode-connector-panel" style="<?php echo 'connector' === $active_mode ? '' : 'display:none;'; ?>">
+							<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
+								<div class="matcha-connector-banner is-connected" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:18px 20px; margin-bottom:14px; display:flex; align-items:flex-start; gap:16px;">
+									<span class="dashicons dashicons-plugins-checked" style="color:#16a34a; font-size:28px; width:28px; height:28px; margin-top:2px;"></span>
+									<div style="flex:1;">
+										<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+											<div>
+												<strong style="color:#15803d; font-size:15px;">
+													<?php printf( esc_html__( 'Connected to %s via WordPress Connectors', 'matcha-gallery' ), esc_html( $connector_info['provider_name'] ) ); ?>
+												</strong>
+												<p style="margin:4px 0 0; color:#166534; font-size:13px; line-height:1.4;">
+													<?php esc_html_e( 'Matcha Gallery is actively linked to your site-wide connector. All AI features (smart tags, focal crops, color swatches) will route through this provider.', 'matcha-gallery' ); ?>
+												</p>
+											</div>
+											<button type="button" id="matcha-test-connector-btn" class="button button-secondary">
+												<span class="dashicons dashicons-update" style="vertical-align:middle; font-size:16px;"></span>
+												<?php esc_html_e( 'Test Connection', 'matcha-gallery' ); ?>
+											</button>
+										</div>
+										<div id="matcha-connector-test-result" class="matcha-test-result" style="display:none; margin-top:12px;"></div>
+										<div style="margin-top:14px; padding-top:12px; border-top:1px solid #dcfce7; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-wrap:wrap; gap:8px;">
+											<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" style="color:#15803d; text-decoration:underline; font-weight:600;">
+												<?php esc_html_e( 'Manage Provider in Settings > Connectors →', 'matcha-gallery' ); ?>
+											</a>
+											<span style="color:#166534; font-size:11px;">
+												<?php printf( esc_html__( 'Active model: %s', 'matcha-gallery' ), '<code>' . esc_html( $connector_info['model'] ) . '</code>' ); ?>
+											</span>
+										</div>
+									</div>
+								</div>
+							<?php else : ?>
+								<div class="matcha-connector-banner is-empty" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:24px 20px; text-align:center; margin-bottom:14px;">
+									<span class="dashicons dashicons-admin-settings" style="color:#64748b; font-size:32px; width:32px; height:32px; margin-bottom:8px;"></span>
+									<h4 style="margin:0 0 6px; font-size:15px; color:#1e293b;"><?php esc_html_e( 'No WordPress Connector Configured Yet', 'matcha-gallery' ); ?></h4>
+									<p style="margin:0 auto 16px; max-width:480px; color:#64748b; font-size:13px; line-height:1.5;">
+										<?php esc_html_e( 'WordPress Connectors allows you to configure Google Gemini, OpenAI, or Claude once under WordPress Settings to share across all plugins.', 'matcha-gallery' ); ?>
+									</p>
+									<div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+										<a href="<?php echo esc_url( $connector_info['connectors_url'] ); ?>" class="button button-primary">
+											<?php esc_html_e( 'Open Settings > Connectors →', 'matcha-gallery' ); ?>
+										</a>
+										<button type="button" class="button button-secondary matcha-switch-to-direct-btn">
+											<?php esc_html_e( 'Switch to Direct API Key Instead', 'matcha-gallery' ); ?>
+										</button>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
+
+						<!-- Panel 2: Direct API Key Panel -->
+						<div id="matcha-mode-direct-panel" style="<?php echo 'direct' === $active_mode ? '' : 'display:none;'; ?>">
+							<div class="matcha-field-row">
+								<label for="matcha_api_key">
+									<strong><?php esc_html_e( 'API Key', 'matcha-gallery' ); ?></strong>
+									<span class="matcha-badge matcha-badge--required"><?php esc_html_e( 'Required', 'matcha-gallery' ); ?></span>
+								</label>
+								<?php wp_nonce_field( 'matcha_ai_generate', 'matcha_api_test_nonce' ); ?>
+								<div class="matcha-input-group">
+									<input type="password" id="matcha_api_key" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_key]" value="<?php echo esc_attr( $settings['api_key'] ?? '' ); ?>" class="regular-text" placeholder="sk-proj-... / AIza..." autocomplete="off" />
+									<button type="button" id="matcha-toggle-key-visibility" class="button" title="<?php esc_attr_e( 'Show / Hide Key', 'matcha-gallery' ); ?>"><span class="dashicons dashicons-visibility" style="vertical-align:middle;line-height:1.4;"></span></button>
+									<button type="button" id="matcha-test-api-btn" class="button button-secondary">
+										<span class="dashicons dashicons-update" style="vertical-align:middle; font-size:16px;"></span>
+										<?php esc_html_e( 'Test Connection', 'matcha-gallery' ); ?>
+									</button>
+								</div>
+								<div id="matcha-api-test-result" class="matcha-test-result" style="display:none;"></div>
+								<p class="description">
 									<?php esc_html_e( 'Get a free key from Google AI Studio (recommended, 100% free tier) or OpenAI Platform.', 'matcha-gallery' ); ?>
 									<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="margin-left:6px;font-weight:600;color:#2563eb;">
 										<?php esc_html_e( 'Get Free Gemini Key →', 'matcha-gallery' ); ?>
 									</a>
-								<?php endif; ?>
-							</p>
-						</div>
-
-						<div class="matcha-field-row">
-							<label><strong><?php esc_html_e( 'Select AI Provider Preset', 'matcha-gallery' ); ?></strong></label>
-							<div class="matcha-quick-presets" style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px;">
-								<button type="button" class="button matcha-provider-preset-btn" data-model="gpt-4o-mini" data-endpoint="https://api.openai.com/v1/chat/completions">
-									<span class="matcha-dot matcha-dot--green"></span> <strong>OpenAI</strong> (gpt-4o-mini)
-								</button>
-								<button type="button" class="button matcha-provider-preset-btn" data-model="gemini-1.5-flash" data-endpoint="https://generativelanguage.googleapis.com/v1beta/openai/chat/completions">
-									<span class="matcha-dot matcha-dot--blue"></span> <strong>Google Gemini</strong> (gemini-1.5-flash)
-								</button>
-								<button type="button" class="button matcha-provider-preset-btn" data-model="google/gemini-flash-1.5" data-endpoint="https://openrouter.ai/api/v1/chat/completions">
-									<span class="matcha-dot matcha-dot--purple"></span> <strong>OpenRouter</strong> (Multi-provider)
-								</button>
+								</p>
 							</div>
-						</div>
 
-						<div class="matcha-field-row">
-							<label for="matcha_api_model"><strong><?php esc_html_e( 'Vision Model', 'matcha-gallery' ); ?></strong></label>
-							<input type="text" id="matcha_api_model" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_model]" value="<?php echo esc_attr( $settings['api_model'] ?? 'gemini-1.5-flash' ); ?>" class="regular-text" />
-							<p class="description"><?php esc_html_e( 'e.g. gemini-1.5-flash, gemini-2.0-flash, gpt-4o-mini', 'matcha-gallery' ); ?></p>
-						</div>
+							<div class="matcha-field-row">
+								<label><strong><?php esc_html_e( 'Select AI Provider Preset', 'matcha-gallery' ); ?></strong></label>
+								<div class="matcha-quick-presets" style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px;">
+									<button type="button" class="button matcha-provider-preset-btn" data-model="gemini-1.5-flash" data-endpoint="https://generativelanguage.googleapis.com/v1beta/openai/chat/completions">
+										<span class="matcha-dot matcha-dot--blue"></span> <strong>Google Gemini</strong> (gemini-1.5-flash)
+									</button>
+									<button type="button" class="button matcha-provider-preset-btn" data-model="gpt-4o-mini" data-endpoint="https://api.openai.com/v1/chat/completions">
+										<span class="matcha-dot matcha-dot--green"></span> <strong>OpenAI</strong> (gpt-4o-mini)
+									</button>
+									<button type="button" class="button matcha-provider-preset-btn" data-model="google/gemini-flash-1.5" data-endpoint="https://openrouter.ai/api/v1/chat/completions">
+										<span class="matcha-dot matcha-dot--purple"></span> <strong>OpenRouter</strong> (Multi-provider)
+									</button>
+								</div>
+							</div>
 
-						<div class="matcha-field-row">
-							<label for="matcha_api_endpoint"><strong><?php esc_html_e( 'API Endpoint URL', 'matcha-gallery' ); ?></strong></label>
-							<input type="url" id="matcha_api_endpoint" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_endpoint]" value="<?php echo esc_attr( $settings['api_endpoint'] ?? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' ); ?>" class="large-text" />
-							<p class="description"><?php esc_html_e( 'For Google Gemini: https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'matcha-gallery' ); ?></p>
+							<div class="matcha-field-row">
+								<label for="matcha_api_model"><strong><?php esc_html_e( 'Vision Model', 'matcha-gallery' ); ?></strong></label>
+								<input type="text" id="matcha_api_model" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_model]" value="<?php echo esc_attr( $settings['api_model'] ?? 'gemini-1.5-flash' ); ?>" class="regular-text" />
+								<p class="description"><?php esc_html_e( 'e.g. gemini-1.5-flash, gemini-2.0-flash, gpt-4o-mini', 'matcha-gallery' ); ?></p>
+							</div>
+
+							<div class="matcha-field-row">
+								<label for="matcha_api_endpoint"><strong><?php esc_html_e( 'API Endpoint URL', 'matcha-gallery' ); ?></strong></label>
+								<input type="url" id="matcha_api_endpoint" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[api_endpoint]" value="<?php echo esc_attr( $settings['api_endpoint'] ?? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' ); ?>" class="large-text" />
+								<p class="description"><?php esc_html_e( 'For Google Gemini: https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', 'matcha-gallery' ); ?></p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -646,36 +747,50 @@ class Settings_Page {
 		}
 		check_ajax_referer( 'matcha_ai_generate', 'nonce' );
 
-		$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : Plugin::get_setting( 'api_key', '' );
-		$model    = isset( $_POST['api_model'] ) ? sanitize_text_field( wp_unslash( $_POST['api_model'] ) ) : Plugin::get_setting( 'api_model', 'gemini-1.5-flash' );
-		$endpoint = isset( $_POST['api_endpoint'] ) ? esc_url_raw( wp_unslash( $_POST['api_endpoint'] ) ) : Plugin::get_setting( 'api_endpoint', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
+		$test_mode = isset( $_POST['test_mode'] ) ? sanitize_key( wp_unslash( $_POST['test_mode'] ) ) : '';
+
+		if ( 'connector' === $test_mode ) {
+			$connector = Connector_Bridge::get_active_connector();
+			if ( empty( $connector['connected'] ) || empty( $connector['api_key'] ) ) {
+				wp_send_json_error( array( 'message' => __( 'No active credentials found in WordPress Settings > Connectors.', 'matcha-gallery' ) ), 400 );
+			}
+			$api_key         = $connector['api_key'];
+			$model           = $connector['model'];
+			$endpoint        = $connector['endpoint'];
+			$using_connector = true;
+		} else {
+			$api_key  = isset( $_POST['api_key'] ) ? sanitize_text_field( wp_unslash( $_POST['api_key'] ) ) : Plugin::get_setting( 'api_key', '' );
+			$model    = isset( $_POST['api_model'] ) ? sanitize_text_field( wp_unslash( $_POST['api_model'] ) ) : Plugin::get_setting( 'api_model', 'gemini-1.5-flash' );
+			$endpoint = isset( $_POST['api_endpoint'] ) ? esc_url_raw( wp_unslash( $_POST['api_endpoint'] ) ) : Plugin::get_setting( 'api_endpoint', 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' );
+
+			// If user submitted masked key bullets or asterisks, try real saved key.
+			if ( preg_match( '/^[•\*]+$/u', $api_key ) ) {
+				$saved   = Plugin::get_setting( 'api_key', '' );
+				$api_key = ( ! empty( $saved ) && ! preg_match( '/^[•\*]+$/u', $saved ) ) ? $saved : '';
+			}
+
+			$using_connector = false;
+			if ( empty( $api_key ) ) {
+				$connector = Connector_Bridge::get_active_connector();
+				if ( ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
+					$api_key         = $connector['api_key'];
+					$model           = ! empty( $connector['model'] ) ? $connector['model'] : $model;
+					$endpoint        = ! empty( $connector['endpoint'] ) ? $connector['endpoint'] : $endpoint;
+					$using_connector = true;
+				}
+			}
+
+			if ( empty( $api_key ) ) {
+				wp_send_json_error( array( 'message' => __( 'Please enter an API key or switch to WordPress AI Connector.', 'matcha-gallery' ) ), 400 );
+			}
+		}
+
 		// SSRF check
 		if ( class_exists( '\\Matcha_AI_Smart_Gallery\\AI\\AI_REST' ) ) {
 			$check = \Matcha_AI_Smart_Gallery\AI\AI_REST::validate_endpoint_url( $endpoint );
 			if ( is_wp_error( $check ) ) {
 				wp_send_json_error( array( 'message' => $check->get_error_message() ), 400 );
 			}
-		}
-
-		// If user submitted masked key bullets or asterisks, try real saved key.
-		if ( preg_match( '/^[•\*]+$/u', $api_key ) ) {
-			$saved   = Plugin::get_setting( 'api_key', '' );
-			$api_key = ( ! empty( $saved ) && ! preg_match( '/^[•\*]+$/u', $saved ) ) ? $saved : '';
-		}
-
-		$using_connector = false;
-		if ( empty( $api_key ) ) {
-			$connector = Connector_Bridge::get_active_connector();
-			if ( ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
-				$api_key         = $connector['api_key'];
-				$model           = ! empty( $connector['model'] ) ? $connector['model'] : $model;
-				$endpoint        = ! empty( $connector['endpoint'] ) ? $connector['endpoint'] : $endpoint;
-				$using_connector = true;
-			}
-		}
-
-		if ( empty( $api_key ) ) {
-			wp_send_json_error( array( 'message' => __( 'Please enter an API key or configure an active provider in Settings > Connectors.', 'matcha-gallery' ) ), 400 );
 		}
 
 		$start_time = microtime( true );
@@ -945,7 +1060,79 @@ class Settings_Page {
 			$(this).addClass('button-primary');
 		});
 
-		// Test API Connection
+		// Connection Mode Switch (OR Condition)
+		function setConnectionMode(mode) {
+			$('#matcha_ai_connection_mode').val(mode);
+			$('.matcha-mode-card').removeClass('is-active');
+			$('.matcha-mode-card[data-mode="' + mode + '"]').addClass('is-active');
+
+			if (mode === 'connector') {
+				$('#matcha-mode-direct-panel').hide();
+				$('#matcha-mode-connector-panel').fadeIn(150);
+				$('#matcha-mode-notice-direct').hide();
+				$('#matcha-mode-notice-connector').show();
+				$('.matcha-mode-pill-indicator').text('Active: WordPress Connector');
+			} else {
+				$('#matcha-mode-connector-panel').hide();
+				$('#matcha-mode-direct-panel').fadeIn(150);
+				$('#matcha-mode-notice-connector').hide();
+				$('#matcha-mode-notice-direct').show();
+				$('.matcha-mode-pill-indicator').text('Active: Direct API Key');
+			}
+		}
+
+		$('.matcha-mode-card').on('click', function(e) {
+			e.preventDefault();
+			var mode = $(this).data('mode');
+			setConnectionMode(mode);
+		}).on('keydown', function(e) {
+			if (e.key === ' ' || e.key === 'Enter') {
+				e.preventDefault();
+				var mode = $(this).data('mode');
+				setConnectionMode(mode);
+			}
+		});
+
+		$('.matcha-switch-to-direct-btn').on('click', function(e) {
+			e.preventDefault();
+			setConnectionMode('direct');
+		});
+
+		// Test Connector Connection
+		$('#matcha-test-connector-btn').on('click', function(e) {
+			e.preventDefault();
+			var $btn = $(this);
+			var $result = $('#matcha-connector-test-result');
+
+			$btn.prop('disabled', true);
+			$result.show().removeClass('is-success is-error').html('<span class="matcha-spinner"></span> Connecting via WordPress AI Connector…');
+
+			$.post(ajaxurl, {
+				action: 'matcha_test_api_connection',
+				nonce: $('#matcha_api_test_nonce').val() || '',
+				test_mode: 'connector'
+			})
+			.done(function(res) {
+				if (res.success) {
+					$result.addClass('is-success').html('✓ ' + res.data.message);
+				} else {
+					$result.addClass('is-error').html('✗ ' + (res.data.message || 'Unknown error'));
+				}
+			})
+			.fail(function(xhr) {
+				var msg = 'Connection failed.';
+				try {
+					var j = JSON.parse(xhr.responseText);
+					msg = j.data.message || msg;
+				} catch(e) {}
+				$result.addClass('is-error').html('✗ ' + msg);
+			})
+			.always(function() {
+				$btn.prop('disabled', false);
+			});
+		});
+
+		// Test API Connection (Direct Mode)
 		$('#matcha-test-api-btn').on('click', function(e) {
 			e.preventDefault();
 			var $btn = $(this);
