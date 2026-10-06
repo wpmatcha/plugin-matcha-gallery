@@ -145,18 +145,68 @@
 
 		bindSections() {
 			this.sectionTabs = Array.from( this.el.querySelectorAll( '.matcha-section-tab' ) );
+			this.albumCards = Array.from( this.el.querySelectorAll( '.matcha-album-card' ) );
+			this.albumDeck = this.el.querySelector( '.matcha-album-deck' );
+			this.albumBackBar = this.el.querySelector( '.matcha-album-back-bar' );
+			this.albumBackBtn = this.el.querySelector( '.matcha-album-back-btn' );
+			this.albumCurrentTitle = this.el.querySelector( '.matcha-album-current-title' );
+			this.albumCurrentCount = this.el.querySelector( '.matcha-album-count-badge' );
+
+			const setSection = ( secId, title, count ) => {
+				this.activeSection = secId;
+
+				this.sectionTabs.forEach( ( b ) => {
+					const isActive = b.dataset.section === this.activeSection;
+					b.classList.toggle( 'matcha-section-tab--active', isActive );
+					b.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
+				} );
+
+				// Handle 3D Album Stacks Drill-Down Transitions
+				if ( this.albumDeck && this.albumBackBar ) {
+					if ( secId === '*' ) {
+						this.albumDeck.style.display = 'grid';
+						this.albumBackBar.style.display = 'none';
+						if ( this.grid ) this.grid.style.display = 'none';
+						if ( this.filterBar ) this.filterBar.style.display = 'none';
+					} else {
+						this.albumDeck.style.display = 'none';
+						this.albumBackBar.style.display = 'flex';
+						if ( this.albumCurrentTitle ) this.albumCurrentTitle.textContent = title || '';
+						if ( this.albumCurrentCount ) this.albumCurrentCount.textContent = count ? `${count} ${count === 1 || count === '1' ? 'photo' : 'photos'}` : '';
+						if ( this.grid ) this.grid.style.display = '';
+						if ( this.filterBar ) this.filterBar.style.display = '';
+					}
+				}
+
+				this.currentPage = 1;
+				this.applyFilters();
+			};
+
 			this.sectionTabs.forEach( ( btn ) => {
 				btn.addEventListener( 'click', () => {
-					this.activeSection = btn.dataset.section;
-					this.sectionTabs.forEach( ( b ) => {
-						const isActive = b.dataset.section === this.activeSection;
-						b.classList.toggle( 'matcha-section-tab--active', isActive );
-						b.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
-					} );
-					this.currentPage = 1;
-					this.applyFilters();
+					setSection( btn.dataset.section, btn.textContent );
 				} );
 			} );
+
+			this.albumCards.forEach( ( card ) => {
+				card.addEventListener( 'click', () => {
+					setSection( card.dataset.section, card.dataset.title, card.dataset.count );
+				} );
+			} );
+
+			if ( this.albumBackBtn ) {
+				this.albumBackBtn.addEventListener( 'click', () => {
+					setSection( '*' );
+				} );
+			}
+
+			// If starting in Album Stacks mode on All Albums, hide raw photo grid until an album is clicked
+			if ( this.albumDeck && this.albumBackBar && this.activeSection === '*' ) {
+				this.albumDeck.style.display = 'grid';
+				this.albumBackBar.style.display = 'none';
+				if ( this.grid ) this.grid.style.display = 'none';
+				if ( this.filterBar ) this.filterBar.style.display = 'none';
+			}
 		}
 
 		bindFilters() {

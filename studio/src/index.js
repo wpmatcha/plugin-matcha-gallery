@@ -1314,11 +1314,32 @@ if (root) {
         </div>
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;color:var(--st-text-primary);">
           <input type="checkbox" id="st-sections-toggle" ${isPro && cfg.sectionsEnabled !== false ? "checked" : ""}>
-          Enable Chapter Tab Navigation
+          Enable Chapters & Stories
         </label>
-        <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 16px 22px;">
-          Displays a multi-tab chapter bar above the gallery (e.g. Ceremony, Reception, Portraits).
+        <p style="font-size:10px;color:var(--st-text-muted);margin:4px 0 10px 22px;">
+          Divide your gallery into tabbed sections (e.g. Ceremony, Reception, Portraits).
         </p>
+
+        <div style="margin: 6px 0 16px 22px; ${isPro && cfg.sectionsEnabled !== false ? '' : 'display:none;'}" id="st-chapter-display-wrap">
+          <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:6px;letter-spacing:0.5px;">PRESENTATION MODE</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay !== 'stacks' ? 'is-active' : ''}" data-display="tabs" style="${cfg.chapterDisplay !== 'stacks' ? 'border-color:#5ec27f;background:rgba(94,194,127,0.15);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
+              📑 Classic Tabs
+            </button>
+            <button type="button" class="matcha-exit-btn st-chapter-display-btn ${cfg.chapterDisplay === 'stacks' ? 'is-active' : ''}" data-display="stacks" style="${cfg.chapterDisplay === 'stacks' ? 'border-color:#5ec27f;background:rgba(94,194,127,0.15);color:#ffffff;' : 'color:var(--st-text-secondary);'}font-size:11px;padding:6px 8px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;">
+              📚 3D Stacks <span class="matcha-pro-badge" style="font-size:8px;">PRO</span>
+            </button>
+          </div>
+
+          ${cfg.chapterDisplay === 'stacks' ? `
+            <label style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:block;margin-bottom:5px;letter-spacing:0.5px;">STACK AESTHETIC</label>
+            <select id="st-chapter-stack-style" class="matcha-dark-select" style="width:100%;font-size:11px;padding:5px 8px;margin-bottom:6px;background:rgba(255,255,255,0.06);color:#ffffff;border:1px solid rgba(255,255,255,0.12);border-radius:6px;">
+              <option value="editorial" ${(cfg.chapterStackStyle || 'editorial') === 'editorial' ? 'selected' : ''}>Luxury Editorial</option>
+              <option value="polaroid" ${cfg.chapterStackStyle === 'polaroid' ? 'selected' : ''}>Polaroid Deck</option>
+              <option value="minimal" ${cfg.chapterStackStyle === 'minimal' ? 'selected' : ''}>Minimalist Glass</option>
+            </select>
+          ` : ''}
+        </div>
 
         <div class="matcha-card-title">
           <span class="heading-wrap">${Icons.palette} AI Color Swatches <span class="matcha-pro-badge">PRO</span></span>
@@ -2164,14 +2185,22 @@ if (root) {
           <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">
             ${cfg.sections.map(sec => {
               const isAssigned = (sec.imageIds || []).includes(id);
+              const isCover = parseInt(sec.coverImageId, 10) === id;
               return `
-                <label style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid ${isAssigned ? 'rgba(94,194,127,0.35)' : 'rgba(255,255,255,0.07)'};border-radius:6px;cursor:pointer;font-size:11px;color:var(--st-text-primary);transition:all 0.15s ease;">
-                  <span style="display:flex;align-items:center;gap:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:rgba(255,255,255,0.03);border:1px solid ${isCover ? '#5ec27f' : (isAssigned ? 'rgba(94,194,127,0.35)' : 'rgba(255,255,255,0.07)')};border-radius:6px;gap:6px;transition:all 0.15s ease;">
+                  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0;margin:0;">
                     <input type="checkbox" class="prop-chapter-checkbox" data-sec-id="${sec.id}" ${isAssigned ? 'checked' : ''} style="cursor:pointer;" />
-                    <span style="font-weight:600;">${escapeHtml(sec.title)}</span>
-                  </span>
-                  <span style="font-size:10px;color:var(--st-text-muted);">${(sec.imageIds || []).length} ${(sec.imageIds || []).length === 1 ? 'photo' : 'photos'}</span>
-                </label>
+                    <span style="font-weight:600;font-size:11px;color:var(--st-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(sec.title)}</span>
+                  </label>
+                  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                    ${isAssigned ? `
+                      <button type="button" class="btn-set-chapter-cover ${isCover ? 'is-active' : ''}" data-sec-id="${sec.id}" title="${isCover ? 'Hero cover photo for this album' : 'Set as Album Cover Photo'}" style="padding:2px 7px;font-size:9.5px;font-weight:700;border-radius:4px;cursor:pointer;border:1px solid ${isCover ? '#5ec27f' : 'rgba(255,255,255,0.18)'};background:${isCover ? 'rgba(94,194,127,0.22)' : 'rgba(255,255,255,0.06)'};color:${isCover ? '#5ec27f' : 'var(--st-text-muted)'};">
+                        ${isCover ? '★ Cover' : 'Set Cover'}
+                      </button>
+                    ` : ''}
+                    <span style="font-size:10px;color:var(--st-text-muted);">${(sec.imageIds || []).length}</span>
+                  </div>
+                </div>
               `;
             }).join('')}
           </div>
@@ -4060,6 +4089,25 @@ if (root) {
       });
     });
 
+    document.querySelectorAll('.btn-set-chapter-cover').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (!isPro) {
+          showProModal('Album Cover Photo', 'Assign custom hero cover photos for your chapters & 3D album stacks in Matcha Gallery Pro.');
+          return;
+        }
+        const secId = btn.dataset.secId;
+        const sections = [...(getState().config.sections || [])];
+        const targetSec = sections.find(s => s.id === secId);
+        if (!targetSec) return;
+        targetSec.coverImageId = (parseInt(targetSec.coverImageId, 10) === id) ? null : id;
+        patchConfig({ sections });
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
     document.getElementById('btn-inspector-create-chapter')?.addEventListener('click', () => {
       openCreateChapterModal(id);
     });
@@ -4123,6 +4171,7 @@ if (root) {
         activeSectionId = pill.dataset.sec;
         trayPage = 1;
         renderLeftTab('images');
+        renderCanvas();
       });
     });
 
@@ -4405,6 +4454,28 @@ if (root) {
         return;
       }
       patchConfig({ sectionsEnabled: e.target.checked });
+      renderRightPanel();
+      renderCanvas();
+      autosaveSoon();
+    });
+
+    document.querySelectorAll('.st-chapter-display-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.display;
+        if (!isPro && mode === 'stacks') {
+          showProModal('3D Album Stacks', 'Present your chapters as physical 3D photo album cover stacks with hover furl physics and drill-down navigation. Available in Matcha Gallery Pro.');
+          return;
+        }
+        patchConfig({ chapterDisplay: mode });
+        renderLeftTab('superpowers');
+        renderRightPanel();
+        renderCanvas();
+        autosaveSoon();
+      });
+    });
+
+    document.getElementById('st-chapter-stack-style')?.addEventListener('change', e => {
+      patchConfig({ chapterStackStyle: e.target.value });
       renderCanvas();
       autosaveSoon();
     });
@@ -5355,29 +5426,77 @@ if (root) {
       d.classList.toggle('is-active', d.dataset.bg === activeBackdrop);
     });
 
+    const showAlbumOverview = hasSections && cfg.chapterDisplay === 'stacks' && activeSectionId === '*';
+    const activeSecObj = sections.find(s => s.id === activeSectionId);
+
     canvas.innerHTML = `
       <div class="matcha-gallery-container matcha-gallery layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === 'skin-editorial' && activeCardTheme === 'dark' ? 'matcha-card-theme--dark' : ''} matcha-gallery--${activeLayout} matcha-gallery--backdrop-${activeBackdrop} wall-${activeWallTex} matcha-wall-texture--${activeWallTex} ${activeLayout === 'art-wall' ? `matcha-wall-preset--${cfg.wallPreset || 'triptych'} matcha-wall-molding--${cfg.wallMolding || 'mold-black'}` : ''} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== 'custom' ? `matcha-gallery--preset-${stylePreset}` : ''}" data-mobile-tap="${cfg.hoverMobileTap || 'lightbox'}" style="${style}">
         ${hasSections ? `
-          <div class="matcha-gallery__section-tabs" role="tablist">
-            <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
-              <span class="tab-icon">${Icons.folder}</span>
-              <span>All Chapters</span>
-              <span class="matcha-section-tab__count">${allIds.length}</span>
-            </button>
-            ${sections.map(s => `
-              <button type="button" class="matcha-section-tab ${activeSectionId === s.id ? 'matcha-section-tab--active' : ''}" data-section="${s.id}">
-                <span class="tab-icon">${Icons.folder}</span>
-                <span>${escapeHtml(s.title)}</span>
-                <span class="matcha-section-tab__count">${(s.imageIds || []).length}</span>
+          ${cfg.chapterDisplay === 'stacks' ? `
+            <div class="matcha-album-deck matcha-album-style--${escapeHtml(cfg.chapterStackStyle || 'editorial')}" style="${activeSectionId === '*' ? 'display:grid;' : 'display:none;'}">
+              ${sections.map(sec => {
+                const secImgIds = sec.imageIds || [];
+                const secCount = secImgIds.length;
+                if (secCount === 0) return '';
+                const coverId = sec.coverImageId ? parseInt(sec.coverImageId, 10) : parseInt(secImgIds[0], 10);
+                const coverMedia = medias.find(m => m.id === coverId) || medias.find(m => m.id === parseInt(secImgIds[0], 10));
+                const otherIds = secImgIds.filter(id => parseInt(id, 10) !== coverId);
+                const p2Media = otherIds[0] ? medias.find(m => m.id === parseInt(otherIds[0], 10)) : null;
+                const p3Media = otherIds[1] ? medias.find(m => m.id === parseInt(otherIds[1], 10)) : null;
+
+                const getMediaUrl = (m) => m ? (m.media_details?.sizes?.medium_large?.source_url || m.media_details?.sizes?.large?.source_url || m.media_details?.sizes?.medium?.source_url || m.source_url || '') : '';
+                const coverUrl = getMediaUrl(coverMedia) || fallbackThumbSvg;
+                const p2Url = getMediaUrl(p2Media) || coverUrl;
+                const p3Url = getMediaUrl(p3Media) || p2Url;
+
+                return `
+                  <div class="matcha-album-card" data-section="${sec.id}" data-title="${escapeHtml(sec.title)}" data-count="${secCount}" style="cursor:pointer;">
+                    <div class="matcha-album-stack">
+                      <div class="matcha-stack-layer matcha-stack-layer--3"><img src="${p3Url}" alt="" /></div>
+                      <div class="matcha-stack-layer matcha-stack-layer--2"><img src="${p2Url}" alt="" /></div>
+                      <div class="matcha-stack-layer matcha-stack-layer--1"><img src="${coverUrl}" alt="${escapeHtml(sec.title)}" /></div>
+                    </div>
+                    <div class="matcha-album-meta">
+                      <h4 class="matcha-album-title"><span>${escapeHtml(sec.title)}</span></h4>
+                      <span class="matcha-album-count-badge">${secCount} ${secCount === 1 ? 'photo' : 'photos'}</span>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="matcha-album-back-bar" style="${activeSectionId !== '*' ? 'display:flex;' : 'display:none;'}">
+              <button type="button" class="matcha-album-back-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                <span>All Albums</span>
               </button>
-            `).join('')}
-          </div>
+              <div class="matcha-album-active-label">
+                <span class="matcha-album-current-title">${escapeHtml(activeSecObj ? activeSecObj.title : '')}</span>
+                <span class="matcha-album-count-badge">${activeSecObj ? (activeSecObj.imageIds || []).length : 0} photos</span>
+              </div>
+            </div>
+          ` : `
+            <div class="matcha-gallery__section-tabs" role="tablist">
+              <button type="button" class="matcha-section-tab ${activeSectionId === '*' ? 'matcha-section-tab--active' : ''}" data-section="*">
+                <span class="tab-icon">${Icons.folder}</span>
+                <span>All Chapters</span>
+                <span class="matcha-section-tab__count">${allIds.length}</span>
+              </button>
+              ${sections.map(s => `
+                <button type="button" class="matcha-section-tab ${activeSectionId === s.id ? 'matcha-section-tab--active' : ''}" data-section="${s.id}">
+                  <span class="tab-icon">${Icons.folder}</span>
+                  <span>${escapeHtml(s.title)}</span>
+                  <span class="matcha-section-tab__count">${(s.imageIds || []).length}</span>
+                </button>
+              `).join('')}
+            </div>
+          `}
         ` : ''}
 
         ${(() => {
           const curToolbarSkin = (!isPro && ['underline', 'obsidian', 'glass'].includes(cfg.toolbarSkin)) ? 'capsule' : (cfg.toolbarSkin || cfg.filterStyle || 'capsule');
           return (cfg.searchEnabled !== false || cfg.filtersEnabled || (isPro && cfg.colorFilterEnabled && sortedColors.length > 0) || (isPro && cfg.frontendSortEnabled)) ? `
-          <div class="matcha-gallery__toolbar matcha-gallery__toolbar--skin-${escapeHtml(curToolbarSkin)}">
+          <div class="matcha-gallery__toolbar matcha-gallery__toolbar--skin-${escapeHtml(curToolbarSkin)}" style="${showAlbumOverview ? 'display:none;' : ''}">
             ${cfg.searchEnabled !== false ? `
               <div class="matcha-gallery__search-wrap">
                 <span class="matcha-search-icon" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;display:flex;align-items:center;pointer-events:none;">
@@ -5435,7 +5554,7 @@ if (root) {
           const artWallMinHeight = (activeLayout === 'art-wall') ? Math.max(860, Math.ceil(medias.length / presetCount) * 880 + 100) : 0;
           const gridStyle = artWallMinHeight ? `min-height:${artWallMinHeight}px !important;` : '';
           return `
-            <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === 'art-wall' ? `matcha-wall-stage wall-${activeWallTex} matcha-gallery--backdrop-${activeBackdrop}` : ''}" style="${gridStyle}">
+            <div class="matcha-gallery__grid layout-${layoutSlug} ${activeSkinKey} ${activeLayout === 'art-wall' ? `matcha-wall-stage wall-${activeWallTex} matcha-gallery--backdrop-${activeBackdrop}` : ''}" style="${gridStyle}${showAlbumOverview ? 'display:none;' : ''}">
           `;
         })()}
           ${activeLayout === 'art-wall' ? `
@@ -5817,6 +5936,10 @@ if (root) {
       // In-Canvas Helpful Empty State
       const grid = canvas.querySelector('.matcha-gallery__grid');
       let emptyMsg = canvas.querySelector('.matcha-canvas-empty-state');
+      if (showAlbumOverview) {
+        if (emptyMsg) emptyMsg.style.display = 'none';
+        return;
+      }
       if (matchingItems.length === 0) {
         if (!emptyMsg && grid) {
           emptyMsg = document.createElement('div');
@@ -5889,6 +6012,22 @@ if (root) {
         renderLeftTab('images');
         applyCanvasFilter();
       });
+    });
+
+    canvas.querySelectorAll('.matcha-album-card').forEach(card => {
+      card.addEventListener('click', () => {
+        activeSectionId = card.dataset.section;
+        canvasPage = 1;
+        renderLeftTab('images');
+        renderCanvas();
+      });
+    });
+
+    canvas.querySelector('.matcha-album-back-btn')?.addEventListener('click', () => {
+      activeSectionId = '*';
+      canvasPage = 1;
+      renderLeftTab('images');
+      renderCanvas();
     });
 
     function updateFilterButtonsState() {

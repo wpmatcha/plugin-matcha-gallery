@@ -192,6 +192,8 @@ class Smart_Gallery_Block {
 					'wallPreset'         => $cfg['wallPreset'] ?? $attributes['wallPreset'] ?? 'triptych',
 					'wallMolding'        => $cfg['wallMolding'] ?? $attributes['wallMolding'] ?? 'mold-black',
 					'artWallFrames'      => $cfg['artWallFrames'] ?? $attributes['artWallFrames'] ?? array(),
+					'chapterDisplay'     => $cfg['chapterDisplay'] ?? $attributes['chapterDisplay'] ?? 'tabs',
+					'chapterStackStyle'  => $cfg['chapterStackStyle'] ?? $attributes['chapterStackStyle'] ?? 'editorial',
 				) );
 			}
 		}
@@ -258,6 +260,8 @@ class Smart_Gallery_Block {
 				'wallPreset'         => 'triptych',
 				'wallMolding'        => 'mold-black',
 				'artWallFrames'      => array(),
+				'chapterDisplay'     => 'tabs',
+				'chapterStackStyle'  => 'editorial',
 			)
 		);
 
@@ -293,6 +297,7 @@ class Smart_Gallery_Block {
 			$attrs['shoppableEnabled']   = false;
 			$attrs['sectionsEnabled']    = false;
 			$attrs['sections']           = array();
+			$attrs['chapterDisplay']     = 'tabs';
 			$attrs['randomizeOrder']     = false;
 			$attrs['frontendSortEnabled']= false;
 			$attrs['filterMultiSelect']  = false;
@@ -520,21 +525,91 @@ class Smart_Gallery_Block {
 			style="<?php echo esc_attr( $css_vars ); ?>"
 		>
 			<?php if ( $has_sections ) : ?>
-				<div class="matcha-gallery__section-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Gallery Chapters', 'matcha-gallery' ); ?>">
-					<button type="button" class="matcha-section-tab matcha-section-tab--active" data-section="*" role="tab" aria-selected="true">
-						<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
-						<span><?php esc_html_e( 'All Chapters', 'matcha-gallery' ); ?></span>
-						<span class="matcha-section-tab__count"><?php echo (int) $total_items; ?></span>
-					</button>
-					<?php foreach ( $sections as $sec ) : ?>
-						<?php $sec_count = count( (array) ( $sec['imageIds'] ?? array() ) ); ?>
-						<button type="button" class="matcha-section-tab" data-section="<?php echo esc_attr( $sec['id'] ); ?>" role="tab" aria-selected="false">
-							<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
-							<span><?php echo esc_html( $sec['title'] ); ?></span>
-							<span class="matcha-section-tab__count"><?php echo (int) $sec_count; ?></span>
+				<?php
+				$chapter_display     = $attrs['chapterDisplay'] ?? 'tabs';
+				$chapter_stack_style = $attrs['chapterStackStyle'] ?? 'editorial';
+				?>
+				<?php if ( 'stacks' === $chapter_display ) : ?>
+					<?php
+					$items_by_id = array();
+					foreach ( $items as $it ) {
+						$items_by_id[ (int) $it['id'] ] = $it;
+					}
+					?>
+					<div class="matcha-album-deck matcha-album-style--<?php echo esc_attr( $chapter_stack_style ); ?>" role="region" aria-label="<?php esc_attr_e( 'Gallery Albums', 'matcha-gallery' ); ?>">
+						<?php foreach ( $sections as $sec ) : ?>
+							<?php
+							$sec_img_ids = (array) ( $sec['imageIds'] ?? array() );
+							$sec_count   = count( $sec_img_ids );
+							if ( $sec_count === 0 ) {
+								continue;
+							}
+
+							$cover_id = ! empty( $sec['coverImageId'] ) && isset( $items_by_id[ (int) $sec['coverImageId'] ] )
+								? (int) $sec['coverImageId']
+								: (int) ( $sec_img_ids[0] ?? 0 );
+
+							$cover_item = $items_by_id[ $cover_id ] ?? ( isset( $items_by_id[ (int) $sec_img_ids[0] ] ) ? $items_by_id[ (int) $sec_img_ids[0] ] : null );
+							$other_ids  = array_values( array_diff( array_map( 'intval', $sec_img_ids ), array( $cover_id ) ) );
+
+							$p2_item = isset( $other_ids[0] ) && isset( $items_by_id[ $other_ids[0] ] ) ? $items_by_id[ $other_ids[0] ] : null;
+							$p3_item = isset( $other_ids[1] ) && isset( $items_by_id[ $other_ids[1] ] ) ? $items_by_id[ $other_ids[1] ] : null;
+
+							$cover_url = $cover_item ? ( $cover_item['sizes']['medium_large']['url'] ?? $cover_item['sizes']['large']['url'] ?? $cover_item['url'] ?? '' ) : '';
+							$p2_url    = $p2_item ? ( $p2_item['sizes']['medium_large']['url'] ?? $p2_item['sizes']['large']['url'] ?? $p2_item['url'] ?? '' ) : $cover_url;
+							$p3_url    = $p3_item ? ( $p3_item['sizes']['medium_large']['url'] ?? $p3_item['sizes']['large']['url'] ?? $p3_item['url'] ?? '' ) : $p2_url;
+							?>
+							<button type="button" class="matcha-album-card" data-section="<?php echo esc_attr( $sec['id'] ); ?>" data-title="<?php echo esc_attr( $sec['title'] ); ?>" data-count="<?php echo (int) $sec_count; ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Open Album: %s (%d photos)', 'matcha-gallery' ), $sec['title'], $sec_count ) ); ?>">
+								<div class="matcha-album-stack">
+									<?php if ( ! empty( $p3_url ) ) : ?>
+										<div class="matcha-stack-layer matcha-stack-layer--3"><img src="<?php echo esc_url( $p3_url ); ?>" alt="" loading="lazy" /></div>
+									<?php endif; ?>
+									<?php if ( ! empty( $p2_url ) ) : ?>
+										<div class="matcha-stack-layer matcha-stack-layer--2"><img src="<?php echo esc_url( $p2_url ); ?>" alt="" loading="lazy" /></div>
+									<?php endif; ?>
+									<?php if ( ! empty( $cover_url ) ) : ?>
+										<div class="matcha-stack-layer matcha-stack-layer--1">
+											<img src="<?php echo esc_url( $cover_url ); ?>" alt="<?php echo esc_attr( $sec['title'] ); ?>" loading="lazy" />
+										</div>
+									<?php endif; ?>
+								</div>
+								<div class="matcha-album-meta">
+									<h4 class="matcha-album-title">
+										<span><?php echo esc_html( $sec['title'] ); ?></span>
+									</h4>
+									<span class="matcha-album-count-badge"><?php echo (int) $sec_count; ?> <?php echo 1 === $sec_count ? esc_html__( 'photo', 'matcha-gallery' ) : esc_html__( 'photos', 'matcha-gallery' ); ?></span>
+								</div>
+							</button>
+						<?php endforeach; ?>
+					</div>
+
+					<div class="matcha-album-back-bar" style="display:none;" aria-live="polite">
+						<button type="button" class="matcha-album-back-btn">
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+							<span><?php esc_html_e( 'All Albums', 'matcha-gallery' ); ?></span>
 						</button>
-					<?php endforeach; ?>
-				</div>
+						<div class="matcha-album-active-label">
+							<span class="matcha-album-current-title"></span>
+							<span class="matcha-album-count-badge"></span>
+						</div>
+					</div>
+				<?php else : ?>
+					<div class="matcha-gallery__section-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Gallery Chapters', 'matcha-gallery' ); ?>">
+						<button type="button" class="matcha-section-tab matcha-section-tab--active" data-section="*" role="tab" aria-selected="true">
+							<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
+							<span><?php esc_html_e( 'All Chapters', 'matcha-gallery' ); ?></span>
+							<span class="matcha-section-tab__count"><?php echo (int) $total_items; ?></span>
+						</button>
+						<?php foreach ( $sections as $sec ) : ?>
+							<?php $sec_count = count( (array) ( $sec['imageIds'] ?? array() ) ); ?>
+							<button type="button" class="matcha-section-tab" data-section="<?php echo esc_attr( $sec['id'] ); ?>" role="tab" aria-selected="false">
+								<span class="tab-icon" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span>
+								<span><?php echo esc_html( $sec['title'] ); ?></span>
+								<span class="matcha-section-tab__count"><?php echo (int) $sec_count; ?></span>
+							</button>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 
 			<?php if ( $attrs['searchEnabled'] || ( $attrs['filtersEnabled'] && ! empty( $visible_tags ) ) || ( $attrs['colorFilterEnabled'] && ! empty( $sorted_colors ) ) || ( $is_pro && ! empty( $attrs['frontendSortEnabled'] ) ) ) : 

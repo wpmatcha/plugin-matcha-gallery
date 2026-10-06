@@ -253,6 +253,8 @@ final class Gallery_CPT {
 		$out['proofingEnabled']    = $is_pro && ! empty( $cfg['proofingEnabled'] );
 		$out['shoppableEnabled']   = $is_pro && ! empty( $cfg['shoppableEnabled'] );
 		$out['sectionsEnabled']    = $is_pro && ! empty( $cfg['sectionsEnabled'] );
+		$out['chapterDisplay']     = in_array( $cfg['chapterDisplay'] ?? 'tabs', array( 'tabs', 'stacks' ), true ) ? $cfg['chapterDisplay'] : 'tabs';
+		$out['chapterStackStyle']  = in_array( $cfg['chapterStackStyle'] ?? 'editorial', array( 'editorial', 'polaroid', 'minimal' ), true ) ? $cfg['chapterStackStyle'] : 'editorial';
 		$out['filterMultiSelect']  = $is_pro && ! empty( $cfg['filterMultiSelect'] );
 
 		// Sanitize multi-section chapters (Pro)
@@ -261,9 +263,10 @@ final class Gallery_CPT {
 			foreach ( $cfg['sections'] as $sec ) {
 				if ( is_array( $sec ) ) {
 					$out['sections'][] = array(
-						'id'       => sanitize_title( $sec['id'] ?? uniqid( 'sec_' ) ),
-						'title'    => sanitize_text_field( $sec['title'] ?? 'Section' ),
-						'imageIds' => array_values( array_filter( array_map( 'intval', (array) ( $sec['imageIds'] ?? array() ) ) ) ),
+						'id'           => sanitize_title( $sec['id'] ?? uniqid( 'sec_' ) ),
+						'title'        => sanitize_text_field( $sec['title'] ?? 'Section' ),
+						'coverImageId' => ! empty( $sec['coverImageId'] ) ? absint( $sec['coverImageId'] ) : 0,
+						'imageIds'     => array_values( array_filter( array_map( 'intval', (array) ( $sec['imageIds'] ?? array() ) ) ) ),
 					);
 				}
 			}
@@ -389,6 +392,8 @@ final class Gallery_CPT {
 			'imageIds'           => array(),
 			'sections'           => array(),
 			'sectionsEnabled'    => false,
+			'chapterDisplay'     => 'tabs',
+			'chapterStackStyle'  => 'editorial',
 			'aiTags'             => array(),
 			'layout'             => 'grid',
 			'imageSpans'         => array(),
