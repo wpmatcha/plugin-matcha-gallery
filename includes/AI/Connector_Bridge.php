@@ -2,8 +2,8 @@
 /**
  * WordPress AI Connectors Bridge.
  *
- * Provides compatibility with WordPress 7.0+ Connectors API (Settings > Connectors),
- * environment credentials, and fallback to direct Matcha API settings.
+ * Provides native compatibility with WordPress 7.0+ Connectors API (Settings > Connectors),
+ * WP_AI_Client registry, environment credentials, and fallback to direct Matcha API settings.
  *
  * @package Matcha_AI_Smart_Gallery\AI
  */
@@ -30,19 +30,19 @@ class Connector_Bridge {
 	public static function is_supported(): bool {
 		global $wp_version;
 
+		if ( function_exists( 'wp_get_connectors' ) || function_exists( 'wp_supports_ai' ) ) {
+			return true;
+		}
+
+		if ( class_exists( '\\WordPress\\AiClient\\AiClient' ) || function_exists( 'wp_ai_client_prompt' ) ) {
+			return true;
+		}
+
+		if ( file_exists( ABSPATH . 'wp-admin/options-connectors.php' ) || file_exists( ABSPATH . 'wp-includes/connectors.php' ) ) {
+			return true;
+		}
+
 		if ( ! empty( $wp_version ) && version_compare( $wp_version, '7.0', '>=' ) ) {
-			return true;
-		}
-
-		if ( file_exists( ABSPATH . 'wp-admin/options-connectors.php' ) ) {
-			return true;
-		}
-
-		if ( class_exists( 'WP_AI_Client' ) || function_exists( 'wp_ai_client' ) ) {
-			return true;
-		}
-
-		if ( defined( 'WP_AI_SUPPORT' ) && true === WP_AI_SUPPORT ) {
 			return true;
 		}
 
@@ -65,8 +65,8 @@ class Connector_Bridge {
 	 * }
 	 */
 	public static function get_active_connector(): array {
-		$supported   = self::is_supported();
-		$manage_url  = admin_url( 'options-connectors.php' );
+		$supported  = self::is_supported();
+		$manage_url = admin_url( 'options-connectors.php' );
 
 		$defaults = array(
 			'supported'      => $supported,
@@ -94,40 +94,141 @@ class Connector_Bridge {
 			);
 		}
 
-		// 2. Check Core Options (WordPress 7.0 Connectors stores registered provider options).
-		$core_connectors = get_option( 'wp_ai_connectors', null );
-		if ( empty( $core_connectors ) || ! is_array( $core_connectors ) ) {
-			$core_connectors = get_option( 'options_connectors', null );
-		}
-		if ( empty( $core_connectors ) || ! is_array( $core_connectors ) ) {
-			$core_connectors = get_option( 'wp_ai_providers', null );
-		}
+		// 2. Query WordPress 7.0 native Connectors API (wp_get_connectors()).
+		if ( function_exists( 'wp_get_connectors' ) ) {
+			$connectors  = wp_get_connectors();
+			$ai_registry = class_exists( '\\WordPress\\AiClient\\AiClient' ) ? \WordPress\AiClient\AiClient::defaultRegistry() : null;
 
-		if ( is_array( $core_connectors ) && ! empty( $core_connectors ) ) {
-			foreach ( $core_connectors as $prov_key => $data ) {
-				if ( ! is_array( $data ) ) {
+			foreach ( $connectors as $id => $data ) {
+				if ( ! is_array( $data ) || ( isset( $data['type'] ) && 'ai_provider' !== $data['type'] ) ) {
 					continue;
 				}
-				$key = $data['api_key'] ?? ( $data['key'] ?? '' );
+
+				$auth          = $data['authentication'] ?? array();
+				$sanitized_id  = str_replace( '-', '_', $id );
+				$setting_name  = $auth['setting_name'] ?? ( 'connectors_ai_' . $sanitized_id . '_api_key' );
+				$constant_name = $auth['constant_name'] ?? ( strtoupper( $sanitized_id ) . '_API_KEY' );
+				$env_var_name  = $auth['env_var_name'] ?? $constant_name;
+
+				$key    = '';
+				$source = 'wp_connectors';
+
+				if ( ! empty( $constant_name ) && defined( $constant_name ) && is_string( constant( $constant_name ) ) && '' !== constant( $constant_name ) ) {
+					$key    = constant( $constant_name );
+					$source = 'constant';
+				} elseif ( ! empty( $env_var_name ) && false !== getenv( $env_var_name ) && '' !== getenv( $env_var_name ) ) {
+					$key    = (string) getenv( $env_var_name );
+					$source = 'env';
+				} else {
+					$stored = get_option( $setting_name, '' );
+					if ( is_string( $stored ) && '' !== $stored ) {
+						$key    = $stored;
+						$source = 'wp_connectors';
+					}
+				}
+
+				$is_configured = false;
 				if ( ! empty( $key ) ) {
-					$model     = $data['model'] ?? ( $data['default_model'] ?? '' );
-					$is_gemini = str_starts_with( $key, 'AIza' ) || str_contains( strtolower( (string) $prov_key ), 'gemini' ) || str_contains( strtolower( (string) $prov_key ), 'google' );
+					$is_configured = true;
+				} elseif ( $ai_registry && $ai_registry->hasProvider( $id ) ) {
+					try {
+						$is_configured = $ai_registry->isProviderConfigured( $id );
+					} catch ( \Throwable $e ) {
+						$is_configured = false;
+					}
+				}
+
+				if ( $is_configured ) {
+					$is_gemini = ( 'google' === $id || str_contains( strtolower( (string) $id ), 'gemini' ) || str_starts_with( $key, 'AIza' ) );
+					$model     = $is_gemini ? 'gemini-1.5-flash' : ( 'openai' === $id ? 'gpt-4o-mini' : 'claude-3-5-sonnet' );
+					$endpoint  = $is_gemini ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : 'https://api.openai.com/v1/chat/completions';
+
 					return array(
 						'supported'      => true,
 						'connected'      => true,
-						'provider'       => $is_gemini ? 'gemini' : sanitize_key( (string) $prov_key ),
-						'provider_name'  => $is_gemini ? 'Google Gemini' : ucwords( str_replace( '_', ' ', (string) $prov_key ) ),
-						'model'          => $model ?: ( $is_gemini ? 'gemini-1.5-flash' : 'gpt-4o-mini' ),
-						'endpoint'       => $data['endpoint'] ?? ( $is_gemini ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : 'https://api.openai.com/v1/chat/completions' ),
+						'provider'       => $is_gemini ? 'gemini' : sanitize_key( (string) $id ),
+						'provider_name'  => $data['name'] ?? ( $is_gemini ? 'Google Gemini' : ucwords( str_replace( '_', ' ', (string) $id ) ) ),
+						'model'          => $model,
+						'endpoint'       => $endpoint,
 						'api_key'        => $key,
-						'source'         => 'wp_connectors',
+						'source'         => $source,
 						'connectors_url' => $manage_url,
 					);
 				}
 			}
 		}
 
-		// 3. Check wp-config / environment constants (enterprise & high-security WordPress setups).
+		// 3. Direct checks for standard WordPress 7.0 database options: connectors_ai_{provider}_api_key
+		$known_providers = array(
+			'google'    => array(
+				'setting'  => 'connectors_ai_google_api_key',
+				'name'     => 'Google (Gemini)',
+				'provider' => 'gemini',
+				'model'    => 'gemini-1.5-flash',
+				'endpoint' => 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+			),
+			'openai'    => array(
+				'setting'  => 'connectors_ai_openai_api_key',
+				'name'     => 'OpenAI',
+				'provider' => 'openai',
+				'model'    => 'gpt-4o-mini',
+				'endpoint' => 'https://api.openai.com/v1/chat/completions',
+			),
+			'anthropic' => array(
+				'setting'  => 'connectors_ai_anthropic_api_key',
+				'name'     => 'Anthropic (Claude)',
+				'provider' => 'anthropic',
+				'model'    => 'claude-3-5-sonnet',
+				'endpoint' => 'https://api.anthropic.com/v1/messages',
+			),
+		);
+
+		foreach ( $known_providers as $prov_id => $pdata ) {
+			$opt_key = get_option( $pdata['setting'], '' );
+			if ( is_string( $opt_key ) && '' !== $opt_key ) {
+				return array(
+					'supported'      => true,
+					'connected'      => true,
+					'provider'       => $pdata['provider'],
+					'provider_name'  => $pdata['name'],
+					'model'          => $pdata['model'],
+					'endpoint'       => $pdata['endpoint'],
+					'api_key'        => $opt_key,
+					'source'         => 'wp_connectors',
+					'connectors_url' => $manage_url,
+				);
+			}
+		}
+
+		// 4. Check wp-config / environment constants (enterprise & high-security WordPress setups).
+		if ( defined( 'GOOGLE_API_KEY' ) && ! empty( constant( 'GOOGLE_API_KEY' ) ) ) {
+			return array(
+				'supported'      => true,
+				'connected'      => true,
+				'provider'       => 'gemini',
+				'provider_name'  => 'Google Gemini (wp-config / Environment)',
+				'model'          => 'gemini-1.5-flash',
+				'endpoint'       => 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
+				'api_key'        => constant( 'GOOGLE_API_KEY' ),
+				'source'         => 'wp_config',
+				'connectors_url' => $manage_url,
+			);
+		}
+
+		if ( defined( 'OPENAI_API_KEY' ) && ! empty( constant( 'OPENAI_API_KEY' ) ) ) {
+			return array(
+				'supported'      => true,
+				'connected'      => true,
+				'provider'       => 'openai',
+				'provider_name'  => 'OpenAI (wp-config / Environment)',
+				'model'          => 'gpt-4o-mini',
+				'endpoint'       => 'https://api.openai.com/v1/chat/completions',
+				'api_key'        => constant( 'OPENAI_API_KEY' ),
+				'source'         => 'wp_config',
+				'connectors_url' => $manage_url,
+			);
+		}
+
 		if ( defined( 'WP_AI_API_KEY' ) && ! empty( constant( 'WP_AI_API_KEY' ) ) ) {
 			$key       = constant( 'WP_AI_API_KEY' );
 			$is_gemini = str_starts_with( $key, 'AIza' );
@@ -139,34 +240,6 @@ class Connector_Bridge {
 				'model'          => defined( 'WP_AI_MODEL' ) ? constant( 'WP_AI_MODEL' ) : ( $is_gemini ? 'gemini-1.5-flash' : 'gpt-4o-mini' ),
 				'endpoint'       => defined( 'WP_AI_ENDPOINT' ) ? constant( 'WP_AI_ENDPOINT' ) : ( $is_gemini ? 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions' : 'https://api.openai.com/v1/chat/completions' ),
 				'api_key'        => $key,
-				'source'         => 'wp_config',
-				'connectors_url' => $manage_url,
-			);
-		}
-
-		if ( defined( 'OPENAI_API_KEY' ) && ! empty( constant( 'OPENAI_API_KEY' ) ) ) {
-			return array(
-				'supported'      => true,
-				'connected'      => true,
-				'provider'       => 'openai',
-				'provider_name'  => 'OpenAI (Environment / wp-config)',
-				'model'          => 'gpt-4o-mini',
-				'endpoint'       => 'https://api.openai.com/v1/chat/completions',
-				'api_key'        => constant( 'OPENAI_API_KEY' ),
-				'source'         => 'wp_config',
-				'connectors_url' => $manage_url,
-			);
-		}
-
-		if ( defined( 'GEMINI_API_KEY' ) && ! empty( constant( 'GEMINI_API_KEY' ) ) ) {
-			return array(
-				'supported'      => true,
-				'connected'      => true,
-				'provider'       => 'gemini',
-				'provider_name'  => 'Google Gemini (Environment / wp-config)',
-				'model'          => 'gemini-1.5-flash',
-				'endpoint'       => 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-				'api_key'        => constant( 'GEMINI_API_KEY' ),
 				'source'         => 'wp_config',
 				'connectors_url' => $manage_url,
 			);

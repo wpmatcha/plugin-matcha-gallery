@@ -325,7 +325,7 @@ class Settings_Page {
 							<label for="matcha_api_key">
 								<strong><?php esc_html_e( 'API Key', 'matcha-gallery' ); ?></strong>
 								<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
-									<span class="matcha-badge" style="background:#f3f4f6; color:#4b5563;"><?php esc_html_e( 'Optional (Connected via WP)', 'matcha-gallery' ); ?></span>
+									<span class="matcha-badge" style="background:#dcfce7; color:#166534; font-weight:600;"><?php esc_html_e( 'Optional (Connected via WP)', 'matcha-gallery' ); ?></span>
 								<?php else : ?>
 									<span class="matcha-badge matcha-badge--required"><?php esc_html_e( 'Required', 'matcha-gallery' ); ?></span>
 								<?php endif; ?>
@@ -341,10 +341,14 @@ class Settings_Page {
 							</div>
 							<div id="matcha-api-test-result" class="matcha-test-result" style="display:none;"></div>
 							<p class="description">
-								<?php esc_html_e( 'Get a free key from Google AI Studio (recommended, 100% free tier) or OpenAI Platform.', 'matcha-gallery' ); ?>
-								<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="margin-left:6px;font-weight:600;color:#2563eb;">
-									<?php esc_html_e( 'Get Free Gemini Key →', 'matcha-gallery' ); ?>
-								</a>
+								<?php if ( ! empty( $connector_info['connected'] ) ) : ?>
+									<span style="color:#16a34a;font-weight:600;">✓ <?php printf( esc_html__( 'Connected to site-wide %s connector. Leave empty to use site credentials.', 'matcha-gallery' ), esc_html( $connector_info['provider_name'] ) ); ?></span>
+								<?php else : ?>
+									<?php esc_html_e( 'Get a free key from Google AI Studio (recommended, 100% free tier) or OpenAI Platform.', 'matcha-gallery' ); ?>
+									<a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="margin-left:6px;font-weight:600;color:#2563eb;">
+										<?php esc_html_e( 'Get Free Gemini Key →', 'matcha-gallery' ); ?>
+									</a>
+								<?php endif; ?>
 							</p>
 						</div>
 
@@ -653,13 +657,19 @@ class Settings_Page {
 			}
 		}
 
+		// If user submitted masked key bullets or asterisks, try real saved key.
+		if ( preg_match( '/^[•\*]+$/u', $api_key ) ) {
+			$saved   = Plugin::get_setting( 'api_key', '' );
+			$api_key = ( ! empty( $saved ) && ! preg_match( '/^[•\*]+$/u', $saved ) ) ? $saved : '';
+		}
+
 		$using_connector = false;
 		if ( empty( $api_key ) ) {
 			$connector = Connector_Bridge::get_active_connector();
 			if ( ! empty( $connector['connected'] ) && ! empty( $connector['api_key'] ) ) {
 				$api_key         = $connector['api_key'];
-				$model           = ! empty( $model ) ? $model : $connector['model'];
-				$endpoint        = ! empty( $endpoint ) ? $endpoint : $connector['endpoint'];
+				$model           = ! empty( $connector['model'] ) ? $connector['model'] : $model;
+				$endpoint        = ! empty( $connector['endpoint'] ) ? $connector['endpoint'] : $endpoint;
 				$using_connector = true;
 			}
 		}
