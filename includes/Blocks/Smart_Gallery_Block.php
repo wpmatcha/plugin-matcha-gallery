@@ -470,6 +470,9 @@ class Smart_Gallery_Block {
 		if ( $attrs['proofingEnabled'] ) {
 			$wrapper_classes[] = 'matcha-gallery--proofing';
 		}
+		if ( $has_sections && 'stacks' === ( $attrs['chapterDisplay'] ?? 'tabs' ) ) {
+			$wrapper_classes[] = 'has-album-deck-active';
+		}
 
 		$css_vars = sprintf(
 			'--matcha-columns: %d; --matcha-columns-tablet: %d; --matcha-columns-mobile: %d; --matcha-gutter: %dpx; --matcha-radius: %dpx; --matcha-row-height: %dpx; --matcha-matting: %dpx; --matcha-accent: %s;',

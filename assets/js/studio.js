@@ -339,23 +339,39 @@
       const totalCount = (cfg.imageIds || []).length;
       const currentSection = sections.find((s) => s.id === activeSectionId);
       return `
-        <!-- Chapter / Section Switcher Header -->
-        <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;">
+        <!-- Chapter Header & Action -->
+        <div class="matcha-studio-chapter-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:10px;font-weight:700;color:var(--st-text-secondary);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.5px;text-transform:uppercase;">
             <span style="color:#5ec27f;">${Icons.folder}</span> Chapters ${sections.length > 0 ? `<span style="opacity:0.6;font-weight:600;">(${sections.length})</span>` : ""}
           </span>
-          <div style="display:flex;align-items:center;gap:6px;">
-            ${isPro && sections.length > 0 ? `
-              <div style="display:inline-flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:1px;">
-                <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== "stacks" ? "is-active" : ""}" data-display="tabs" title="Classic Pill Tabs" style="padding:2px 6px;font-size:9.5px;border:none;border-radius:4px;cursor:pointer;background:${cfg.chapterDisplay !== "stacks" ? "#5ec27f" : "transparent"};color:${cfg.chapterDisplay !== "stacks" ? "#0f1712" : "var(--st-text-muted)"};font-weight:700;transition:all 0.15s ease;">Tabs</button>
-                <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay === "stacks" ? "is-active" : ""}" data-display="stacks" title="3D Physical Album Stacks" style="padding:2px 6px;font-size:9.5px;border:none;border-radius:4px;cursor:pointer;background:${cfg.chapterDisplay === "stacks" ? "#5ec27f" : "transparent"};color:${cfg.chapterDisplay === "stacks" ? "#0f1712" : "var(--st-text-muted)"};font-weight:700;transition:all 0.15s ease;">3D Stacks</button>
-              </div>
-            ` : ""}
-            <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
-              <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+          <button type="button" id="btn-add-section" class="matcha-exit-btn" style="color:#ffffff;border-color:rgba(77,164,104,0.35);background:rgba(94,194,127,0.12);font-weight:700;font-size:10px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;" title="Create new gallery chapter">
+            <span style="color:#5ec27f;font-weight:800;font-size:12px;line-height:1;">+</span> Chapter <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
+          </button>
+        </div>
+
+        ${isPro && sections.length > 0 ? `
+          <!-- Clean Full-Width Presentation Mode Segmented Control -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;margin-bottom:8px;">
+            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay !== "stacks" ? "is-active" : ""}" data-display="tabs" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay !== "stacks" ? "rgba(94,194,127,0.18)" : "transparent"};color:${cfg.chapterDisplay !== "stacks" ? "#5ec27f" : "var(--st-text-muted)"};border:${cfg.chapterDisplay !== "stacks" ? "1px solid rgba(94,194,127,0.35)" : "1px solid transparent"};transition:all 0.15s ease;">
+              <span>\u{1F4D1}</span> Classic Tabs
+            </button>
+            <button type="button" class="btn-quick-chapter-display ${cfg.chapterDisplay === "stacks" ? "is-active" : ""}" data-display="stacks" style="padding:6px 8px;font-size:10.5px;font-weight:600;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;background:${cfg.chapterDisplay === "stacks" ? "rgba(94,194,127,0.18)" : "transparent"};color:${cfg.chapterDisplay === "stacks" ? "#5ec27f" : "var(--st-text-muted)"};border:${cfg.chapterDisplay === "stacks" ? "1px solid rgba(94,194,127,0.35)" : "1px solid transparent"};transition:all 0.15s ease;">
+              <span>\u{1F4DA}</span> 3D Albums <span class="matcha-pro-badge" style="font-size:8px;padding:1px 4px;">PRO</span>
             </button>
           </div>
-        </div>
+
+          ${cfg.chapterDisplay === "stacks" ? `
+            <!-- Stack Aesthetic Dropdown -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;margin-bottom:8px;background:rgba(94,194,127,0.06);border:1px solid rgba(94,194,127,0.18);border-radius:6px;">
+              <span style="font-size:9.5px;color:#94a3b8;font-weight:600;">Album Style:</span>
+              <select id="quick-chapter-stack-style" class="matcha-dark-select" style="padding:2px 6px;font-size:10px;height:24px;border:none;background:transparent;color:#5ec27f;font-weight:700;cursor:pointer;">
+                <option value="editorial" ${(cfg.chapterStackStyle || "editorial") === "editorial" ? "selected" : ""}>Luxury Editorial</option>
+                <option value="polaroid" ${cfg.chapterStackStyle === "polaroid" ? "selected" : ""}>Polaroid Deck</option>
+                <option value="minimal" ${cfg.chapterStackStyle === "minimal" ? "selected" : ""}>Minimalist Glass</option>
+              </select>
+            </div>
+          ` : ""}
+        ` : ""}
 
         <!-- Wrapped Chapter Pills (Auto-wrapping, zero horizontal overflow) -->
         <div class="matcha-studio-sections">
@@ -3520,6 +3536,11 @@
           autosaveSoon();
         });
       });
+      document.getElementById("quick-chapter-stack-style")?.addEventListener("change", (e) => {
+        patchConfig({ chapterStackStyle: e.target.value });
+        renderCanvas();
+        autosaveSoon();
+      });
       document.getElementById("btn-add-section")?.addEventListener("click", () => {
         openCreateChapterModal();
       });
@@ -4989,7 +5010,7 @@
       const showAlbumOverview = hasSections && cfg.chapterDisplay === "stacks" && activeSectionId === "*";
       const activeSecObj = sections.find((s) => s.id === activeSectionId);
       canvas.innerHTML = `
-      <div class="matcha-gallery-container matcha-gallery layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === "skin-editorial" && activeCardTheme === "dark" ? "matcha-card-theme--dark" : ""} matcha-gallery--${activeLayout} matcha-gallery--backdrop-${activeBackdrop} wall-${activeWallTex} matcha-wall-texture--${activeWallTex} ${activeLayout === "art-wall" ? `matcha-wall-preset--${cfg.wallPreset || "triptych"} matcha-wall-molding--${cfg.wallMolding || "mold-black"}` : ""} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== "custom" ? `matcha-gallery--preset-${stylePreset}` : ""}" data-mobile-tap="${cfg.hoverMobileTap || "lightbox"}" style="${style}">
+      <div class="matcha-gallery-container matcha-gallery ${showAlbumOverview ? "has-album-deck-active" : ""} layout-${layoutSlug} ${activeSkinKey} ${activeSkinKey === "skin-editorial" && activeCardTheme === "dark" ? "matcha-card-theme--dark" : ""} matcha-gallery--${activeLayout} matcha-gallery--backdrop-${activeBackdrop} wall-${activeWallTex} matcha-wall-texture--${activeWallTex} ${activeLayout === "art-wall" ? `matcha-wall-preset--${cfg.wallPreset || "triptych"} matcha-wall-molding--${cfg.wallMolding || "mold-black"}` : ""} matcha-gallery--theme-${activeCardTheme} matcha-gallery--frame-${activeFrameStyle} matcha-gallery--shadow-${shadowElevation} matcha-gallery--hover-${hoverEffect} ${stylePreset !== "custom" ? `matcha-gallery--preset-${stylePreset}` : ""}" data-mobile-tap="${cfg.hoverMobileTap || "lightbox"}" style="${style}">
         ${hasSections ? `
           ${cfg.chapterDisplay === "stacks" ? `
             <div class="matcha-album-deck matcha-album-style--${escapeHtml(cfg.chapterStackStyle || "editorial")}" style="${activeSectionId === "*" ? "display:grid;" : "display:none;"}">
@@ -5358,6 +5379,25 @@
       let currentColor = "";
       let canvasPage = 1;
       function applyCanvasFilter() {
+        const grid = canvas.querySelector(".matcha-gallery__grid");
+        const toolbar = canvas.querySelector(".matcha-gallery__toolbar");
+        const loadWrap = canvas.querySelector(".matcha-gallery__load-more-wrap");
+        const pagContainer = canvas.querySelector("#studio-canvas-pagination");
+        let emptyMsg = canvas.querySelector(".matcha-canvas-empty-state");
+        if (showAlbumOverview) {
+          if (grid) grid.style.setProperty("display", "none", "important");
+          if (toolbar) toolbar.style.setProperty("display", "none", "important");
+          if (loadWrap) loadWrap.style.setProperty("display", "none", "important");
+          if (pagContainer) pagContainer.innerHTML = "";
+          if (emptyMsg) emptyMsg.style.display = "none";
+          return;
+        }
+        if (grid) {
+          grid.style.removeProperty("display");
+        }
+        if (toolbar) {
+          toolbar.style.removeProperty("display");
+        }
         const allItems = Array.from(canvas.querySelectorAll(".matcha-gallery__item"));
         const matchingItems = [];
         allItems.forEach((item) => {
@@ -5395,10 +5435,10 @@
             item.style.display = "";
             item.style.opacity = "1";
           });
-          const loadWrap = canvas.querySelector(".matcha-gallery__load-more-wrap");
-          if (loadWrap) loadWrap.style.display = "none";
-          const pagContainer = canvas.querySelector("#studio-canvas-pagination");
-          if (pagContainer) pagContainer.innerHTML = "";
+          const loadWrap2 = canvas.querySelector(".matcha-gallery__load-more-wrap");
+          if (loadWrap2) loadWrap2.style.display = "none";
+          const pagContainer2 = canvas.querySelector("#studio-canvas-pagination");
+          if (pagContainer2) pagContainer2.innerHTML = "";
         } else {
           const pagType = cfg.paginationType || "none";
           const perPage = cfg.itemsPerPage || 12;
@@ -5407,8 +5447,8 @@
               item.style.display = "";
               item.style.opacity = "1";
             });
-            const loadWrap = canvas.querySelector(".matcha-gallery__load-more-wrap");
-            if (loadWrap) loadWrap.style.display = "none";
+            const loadWrap2 = canvas.querySelector(".matcha-gallery__load-more-wrap");
+            if (loadWrap2) loadWrap2.style.display = "none";
           } else if (pagType === "load-more" || pagType === "infinite") {
             const limit = canvasPage * perPage;
             const hasMore = limit < matchingItems.length;
@@ -5420,9 +5460,9 @@
                 item.style.display = "none";
               }
             });
-            const loadWrap = canvas.querySelector(".matcha-gallery__load-more-wrap");
-            if (loadWrap) {
-              loadWrap.style.display = hasMore ? "flex" : "none";
+            const loadWrap2 = canvas.querySelector(".matcha-gallery__load-more-wrap");
+            if (loadWrap2) {
+              loadWrap2.style.display = hasMore ? "flex" : "none";
             }
           } else if (pagType === "pages") {
             const totalPages = Math.ceil(matchingItems.length / perPage) || 1;
@@ -5437,17 +5477,17 @@
                 item.style.display = "none";
               }
             });
-            const pagContainer = canvas.querySelector("#studio-canvas-pagination");
-            if (pagContainer) {
+            const pagContainer2 = canvas.querySelector("#studio-canvas-pagination");
+            if (pagContainer2) {
               if (totalPages <= 1) {
-                pagContainer.innerHTML = "";
+                pagContainer2.innerHTML = "";
               } else {
                 let phtml = "";
                 for (let p = 1; p <= totalPages; p++) {
                   phtml += `<button type="button" class="matcha-page-btn ${p === canvasPage ? "is-active" : ""}" data-page="${p}">${p}</button>`;
                 }
-                pagContainer.innerHTML = phtml;
-                pagContainer.querySelectorAll(".matcha-page-btn").forEach((btn) => {
+                pagContainer2.innerHTML = phtml;
+                pagContainer2.querySelectorAll(".matcha-page-btn").forEach((btn) => {
                   btn.addEventListener("click", () => {
                     canvasPage = parseInt(btn.dataset.page);
                     applyCanvasFilter();
@@ -5457,12 +5497,7 @@
             }
           }
         }
-        const grid = canvas.querySelector(".matcha-gallery__grid");
-        let emptyMsg = canvas.querySelector(".matcha-canvas-empty-state");
-        if (showAlbumOverview) {
-          if (emptyMsg) emptyMsg.style.display = "none";
-          return;
-        }
+        emptyMsg = canvas.querySelector(".matcha-canvas-empty-state");
         if (matchingItems.length === 0) {
           if (!emptyMsg && grid) {
             emptyMsg = document.createElement("div");

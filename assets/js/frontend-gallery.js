@@ -164,17 +164,19 @@
 				// Handle 3D Album Stacks Drill-Down Transitions
 				if ( this.albumDeck && this.albumBackBar ) {
 					if ( secId === '*' ) {
+						this.el.classList.add( 'has-album-deck-active' );
 						this.albumDeck.style.display = 'grid';
 						this.albumBackBar.style.display = 'none';
-						if ( this.grid ) this.grid.style.display = 'none';
-						if ( this.filterBar ) this.filterBar.style.display = 'none';
+						if ( this.grid ) this.grid.style.setProperty( 'display', 'none', 'important' );
+						if ( this.filterBar ) this.filterBar.style.setProperty( 'display', 'none', 'important' );
 					} else {
+						this.el.classList.remove( 'has-album-deck-active' );
 						this.albumDeck.style.display = 'none';
 						this.albumBackBar.style.display = 'flex';
 						if ( this.albumCurrentTitle ) this.albumCurrentTitle.textContent = title || '';
 						if ( this.albumCurrentCount ) this.albumCurrentCount.textContent = count ? `${count} ${count === 1 || count === '1' ? 'photo' : 'photos'}` : '';
-						if ( this.grid ) this.grid.style.display = '';
-						if ( this.filterBar ) this.filterBar.style.display = '';
+						if ( this.grid ) this.grid.style.removeProperty( 'display' );
+						if ( this.filterBar ) this.filterBar.style.removeProperty( 'display' );
 					}
 				}
 
@@ -202,10 +204,11 @@
 
 			// If starting in Album Stacks mode on All Albums, hide raw photo grid until an album is clicked
 			if ( this.albumDeck && this.albumBackBar && this.activeSection === '*' ) {
+				this.el.classList.add( 'has-album-deck-active' );
 				this.albumDeck.style.display = 'grid';
 				this.albumBackBar.style.display = 'none';
-				if ( this.grid ) this.grid.style.display = 'none';
-				if ( this.filterBar ) this.filterBar.style.display = 'none';
+				if ( this.grid ) this.grid.style.setProperty( 'display', 'none', 'important' );
+				if ( this.filterBar ) this.filterBar.style.setProperty( 'display', 'none', 'important' );
 			}
 		}
 

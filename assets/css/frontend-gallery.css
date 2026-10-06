@@ -140,6 +140,17 @@
 	width: 100%;
 }
 
+/* When Album Deck is active in overview mode, strictly hide photo grid, filter bars, search, and pagers */
+.matcha-gallery.has-album-deck-active .matcha-gallery__grid,
+.matcha-gallery.has-album-deck-active .matcha-gallery__toolbar,
+.matcha-gallery.has-album-deck-active .matcha-gallery__filters,
+.matcha-gallery.has-album-deck-active .matcha-gallery__search-wrap,
+.matcha-gallery.has-album-deck-active .matcha-gallery__load-more-wrap,
+.matcha-gallery.has-album-deck-active .matcha-gallery__pagination,
+.matcha-gallery.has-album-deck-active .matcha-canvas-empty-state {
+	display: none !important;
+}
+
 .matcha-album-card {
 	position: relative;
 	cursor: pointer;
